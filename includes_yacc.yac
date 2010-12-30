@@ -1,0 +1,52 @@
+
+/*------------------------------------------------------------------------------
+
+	Proyecto			: show_includes
+	Codigo				: includes_yacc.yac
+	Descripcion			: 
+	Version				: 0.1
+	Autor				: F. Manuel Hevia Garcia
+	Fecha creacion		: 30/12/2010
+	Fecha modificacion	: 
+
+	Observaciones :
+
+			
+------------------------------------------------------------------------------*/
+%{
+#include <stdio.h>
+#include <string.h>
+#include "includes_semantico.h"
+#include "includes_lex_yacc.h"
+%}
+%union{
+	int		int;
+	char	id[1024];
+}
+
+%token TOKEN_REQUEST 
+%token TOKEN_DEFINE
+%token <string>	STRING
+%%
+/*----------------------------------------------------------------------------*/
+s: s define_line
+	|s error
+	|define_line
+	|error
+	;
+
+define_line: '#' TOKEN_DEFINE STRING
+	{
+		includes_semantic.define_process($3);
+	}
+	;
+/*----------------------------------------------------------------------------*/
+%%
+void yyerror(char *p_cadena){
+	printf(" ERROR SINTACTICO linea [%d]->[%s] yytext[%s]\n"
+			,yylineno
+			,p_cadena
+			,yylval.identificador
+	);
+}
+/*----------------------------------------------------------------------------*/

@@ -1,0 +1,36 @@
+/*------------------------------------------------------------------------------
+
+	Proyecto            : 
+	Codigo              : includes_semantic.h
+	Descripcion         : 
+	Version             : 0.1
+	Autor               : F. Manuel Hevia Garcia
+	Fecha creacion      : 04/06/2008
+	Fecha modificacion  : 
+
+	Observaciones:
+     	->
+
+------------------------------------------------------------------------------*/
+#ifndef semantico_h
+#define semantico_h
+/*----------------------------------------------------------------------------*/
+class c_includes_semantic
+{
+    private:
+        char p_dominio[512];      
+
+        void init(void);        
+    protected:
+    public:        
+        c_includes_semantic();
+        ~c_includes_semantic();
+
+		void define_process(char * str);
+};
+/*----------------------------------------------------------------------------*/
+extern c_semantico_web_filter semantico_web_filter;
+/*----------------------------------------------------------------------------*/
+#endif
+
+/*----------------------------------------------------------------------------*/

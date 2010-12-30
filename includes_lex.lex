@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
 
-	Proyecto			: ClientSegmentation
+	Proyecto			: show_includes
 	Codigo				: includes_lex.lex
 	Descripcion			: 
 	Version				: 0.1
@@ -35,11 +35,17 @@ stringtext				([^"])|(\\.)
 [\t\f\v\r ]+ { /* Ignore whitespace. */ 
 	}
 
+"define" {
+		return TOKEN_DEFINE;
+	}
 
 "\""{stringtext}*"\"" { 
 		return STRING; 
 	}
 "L\""{stringtext}*"\"" { 
+		return STRING; 
+	}
+"\<"{stringtext}*"\>" { 
 		return STRING; 
 	}
 %%

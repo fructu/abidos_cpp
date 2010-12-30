@@ -28,47 +28,37 @@ LIB=
 
 todo: bison lex compilar linkar permisos borrar
 
-bison: web_filter_bison web_filter_bison_renombrar
+bison: includes_yacc
 
 lex: includes_lex
 
-compilar:	compilar_semantico\
-			compilar_web_filter_lex\
-			compilar_web_filter_yacc\
-			compilar_main
-
-compilar_1:	compilar_prueba_1
+compilar:	compile_lex\
+			compile_yacc\
+			compile_semanti
 
 linkar:	linkar_1
 
 ejecutar:	ejecutar_p1_main
 #-------------------------------------------------------------------------------
-
-web_filter_bison: web_filter_sintactico.yac
-	bison -v -d web_filter_sintactico.yac
-	
-web_filter_bison_renombrar:
-	cp web_filter_sintactico.tab.cac web_filter_sintactico.c
-	rm -f web_filter_sintactico.tab.cac
-	cp web_filter_sintactico.tab.hac web_filter_sintactico.h
-	rm -f web_filter_sintactico.tab.hac	
+includes_yacc: includes_yacc.yac
+	bison -v -d includes_yacc.yac
+	mv includes_yacc.tab.cac includes_yacc.c
+	mv includes_yacc.tab.hac includes_yacc.h
+	rm -f includes_yacc.output
 
 includes_lex: includes_lex.lex
 	flex includes_lex.lex
 	mv lex.yy.c includes_lex.c
 
 #-------------------------------------------------------------------------------
-compilar_semantico: semantico.cpp
-	$(CC) -O -c $(CFLAGS) semantico.cpp
+compile_semanti: includes_semantic.cpp
+	$(CC) -O -c $(CFLAGS) includes_semantic.cpp
 
-compilar_web_filter_lex:	web_filter_lexico.c
-	$(CC) -O -c $(CFLAGS) web_filter_lexico.c
-	
-compilar_web_filter_yacc: web_filter_sintactico.c	
-	$(CC) -O -c $(CFLAGS) web_filter_sintactico.c
+compile_lex:	includes_lex.c
+	$(CC) -O -c $(CFLAGS) includes_lex.c
 
-compilar_main: uri_scan.cpp
-	$(CC) -O -c $(CFLAGS) uri_scan.cpp
+compile_lex:	includes_yacc..c
+	$(CC) -O -c $(CFLAGS) includes_yacc.c
 
 linkar_1: semantico.o \
 		  web_filter_lexico.o \
@@ -88,5 +78,10 @@ clean:
 	rm -f *.o
 	rm -f *.bak
 	rm -f core.*
+	rm -f *.tab.cac
+	rm -f *.tab.hac
+	rm -f *.output
 	rm -f includes_lex.c
+	rm -f includes_yacc.c
+	rm -f includes_yacc.h
 #-------------------------------------------------------------------------------
