@@ -96,4 +96,9 @@ clean:
 	rm -f includes_lex.c
 	rm -f includes_yacc.c
 	rm -f includes_yacc.h
+
+execute: $(EXEC)
+	./$(EXEC)
+	dot out.gv -Tpng -o out.png
+	eog out.png
 #-------------------------------------------------------------------------------
