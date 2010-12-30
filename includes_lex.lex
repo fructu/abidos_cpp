@@ -30,28 +30,42 @@ stringtext				([^"])|(\\.)
 %%
 \r\n {
 		yylineno++;
-		return '\n';
+		//return '\n';
 	}
 \n {
 		yylineno++;
-		return '\n';
+		//return '\n';
 	}
 
 [\t\f\v\r ]+ { /* Ignore whitespace. */ 
 	}
 
-"define" {
-		return TOKEN_DEFINE;
+[#] {
+		return '#';
+	}
+
+(include) {
+		return TOKEN_INCLUDE;
 	}
 
 "\""{stringtext}*"\"" { 
+		strcpy(yylval.id,yytext);
+		
 		return STRING; 
 	}
-"L\""{stringtext}*"\"" { 
+
+"L\""{stringtext}*"\"" {
+		strcpy(yylval.id,yytext); 
 		return STRING; 
 	}
+
 "\<"{stringtext}*"\>" { 
+		strcpy(yylval.id,yytext);
 		return STRING; 
+	}
+
+. { 
+		fprintf(stderr, "lex %d: unexpected character `%c'\n", yylineno, yytext[0]); 
 	}
 %%
 

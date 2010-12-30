@@ -17,9 +17,6 @@
 
 #include "includes_yacc.h"
 
-//#define K_ERROR_UNKNOWN_TOKEN -1
-#define STRING 1024
-
 extern int yylineno;
 extern FILE *yyin;
 

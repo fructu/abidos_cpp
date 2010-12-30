@@ -72,7 +72,7 @@ link_1: includes_semantic.o \
 		  main.o
 	$(CC) -o $(EXEC) \
 		  main.o \
-	      includes_semantic.o  \
+		  includes_semantic.o  \
 		  includes_lex.o \
 		  includes_yacc.o $(LIB)
 

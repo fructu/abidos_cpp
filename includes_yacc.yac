@@ -23,19 +23,33 @@
 /*	int		int;*/
 	char	id[1024];
 }
-
-%token TOKEN_REQUEST 
-%token TOKEN_DEFINE
+%token TOKEN_INCLUDE
+%token '#'
 %token <id>	STRING
+
+%start s
 %%
 /*----------------------------------------------------------------------------*/
-s: s define_line
-	|s error
-	|define_line
-	|error
+s: no_errors
+	|errors
 	;
 
-define_line: '#' TOKEN_DEFINE STRING
+errors: 
+	error
+	|errors error
+	;
+
+no_errors:
+	define_lines
+	;
+
+
+define_lines: 
+	define_line
+	|define_lines define_line
+	;
+
+define_line: '#' TOKEN_INCLUDE STRING
 	{
 		includes_semantic.define_process($3);
 	}

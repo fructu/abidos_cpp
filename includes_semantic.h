@@ -17,9 +17,7 @@
 /*----------------------------------------------------------------------------*/
 class c_includes_semantic
 {
-    private:
-        char p_dominio[512];      
-
+    private: 
         void init(void);        
     protected:
     public:        
