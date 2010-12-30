@@ -51,8 +51,10 @@ includes_yacc: includes_yacc.yac
 	rm -f includes_yacc.output
 
 includes_lex: includes_lex.lex
-	flex includes_lex.lex
-	mv lex.yy.c includes_lex.c
+	flex -t includes_lex.lex > includes_lex.c
+
+#	flex includes_lex.lex
+#	mv lex.yy.c includes_lex.c
 
 #-------------------------------------------------------------------------------
 compile_ts: ts.cpp
@@ -82,6 +84,14 @@ link_1: includes_semantic.o \
 		  includes_lex.o \
 		  includes_yacc.o $(LIB)
 
+
+input_generate: input.txt
+	find . -name "*.cpp" > input.txt
+	find . -name "*.c" >> input.txt
+	find . -name "*.h" >> input.txt
+	sed -e 's/^\.\///g' input.txt > input.txt_sed
+	mv -f input.txt_sed input.txt
+
 #-------------------------------------------------------------------------------
 permisos: $(EXEC)
 	chmod 777 $(EXEC)
@@ -99,6 +109,7 @@ clean:
 
 execute: $(EXEC)
 	./$(EXEC)
-	dot out.gv -Tpng -o out.png
-	eog out.png
+	dot out.gv -Tps -o out.ps
+	evince out.ps
+#	eog out.ps
 #-------------------------------------------------------------------------------

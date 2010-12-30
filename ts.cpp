@@ -74,7 +74,7 @@ void c_ts::generate(void)
 		t_files_included::iterator i2 = (*i1).second.begin();
 		while( i2 != (*i1).second.end())
 		{
-//			printf("      ->[%s]\n", ((*i2).first).c_str());
+			printf("      ->[%s]\n", ((*i2).first).c_str());
 			string s = ((*i2).first).c_str();
 			if( '<' == s[0] )
 			{

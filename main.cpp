@@ -25,15 +25,44 @@ void file_process(char *f)
 		printf("  error open [%s]\n",f);
 	}
 	ts.file_begin(f);
+	yylineno=1;
 	yyparse();
 	ts.file_end();
+}
+
+void files_process(char * f_name)
+{
+//input.txt
+	FILE *f = NULL;
+	char line[4024]={0};
+
+	f = fopen(f_name,"r");
+
+	if( NULL==f )
+	{
+		printf("  error open [%s]\n",f_name);
+		return;
+	}
+
+	fscanf(f,"%s",line);
+	while( !feof(f) )
+
+	{
+
+//		printf(" files_process[%s]\n",line);
+		file_process(line);
+		fscanf(f,"%s",line);
+	}
+
+	fclose(f);
 }
 
 int main(int argc, char* argv[])
 {
 	printf("show_includes project v0.0.01\n");
 	printf("{\n");
-	file_process("test/t1.cpp");
+//	file_process("test/t1.cpp");
+	files_process("input.txt");
 	ts.print();
 	ts.generate();
 	printf("}\n");

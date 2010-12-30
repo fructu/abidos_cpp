@@ -20,19 +20,31 @@
 %}
 %union{
 /*	int		int;*/
-	char	id[1024];
+	char	id[10024];
 }
 
 %token '#'
 %token TOKEN_INCLUDE
+%token OTHER_TOKEN
 %token <id>	STRING
+
 
 %start s
 %%
 /*----------------------------------------------------------------------------*/
 s: no_errors
+	|others_lines
 	|errors
 	;
+
+others_lines: 
+	OTHER_TOKEN
+	{
+		printf(".");
+	}
+	|others_lines OTHER_TOKEN
+	;
+
 
 errors: 
 	error
@@ -53,6 +65,8 @@ define_line: '#' TOKEN_INCLUDE STRING
 	{
 		includes_semantic.define_process($3);
 	}
+	|'#'
+	|STRING
 	;
 /*----------------------------------------------------------------------------*/
 %%
