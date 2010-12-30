@@ -28,23 +28,12 @@
 %token OTHER_TOKEN
 %token <id>	STRING
 
-
 %start s
 %%
 /*----------------------------------------------------------------------------*/
 s: no_errors
-	|others_lines
 	|errors
 	;
-
-others_lines: 
-	OTHER_TOKEN
-	{
-		printf(".");
-	}
-	|others_lines OTHER_TOKEN
-	;
-
 
 errors: 
 	error
@@ -54,7 +43,6 @@ errors:
 no_errors:
 	define_lines
 	;
-
 
 define_lines: 
 	define_line
@@ -66,7 +54,6 @@ define_line: '#' TOKEN_INCLUDE STRING
 		includes_semantic.define_process($3);
 	}
 	|'#'
-	|STRING
 	;
 /*----------------------------------------------------------------------------*/
 %%
