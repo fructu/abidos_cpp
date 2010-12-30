@@ -23,6 +23,8 @@
 using namespace std;
 
 typedef map<string, int> t_files_included;
+//typedef tt_files_included::value_type t_files_included;
+
 typedef map<string, t_files_included> t_files;
 
 class c_ts
@@ -36,8 +38,12 @@ class c_ts
 		~c_ts();
 
 		void print(void);
+		void generate(void);
+
 		void file_begin(char *f);
 		void file_end(void);
+
+		void file_included(char *f);
 };
 
 extern c_ts ts;

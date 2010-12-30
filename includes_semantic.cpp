@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include "includes_semantic.h"
 #include "includes_lex_yacc.h"
+#include "ts.h"
 /*----------------------------------------------------------------------------*/
 c_includes_semantic includes_semantic;
 /*----------------------------------------------------------------------------*/
@@ -30,8 +31,9 @@ void c_includes_semantic::init(void)
 {
 }
 /*----------------------------------------------------------------------------*/
-void c_includes_semantic::define_process(char * str)
+void c_includes_semantic::define_process(char * f)
 {
-	printf("  c_includes_semantic::define_process(char * [%s])\n", str);
+	printf("  c_includes_semantic::define_process(char * [%s])\n", f);
+	ts.file_included(f);
 }
 /*----------------------------------------------------------------------------*/

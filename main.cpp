@@ -34,5 +34,7 @@ int main(int argc, char* argv[])
 	printf("show_includes project v0.0.01\n");
 	printf("{\n");
 	file_process("test/t1.cpp");
+	ts.print();
+	ts.generate();
 	printf("}\n");
 }
