@@ -16,17 +16,17 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "includes_semantico.h"
 #include "includes_lex_yacc.h"
+#include "includes_semantic.h"
 %}
 %union{
-	int		int;
+/*	int		int;*/
 	char	id[1024];
 }
 
 %token TOKEN_REQUEST 
 %token TOKEN_DEFINE
-%token <string>	STRING
+%token <id>	STRING
 %%
 /*----------------------------------------------------------------------------*/
 s: s define_line
@@ -46,7 +46,7 @@ void yyerror(char *p_cadena){
 	printf(" ERROR SINTACTICO linea [%d]->[%s] yytext[%s]\n"
 			,yylineno
 			,p_cadena
-			,yylval.identificador
+			,yylval.id
 	);
 }
 /*----------------------------------------------------------------------------*/

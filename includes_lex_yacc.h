@@ -15,9 +15,9 @@
 #ifndef includes_lex_yacc_h
 #define includes_lex_yacc_h
 
-#include "web_filter_sintactico.h"
+#include "includes_yacc.h"
 
-#define K_ERROR_UNKNOWN_TOKEN -1
+//#define K_ERROR_UNKNOWN_TOKEN -1
 #define STRING 1024
 
 extern int yylineno;

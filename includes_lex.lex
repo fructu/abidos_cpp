@@ -16,11 +16,16 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"web_filter_lex_yacc.h"    
+#include"includes_lex_yacc.h"    
     
-int yylineno = 1;
+//int yylineno = 1;
 %}
-
+/*
+	if i want to continue scaning other file
+	i must define yywrap and drop the next line
+*/
+%option noyywrap
+%option yylineno 
 stringtext				([^"])|(\\.)
 %%
 \r\n {
@@ -53,7 +58,6 @@ stringtext				([^"])|(\\.)
 int yyerror(const char *msg) 
 {
   printf("%d: %s at '%s'\n",yylineno, msg, yytext);
-  yydied = 1;
   return -1;
 }
 

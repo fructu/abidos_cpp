@@ -21,22 +21,25 @@
 
 CC=c++
 
-CFLAGS=-s
+CFLAGS=-s -Wall
+
+EXEC=show_defines
 
 LIB=
 #-------------------------------------------------------------------------------
 
-todo: bison lex compilar linkar permisos borrar
+all: bison lex compile link permisos
 
 bison: includes_yacc
 
 lex: includes_lex
 
-compilar:	compile_lex\
+compile:	compile_lex\
 			compile_yacc\
-			compile_semanti
+			compile_semantic\
+			compile_main
 
-linkar:	linkar_1
+link:	link_1
 
 ejecutar:	ejecutar_p1_main
 #-------------------------------------------------------------------------------
@@ -51,28 +54,31 @@ includes_lex: includes_lex.lex
 	mv lex.yy.c includes_lex.c
 
 #-------------------------------------------------------------------------------
-compile_semanti: includes_semantic.cpp
+compile_semantic: includes_semantic.cpp
 	$(CC) -O -c $(CFLAGS) includes_semantic.cpp
 
 compile_lex:	includes_lex.c
 	$(CC) -O -c $(CFLAGS) includes_lex.c
 
-compile_lex:	includes_yacc..c
+compile_yacc:	includes_yacc.c
 	$(CC) -O -c $(CFLAGS) includes_yacc.c
 
-linkar_1: semantico.o \
-		  web_filter_lexico.o \
-		  web_filter_sintactico.c \
-		  uri_scan.o
-	$(CC) -o uri_scan \
-		  semantico.o \
-		  web_filter_lexico.o \
-		  web_filter_sintactico.o \
-		  uri_scan.o $(LIB)
+compile_main:	main.cpp
+	$(CC) -O -c $(CFLAGS) main.cpp
+
+link_1: includes_semantic.o \
+		  includes_lex.o \
+		  includes_yacc.o \
+		  main.o
+	$(CC) -o $(EXEC) \
+		  main.o \
+	      includes_semantic.o  \
+		  includes_lex.o \
+		  includes_yacc.o $(LIB)
 
 #-------------------------------------------------------------------------------
-permisos: uri_scan
-	chmod 777 uri_scan
+permisos: $(EXEC)
+	chmod 777 $(EXEC)
 	
 clean:
 	rm -f *.o

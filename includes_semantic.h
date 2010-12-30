@@ -29,7 +29,7 @@ class c_includes_semantic
 		void define_process(char * str);
 };
 /*----------------------------------------------------------------------------*/
-extern c_semantico_web_filter semantico_web_filter;
+extern c_includes_semantic includes_semantic;
 /*----------------------------------------------------------------------------*/
 #endif
 
