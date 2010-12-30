@@ -36,6 +36,7 @@ lex: includes_lex
 
 compile:	compile_lex\
 			compile_yacc\
+			compile_ts\
 			compile_semantic\
 			compile_main
 
@@ -54,6 +55,9 @@ includes_lex: includes_lex.lex
 	mv lex.yy.c includes_lex.c
 
 #-------------------------------------------------------------------------------
+compile_ts: ts.cpp
+	$(CC) -O -c $(CFLAGS) ts.cpp
+
 compile_semantic: includes_semantic.cpp
 	$(CC) -O -c $(CFLAGS) includes_semantic.cpp
 
@@ -67,11 +71,13 @@ compile_main:	main.cpp
 	$(CC) -O -c $(CFLAGS) main.cpp
 
 link_1: includes_semantic.o \
+		  ts.o \
 		  includes_lex.o \
 		  includes_yacc.o \
 		  main.o
 	$(CC) -o $(EXEC) \
 		  main.o \
+		  ts.o  \
 		  includes_semantic.o  \
 		  includes_lex.o \
 		  includes_yacc.o $(LIB)

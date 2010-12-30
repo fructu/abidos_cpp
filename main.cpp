@@ -14,6 +14,7 @@
 ------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include "includes_lex_yacc.h"
+#include "ts.h"
 
 void file_process(char *f)
 {
@@ -23,7 +24,9 @@ void file_process(char *f)
 	{
 		printf("  error open [%s]\n",f);
 	}
+	ts.file_begin(f);
 	yyparse();
+	ts.file_end();
 }
 
 int main(int argc, char* argv[])

@@ -1,4 +1,3 @@
-
 /*------------------------------------------------------------------------------
 
 	Proyecto			: show_includes
@@ -23,8 +22,9 @@
 /*	int		int;*/
 	char	id[1024];
 }
-%token TOKEN_INCLUDE
+
 %token '#'
+%token TOKEN_INCLUDE
 %token <id>	STRING
 
 %start s

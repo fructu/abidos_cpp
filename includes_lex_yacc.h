@@ -26,8 +26,6 @@ int  yylex(void);
 void yyerror (char *s);
 int  yyparse();
 
-void yy_coger_cadena(const char* entrada);
-
 #endif
 /*----------------------------------------------------------------------------*/
 
