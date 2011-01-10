@@ -23,7 +23,18 @@
 
 using namespace std;
 
-typedef map<string, int> t_files_included;
+struct c_cell
+{
+	string path;
+	string name;
+
+	c_cell();
+	~c_cell();
+	void init(void);
+	void print(void);
+};
+
+typedef map<string, c_cell> t_files_included;
 //typedef tt_files_included::value_type t_files_included;
 
 typedef map<string, t_files_included> t_files;
@@ -50,3 +61,4 @@ class c_ts
 extern c_ts ts;
 #endif
 /*----------------------------------------------------------------------------*/
+

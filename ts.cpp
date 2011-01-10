@@ -15,6 +15,39 @@
 #include "ts.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+/*
+struct c_cell
+{
+	string path
+	string name
+*/
+/*----------------------------------------------------------------------------*/
+c_cell::c_cell()
+{
+	path = "";
+	name = "";
+}
+/*----------------------------------------------------------------------------*/
+c_cell::~c_cell()
+{
+	path = "";
+	name = "";
+}
+/*----------------------------------------------------------------------------*/
+void c_cell::init(void)
+{
+	path = "";
+	name = "";
+}
+/*----------------------------------------------------------------------------*/
+void c_cell::print(void)
+{
+	printf(" path[%s] name[%s] ", path.c_str(), name.c_str() );
+}
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 c_ts ts;
 /*----------------------------------------------------------------------------*/
@@ -39,7 +72,10 @@ void c_ts::print(void)
 		t_files_included::iterator i2 = (*i1).second.begin();
 		while( i2 != (*i1).second.end())
 		{
-			printf("      ->[%s]\n", ((*i2).first).c_str());
+			printf("      i2.first ->[%s]\n", ((*i2).first).c_str());
+			printf("      i2.second->");
+				( ((*i2).second).print() );
+			printf("\n");
 			++i2;
 		}
 
@@ -109,9 +145,46 @@ void c_ts::file_begin(char *f)
 
 }
 /*----------------------------------------------------------------------------*/
+/*
+	prueba/p2/f.h
+			 ^   ^
+			 |   |
+			 p2  p1
+*/
 void c_ts::file_included(char *f)
 {
-	files[file_name][f]=0;
+	char s_name[1024]={0};
+	char s_path[1024]={0};
+
+	char *p1 = NULL;
+	char *p2 = NULL;
+
+	p1 = f;
+	p2 = f;
+
+	files[file_name][f].init();
+
+	p1=strchr(f,'/');
+
+	while (p1!=NULL)
+	{
+		p2 = p1;
+		p1=strchr(p1+1,'/');
+	}
+
+	if( '/' == p2[0] )
+	{
+		strncpy(s_path,f, p2-f+1);
+		strcpy(s_name,p2+1);
+	}
+	else
+	{
+		sprintf(s_path,"./");
+		sprintf(s_name,"%s",f);
+	}
+
+	files[file_name][f].path = s_path;
+	files[file_name][f].name = s_name;
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_end(void)

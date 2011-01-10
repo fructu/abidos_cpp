@@ -35,23 +35,26 @@ void files_process(char * f_name)
 //input.txt
 	FILE *f = NULL;
 	char line[4024]={0};
+	int n_chars = 0;
 
 	f = fopen(f_name,"r");
 
 	if( NULL==f )
 	{
-		printf("  error open [%s]\n",f_name);
+		printf("  error open [%s]\n", f_name);
 		return;
 	}
 
-	fscanf(f,"%s",line);
+	n_chars = fscanf(f,"%s",line);
 	while( !feof(f) )
-
 	{
 
 //		printf(" files_process[%s]\n",line);
-		file_process(line);
-		fscanf(f,"%s",line);
+		if( n_chars > 0 )
+		{
+			file_process(line);
+		}
+		n_chars = fscanf(f,"%s",line);
 	}
 
 	fclose(f);
@@ -62,7 +65,7 @@ int main(int argc, char* argv[])
 	printf("show_includes project v0.0.01\n");
 	printf("{\n");
 //	file_process("test/t1.cpp");
-	files_process("input.txt");
+	files_process((char *)"input.txt");
 	ts.print();
 	ts.generate();
 	printf("}\n");

@@ -21,7 +21,8 @@
 
 CC=c++
 
-CFLAGS=-s -Wall
+#CFLAGS=-s -Wall -g
+CFLAGS=-g -Wall
 
 EXEC=show_defines
 
@@ -52,9 +53,6 @@ includes_yacc: includes_yacc.yac
 
 includes_lex: includes_lex.lex
 	flex -t includes_lex.lex > includes_lex.c
-
-#	flex includes_lex.lex
-#	mv lex.yy.c includes_lex.c
 
 #-------------------------------------------------------------------------------
 compile_ts: ts.cpp
