@@ -16,12 +16,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/*
-struct c_cell
-{
-	string path
-	string name
-*/
 /*----------------------------------------------------------------------------*/
 c_cell::c_cell()
 {
@@ -78,7 +72,7 @@ void c_cell::fill(char *f)
 	}
 	else
 	{
-		sprintf(s_path,"./");
+		sprintf(s_path,PATH_ROOT);
 		sprintf(s_name,"%s",f);
 	}
 
@@ -86,6 +80,21 @@ void c_cell::fill(char *f)
 	name = s_name;
 }
 /*----------------------------------------------------------------------------*/
+char * c_cell::full(void)
+{
+	static char s[1024] = {};
+
+	if( PATH_ROOT == path )
+	{
+		sprintf(s,"%s",name.c_str());
+	}
+	else
+	{
+		sprintf(s,"%s%s",path.c_str(),name.c_str());
+	}
+
+	return s;
+}
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -93,7 +102,7 @@ c_ts ts;
 /*----------------------------------------------------------------------------*/
 c_ts::c_ts()
 {
-	file_name = "";
+	file.init();
 }
 /*----------------------------------------------------------------------------*/
 c_ts::~c_ts()
@@ -127,8 +136,10 @@ void c_ts::print(void)
 void c_ts::generate(void)
 {
 	FILE *f_out = NULL;
-	
 
+	printf("  void c_ts::generate()\n");
+	printf("  {\n");
+	
 	f_out = fopen("out.gv","w");
 	if( NULL == f_out )
 	{
@@ -139,9 +150,6 @@ void c_ts::generate(void)
 	fprintf(f_out,"  size=\"6,6\";\n");
 	fprintf(f_out,"  node [color=lightblue2, style=filled];\n");
 
-
-	printf("  void c_ts::generate()\n");
-	printf("  {\n");
 	t_files::iterator i1 = files.begin();
 	while( i1 != files.end())
 	{
@@ -175,32 +183,32 @@ void c_ts::generate(void)
 /*----------------------------------------------------------------------------*/
 void c_ts::file_begin(char *f)
 {
-	if( "" != file_name) 
+	if( "" != file.name) 
 	{
 		printf("error c_ts::file_begin(char *f) file_name [%s] not empty\n"
-			, file_name.c_str()
+			, file.name.c_str()
 		);
 		exit(-1);
 	}
 
-	file_name = f;
-	printf(" file_begin() file_name [%s]\n",file_name.c_str());
+	file.fill(f);
+	printf(" file_begin() file_name [%s]\n",file.name.c_str());
 
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_included(char *f)
 {
-	files[file_name][f].init();
-	files[file_name][f].fill(f);
+	files[file.full()][f].init();
+	files[file.full()][f].fill(f);
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_end(void)
 {
-	if( "" == file_name) 
+	if( "" == file.name) 
 	{
 		printf("warning c_ts::file_end() file_name empty\n");
 	}
-	file_name = "";
+	file.init();
 }
 /*----------------------------------------------------------------------------*/
 

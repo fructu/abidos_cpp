@@ -21,6 +21,9 @@
 //#include <unordered_map>
 #include <map>
 
+//const string path_root = "./";
+#define PATH_ROOT "./"
+
 using namespace std;
 
 struct c_cell
@@ -33,6 +36,7 @@ struct c_cell
 	void init(void);
 	void print(void);
 	void fill(char *f);
+	char * full(void);
 };
 
 typedef map<string, c_cell> t_files_included;
@@ -43,7 +47,8 @@ typedef map<string, t_files_included> t_files;
 class c_ts
 {
 	private:
-		string file_name;
+		c_cell  file;
+
 		t_files files;
 
 	public:
