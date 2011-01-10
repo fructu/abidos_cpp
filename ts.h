@@ -32,6 +32,7 @@ struct c_cell
 	~c_cell();
 	void init(void);
 	void print(void);
+	void fill(char *f);
 };
 
 typedef map<string, c_cell> t_files_included;

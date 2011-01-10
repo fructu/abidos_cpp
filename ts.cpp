@@ -46,6 +46,46 @@ void c_cell::print(void)
 	printf(" path[%s] name[%s] ", path.c_str(), name.c_str() );
 }
 /*----------------------------------------------------------------------------*/
+void c_cell::fill(char *f)
+/*
+	prueba/p2/f.h
+			 ^   ^
+			 |   |
+			 p2  p1
+*/
+{
+	char s_name[1024]={0};
+	char s_path[1024]={0};
+
+	char *p1 = NULL;
+	char *p2 = NULL;
+
+	p1 = f;
+	p2 = f;
+
+	p1=strchr(f,'/');
+
+	while (p1!=NULL)
+	{
+		p2 = p1;
+		p1=strchr(p1+1,'/');
+	}
+
+	if( '/' == p2[0] )
+	{
+		strncpy(s_path,f, p2-f+1);
+		strcpy(s_name,p2+1);
+	}
+	else
+	{
+		sprintf(s_path,"./");
+		sprintf(s_name,"%s",f);
+	}
+
+	path = s_path;
+	name = s_name;
+}
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -122,6 +162,9 @@ void c_ts::generate(void)
 			}
 			++i2;
 		}
+/*
+				fprintf(f_out,"\"state2\"  [ style = \"filled\" penwidth = 1 fillcolor = \"white\" fontname = \"Courier New\" shape = \"Mrecord\" label =<<table border=\"0\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\"><tr><td bgcolor=\"black\" align=\"center\" colspan=\"2\"><font color=\"white\">State #2</font></td></tr><tr><td align=\"left\" port=\"r4\">&#40;4&#41; l -&gt; 'n' &bull;<\"/td><td bgcolor=\"grey\" align=\"right\">=$</td></tr></table>> ];");
+*/
 
 		++i1;
 	}
@@ -145,46 +188,10 @@ void c_ts::file_begin(char *f)
 
 }
 /*----------------------------------------------------------------------------*/
-/*
-	prueba/p2/f.h
-			 ^   ^
-			 |   |
-			 p2  p1
-*/
 void c_ts::file_included(char *f)
 {
-	char s_name[1024]={0};
-	char s_path[1024]={0};
-
-	char *p1 = NULL;
-	char *p2 = NULL;
-
-	p1 = f;
-	p2 = f;
-
 	files[file_name][f].init();
-
-	p1=strchr(f,'/');
-
-	while (p1!=NULL)
-	{
-		p2 = p1;
-		p1=strchr(p1+1,'/');
-	}
-
-	if( '/' == p2[0] )
-	{
-		strncpy(s_path,f, p2-f+1);
-		strcpy(s_name,p2+1);
-	}
-	else
-	{
-		sprintf(s_path,"./");
-		sprintf(s_name,"%s",f);
-	}
-
-	files[file_name][f].path = s_path;
-	files[file_name][f].name = s_name;
+	files[file_name][f].fill(f);
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_end(void)
