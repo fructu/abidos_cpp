@@ -52,7 +52,10 @@ void files_process(char * f_name)
 //		printf(" files_process[%s]\n",line);
 		if( n_chars > 0 )
 		{
-			file_process(line);
+			if( '#' != line[0] )
+			{
+				file_process(line);
+			}
 		}
 		n_chars = fscanf(f,"%s",line);
 	}

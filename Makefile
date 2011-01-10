@@ -42,8 +42,6 @@ compile:	compile_lex\
 			compile_main
 
 link:	link_1
-
-ejecutar:	ejecutar_p1_main
 #-------------------------------------------------------------------------------
 includes_yacc: includes_yacc.yac
 	bison -v -d includes_yacc.yac
@@ -110,4 +108,9 @@ execute: $(EXEC)
 	dot out.gv -Tps -o out.ps
 	evince out.ps
 #	eog out.ps
+
+help:
+	@echo "  make all"
+	@echo "  make execute"
+	@echo "  input_generate"
 #-------------------------------------------------------------------------------
