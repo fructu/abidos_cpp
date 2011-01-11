@@ -40,7 +40,7 @@ void c_cell::print(void)
 	printf(" path[%s] name[%s] ", path.c_str(), name.c_str() );
 }
 /*----------------------------------------------------------------------------*/
-void c_cell::fill(char *f)
+void c_cell::fill(char *f1)
 /*
 	prueba/p2/f.h
 			 ^   ^
@@ -51,8 +51,12 @@ void c_cell::fill(char *f)
 	char s_name[1024]={0};
 	char s_path[1024]={0};
 
+	char f[LONG_STR]={0};
+
 	char *p1 = NULL;
 	char *p2 = NULL;
+
+	strcpy(f,f1);
 
 	p1 = f;
 	p2 = f;
@@ -107,30 +111,64 @@ c_ts::c_ts()
 /*----------------------------------------------------------------------------*/
 c_ts::~c_ts()
 {
+	files.clear();
+	all_files.clear();
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::print(void)
 {
 	printf("  void c_ts::print()\n");
 	printf("  {\n");
+	t_files_all::iterator i = all_files.begin();
+	printf("    all files\n");
+	printf("    {\n");
+	while( i != all_files.end())
+	{
+		printf("      [%s][%d]\n", ((*i).first).c_str(), ((*i).second) );
+		++i;
+	}
+	printf("    }\n");
+
+	printf("    -----------------------\n");
 	t_files::iterator i1 = files.begin();
 	while( i1 != files.end())
 	{
 		printf("    file[%s] includes:\n", ((*i1).first).c_str());
+		printf("    {\n");
 
 		t_files_included::iterator i2 = (*i1).second.begin();
 		while( i2 != (*i1).second.end())
 		{
-			printf("      i2.first ->[%s]\n", ((*i2).first).c_str());
-			printf("      i2.second->");
+			printf("      i2.first ->[%s]", ((*i2).first).c_str());
+			printf(", second->[ ");
 				( ((*i2).second).print() );
-			printf("\n");
+			printf(" ]\n");
+			++i2;
+		}
+		printf("    }\n");
+		++i1;
+	}
+	printf("  }\n");
+}
+/*----------------------------------------------------------------------------*/
+void str_drop_char(char *p_str, char c)
+{
+	int i1 = 0;
+	int i2 = 0;
+	char str[LONG_STR] = {0};
+
+	while( '\0' != p_str[i1] )
+	{
+		if( c != p_str[i1] )
+		{
+			str[i2] = p_str[i1];
 			++i2;
 		}
 
 		++i1;
 	}
-	printf("  }\n");
+
+	strcpy(p_str, str);
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::generate(void)
@@ -146,9 +184,44 @@ void c_ts::generate(void)
 		printf("  error c_ts::generate() cant fopen()\n");
 		return;
 	}
+
+/*
 	fprintf(f_out,"digraph defines {\n");
 	fprintf(f_out,"  size=\"6,6\";\n");
 	fprintf(f_out,"  node [color=lightblue2, style=filled];\n");
+*/
+	fprintf(f_out,"digraph defines {\n");
+	fprintf(f_out,"  edge [label=0];\n");
+	fprintf(f_out,"  graph [ranksep=0];\n");
+
+	t_files_all::iterator i = all_files.begin();
+	while( i != all_files.end() )
+	{
+		c_cell cell;
+
+		string s = ((*i).first).c_str();
+		char f[LONG_STR]={0};
+
+		strcpy(f,s.c_str());
+
+		cell.fill(f);
+
+		char str[LONG_STR] = {0};
+		char str_path[LONG_STR] = {0};
+		char str_name[LONG_STR] = {0};
+
+		strcpy(str,s.c_str());
+		strcpy(str_path,cell.path.c_str());
+		strcpy(str_name,cell.name.c_str());
+
+		str_drop_char(str, '"');
+		str_drop_char(str_path, '"');
+		str_drop_char(str_name, '"');
+
+		fprintf(f_out,"  \"%s\" [label=\"%s\\n%s\\n%s\"];\n", str, str, str_path, str_name);
+
+		++i;
+	}
 
 	t_files::iterator i1 = files.begin();
 	while( i1 != files.end())
@@ -158,7 +231,7 @@ void c_ts::generate(void)
 		t_files_included::iterator i2 = (*i1).second.begin();
 		while( i2 != (*i1).second.end())
 		{
-			printf("      ->[%s]\n", ((*i2).first).c_str());
+			//printf("      ->[%s]\n", ((*i2).first).c_str());
 			string s = ((*i2).first).c_str();
 			if( '<' == s[0] )
 			{
@@ -194,12 +267,15 @@ void c_ts::file_begin(char *f)
 	file.fill(f);
 	printf(" file_begin() file_name [%s]\n",file.name.c_str());
 
+	all_files[file.full()]++;
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_included(char *f)
 {
 	files[file.full()][f].init();
 	files[file.full()][f].fill(f);
+	all_files[files[file.full()][f].full()]++;
+
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_end(void)
@@ -218,7 +294,20 @@ dot out.gv -Tpng -o out.png
 digraph unix {
 	size="6,6";
 	node [color=lightblue2, style=filled];
+
 	"5th Edition" -> "6th Edition";
 	"5th Edition" -> "PWB 1.0";
 }
+
+
+digraph unix {
+    edge [label=0];
+    graph [ranksep=0];
+    node [shape=record];
+
+        "D" [label="{{D|6}|0000}"];
+        "1" -> "2";
+        "D" -> "3";
+}
+
 */
