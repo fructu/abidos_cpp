@@ -25,7 +25,7 @@
 
 %token '#'
 %token TOKEN_INCLUDE
-%token OTHER_TOKEN
+//%token OTHER_TOKEN
 %token <id>	STRING
 
 %start s
@@ -41,27 +41,31 @@ errors:
 	;
 
 no_errors:
-	define_lines
+	prepro_lines
 	;
 
-define_lines: 
-	define_line
-	|define_lines define_line
+prepro_lines: 
+	prepro_line
+	|prepro_lines prepro_line
 	;
 
-define_line: '#' TOKEN_INCLUDE STRING
+prepro_line: '#' TOKEN_INCLUDE STRING
 	{
-		includes_semantic.define_process($3);
+		includes_semantic.include_process($3);
 	}
-	|'#'
+	| '#'
+	{
+		printf(" ### yacc -> # yytext[%s] yylineno[%d]\n",yytext,yylineno);
+	}
 	;
 /*----------------------------------------------------------------------------*/
 %%
 void yyerror(char *p_cadena){
-	printf(" ERROR SINTACTICO linea [%d]->[%s] yytext[%s]\n"
+	printf(" ERROR SINTACTICO file[%s:%d] -> [%s] yytext[%s]\n"
+			,lex_file_name
 			,yylineno
 			,p_cadena
-			,yylval.id
+			,yytext
 	);
 }
 /*----------------------------------------------------------------------------*/

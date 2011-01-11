@@ -21,10 +21,15 @@ extern int yylineno;
 extern FILE *yyin;
 
 extern YYSTYPE yylval;
+extern char lex_file_name[];
 
 int  yylex(void);
 void yyerror (char *s);
 int  yyparse();
+
+extern char *yytext;
+
+void lex_file_init(char *f);
 
 #endif
 /*----------------------------------------------------------------------------*/

@@ -18,21 +18,15 @@
 
 void file_process(char *f)
 {
-//FILE *yyin;
-	yyin=fopen(f,"r");
-	if( NULL==yyin )
-	{
-		printf("  error open [%s]\n",f);
-	}
+	lex_file_init(f);
+
 	ts.file_begin(f);
-	yylineno=1;
 	yyparse();
 	ts.file_end();
 }
 
 void files_process(char * f_name)
 {
-//input.txt
 	FILE *f = NULL;
 	char line[4024]={0};
 	int n_chars = 0;
@@ -48,8 +42,6 @@ void files_process(char * f_name)
 	n_chars = fscanf(f,"%s",line);
 	while( !feof(f) )
 	{
-
-//		printf(" files_process[%s]\n",line);
 		if( n_chars > 0 )
 		{
 			if( '#' != line[0] )
@@ -67,7 +59,6 @@ int main(int argc, char* argv[])
 {
 	printf("show_includes project v0.0.01\n");
 	printf("{\n");
-//	file_process("test/t1.cpp");
 	files_process((char *)"input.txt");
 	ts.print();
 	ts.generate();

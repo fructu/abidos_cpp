@@ -24,7 +24,7 @@ class c_includes_semantic
         c_includes_semantic();
         ~c_includes_semantic();
 
-		void define_process(char * f);
+		void include_process(char * f);
 };
 /*----------------------------------------------------------------------------*/
 extern c_includes_semantic includes_semantic;

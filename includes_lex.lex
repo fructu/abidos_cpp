@@ -20,6 +20,7 @@
 #include"includes_lex_yacc.h"    
     
 //int yylineno = 1;
+char lex_file_name[1024];
 
 static void skip_comment(void);
 static void skip_until_eol(void);static void skip_until_eol(void);
@@ -119,5 +120,19 @@ skip_until_eol(void)
 	while ((c = yyinput()) != EOF && c != '\n')
 		;
 	++yylineno;
+}
+
+
+void lex_file_init(char *f)
+{
+	sprintf(lex_file_name,"%s",f);
+
+	yyin=fopen(f,"r");
+	if( NULL==yyin )
+	{
+		printf("  error open [%s]\n",f);
+	}
+
+	yylineno=1;
 }
 

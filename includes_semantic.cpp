@@ -31,7 +31,7 @@ void c_includes_semantic::init(void)
 {
 }
 /*----------------------------------------------------------------------------*/
-void c_includes_semantic::define_process(char * f)
+void c_includes_semantic::include_process(char * f)
 {
 	printf("  c_includes_semantic::define_process(char * [%s])\n", f);
 	ts.file_included(f);
