@@ -142,7 +142,7 @@ void c_cell::push_dirs(t_dir_vector & dir_vector)
 /*----------------------------------------------------------------------------*/
 void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
 {
-	sprintf(str,"");
+	str[0]='\0';
 
 	t_dir_vector::iterator i = dir_vector.begin();
 
@@ -154,6 +154,7 @@ void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
 
 		++i;
 	}
+
 	printf(" -------------**->str[%s]\n",str);
 }
 /*----------------------------------------------------------------------------*/
@@ -167,7 +168,7 @@ void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
 */
 char * c_cell::path_resolve(c_cell cell)
 {
-	char str[LONG_STR]={0};
+	static char str[LONG_STR]={0};
 	int n_dirs     = get_number_dirs();
 	int n_resolved = n_dirs;
 
@@ -178,18 +179,13 @@ char * c_cell::path_resolve(c_cell cell)
 	strcpy(str, cell.path.c_str());
 	char * pch;
 
-
-	printf(" ### path_resolve [%s]\n",str);
-
 	pch = strtok (str,"/\"");
 	while (pch != NULL)
 	{
-		printf("  ######### pch[%s] ####", pch);
 		if( strcmp(pch,"..") == 0 )
 		{
 			if( !dir_vector.empty() )
 			{
-				printf("  #########pop_back() ####");
 				dir_vector.pop_back();
 			}
 		}
@@ -352,6 +348,10 @@ void c_ts::generate(void)
 		{
 			//printf("      ->[%s]\n", ((*i2).first).c_str());
 			string s = ((*i2).first).c_str();
+
+			fprintf(f_out,"  \"%s\" -> \"%s\";\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
+
+/*
 			if( '<' == s[0] )
 			{
 				fprintf(f_out,"  \"%s\" -> \"%s\";\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
@@ -360,6 +360,7 @@ void c_ts::generate(void)
 			{
 				fprintf(f_out,"  \"%s\" -> %s;\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
 			}
+*/
 			++i2;
 		}
 /*

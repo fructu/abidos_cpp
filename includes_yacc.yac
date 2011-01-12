@@ -69,6 +69,8 @@ prepro_line:
 		includes_semantic.include_process($3, '<');
 	}
 	| '#'
+	| STRING_COMMILLAS
+	| STRING_SHARP
 	;
 /*----------------------------------------------------------------------------*/
 %%

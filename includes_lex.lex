@@ -24,6 +24,8 @@ char lex_file_name[1024];
 
 static void skip_comment(void);
 static void skip_until_eol(void);static void skip_until_eol(void);
+
+void string_copy(void);
 %}
 /*
 	if i want to continue scaning other file
@@ -63,23 +65,18 @@ stringtext_2			([^"<>])|(\\.)
 	}
 
 "\""{stringtext}*"\"" { 
-
-//		strcpy(yylval.id,yytext);
-		strncpy(yylval.id, yytext+1, strlen(yytext) -2 );
-
-		printf(" ### lex yytext[%s] -> [%s]", yytext, yylval.id);
-		
+		string_copy();	
 		return STRING_COMMILLAS; 
 	}
 
 "L\""{stringtext}*"\"" {
-		strncpy(yylval.id, yytext+1, strlen(yytext) -2 );
+		string_copy();
 		return STRING_COMMILLAS; 
 	}
 
 "\<"{stringtext_2}*"\>" { 
-		printf(" ### lex  <> yytext[%s] -> [%s]", yytext, yylval.id);
-		strncpy(yylval.id, yytext+1, strlen(yytext) -2 );
+//		printf(" ### lex  <> yytext[%s] -> [%s]", yytext, yylval.id);
+		string_copy();
 		return STRING_SHARP; 
 	}
 
@@ -139,5 +136,23 @@ void lex_file_init(char *f)
 	}
 
 	yylineno=1;
+}
+
+
+void string_copy(void)
+{
+	printf("\n ###* lex yytext[%s] [%d]\n", yytext, strlen(yytext));
+	int len = strlen(yytext);
+	if( len > 4)
+	{
+		strncpy(yylval.id, yytext+1, len -2 );
+		yylval.id[len - 2] = '\0';
+	}
+	else
+	{
+		strcpy(yylval.id, yytext);
+	}
+
+	printf(" ### lex yytext[%s] -> [%s]\n", yytext, yylval.id);
 }
 
