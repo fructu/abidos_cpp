@@ -263,7 +263,7 @@ void c_ts::print(void)
 	printf("    {\n");
 	while( i != all_files.end())
 	{
-		printf("      [%s][%d]\n", ((*i).first).c_str(), ((*i).second) );
+		printf("      [%s][%s]\n", ((*i).first).c_str(), ((*i).second).delimiter.c_str() );
 		++i;
 	}
 	printf("    }\n");
@@ -337,27 +337,51 @@ void c_ts::generate(void)
 	while( i != all_files.end() )
 	{
 		c_cell cell;
+		cell = (*i).second;
 
 		string s = ((*i).first).c_str();
 		char f[LONG_STR]={0};
 
 		strcpy(f,s.c_str());
 
-		cell.fill(f);
+//		cell.fill(f);
 
 		char str[LONG_STR] = {0};
-		char str_path[LONG_STR] = {0};
-		char str_name[LONG_STR] = {0};
 
+		char str_path[LONG_STR] = {0};
+/*
+		char str_name[LONG_STR] = {0};
+*/
+
+		if( 0 == strcmp("./",cell.get_path()) )
+		{
+			strcpy(str_path,"");
+		}
+		else
+		{
+			strcpy(str_path,cell.get_path());
+		}
+		
 		strcpy(str,s.c_str());
+/*
 		strcpy(str_path,cell.get_path());
 		strcpy(str_name,cell.get_name());
-/*
+
 		str_drop_char(str, '"');
 		str_drop_char(str_path, '"');
 		str_drop_char(str_name, '"');
 */
-		fprintf(f_out,"  \"%s\" [label=\"%s\\n%s\\n%s\"];\n", str, str, str_path, str_name);
+	
+		if( "<" == cell.delimiter)
+		{
+//			fprintf(f_out,"  \"%s\" [label=\"%s\\n%s\\n<%s>\"];\n", str, str, cell.get_path(), cell.get_name());
+			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());
+		}
+		else
+		{
+//			fprintf(f_out,"  \"%s\" [label=\"%s\\n%s\\n%s\"];\n", str, str, cell.get_path(), cell.get_name());
+			fprintf(f_out,"  \"%s\" [label=\"%s%s\"];\n",str, str_path, cell.get_name());
+		}
 
 		++i;
 	}
@@ -406,9 +430,11 @@ void c_ts::file_begin(char *f)
 	}
 
 	file.fill(f);
+	file.delimiter="\"";
+
 	printf(" file_begin() file_name [%s]\n",file.get_name());
 
-	all_files[file.full()]++;
+	all_files[file.full()]=file;
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_included(char *f, char c_type)
@@ -421,17 +447,18 @@ void c_ts::file_included(char *f, char c_type)
 	if( strcmp(file.get_path(), "./") != 0)
 	{
 		file.path_resolve(cell);
-
+/*
 		printf("   file_included f[%s] resolve with [",f);
 		file.print();
 		printf("] -> [");
 		cell.print();
 		printf("]\n");
+*/
 	}
 
 
 	files[file.full()][cell.full()] = cell;
-	all_files[cell.full()]++;
+	all_files[cell.full()]=cell;
 
 
 //	files[file.full()][f] = cell;

@@ -65,7 +65,7 @@ typedef map<string, c_cell> t_files_included;
 
 typedef map<string, t_files_included> t_files;
 
-typedef map<string, int> t_files_all;
+typedef map<string, c_cell> t_files_all;
 
 class c_ts
 {

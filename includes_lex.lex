@@ -75,7 +75,6 @@ stringtext_2			([^"<>])|(\\.)
 	}
 
 "\<"{stringtext_2}*"\>" { 
-//		printf(" ### lex  <> yytext[%s] -> [%s]", yytext, yylval.id);
 		string_copy();
 		return STRING_SHARP; 
 	}
