@@ -21,6 +21,7 @@ void file_process(char *f)
 	lex_file_init(f);
 
 	ts.file_begin(f);
+
 	yyparse();
 	ts.file_end();
 }
@@ -28,7 +29,8 @@ void file_process(char *f)
 void files_process(char * f_name)
 {
 	FILE *f = NULL;
-	char line[4024]={0};
+	char line[LONG_STR]={0};
+
 	int n_chars = 0;
 
 	f = fopen(f_name,"r");
@@ -79,11 +81,13 @@ void test_01(void)
 	c1.print();
 	printf("\n");
 
+
+	printf("s2 include [%s]\n",s2);
 	printf("   include[");
 	c2.print();
 	printf("\n");
 
-	c2.path = c1.path_resolve(c2);
+	c1.path_resolve(c2);
 
 	printf("   resolved[");
 	c2.print();

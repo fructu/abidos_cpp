@@ -38,6 +38,29 @@ void c_cell::init(void)
 	delimiter = "";
 }
 /*----------------------------------------------------------------------------*/
+char * c_cell::get_path()
+{
+	static char str_path[LONG_STR]={0};
+
+	strcpy(str_path, path.c_str());
+
+	return str_path;
+}
+/*----------------------------------------------------------------------------*/
+void c_cell::path_set(char str[])
+{
+	path=str;
+}
+/*----------------------------------------------------------------------------*/
+char * c_cell::get_name()
+{
+	static char str_name[LONG_STR]={0};
+
+	strcpy(str_name, name.c_str());
+
+	return str_name;
+}
+/*----------------------------------------------------------------------------*/
 void c_cell::print(void)
 {
 	printf(" path[%s] name[%s] delimiter[%s]", path.c_str(), name.c_str(), delimiter.c_str() );
@@ -65,7 +88,7 @@ void c_cell::fill(char *f1)
 	p1 = f;
 	p2 = f;
 
-	p1=strchr(f,'\0');
+	p1=strchr(p1,'/');
 
 	while (p1!=NULL)
 	{
@@ -154,8 +177,6 @@ void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
 
 		++i;
 	}
-
-	printf(" -------------**->str[%s]\n",str);
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -166,11 +187,11 @@ void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
 		path_resolve("../h1.h");
 			->/d1/h1.h
 */
-char * c_cell::path_resolve(c_cell cell)
+void c_cell::path_resolve(c_cell & cell)
 {
 	static char str[LONG_STR]={0};
-	int n_dirs     = get_number_dirs();
-	int n_resolved = n_dirs;
+//	int n_dirs     = get_number_dirs();
+//	int n_resolved = n_dirs;
 
 	t_dir_vector dir_vector;
 
@@ -179,7 +200,7 @@ char * c_cell::path_resolve(c_cell cell)
 	strcpy(str, cell.path.c_str());
 	char * pch;
 
-	pch = strtok (str,"/\"");
+	pch = strtok (str,"/");
 	while (pch != NULL)
 	{
 		if( strcmp(pch,"..") == 0 )
@@ -195,7 +216,10 @@ char * c_cell::path_resolve(c_cell cell)
 
 	pop_dirs( dir_vector, str );
 
-	return str;
+//	return str;
+
+//	cell.path = str;
+	cell.path_set(str);
 }
 /*
   vector<int> myvector;
@@ -326,8 +350,8 @@ void c_ts::generate(void)
 		char str_name[LONG_STR] = {0};
 
 		strcpy(str,s.c_str());
-		strcpy(str_path,cell.path.c_str());
-		strcpy(str_name,cell.name.c_str());
+		strcpy(str_path,cell.get_path());
+		strcpy(str_name,cell.get_name());
 /*
 		str_drop_char(str, '"');
 		str_drop_char(str_path, '"');
@@ -363,9 +387,6 @@ void c_ts::generate(void)
 */
 			++i2;
 		}
-/*
-				fprintf(f_out,"\"state2\"  [ style = \"filled\" penwidth = 1 fillcolor = \"white\" fontname = \"Courier New\" shape = \"Mrecord\" label =<<table border=\"0\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\"><tr><td bgcolor=\"black\" align=\"center\" colspan=\"2\"><font color=\"white\">State #2</font></td></tr><tr><td align=\"left\" port=\"r4\">&#40;4&#41; l -&gt; 'n' &bull;<\"/td><td bgcolor=\"grey\" align=\"right\">=$</td></tr></table>> ];");
-*/
 
 		++i1;
 	}
@@ -376,16 +397,16 @@ void c_ts::generate(void)
 /*----------------------------------------------------------------------------*/
 void c_ts::file_begin(char *f)
 {
-	if( "" != file.name) 
+	if( strcmp("",file.get_name()) != 0 ) 
 	{
 		printf("error c_ts::file_begin(char *f) file_name [%s] not empty\n"
-			, file.name.c_str()
+			, file.get_name()
 		);
 		exit(-1);
 	}
 
 	file.fill(f);
-	printf(" file_begin() file_name [%s]\n",file.name.c_str());
+	printf(" file_begin() file_name [%s]\n",file.get_name());
 
 	all_files[file.full()]++;
 }
@@ -397,9 +418,9 @@ void c_ts::file_included(char *f, char c_type)
 	cell.fill(f);
 	cell.delimiter = c_type;
 
-	if( file.path != "./")
+	if( strcmp(file.get_path(), "./") != 0)
 	{
-		cell.path = file.path_resolve(cell);
+		file.path_resolve(cell);
 
 		printf("   file_included f[%s] resolve with [",f);
 		file.print();
@@ -428,7 +449,7 @@ void c_ts::file_included(char *f, char c_type)
 /*----------------------------------------------------------------------------*/
 void c_ts::file_end(void)
 {
-	if( "" == file.name) 
+	if( 0 == strcmp("",file.get_name()) ) 
 	{
 		printf("warning c_ts::file_end() file_name empty\n");
 	}

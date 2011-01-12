@@ -124,7 +124,6 @@ skip_until_eol(void)
 	++yylineno;
 }
 
-
 void lex_file_init(char *f)
 {
 	sprintf(lex_file_name,"%s",f);
@@ -138,10 +137,8 @@ void lex_file_init(char *f)
 	yylineno=1;
 }
 
-
 void string_copy(void)
 {
-	printf("\n ###* lex yytext[%s] [%d]\n", yytext, strlen(yytext));
 	int len = strlen(yytext);
 	if( len > 4)
 	{
@@ -152,7 +149,5 @@ void string_copy(void)
 	{
 		strcpy(yylval.id, yytext);
 	}
-
-	printf(" ### lex yytext[%s] -> [%s]\n", yytext, yylval.id);
 }
 

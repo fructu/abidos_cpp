@@ -32,25 +32,32 @@ using namespace std;
 //to resolved dirs
 typedef vector<string> t_dir_vector;
 
-struct c_cell
+class c_cell
 {
-	string path;
-	string name;
-
-	string delimiter;
-
-	c_cell();
-	~c_cell();
-	void init(void);
-	void print(void);
-	void fill(char *f1);
-	char * full(void);
-	int get_number_dirs(void);
-	char * path_resolve(c_cell cell);
-
 	private:
+		string path;
+		string name;
+
 		void push_dirs(t_dir_vector & dir_vector);
 		void pop_dirs(t_dir_vector & dir_vector, char * str);
+
+	public:
+		string delimiter;
+
+		c_cell();
+		~c_cell();
+		void init(void);
+		void print(void);
+		void fill(char *f1);
+		char * full(void);
+		int get_number_dirs(void);
+		void path_resolve(c_cell & cell);
+
+		char * get_path();
+		//used only inside this class
+		void path_set(char str[]);
+
+		char * get_name();
 };
 
 typedef map<string, c_cell> t_files_included;
