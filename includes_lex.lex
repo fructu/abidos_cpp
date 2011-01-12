@@ -17,10 +17,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"includes_lex_yacc.h"    
+#include"includes_lex_yacc.h"
+#include "ts.h"
+
     
 //int yylineno = 1;
-char lex_file_name[1024];
+char lex_file_name[LONG_STR];
 
 static void skip_comment(void);
 static void skip_until_eol(void);static void skip_until_eol(void);
@@ -136,9 +138,23 @@ void lex_file_init(char *f)
 	yylineno=1;
 }
 
+
+void lex_file_end(void)
+{
+	fclose(yyin);
+}
+
 void string_copy(void)
 {
 	int len = strlen(yytext);
+
+	if(len > 20000)
+	{
+//		printf("\n\nerror very big yytext[%s] len[%d]\n\n",yytext, len);
+		strcpy(yylval.id, "error very big yytext");
+		return;
+	}
+
 	if( len > 4)
 	{
 		strncpy(yylval.id, yytext+1, len -2 );

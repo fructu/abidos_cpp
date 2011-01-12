@@ -24,6 +24,9 @@ void file_process(char *f)
 
 	yyparse();
 	ts.file_end();
+
+	lex_file_end();
+	yylex_destroy();
 }
 
 void files_process(char * f_name)
@@ -33,11 +36,14 @@ void files_process(char * f_name)
 
 	int n_chars = 0;
 
+	printf("  files_process()\n");
+	printf("  {\n");
+
 	f = fopen(f_name,"r");
 
 	if( NULL==f )
 	{
-		printf("  error open [%s]\n", f_name);
+		printf("  files_process..error open [%s]\n", f_name);
 		return;
 	}
 
@@ -55,6 +61,7 @@ void files_process(char * f_name)
 	}
 
 	fclose(f);
+	printf("  }\n");
 }
 
 /*
@@ -109,8 +116,11 @@ int main(int argc, char* argv[])
 	printf("{\n");
 //	tests();
 
+//	file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/mailnews/addrbook/src/nsAbCardProperty.cpp");
+//	file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/xpfe/components/filepicker/src/nsWildCard.cpp");
+
 	files_process((char *)"input.txt");
-	ts.print();
+//	ts.print();
 	ts.generate();
 
 	printf("}\n");

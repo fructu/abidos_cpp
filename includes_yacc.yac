@@ -20,13 +20,12 @@
 %}
 %union{
 /*	int		int;*/
-	char	id[10024];
+	char	id[20000];
 }
 
 %token '#'
 %token TOKEN_INCLUDE
 %token OTHER_TOKEN
-//%token <id>	STRING
 %token <id> STRING_COMMILLAS
 %token <id> STRING_SHARP
 
@@ -75,11 +74,14 @@ prepro_line:
 /*----------------------------------------------------------------------------*/
 %%
 void yyerror(char *p_cadena){
+/*
 	printf(" ERROR SINTACTICO file[%s:%d] -> [%s] yytext[%s]\n"
 			,lex_file_name
 			,yylineno
 			,p_cadena
 			,yytext
 	);
+*/
 }
 /*----------------------------------------------------------------------------*/
+

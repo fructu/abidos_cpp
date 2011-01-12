@@ -16,16 +16,13 @@
 #define ts_h
 
 #include <string>
-//expecific vendor
-//#include <ext/hash_map>
-//#include <unordered_map>
 #include <map>
 #include <vector>
 
 //const string path_root = "./";
 #define PATH_ROOT "./"
 
-#define LONG_STR (4024)
+#define LONG_STR (20000)
 
 using namespace std;
 

@@ -330,6 +330,8 @@ void c_ts::generate(void)
 	fprintf(f_out,"  node [color=lightblue2, style=filled];\n");
 */
 	fprintf(f_out,"digraph defines {\n");
+//	fprintf(f_out,"  size=\"10,6\";\n");
+	fprintf(f_out,"  node [color=lightblue2, style=filled];\n");
 	fprintf(f_out,"  edge [label=0];\n");
 	fprintf(f_out,"  graph [ranksep=0];\n");
 
@@ -363,24 +365,16 @@ void c_ts::generate(void)
 		}
 		
 		strcpy(str,s.c_str());
-/*
-		strcpy(str_path,cell.get_path());
-		strcpy(str_name,cell.get_name());
 
-		str_drop_char(str, '"');
-		str_drop_char(str_path, '"');
-		str_drop_char(str_name, '"');
-*/
-	
 		if( "<" == cell.delimiter)
 		{
-//			fprintf(f_out,"  \"%s\" [label=\"%s\\n%s\\n<%s>\"];\n", str, str, cell.get_path(), cell.get_name());
-			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());
+//			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());
+			fprintf(f_out,"  \"%s\" [label=\"<%s>\"];\n",str, cell.get_name());
 		}
 		else
 		{
-//			fprintf(f_out,"  \"%s\" [label=\"%s\\n%s\\n%s\"];\n", str, str, cell.get_path(), cell.get_name());
-			fprintf(f_out,"  \"%s\" [label=\"%s%s\"];\n",str, str_path, cell.get_name());
+//			fprintf(f_out,"  \"%s\" [label=\"%s%s\"];\n",str, str_path, cell.get_name());
+			fprintf(f_out,"  \"%s\" [label=\"%s\"];\n",str, cell.get_name());
 		}
 
 		++i;
@@ -399,16 +393,6 @@ void c_ts::generate(void)
 
 			fprintf(f_out,"  \"%s\" -> \"%s\";\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
 
-/*
-			if( '<' == s[0] )
-			{
-				fprintf(f_out,"  \"%s\" -> \"%s\";\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
-			}
-			else
-			{
-				fprintf(f_out,"  \"%s\" -> %s;\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
-			}
-*/
 			++i2;
 		}
 
@@ -418,6 +402,60 @@ void c_ts::generate(void)
 	fprintf(f_out,"}\n");
 	fclose(f_out);
 }
+/*----------------------------------------------------------------------------*/
+int file_name_good(char * f)
+{
+	int i = 0;
+
+	while( f[i] != '\0' )
+	{
+		if( f[i] == '(' )
+		{
+			return 0;
+		}
+		else if( f[i] == ')' )
+		{
+			return 0;
+		}
+		else if( f[i] == '"' )
+		{
+			return 0;
+		}
+		else if( f[i] == '[' )
+		{
+			return 0;
+		}
+		else if( f[i] == ']' )
+		{
+			return 0;
+		}
+		else if( f[i] == '{' )
+		{
+			return 0;
+		}
+		else if( f[i] == '}' )
+		{
+			return 0;
+		}
+		else if( f[i] == '=' )
+		{
+			return 0;
+		}
+		else if( f[i] == '<' )
+		{
+			return 0;
+		}
+		else if( f[i] == '>' )
+		{
+			return 0;
+		}
+
+		++i;
+	}
+
+	return 1;
+}
+
 /*----------------------------------------------------------------------------*/
 void c_ts::file_begin(char *f)
 {
@@ -429,10 +467,14 @@ void c_ts::file_begin(char *f)
 		exit(-1);
 	}
 
+	if( file_name_good(f) != 1  )
+	{
+		printf(" c_ts::file_begin() chars arent all good [%s]\n",f);
+		return;
+	}
+
 	file.fill(f);
 	file.delimiter="\"";
-
-	printf(" file_begin() file_name [%s]\n",file.get_name());
 
 	all_files[file.full()]=file;
 }
@@ -443,6 +485,17 @@ void c_ts::file_included(char *f, char c_type)
 	cell.init();
 	cell.fill(f);
 	cell.delimiter = c_type;
+
+
+	if( file_name_good(f) != 1  )
+	{
+		printf("    c_ts::file_included()\n");
+		printf("    {\n");
+		printf("      processing file [%s]\n",file.full());
+		printf("      chars arent all good [%s]\n",f);
+		printf("    }\n");
+		return;
+	}
 
 	if( strcmp(file.get_path(), "./") != 0)
 	{
@@ -459,19 +512,6 @@ void c_ts::file_included(char *f, char c_type)
 
 	files[file.full()][cell.full()] = cell;
 	all_files[cell.full()]=cell;
-
-
-//	files[file.full()][f] = cell;
-
-/*
-	files[file.full()][f].init();
-	files[file.full()][f].fill(f);
-*/
-
-//	files[file.full()][f].path = file.path_resolve(files[file.full()][f]);
-
-//	all_files[files[file.full()][f].full()]++;
-
 }
 /*----------------------------------------------------------------------------*/
 void c_ts::file_end(void)
@@ -507,3 +547,4 @@ digraph unix {
 }
 
 */
+
