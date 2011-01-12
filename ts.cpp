@@ -21,23 +21,26 @@ c_cell::c_cell()
 {
 	path = "";
 	name = "";
+	delimiter = "";
 }
 /*----------------------------------------------------------------------------*/
 c_cell::~c_cell()
 {
 	path = "";
 	name = "";
+	delimiter = "";
 }
 /*----------------------------------------------------------------------------*/
 void c_cell::init(void)
 {
 	path = "";
 	name = "";
+	delimiter = "";
 }
 /*----------------------------------------------------------------------------*/
 void c_cell::print(void)
 {
-	printf(" path[%s] name[%s] ", path.c_str(), name.c_str() );
+	printf(" path[%s] name[%s] delimiter[%s]", path.c_str(), name.c_str(), delimiter.c_str() );
 }
 /*----------------------------------------------------------------------------*/
 void c_cell::fill(char *f1)
@@ -48,6 +51,7 @@ void c_cell::fill(char *f1)
 			 p2  p1
 */
 {
+
 	char s_name[1024]={0};
 	char s_path[1024]={0};
 
@@ -61,7 +65,7 @@ void c_cell::fill(char *f1)
 	p1 = f;
 	p2 = f;
 
-	p1=strchr(f,'/');
+	p1=strchr(f,'\0');
 
 	while (p1!=NULL)
 	{
@@ -86,7 +90,7 @@ void c_cell::fill(char *f1)
 /*----------------------------------------------------------------------------*/
 char * c_cell::full(void)
 {
-	static char s[1024] = {};
+	static char s[LONG_STR] = {};
 
 	if( PATH_ROOT == path )
 	{
@@ -99,6 +103,121 @@ char * c_cell::full(void)
 
 	return s;
 }
+/*----------------------------------------------------------------------------*/
+int c_cell::get_number_dirs(void)
+{
+	char str[LONG_STR]={0};
+	int n_dirs = 0;
+
+	strcpy(str, path.c_str());
+
+	char * pch;
+
+	pch = strtok (str,"/");
+	while (pch != NULL)
+	{
+		++n_dirs;
+		
+		pch = strtok (NULL, "/");
+	}
+
+	return n_dirs;
+}
+/*----------------------------------------------------------------------------*/
+void c_cell::push_dirs(t_dir_vector & dir_vector)
+{
+	char str[LONG_STR]={0};
+	strcpy(str, path.c_str());
+
+	char * pch;
+
+	pch = strtok (str,"/");
+	while (pch != NULL)
+	{
+		dir_vector.push_back(pch);
+		
+		pch = strtok (NULL, "/");
+	}
+}
+/*----------------------------------------------------------------------------*/
+void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
+{
+	sprintf(str,"");
+
+	t_dir_vector::iterator i = dir_vector.begin();
+
+	while( i != dir_vector.end() ) 
+	{
+		string s = *i;
+		strcat(str,s.c_str());
+		strcat(str,"/");
+
+		++i;
+	}
+	printf(" -------------**->str[%s]\n",str);
+}
+/*----------------------------------------------------------------------------*/
+/*
+		actual file: /d1/d2/p.cpp
+		actual path: /d1/d2/
+
+		#include "../h1.h"
+		path_resolve("../h1.h");
+			->/d1/h1.h
+*/
+char * c_cell::path_resolve(c_cell cell)
+{
+	char str[LONG_STR]={0};
+	int n_dirs     = get_number_dirs();
+	int n_resolved = n_dirs;
+
+	t_dir_vector dir_vector;
+
+	push_dirs(dir_vector);
+
+	strcpy(str, cell.path.c_str());
+	char * pch;
+
+
+	printf(" ### path_resolve [%s]\n",str);
+
+	pch = strtok (str,"/\"");
+	while (pch != NULL)
+	{
+		printf("  ######### pch[%s] ####", pch);
+		if( strcmp(pch,"..") == 0 )
+		{
+			if( !dir_vector.empty() )
+			{
+				printf("  #########pop_back() ####");
+				dir_vector.pop_back();
+			}
+		}
+		
+		pch = strtok (NULL, "/");
+	}
+
+	pop_dirs( dir_vector, str );
+
+	return str;
+}
+/*
+  vector<int> myvector;
+  int sum (0);
+  myvector.push_back (100);
+  myvector.push_back (200);
+  myvector.push_back (300);
+
+  while (!myvector.empty())
+  {
+    sum+=myvector.back();
+    myvector.pop_back();
+  }
+
+  cout << "The elements of myvector summed " << sum << endl;
+
+  return 0;
+*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -213,11 +332,11 @@ void c_ts::generate(void)
 		strcpy(str,s.c_str());
 		strcpy(str_path,cell.path.c_str());
 		strcpy(str_name,cell.name.c_str());
-
+/*
 		str_drop_char(str, '"');
 		str_drop_char(str_path, '"');
 		str_drop_char(str_name, '"');
-
+*/
 		fprintf(f_out,"  \"%s\" [label=\"%s\\n%s\\n%s\"];\n", str, str, str_path, str_name);
 
 		++i;
@@ -270,11 +389,39 @@ void c_ts::file_begin(char *f)
 	all_files[file.full()]++;
 }
 /*----------------------------------------------------------------------------*/
-void c_ts::file_included(char *f)
+void c_ts::file_included(char *f, char c_type)
 {
+	c_cell cell;
+	cell.init();
+	cell.fill(f);
+	cell.delimiter = c_type;
+
+	if( file.path != "./")
+	{
+		cell.path = file.path_resolve(cell);
+
+		printf("   file_included f[%s] resolve with [",f);
+		file.print();
+		printf("] -> [");
+		cell.print();
+		printf("]\n");
+	}
+
+
+	files[file.full()][cell.full()] = cell;
+	all_files[cell.full()]++;
+
+
+//	files[file.full()][f] = cell;
+
+/*
 	files[file.full()][f].init();
 	files[file.full()][f].fill(f);
-	all_files[files[file.full()][f].full()]++;
+*/
+
+//	files[file.full()][f].path = file.path_resolve(files[file.full()][f]);
+
+//	all_files[files[file.full()][f].full()]++;
 
 }
 /*----------------------------------------------------------------------------*/

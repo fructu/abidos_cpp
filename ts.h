@@ -20,6 +20,7 @@
 //#include <ext/hash_map>
 //#include <unordered_map>
 #include <map>
+#include <vector>
 
 //const string path_root = "./";
 #define PATH_ROOT "./"
@@ -28,10 +29,15 @@
 
 using namespace std;
 
+//to resolved dirs
+typedef vector<string> t_dir_vector;
+
 struct c_cell
 {
 	string path;
 	string name;
+
+	string delimiter;
 
 	c_cell();
 	~c_cell();
@@ -39,6 +45,12 @@ struct c_cell
 	void print(void);
 	void fill(char *f1);
 	char * full(void);
+	int get_number_dirs(void);
+	char * path_resolve(c_cell cell);
+
+	private:
+		void push_dirs(t_dir_vector & dir_vector);
+		void pop_dirs(t_dir_vector & dir_vector, char * str);
 };
 
 typedef map<string, c_cell> t_files_included;
@@ -70,7 +82,7 @@ class c_ts
 		void file_begin(char *f);
 		void file_end(void);
 
-		void file_included(char *f);
+		void file_included(char *f, char c_type);
 };
 
 extern c_ts ts;

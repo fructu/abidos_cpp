@@ -55,12 +55,59 @@ void files_process(char * f_name)
 	fclose(f);
 }
 
+/*
+		actual file: /d1/d2/p.cpp
+		actual path: /d1/d2/
+
+		#include "../h1.h"
+		path_resolve("../h1.h");
+			->/d1/h1.h
+*/
+void test_01(void)
+{
+	c_cell c1;
+	c_cell c2;
+	char s1[] = "/d1/d2/p.cpp";
+	char s2[] = "../h1.h";
+
+	c1.fill(s1);
+	c2.fill(s2);
+
+	printf("test_01\n");
+	printf("{\n");
+	printf("   file[");
+	c1.print();
+	printf("\n");
+
+	printf("   include[");
+	c2.print();
+	printf("\n");
+
+	c2.path = c1.path_resolve(c2);
+
+	printf("   resolved[");
+	c2.print();
+	printf("]\n");
+	
+
+//	/d1/d2/p.cpp
+	printf("}\n");
+}
+
+void tests(void)
+{
+	test_01();
+}
+
 int main(int argc, char* argv[])
 {
 	printf("show_includes project v0.0.01\n");
 	printf("{\n");
+//	tests();
+
 	files_process((char *)"input.txt");
 	ts.print();
 	ts.generate();
+
 	printf("}\n");
 }

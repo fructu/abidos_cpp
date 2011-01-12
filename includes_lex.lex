@@ -63,19 +63,24 @@ stringtext_2			([^"<>])|(\\.)
 	}
 
 "\""{stringtext}*"\"" { 
-		strcpy(yylval.id,yytext);
+
+//		strcpy(yylval.id,yytext);
+		strncpy(yylval.id, yytext+1, strlen(yytext) -2 );
+
+		printf(" ### lex yytext[%s] -> [%s]", yytext, yylval.id);
 		
-		return STRING; 
+		return STRING_COMMILLAS; 
 	}
 
 "L\""{stringtext}*"\"" {
-		strcpy(yylval.id,yytext); 
-		return STRING; 
+		strncpy(yylval.id, yytext+1, strlen(yytext) -2 );
+		return STRING_COMMILLAS; 
 	}
 
 "\<"{stringtext_2}*"\>" { 
-		strcpy(yylval.id,yytext);
-		return STRING; 
+		printf(" ### lex  <> yytext[%s] -> [%s]", yytext, yylval.id);
+		strncpy(yylval.id, yytext+1, strlen(yytext) -2 );
+		return STRING_SHARP; 
 	}
 
 . { 

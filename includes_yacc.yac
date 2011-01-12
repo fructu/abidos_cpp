@@ -26,7 +26,10 @@
 %token '#'
 %token TOKEN_INCLUDE
 %token OTHER_TOKEN
-%token <id>	STRING
+//%token <id>	STRING
+%token <id> STRING_COMMILLAS
+%token <id> STRING_SHARP
+
 
 %start s
 %%
@@ -47,11 +50,23 @@ prepro_lines:
 	prepro_line
 	|prepro_lines prepro_line
 	;
-
+/*
 prepro_line: 
 	'#' TOKEN_INCLUDE STRING
 	{
 		includes_semantic.include_process($3);
+	}
+	| '#'
+	;
+*/
+prepro_line: 
+	'#' TOKEN_INCLUDE STRING_COMMILLAS
+	{
+		includes_semantic.include_process($3, '"');
+	}
+	|'#' TOKEN_INCLUDE STRING_SHARP
+	{
+		includes_semantic.include_process($3, '<');
 	}
 	| '#'
 	;
