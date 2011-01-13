@@ -29,25 +29,48 @@ using namespace std;
 
 struct c_config
 {
+	int help;
 	int sharp;
 	int follow;
 	int test;
+	int print_;
 
 	c_config()
 	{
+		help   = 0;
 		sharp  = 1;
 		follow = 0;
-		test = 0;
+		test   = 0;
+		print_ = 0;
 	}
 
 	void print(void)
 	{
-		printf(" config sharp[%d] follow[%d] test[%d]\n", sharp, follow, test);
+		printf(" config  help[%d] sharp[%d] follow[%d] test[%d] print[%d]\n",help , sharp, follow, test, print_);
 	}
 };
 
+
+
 extern c_config config;
 
+typedef vector<string> t_files_to_process;
+typedef map<string, int> t_all_files;
+
+class c_files_to_process
+{
+	private:
+		t_files_to_process files_to_process;
+		t_all_files   all_files;
+
+	public:
+		bool empty(void);
+		void push(char *);
+		char * pop(void);
+};
+
+
+extern c_files_to_process files_to_process;
 
 //to resolved dirs
 typedef vector<string> t_dir_vector;

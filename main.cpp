@@ -19,7 +19,12 @@
 
 void file_process(char *f)
 {
-	lex_file_init(f);
+	if( 0 == lex_file_init(f) )
+	{
+		return;
+	}
+
+	printf("     file_process()[%s]\n",f);
 
 	ts.file_begin(f);
 
@@ -55,13 +60,28 @@ void files_process(char * f_name)
 		{
 			if( '#' != line[0] )
 			{
-				file_process(line);
+				files_to_process.push(line);
 			}
 		}
 		n_chars = fscanf(f,"%s",line);
 	}
 
 	fclose(f);
+/*
+	while(!files_to_process.empty())
+	{
+		strcpy(line, files_to_process.back().c_str());
+		printf("  ##pop line[%s]\n",line);
+		file_process(line);
+		files_to_process.pop_back();
+	}
+*/
+	while(!files_to_process.empty())
+	{
+		strcpy(line, files_to_process.pop());
+///		printf("  ##pop line[%s]\n",line);
+		file_process(line);
+	}
 	printf("  }\n");
 }
 
@@ -202,7 +222,8 @@ void help_print(void)
 	printf("   -help show help options\n");
 	printf("   -no-sharp don't process #include<...>\n");
 	printf("   -follow try to parse the files included in actual file\n");
-	
+	printf("   -test run tests to check the program\n");
+	printf("   -print show the ts and other data\n");
 }
 
 
@@ -215,6 +236,7 @@ void process_command(char * command)
 	if( strcmp("-help", command) == 0)
 	{
 		help_print();
+		config.help = 1;
 	}
 	else if( strcmp("-no-sharp", command) == 0)
 	{
@@ -227,6 +249,10 @@ void process_command(char * command)
 	else if( strcmp("-test", command) == 0)
 	{
 		config.test = 1;
+	}
+	else if( strcmp("-print", command) == 0)
+	{
+		config.print_ = 1;
 	}
 	else
 	{
@@ -248,7 +274,6 @@ void process_arg(int argc, char* argv[])
 
 		i++;
 	}
-	config.print();
 }
 
 int main(int argc, char* argv[])
@@ -257,19 +282,28 @@ int main(int argc, char* argv[])
 	printf("{\n");
 
 	process_arg(argc, argv);
-	
-	if( 1 == config.test)
-	{
-	  tests();
-	}
-	else
-	{
-		//     file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/mailnews/addrbook/src/nsAbCardProperty.cpp");
-		//     file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/xpfe/components/filepicker/src/nsWildCard.cpp");
 
-	    files_process((char *)"input.txt");
-		//    ts.print();
-	    ts.generate();
+			   config.print();
+	
+	if( 0 == config.help)
+	{
+		if( 1 == config.test)
+		{
+			tests();
+		}
+		else
+		{
+			//     file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/mailnews/addrbook/src/nsAbCardProperty.cpp");
+			//     file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/xpfe/components/filepicker/src/nsWildCard.cpp");
+
+		    files_process((char *)"input.txt");
+			if( 1 == config.print_)
+			{
+			   config.print();
+			   ts.print();
+			}
+		    ts.generate();
+		}
 	}
 
 	printf("}\n");

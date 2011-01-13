@@ -18,6 +18,52 @@
 #include <string.h>
 /*----------------------------------------------------------------------------*/
 c_config config;
+c_files_to_process files_to_process;
+/*
+class c_files_to_process
+{
+	private:
+		t_files_to_process files_to_process;
+		t_files_included   all_files
+
+	public:
+		void push(char *);
+		char * pop(void);
+};
+*/
+/*----------------------------------------------------------------------------*/
+bool c_files_to_process::empty(void)
+{
+	return files_to_process.empty();
+}
+/*----------------------------------------------------------------------------*/
+void c_files_to_process::push(char * file)
+{
+	if(all_files.find(file) != all_files.end())
+	{
+		printf(" #### file[%s] ya metido\n",file);
+		return;
+	}
+
+	files_to_process.push_back(file);
+	all_files[file]=1;
+}
+/*----------------------------------------------------------------------------*/
+char * c_files_to_process::pop(void)
+{
+	static char file[LONG_STR] = {0};
+
+	if( files_to_process.empty() )
+	{
+		return 0;
+	}
+	else
+	{
+		strcpy(file, files_to_process.back().c_str());
+		files_to_process.pop_back();
+	}
+	return file;
+}
 /*----------------------------------------------------------------------------*/
 c_cell::c_cell()
 {

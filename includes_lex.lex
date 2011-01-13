@@ -125,7 +125,7 @@ skip_until_eol(void)
 	++yylineno;
 }
 
-void lex_file_init(char *f)
+int lex_file_init(char *f)
 {
 	sprintf(lex_file_name,"%s",f);
 
@@ -133,9 +133,12 @@ void lex_file_init(char *f)
 	if( NULL==yyin )
 	{
 		printf("  error open [%s]\n",f);
+		return 0;
 	}
 
 	yylineno=1;
+
+	return 1;
 }
 
 

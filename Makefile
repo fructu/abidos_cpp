@@ -108,7 +108,8 @@ clean:
 	rm -f includes_yacc.h
 
 execute: $(EXEC)
-	./$(EXEC) input.txt -follow -no-sharp
+	./$(EXEC) input.txt -print
+#	./$(EXEC) input.txt -no-sharp
 #	dot    out.gv -Tps -o out_dot.ps
 #	evince out_dot.ps
 

@@ -29,7 +29,7 @@ int  yyparse();
 
 extern char *yytext;
 
-void lex_file_init(char *f);
+int lex_file_init(char *f);
 void lex_file_end(void);
 int yylex_destroy(void);
 
