@@ -80,7 +80,6 @@ link_1: includes_semantic.o \
 		  includes_lex.o \
 		  includes_yacc.o $(LIB)
 
-
 input_generate: input.txt
 	find . -name "*.cpp" > input.txt
 	find . -name "*.c" >> input.txt
@@ -109,8 +108,13 @@ execute: $(EXEC)
 	evince out.ps
 #	eog out.ps
 
+valgrind_execute: $(EXEC)
+	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./show_defines
+
 help:
 	@echo "  make all"
 	@echo "  make execute"
 	@echo "  input_generate"
+	@echo "  valgrind_execute"
+
 #-------------------------------------------------------------------------------

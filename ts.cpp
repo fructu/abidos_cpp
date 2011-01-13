@@ -191,7 +191,7 @@ void c_cell::path_resolve(c_cell & cell)
 {
 	static char str[LONG_STR]={0};
 //	int n_dirs     = get_number_dirs();
-//	int n_resolved = n_dirs;
+	int n_resolved = 0;
 
 	t_dir_vector dir_vector;
 
@@ -207,6 +207,7 @@ void c_cell::path_resolve(c_cell & cell)
 		{
 			if( !dir_vector.empty() )
 			{
+				n_resolved = 1;
 				dir_vector.pop_back();
 			}
 		}
@@ -216,9 +217,11 @@ void c_cell::path_resolve(c_cell & cell)
 
 	pop_dirs( dir_vector, str );
 
-//	return str;
+	if( 1 == n_resolved)
+	{
+		printf("    resolved host_path[%s]: [%s]->[%s]\n",path.c_str(),cell.path.c_str(),str);
+	}
 
-//	cell.path = str;
 	cell.path_set(str);
 }
 /*

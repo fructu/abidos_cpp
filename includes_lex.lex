@@ -48,11 +48,11 @@ stringtext_2			([^"<>])|(\\.)
 
 \r\n {
 //		yylineno++;
-		//return '\n';
+//		return '\n';
 	}
 \n {
 //		yylineno++;
-		//return '\n';
+//		return '\n';
 	}
 
 [\t\f\v\r ]+ { /* Ignore whitespace. */ 
