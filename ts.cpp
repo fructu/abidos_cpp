@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <string.h>
 /*----------------------------------------------------------------------------*/
+c_config config;
+/*----------------------------------------------------------------------------*/
 c_cell::c_cell()
 {
 	path = "";
@@ -47,6 +49,15 @@ char * c_cell::get_path()
 	return str_path;
 }
 /*----------------------------------------------------------------------------*/
+char * c_cell::get_delimiter()
+{
+	static char str_delimiter[LONG_STR]={0};
+
+	strcpy(str_delimiter, delimiter.c_str());
+
+	return str_delimiter;
+}
+/*----------------------------------------------------------------------------*/
 void c_cell::path_set(char str[])
 {
 	path=str;
@@ -66,7 +77,7 @@ void c_cell::print(void)
 	printf(" path[%s] name[%s] delimiter[%s]", path.c_str(), name.c_str(), delimiter.c_str() );
 }
 /*----------------------------------------------------------------------------*/
-void c_cell::fill(char *f1)
+void c_cell::fill(char *f1, char * c_type)
 /*
 	prueba/p2/f.h
 			 ^   ^
@@ -84,6 +95,8 @@ void c_cell::fill(char *f1)
 	char *p2 = NULL;
 
 	strcpy(f,f1);
+
+	delimiter = c_type;
 
 	p1 = f;
 	p2 = f;
@@ -152,6 +165,11 @@ void c_cell::push_dirs(t_dir_vector & dir_vector)
 	char str[LONG_STR]={0};
 	strcpy(str, path.c_str());
 
+	if( '/' == str[0])
+	{
+		dir_vector.push_back("/");
+	}
+
 	char * pch;
 
 	pch = strtok (str,"/");
@@ -173,10 +191,59 @@ void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
 	{
 		string s = *i;
 		strcat(str,s.c_str());
-		strcat(str,"/");
+
+		if( strcmp("/", s.c_str()) != 0)
+		{
+			strcat(str,"/");
+		}
 
 		++i;
 	}
+}
+/*----------------------------------------------------------------------------*/
+int c_cell::is_sharp(void)
+{
+	if( "<" == delimiter)
+	{
+		return 1;
+	}
+
+	return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+	answerd to quiestion 
+		resolve or not?
+*/
+int c_cell::is_resolve(c_cell cell)
+{
+	 char str[LONG_STR]={0};
+
+	int resolve = 0;
+
+	if( 1 == cell.is_sharp() )
+	{
+		printf("  ##[");
+		cell.print();
+		printf("] -> no resolved");
+		return 0;
+	}	
+
+	strcpy(str, cell.path.c_str());
+	char * pch;
+
+	pch = strtok (str,"/");
+	while (pch != NULL)
+	{
+		if( strcmp(pch,"..") == 0 )
+		{
+			return 1;
+		}
+		
+		pch = strtok (NULL, "/");
+	}	
+
+	return resolve;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -192,6 +259,13 @@ void c_cell::path_resolve(c_cell & cell)
 	static char str[LONG_STR]={0};
 //	int n_dirs     = get_number_dirs();
 	int n_resolved = 0;
+	c_cell cell_old = cell;
+
+
+	if( 1 == cell.is_sharp() )
+	{
+		return;
+	}
 
 	t_dir_vector dir_vector;
 
@@ -211,6 +285,13 @@ void c_cell::path_resolve(c_cell & cell)
 				dir_vector.pop_back();
 			}
 		}
+		else
+		{
+			if( strcmp(pch,".") != 0 )
+			{
+				dir_vector.push_back(pch);
+			}
+		}
 		
 		pch = strtok (NULL, "/");
 	}
@@ -219,28 +300,16 @@ void c_cell::path_resolve(c_cell & cell)
 
 	if( 1 == n_resolved)
 	{
-		printf("    resolved host_path[%s]: [%s]->[%s]\n",path.c_str(),cell.path.c_str(),str);
+		/*
+		printf("    resolved host[%s]: [%s]->[%s]\n"  , full(), cell.path.c_str(), str);
+		printf("    resolved host[%s]: [%s]->[%s%s]\n", full(), cell.full()      , str, cell.get_name());
+		*/
+		printf("    resolved host[%s]:", full());
+		printf(" [%s]->[%s%s]\n", cell.full(), str, cell.get_name());
 	}
 
 	cell.path_set(str);
 }
-/*
-  vector<int> myvector;
-  int sum (0);
-  myvector.push_back (100);
-  myvector.push_back (200);
-  myvector.push_back (300);
-
-  while (!myvector.empty())
-  {
-    sum+=myvector.back();
-    myvector.pop_back();
-  }
-
-  cout << "The elements of myvector summed " << sum << endl;
-
-  return 0;
-*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -266,7 +335,7 @@ void c_ts::print(void)
 	printf("    {\n");
 	while( i != all_files.end())
 	{
-		printf("      [%s][%s]\n", ((*i).first).c_str(), ((*i).second).delimiter.c_str() );
+		printf("      [%s][%s]\n", ((*i).first).c_str(), ((*i).second).get_delimiter() );
 		++i;
 	}
 	printf("    }\n");
@@ -333,10 +402,11 @@ void c_ts::generate(void)
 	fprintf(f_out,"  node [color=lightblue2, style=filled];\n");
 */
 	fprintf(f_out,"digraph defines {\n");
-//	fprintf(f_out,"  size=\"10,6\";\n");
-	fprintf(f_out,"  node [color=lightblue2, style=filled];\n");
-	fprintf(f_out,"  edge [label=0];\n");
+//	fprintf(f_out,"  size=\"20,6\";\n");
+//	fprintf(f_out,"  node [color=lightblue2, style=filled, nodesep=100];\n");
+//	fprintf(f_out,"  edge [label=0];\n");
 	fprintf(f_out,"  graph [ranksep=0];\n");
+
 
 	t_files_all::iterator i = all_files.begin();
 	while( i != all_files.end() )
@@ -369,7 +439,7 @@ void c_ts::generate(void)
 		
 		strcpy(str,s.c_str());
 
-		if( "<" == cell.delimiter)
+		if( 0 == strcmp("<", cell.get_delimiter()) )
 		{
 //			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());
 			fprintf(f_out,"  \"%s\" [label=\"<%s>\"];\n",str, cell.get_name());
@@ -458,7 +528,6 @@ int file_name_good(char * f)
 
 	return 1;
 }
-
 /*----------------------------------------------------------------------------*/
 void c_ts::file_begin(char *f)
 {
@@ -476,19 +545,16 @@ void c_ts::file_begin(char *f)
 		return;
 	}
 
-	file.fill(f);
-	file.delimiter="\"";
+	file.fill(f,(char *) "\"");
 
 	all_files[file.full()]=file;
 }
 /*----------------------------------------------------------------------------*/
-void c_ts::file_included(char *f, char c_type)
+void c_ts::file_included(char *f, char * c_type)
 {
 	c_cell cell;
 	cell.init();
-	cell.fill(f);
-	cell.delimiter = c_type;
-
+	cell.fill(f, c_type);
 
 	if( file_name_good(f) != 1  )
 	{
@@ -511,7 +577,6 @@ void c_ts::file_included(char *f, char c_type)
 		printf("]\n");
 */
 	}
-
 
 	files[file.full()][cell.full()] = cell;
 	all_files[cell.full()]=cell;

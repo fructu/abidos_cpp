@@ -61,11 +61,11 @@ prepro_line:
 prepro_line: 
 	'#' TOKEN_INCLUDE STRING_COMMILLAS
 	{
-		includes_semantic.include_process($3, '"');
+		includes_semantic.include_process($3, (char *)"\"");
 	}
 	|'#' TOKEN_INCLUDE STRING_SHARP
 	{
-		includes_semantic.include_process($3, '<');
+		includes_semantic.include_process($3, (char *)"<");
 	}
 	| '#'
 	| STRING_COMMILLAS

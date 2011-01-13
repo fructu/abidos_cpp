@@ -24,7 +24,7 @@ CC=c++
 #CFLAGS=-s -Wall -g
 CFLAGS=-g -Wall
 
-EXEC=show_defines
+EXEC=show_includes
 
 LIB=
 #-------------------------------------------------------------------------------
@@ -84,8 +84,13 @@ input_generate: input.txt
 	find . -name "*.cpp" > input.txt
 	find . -name "*.c" >> input.txt
 	find . -name "*.h" >> input.txt
+	find . -name "*.cc" >> input.txt
 	sed -e 's/^\.\///g' input.txt > input.txt_sed
 	mv -f input.txt_sed input.txt
+
+install:
+	cp $(EXEC) /opt/hevia_tools
+	cp $(EXEC).sh /opt/hevia_tools
 
 #-------------------------------------------------------------------------------
 permisos: $(EXEC)
@@ -103,10 +108,15 @@ clean:
 	rm -f includes_yacc.h
 
 execute: $(EXEC)
-	./$(EXEC)
-	dot out.gv -Tps -o out.ps
-	evince out.ps
-#	eog out.ps
+	./$(EXEC) input.txt -follow -no-sharp
+#	dot    out.gv -Tps -o out_dot.ps
+#	evince out_dot.ps
+
+#	neato  out.gv -Tpng -o out_neato.png
+#	evince out_neato.ps
+
+	fdp    out.gv -Tpng -o out_fdp.png
+	evince out_fdp.png
 
 valgrind_execute: $(EXEC)
 	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./show_defines
