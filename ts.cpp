@@ -41,12 +41,18 @@ void c_files_to_process::push(char * file)
 {
 	if(all_files.find(file) != all_files.end())
 	{
-		printf(" #### file[%s] ya metido\n",file);
 		return;
 	}
 
+	c_cell cell = ts.resolve(file, (char *)"\"");
+
+	files_to_process.push_back(cell.full());
+	all_files[file]=1;
+
+/*
 	files_to_process.push_back(file);
 	all_files[file]=1;
+*/
 }
 /*----------------------------------------------------------------------------*/
 char * c_files_to_process::pop(void)
@@ -84,6 +90,7 @@ void c_cell::init(void)
 	path = "";
 	name = "";
 	delimiter = "";
+	show = 1;
 }
 /*----------------------------------------------------------------------------*/
 char * c_cell::get_path()
@@ -485,15 +492,18 @@ void c_ts::generate(void)
 		
 		strcpy(str,s.c_str());
 
-		if( 0 == strcmp("<", cell.get_delimiter()) )
+		if( 1 == cell.show)
 		{
-//			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());
+			if( 0 == strcmp("<", cell.get_delimiter()) )
+			{
+	//			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());			
 			fprintf(f_out,"  \"%s\" [label=\"<%s>\"];\n",str, cell.get_name());
-		}
-		else
-		{
-//			fprintf(f_out,"  \"%s\" [label=\"%s%s\"];\n",str, str_path, cell.get_name());
-			fprintf(f_out,"  \"%s\" [label=\"%s\"];\n",str, cell.get_name());
+			}
+			else
+			{
+	//			fprintf(f_out,"  \"%s\" [label=\"%s%s\"];\n",str, str_path, cell.get_name());
+				fprintf(f_out,"  \"%s\" [label=\"%s\"];\n",str, cell.get_name());
+			}
 		}
 
 		++i;
@@ -503,17 +513,24 @@ void c_ts::generate(void)
 	while( i1 != files.end())
 	{
 //		printf("    file[%s] includes:\n", ((*i1).first).c_str());
+		c_cell cell_1 ;
 
-		t_files_included::iterator i2 = (*i1).second.begin();
-		while( i2 != (*i1).second.end())
-		{
-			//printf("      ->[%s]\n", ((*i2).first).c_str());
-			string s = ((*i2).first).c_str();
+//		if( 1 == cell_1.show )
+//		{
+			t_files_included::iterator i2 = (*i1).second.begin();
+			while( i2 != (*i1).second.end())
+			{
+				c_cell cell_2 = (*i2).second;
+				//printf("      ->[%s]\n", ((*i2).first).c_str());
+				string s = ((*i2).first).c_str();
+				if( 1 == cell_2.show )
+				{
+					fprintf(f_out,"  \"%s\" -> \"%s\";\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
+				}
 
-			fprintf(f_out,"  \"%s\" -> \"%s\";\n", ((*i1).first).c_str(), ((*i2).first).c_str() );
-
-			++i2;
-		}
+				++i2;
+			}
+//		}
 
 		++i1;
 	}
@@ -593,10 +610,19 @@ void c_ts::file_begin(char *f)
 
 	file.fill(f,(char *) "\"");
 
+	if( 1 == config.callers )
+	{
+		file.show = 0;
+	}
+	else
+	{
+		file.show = 1;
+	}
+
 	all_files[file.full()]=file;
 }
 /*----------------------------------------------------------------------------*/
-void c_ts::file_included(char *f, char * c_type)
+c_cell c_ts::resolve(char *f, char * c_type)
 {
 	c_cell cell;
 	cell.init();
@@ -609,7 +635,7 @@ void c_ts::file_included(char *f, char * c_type)
 		printf("      processing file [%s]\n",file.full());
 		printf("      chars arent all good [%s]\n",f);
 		printf("    }\n");
-		return;
+		return cell;
 	}
 
 	if( strcmp(file.get_path(), "./") != 0)
@@ -622,6 +648,34 @@ void c_ts::file_included(char *f, char * c_type)
 		cell.print();
 		printf("]\n");
 */
+	}
+
+	return cell;
+}
+/*----------------------------------------------------------------------------*/
+void c_ts::file_included(char *f, char * c_type)
+{
+	c_cell cell = resolve(f, c_type);
+
+	if( 1 == config.callers )
+	{
+//		printf("   ##### [%s] -> include[%s]\n", file.full(), cell.full());
+		if( 0 == strcmp( config.callers_file, cell.full() ) )
+		{
+//			printf("   ##### 1 [%s] -> include[%s]\n", file.full(), cell.full());
+			cell.show = 1;
+			file.show = 1;
+			all_files[file.full()].show = 1;
+		}
+		else
+		{
+			cell.show = 0;
+		}
+	}	
+	else
+	{
+		file.show = 1;
+		cell.show = 1;
 	}
 
 	files[file.full()][cell.full()] = cell;

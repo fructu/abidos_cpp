@@ -34,6 +34,10 @@ struct c_config
 	int follow;
 	int test;
 	int print_;
+	int batch;
+	int callers;
+
+	char callers_file[LONG_STR];
 
 	c_config()
 	{
@@ -42,11 +46,16 @@ struct c_config
 		follow = 0;
 		test   = 0;
 		print_ = 0;
+		batch  = 0;
+
+		callers = 0;
+
+		callers_file[0] = '\0';
 	}
 
 	void print(void)
 	{
-		printf(" config  help[%d] sharp[%d] follow[%d] test[%d] print[%d]\n",help , sharp, follow, test, print_);
+		printf("  config batch[%d] callers[%d] help[%d] sharp[%d] follow[%d] test[%d] print[%d]\n",batch, callers ,help , sharp, follow, test, print_);
 	}
 };
 
@@ -87,6 +96,7 @@ class c_cell
 
 		int  is_resolve(c_cell cell);
 	public:
+		int show;
 
 		c_cell();
 		~c_cell();
@@ -135,6 +145,8 @@ class c_ts
 		void file_begin(char *f);
 		void file_end(void);
 
+		//return path resolved
+		c_cell resolve(char *f, char * c_type);
 		void file_included(char *f, char * c_type);
 };
 

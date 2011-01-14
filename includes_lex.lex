@@ -132,7 +132,7 @@ int lex_file_init(char *f)
 	yyin=fopen(f,"r");
 	if( NULL==yyin )
 	{
-		printf("  error open [%s]\n",f);
+		printf("     error open [%s]\n",f);
 		return 0;
 	}
 

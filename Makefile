@@ -91,6 +91,7 @@ input_generate: input.txt
 install:
 	cp $(EXEC) /opt/hevia_tools
 	cp $(EXEC).sh /opt/hevia_tools
+	cp show_out.sh /opt/hevia_tools
 
 #-------------------------------------------------------------------------------
 permisos: $(EXEC)
@@ -108,8 +109,11 @@ clean:
 	rm -f includes_yacc.h
 
 execute: $(EXEC)
-	./$(EXEC) input.txt -print
-#	./$(EXEC) input.txt -no-sharp
+	./$(EXEC) -batch input.txt -follow -print -no-sharp
+#	./$(EXEC) input.txt -no-sharp -follow
+#	./$(EXEC) input.txt -no-sharp -follow -batch
+#	./$(EXEC) input.txt -no-sharp -follow -batch -callers test/h1.h
+#	./$(EXEC) input.txt -no-sharp -follow -batch -callers ts.h
 #	dot    out.gv -Tps -o out_dot.ps
 #	evince out_dot.ps
 
@@ -120,12 +124,13 @@ execute: $(EXEC)
 	evince out_fdp.png
 
 valgrind_execute: $(EXEC)
-	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./show_defines
+	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./$(EXEC) -batch input.txt -follow -print
 
 help:
 	@echo "  make all"
 	@echo "  make execute"
-	@echo "  input_generate"
-	@echo "  valgrind_execute"
+	@echo "  make input_generate"
+	@echo "  make valgrind_execute"
+	@echo "  sudo make install #copy to /opt/hevia_tools"
 
 #-------------------------------------------------------------------------------

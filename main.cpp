@@ -24,7 +24,10 @@ void file_process(char *f)
 		return;
 	}
 
-	printf("     file_process()[%s]\n",f);
+	if( 1 == config.print_)
+	{
+		printf("    file_process()[%s]\n",f);
+	}
 
 	ts.file_begin(f);
 
@@ -35,21 +38,21 @@ void file_process(char *f)
 	yylex_destroy();
 }
 
-void files_process(char * f_name)
+void files_process_batch(char * f_name)
 {
 	FILE *f = NULL;
 	char line[LONG_STR]={0};
 
 	int n_chars = 0;
 
-	printf("  files_process()\n");
+	printf("  files_process_batch()\n");
 	printf("  {\n");
 
 	f = fopen(f_name,"r");
 
 	if( NULL==f )
 	{
-		printf("  files_process..error open [%s]\n", f_name);
+		printf("  files_process_batchprocess..error open [%s]\n", f_name);
 		return;
 	}
 
@@ -67,24 +70,31 @@ void files_process(char * f_name)
 	}
 
 	fclose(f);
-/*
-	while(!files_to_process.empty())
-	{
-		strcpy(line, files_to_process.back().c_str());
-		printf("  ##pop line[%s]\n",line);
-		file_process(line);
-		files_to_process.pop_back();
-	}
-*/
+
 	while(!files_to_process.empty())
 	{
 		strcpy(line, files_to_process.pop());
-///		printf("  ##pop line[%s]\n",line);
 		file_process(line);
 	}
 	printf("  }\n");
 }
 
+
+void file_process_one_file(char * f_name)
+{
+	char line[LONG_STR]={0};
+
+	printf("  file_process_one_file()\n");
+	printf("  {\n");
+
+	files_to_process.push(f_name);
+	while(!files_to_process.empty())
+	{
+		strcpy(line, files_to_process.pop());
+		file_process(line);
+	}
+	printf("  }\n");
+}
 
 
 void test_resolve(char *s1, char *s2, char *s_result)
@@ -125,8 +135,6 @@ void test_resolve(char *s1, char *s2, char *s_result)
 	c2.print();
 	printf("]\n");	
 */
-
-//	/d1/d2/p.cpp
 
 	if( strcmp(c2.full(),s_result) == 0 )
 	{
@@ -219,11 +227,13 @@ void tests(void)
 
 void help_print(void)
 {
-	printf("   -help show help options\n");
-	printf("   -no-sharp don't process #include<...>\n");
-	printf("   -follow try to parse the files included in actual file\n");
-	printf("   -test run tests to check the program\n");
-	printf("   -print show the ts and other data\n");
+	printf("   -batch        #the file is a list of files to process\n");
+	printf("   -callers file #only process files with include file\n");
+	printf("   -help         #show help options\n");
+	printf("   -no-sharp     #don't process #include<...>\n");
+	printf("   -follow       #try to parse the files included in actual file\n");
+	printf("   -test         #run tests to check the program\n");
+	printf("   -print        #show the ts and other data\n");
 }
 
 
@@ -237,6 +247,10 @@ void process_command(char * command)
 	{
 		help_print();
 		config.help = 1;
+	}
+	else if( strcmp("-batch", command) == 0)
+	{
+		config.batch = 1;
 	}
 	else if( strcmp("-no-sharp", command) == 0)
 	{
@@ -254,22 +268,38 @@ void process_command(char * command)
 	{
 		config.print_ = 1;
 	}
+	else if( strcmp("-callers", command) == 0)
+	{
+		config.callers = 2;
+	}
 	else
 	{
 		printf(" error comand unknow \n");
 	}
 }
 
-void process_arg(int argc, char* argv[])
+void process_arg(int argc, char* argv[], char * file_name)
 {
 	int i = 0;
 	while(i < argc)
 	{
-		printf("    ### argv[%d]=[%s] [%c]\n",i,argv[i],argv[i][0]);
-		
 		if( '-' == argv[i][0])
 		{
 			process_command(argv[i]);
+		}
+		else
+		{
+			if( 2 == config.callers )
+			{
+				config.callers = 1;
+				strcpy( config.callers_file, argv[i] );
+
+				printf("  callers of [%s]\n",config.callers_file);
+			}	
+			else
+			{
+				strcpy( file_name, argv[i] );
+			}
 		}
 
 		i++;
@@ -278,12 +308,14 @@ void process_arg(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+	char file_name[LONG_STR]={0};
+
 	printf("show_includes project v0.0.01\n");
 	printf("{\n");
 
-	process_arg(argc, argv);
+	process_arg(argc, argv, file_name);
 
-			   config.print();
+	config.print();
 	
 	if( 0 == config.help)
 	{
@@ -295,8 +327,15 @@ int main(int argc, char* argv[])
 		{
 			//     file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/mailnews/addrbook/src/nsAbCardProperty.cpp");
 			//     file_process("MVTVc/source/engine/mozilla/firefox-2.0.0.18/xpfe/components/filepicker/src/nsWildCard.cpp");
-
-		    files_process((char *)"input.txt");
+			if( 1 == config.batch )
+			{
+//			    files_process_batch((char *)"input.txt");
+				files_process_batch(file_name);
+			}
+			else
+			{
+				file_process_one_file(file_name);
+			}
 			if( 1 == config.print_)
 			{
 			   config.print();
