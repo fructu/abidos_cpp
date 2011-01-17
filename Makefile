@@ -120,8 +120,13 @@ execute: $(EXEC)
 #	neato  out.gv -Tpng -o out_neato.png
 #	evince out_neato.ps
 
-	fdp    out.gv -Tpng -o out_fdp.png
-	evince out_fdp.png
+#	fdp    out.gv -Tpng -o out_fdp.png
+#	evince out_fdp.png
+
+	fdp    out.gv -Tsvg -o out_fdp.svg
+	evince out_fdp.svg
+
+#	dotty out.gv
 
 valgrind_execute: $(EXEC)
 	valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./$(EXEC) -batch input.txt -follow -print
