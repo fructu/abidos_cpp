@@ -45,7 +45,9 @@ link:	link_1
 #-------------------------------------------------------------------------------
 includes_yacc: includes_yacc.yac
 	bison -v -d includes_yacc.yac
-	mv includes_yacc.tab.cac includes_yacc.c
+
+	sed -e 's/yyerror (YY_("/yyerror (YY_((char *)"/g' includes_yacc.tab.cac > includes_yacc.c
+#	mv includes_yacc.tab.cac includes_yacc.c
 	mv includes_yacc.tab.hac includes_yacc.h
 	rm -f includes_yacc.output
 
