@@ -125,8 +125,8 @@ execute: $(EXEC)
 #	fdp    out.gv -Tpng -o out_fdp.png
 #	evince out_fdp.png
 
-	fdp    out.gv -Tsvg -o out_fdp.svg
-	evince out_fdp.svg
+	fdp out.gv -Tsvg -o out_fdp.svg
+	eog out_fdp.svg
 
 #	dotty out.gv
 

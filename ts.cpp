@@ -671,7 +671,7 @@ void c_ts::file_included(char *f, char * c_type)
 		cell.show = 1;
 	}
 
-    printf("    ## file[%s:%d] -> include[%s]\n",file.full(), yylineno, cell.full() );
+//    printf("    ## file[%s:%d] -> include[%s]\n",file.full(), yylineno, cell.full() );
 
 	files[file.full()][cell.full()] = cell;
 	all_files[cell.full()]=cell;
