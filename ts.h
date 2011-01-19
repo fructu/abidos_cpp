@@ -2,15 +2,15 @@
 
 	Proyecto			: show_includes
 	Codigo				: ts.h
-	Descripcion			: 
+	Descripcion			:
 	Version				: 0.1
 	Autor				: F. Manuel Hevia Garcia
 	Fecha creacion		: 30/12/2010
-	Fecha modificacion	: 
+	Fecha modificacion	:
 
 	Observaciones :
 
-			
+
 ------------------------------------------------------------------------------*/
 #ifndef ts_h
 #define ts_h
@@ -73,6 +73,8 @@ class c_files_to_process
 		t_all_files   all_files;
 
 	public:
+        char str[LONG_STR];
+
 		bool empty(void);
 		void push(char *);
 		char * pop(void);
@@ -97,6 +99,11 @@ class c_cell
 		int  is_resolve(c_cell cell);
 	public:
 		int show;
+
+        char str_path[LONG_STR];
+        char str_name[LONG_STR];
+        char str_full[LONG_STR];
+        char str_delimiter[LONG_STR];
 
 		c_cell();
 		~c_cell();

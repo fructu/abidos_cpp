@@ -1,13 +1,13 @@
 #-------------------------------------------------------------------------------
 #
-#       Proyecto             : 
+#       Proyecto             :
 #       Fichero              : Makefile
-#       Codigo               : 
-#       Descripcion          : 
+#       Codigo               :
+#       Descripcion          :
 #       Version              : 0.0.01
 #       Autor                : F. Manuel Hevia Garcia
-#       Fecha creacion	     : 
-#       Fecha modificacion   : 
+#       Fecha creacion	     :
+#       Fecha modificacion   :
 #
 #       Observaciones :
 #
@@ -96,7 +96,7 @@ install:
 #-------------------------------------------------------------------------------
 permisos: $(EXEC)
 	chmod 777 $(EXEC)
-	
+
 clean:
 	rm -f *.o
 	rm -f *.bak
@@ -139,3 +139,4 @@ help:
 	@echo "  sudo make install #copy to /opt/hevia_tools"
 
 #-------------------------------------------------------------------------------
+

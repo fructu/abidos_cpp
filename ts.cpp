@@ -2,17 +2,19 @@
 
 	Proyecto			: show_includes
 	Codigo				: ts.cpp
-	Descripcion			: 
+	Descripcion			:
 	Version				: 0.1
 	Autor				: F. Manuel Hevia Garcia
 	Fecha creacion		: 30/12/2010
-	Fecha modificacion	: 
+	Fecha modificacion	:
 
 	Observaciones :
 
-			
+
 ------------------------------------------------------------------------------*/
 #include "ts.h"
+#include "includes_lex_yacc.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,18 +59,16 @@ void c_files_to_process::push(char * file)
 /*----------------------------------------------------------------------------*/
 char * c_files_to_process::pop(void)
 {
-	static char file[LONG_STR] = {0};
-
 	if( files_to_process.empty() )
 	{
 		return 0;
 	}
 	else
 	{
-		strcpy(file, files_to_process.back().c_str());
+		strcpy(str, files_to_process.back().c_str());
 		files_to_process.pop_back();
 	}
-	return file;
+	return str;
 }
 /*----------------------------------------------------------------------------*/
 c_cell::c_cell()
@@ -76,6 +76,7 @@ c_cell::c_cell()
 	path = "";
 	name = "";
 	delimiter = "";
+	str_full[0]='\0';
 }
 /*----------------------------------------------------------------------------*/
 c_cell::~c_cell()
@@ -83,6 +84,7 @@ c_cell::~c_cell()
 	path = "";
 	name = "";
 	delimiter = "";
+
 }
 /*----------------------------------------------------------------------------*/
 void c_cell::init(void)
@@ -91,12 +93,11 @@ void c_cell::init(void)
 	name = "";
 	delimiter = "";
 	show = 1;
+
 }
 /*----------------------------------------------------------------------------*/
 char * c_cell::get_path()
 {
-	static char str_path[LONG_STR]={0};
-
 	strcpy(str_path, path.c_str());
 
 	return str_path;
@@ -104,8 +105,6 @@ char * c_cell::get_path()
 /*----------------------------------------------------------------------------*/
 char * c_cell::get_delimiter()
 {
-	static char str_delimiter[LONG_STR]={0};
-
 	strcpy(str_delimiter, delimiter.c_str());
 
 	return str_delimiter;
@@ -118,8 +117,6 @@ void c_cell::path_set(char str[])
 /*----------------------------------------------------------------------------*/
 char * c_cell::get_name()
 {
-	static char str_name[LONG_STR]={0};
-
 	strcpy(str_name, name.c_str());
 
 	return str_name;
@@ -179,18 +176,16 @@ void c_cell::fill(char *f1, char * c_type)
 /*----------------------------------------------------------------------------*/
 char * c_cell::full(void)
 {
-	static char s[LONG_STR] = {};
-
 	if( PATH_ROOT == path )
 	{
-		sprintf(s,"%s",name.c_str());
+		sprintf(str_full,"%s",name.c_str());
 	}
 	else
 	{
-		sprintf(s,"%s%s",path.c_str(),name.c_str());
+		sprintf(str_full,"%s%s",path.c_str(),name.c_str());
 	}
 
-	return s;
+	return str_full;
 }
 /*----------------------------------------------------------------------------*/
 int c_cell::get_number_dirs(void)
@@ -206,7 +201,7 @@ int c_cell::get_number_dirs(void)
 	while (pch != NULL)
 	{
 		++n_dirs;
-		
+
 		pch = strtok (NULL, "/");
 	}
 
@@ -229,7 +224,7 @@ void c_cell::push_dirs(t_dir_vector & dir_vector)
 	while (pch != NULL)
 	{
 		dir_vector.push_back(pch);
-		
+
 		pch = strtok (NULL, "/");
 	}
 }
@@ -240,7 +235,7 @@ void c_cell::pop_dirs(t_dir_vector & dir_vector, char * str)
 
 	t_dir_vector::iterator i = dir_vector.begin();
 
-	while( i != dir_vector.end() ) 
+	while( i != dir_vector.end() )
 	{
 		string s = *i;
 		strcat(str,s.c_str());
@@ -265,7 +260,7 @@ int c_cell::is_sharp(void)
 }
 /*----------------------------------------------------------------------------*/
 /*
-	answerd to quiestion 
+	answerd to quiestion
 		resolve or not?
 */
 int c_cell::is_resolve(c_cell cell)
@@ -280,7 +275,7 @@ int c_cell::is_resolve(c_cell cell)
 		cell.print();
 		printf("] -> no resolved");
 		return 0;
-	}	
+	}
 
 	strcpy(str, cell.path.c_str());
 	char * pch;
@@ -292,9 +287,9 @@ int c_cell::is_resolve(c_cell cell)
 		{
 			return 1;
 		}
-		
+
 		pch = strtok (NULL, "/");
-	}	
+	}
 
 	return resolve;
 }
@@ -309,8 +304,8 @@ int c_cell::is_resolve(c_cell cell)
 */
 void c_cell::path_resolve(c_cell & cell)
 {
-	static char str[LONG_STR]={0};
 //	int n_dirs     = get_number_dirs();
+    char str[LONG_STR]={0};
 	int n_resolved = 0;
 	c_cell cell_old = cell;
 
@@ -345,7 +340,7 @@ void c_cell::path_resolve(c_cell & cell)
 				dir_vector.push_back(pch);
 			}
 		}
-		
+
 		pch = strtok (NULL, "/");
 	}
 
@@ -441,7 +436,7 @@ void c_ts::generate(void)
 
 	printf("  void c_ts::generate()\n");
 	printf("  {\n");
-	
+
 	f_out = fopen("out.gv","w");
 	if( NULL == f_out )
 	{
@@ -489,14 +484,14 @@ void c_ts::generate(void)
 		{
 			strcpy(str_path,cell.get_path());
 		}
-		
+
 		strcpy(str,s.c_str());
 
 		if( 1 == cell.show)
 		{
 			if( 0 == strcmp("<", cell.get_delimiter()) )
 			{
-	//			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());			
+	//			fprintf(f_out,"  \"%s\" [label=\"<%s%s>\"];\n",str, str_path, cell.get_name());
 			fprintf(f_out,"  \"%s\" [label=\"<%s>\"];\n",str, cell.get_name());
 			}
 			else
@@ -594,7 +589,7 @@ int file_name_good(char * f)
 /*----------------------------------------------------------------------------*/
 void c_ts::file_begin(char *f)
 {
-	if( strcmp("",file.get_name()) != 0 ) 
+	if( strcmp("",file.get_name()) != 0 )
 	{
 		printf("error c_ts::file_begin(char *f) file_name [%s] not empty\n"
 			, file.get_name()
@@ -659,10 +654,8 @@ void c_ts::file_included(char *f, char * c_type)
 
 	if( 1 == config.callers )
 	{
-//		printf("   ##### [%s] -> include[%s]\n", file.full(), cell.full());
 		if( 0 == strcmp( config.callers_file, cell.full() ) )
 		{
-//			printf("   ##### 1 [%s] -> include[%s]\n", file.full(), cell.full());
 			cell.show = 1;
 			file.show = 1;
 			all_files[file.full()].show = 1;
@@ -671,12 +664,14 @@ void c_ts::file_included(char *f, char * c_type)
 		{
 			cell.show = 0;
 		}
-	}	
+	}
 	else
 	{
 		file.show = 1;
 		cell.show = 1;
 	}
+
+    printf("    ## file[%s:%d] -> include[%s]\n",file.full(), yylineno, cell.full() );
 
 	files[file.full()][cell.full()] = cell;
 	all_files[cell.full()]=cell;
@@ -684,7 +679,7 @@ void c_ts::file_included(char *f, char * c_type)
 /*----------------------------------------------------------------------------*/
 void c_ts::file_end(void)
 {
-	if( 0 == strcmp("",file.get_name()) ) 
+	if( 0 == strcmp("",file.get_name()) )
 	{
 		printf("warning c_ts::file_end() file_name empty\n");
 	}

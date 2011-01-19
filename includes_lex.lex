@@ -2,15 +2,15 @@
 
 	Proyecto			: show_includes
 	Codigo				: includes_lex.lex
-	Descripcion			: 
+	Descripcion			:
 	Version				: 0.1
 	Autor				: F. Manuel Hevia Garcia
 	Fecha creacion		: 30/12/2010
-	Fecha modificacion	: 
+	Fecha modificacion	:
 
 	Observaciones :
 
-			
+
 ------------------------------------------------------------------------------*/
 %{
 #include <ctype.h>
@@ -20,7 +20,7 @@
 #include"includes_lex_yacc.h"
 #include "ts.h"
 
-    
+
 //int yylineno = 1;
 char lex_file_name[LONG_STR];
 
@@ -34,16 +34,16 @@ void string_copy(void);
 	i must define yywrap and drop the next line
 */
 %option noyywrap
-%option yylineno 
+%option yylineno
 stringtext				([^"])|(\\.)
 stringtext_2			([^"<>])|(\\.)
 %%
-"/*" { 
-		skip_comment(); 
+"/*" {
+		skip_comment();
 	}
 
 "//" {
-		skip_until_eol(); 
+		skip_until_eol();
 	}
 
 \r\n {
@@ -55,7 +55,7 @@ stringtext_2			([^"<>])|(\\.)
 //		return '\n';
 	}
 
-[\t\f\v\r ]+ { /* Ignore whitespace. */ 
+[\t\f\v\r ]+ { /* Ignore whitespace. */
 	}
 
 [#] {
@@ -66,27 +66,27 @@ stringtext_2			([^"<>])|(\\.)
 		return TOKEN_INCLUDE;
 	}
 
-"\""{stringtext}*"\"" { 
-		string_copy();	
-		return STRING_COMMILLAS; 
+"\""{stringtext}*"\"" {
+		string_copy();
+		return STRING_COMMILLAS;
 	}
 
 "L\""{stringtext}*"\"" {
 		string_copy();
-		return STRING_COMMILLAS; 
+		return STRING_COMMILLAS;
 	}
 
-"\<"{stringtext_2}*"\>" { 
+"\<"{stringtext_2}*"\>" {
 		string_copy();
-		return STRING_SHARP; 
+		return STRING_SHARP;
 	}
 
-. { 
+. {
 	/*fprintf(stderr, "%d: unexpected `%s'\n", yylineno, yytext); */
 	}
 %%
 
-int yyerror(const char *msg) 
+int yyerror(const char *msg)
 {
   printf("%d: %s at '%s'\n",yylineno, msg, yytext);
   return -1;
@@ -105,8 +105,8 @@ skip_comment(void)
 	c2 = yyinput();
 
 	while (c2 != EOF && !(c1 == '*' && c2 == '/')) {
-		if (c1 == '\n')
-			++yylineno;
+//		if (c1 == '\n')
+//			++yylineno;
 		c1 = c2;
 		c2 = yyinput();
 	}
@@ -122,7 +122,7 @@ skip_until_eol(void)
 
 	while ((c = yyinput()) != EOF && c != '\n')
 		;
-	++yylineno;
+//	++yylineno;
 }
 
 int lex_file_init(char *f)
@@ -136,7 +136,7 @@ int lex_file_init(char *f)
 		return 0;
 	}
 
-	yylineno=1;
+//	yylineno=1;
 
 	return 1;
 }
