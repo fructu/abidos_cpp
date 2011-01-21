@@ -94,6 +94,9 @@ install:
 	cp $(EXEC) /opt/hevia_tools
 	cp $(EXEC).sh /opt/hevia_tools
 	cp show_out.sh /opt/hevia_tools
+	cp out_begin.py /opt/hevia_tools
+	cp out_end.py /opt/hevia_tools
+	cp xdot.py /opt/hevia_tools
 
 #-------------------------------------------------------------------------------
 permisos: $(EXEC)
@@ -126,12 +129,13 @@ execute: $(EXEC)
 #	fdp    out.gv -Tpng -o out_fdp.png
 #	evince out_fdp.png
 
-	fdp out.gv -Tsvg -o out_fdp.svg
+#	fdp out.gv -Tsvg -o out_fdp.svg
 #	eog out_fdp.svg
 	cat out_begin.py > out_run.py
 	cat out.gv >> out_run.py
 	cat out_end.py >> out_run.py
 	chmod +x out_run.py
+	./out_run.py
 
 #	dotty out.gv
 

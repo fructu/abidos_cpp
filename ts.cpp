@@ -497,7 +497,7 @@ void c_ts::generate(void)
 			else
 			{
 	//			fprintf(f_out,"  \"%s\" [label=\"%s%s\"];\n",str, str_path, cell.get_name());
-				fprintf(f_out,"  \"%s\" [label=\"%s\"];\n",str, cell.get_name());
+				fprintf(f_out,"  \"%s\" [URL=\"%s\"];\n",str, cell.full());
 			}
 		}
 
