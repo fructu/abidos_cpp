@@ -21,8 +21,8 @@
 
 CC=c++
 
-#CFLAGS=-s -Wall -g
-CFLAGS=-g -Wall
+CFLAGS=-s -Wall -g
+#CFLAGS=-g -Wall
 
 EXEC=show_includes
 
@@ -111,7 +111,8 @@ clean:
 	rm -f includes_yacc.h
 
 execute: $(EXEC)
-	./$(EXEC) -batch input.txt -follow -print -no-sharp
+#	./$(EXEC) -batch input.txt -follow -print -no-sharp
+	./$(EXEC) -batch input.txt -follow -print
 #	./$(EXEC) input.txt -no-sharp -follow
 #	./$(EXEC) input.txt -no-sharp -follow -batch
 #	./$(EXEC) input.txt -no-sharp -follow -batch -callers test/h1.h
@@ -126,7 +127,11 @@ execute: $(EXEC)
 #	evince out_fdp.png
 
 	fdp out.gv -Tsvg -o out_fdp.svg
-	eog out_fdp.svg
+#	eog out_fdp.svg
+	cat out_begin.py > out_run.py
+	cat out.gv >> out_run.py
+	cat out_end.py >> out_run.py
+	chmod +x out_run.py
 
 #	dotty out.gv
 
