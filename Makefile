@@ -91,6 +91,8 @@ input_generate: input.txt
 	mv -f input.txt_sed input.txt
 
 install:
+	mkdir -p /opt/hevia_tools
+	mkdir -p /tmp/hevia
 	cp $(EXEC) /opt/hevia_tools
 	cp $(EXEC).sh /opt/hevia_tools
 	cp show_out.sh /opt/hevia_tools
