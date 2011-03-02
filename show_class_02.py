@@ -47,8 +47,8 @@ digraph G {
         ]
         
         B [
-        URL="B;b1;b2;b3;b4;b5;b6;b7;b8;b9;b10;b11;b12;b13;b14;b15;b16;b17;b18;b19;b20",
-                label = "{B\lb1\lb2\lb3\lb4\lb5\lb6\lb7\lb8\lb9\lb10\lb11\lb12\lb13\lb14\lb15\lb16\lb17\lb18\lb19\lb20\l}"
+        URL="B;b2;b3;b4;b5;b6;b7;b8;b9;b10;b11;b12;b13;b14;b15;b16;b17;b18;b19;b20",
+                label = "{B\lb2\lb3\lb4\lb5\lb6\lb7\lb8\lb9\lb10\lb11\lb12\lb13\lb14\lb15\lb16\lb17\lb18\lb19\lb20\l}"
         ]
         
         B->A;

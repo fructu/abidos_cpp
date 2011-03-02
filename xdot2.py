@@ -415,24 +415,29 @@ class Node(Element):
         
         # i dont want change the line in the midle
         # todo -> adjunst this
-        #y_inside_centered = y_inside        
-        y_inside_centered = y_inside - element_height / 2
+        y_inside_centered = y_inside
+        #y_inside_centered = y_inside - element_height / 2
         
-        n_element = int( math.ceil( y_inside_centered / element_height ) )
+        n_element = int( math.ceil( y_inside_centered / element_height ) ) - 1
         
-        
-        print " n_element["+str(n_element)+"]"
+        if( 0 <= n_element and n_element <= n_parts):
+          print " n_element["+str(n_element)+"] -> [" + l_class_parts[n_element] + "]"
+        else:
+          print " n_element["+str(n_element)+"] -> [out elements]"
 
 #        i = int(
 
-        for part in l_class_parts:
-            print " part["+part+"]"
+#        for part in l_class_parts:
+#            print " part["+part+"]"
             
         return url;
 
 
 
     def get_url(self, x, y):
+        if not self.is_inside(x, y):
+          return None
+
         print ""
         print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
         if self.url is None:
