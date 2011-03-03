@@ -389,47 +389,37 @@ class Node(Element):
     # y2_inside the top of the node is 0
     #           and the bottom is the height
     #
-    # y is global i want the position with the top of node
+    # y is global, i want the position with the top of node
     #
     def get_item_url(self, x, y):        
-        print "---------------------------------------------------------------"
-#        print "x["+str(x)+"][y"+str(y)+"]   / x2_global["+str(self.x2)+"] y2_global ["+str(self.y2)+"]"
-        
+        item_selected = "";
         if ( self.y1 >= 0 ):
           y_inside = y - self.y1;
         else:
           y_inside = y + self.y1;
-        
-        print "x["+str(x)+"][y"+str(y)+"]   / x2_global["+str(self.x2)+"] y2_global ["+str(self.y2)+"]"
-        print "self.y1["+str(self.y1)+"]-> y_inside["+str(y_inside)+"]"
-        
+#        print "x["+str(x)+"][y"+str(y)+"]   / x2_global["+str(self.x2)+"] y2_global ["+str(self.y2)+"]"
+#        print "self.y1["+str(self.y1)+"]-> y_inside["+str(y_inside)+"]"
         url=Url(self, self.url)
         print"url"+url.url
         l_class_parts = url.url.split(";")
         n_parts = len(l_class_parts)
-        print "l_class_parts.len["+ str(n_parts) +"]"
+#        print "l_class_parts.len["+ str(n_parts) +"]"
         
         element_height = (self.y2 - self.y1) / n_parts
         
-        print " element_height["+str(element_height)+"]"
+#        print " element_height["+str(element_height)+"]"
         
-        # i dont want change the line in the midle
-        # todo -> adjunst this
         y_inside_centered = y_inside
-        #y_inside_centered = y_inside - element_height / 2
         
         n_element = int( math.ceil( y_inside_centered / element_height ) ) - 1
         
         if( 0 <= n_element and n_element <= n_parts):
-          print " n_element["+str(n_element)+"] -> [" + l_class_parts[n_element] + "]"
-        else:
-          print " n_element["+str(n_element)+"] -> [out elements]"
+          item_selected = l_class_parts[n_element];
 
-#        i = int(
+        if( item_selected != ""):
+          print " item_selected["+item_selected+"]"
+          url.url += "->[" + item_selected + "]"
 
-#        for part in l_class_parts:
-#            print " part["+part+"]"
-            
         return url;
 
 
@@ -438,11 +428,9 @@ class Node(Element):
         if not self.is_inside(x, y):
           return None
 
-        print ""
-        print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
         if self.url is None:
             return None
-        #print (x, y), (self.x1, self.y1), "-", (self.x2, self.y2)
+
         url = self.get_item_url(x,y)
 
         if self.is_inside(x, y):
