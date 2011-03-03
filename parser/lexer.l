@@ -36,10 +36,10 @@
 #include <stdio.h>
 
 #include "parser.h"
+#define LONG_STR (4000)
+//static int yywrap(void);
+char lex_file_name[LONG_STR];
 
-int lineno;
-
-static int yywrap(void);
 static void skip_until_eol(void);
 static void skip_comment(void);
 static int check_identifier(const char *);
@@ -52,9 +52,11 @@ floatsuffix				[fFlL]
 chartext				([^'])|(\\.)
 stringtext				([^"])|(\\.)
 
+%option noyywrap
+%option yylineno
 %%
 
-"\n"					{ ++lineno; }
+"\n"					{ }
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
 "/*"					{ skip_comment(); }
@@ -204,15 +206,17 @@ stringtext				([^"])|(\\.)
 "\""{stringtext}*"\""			{ return STRING; }
 "L\""{stringtext}*"\""			{ return STRING; }
 
-.					{ fprintf(stderr, "%d: unexpected character `%c'\n", lineno, yytext[0]); }
+.					{ fprintf(stderr, "%d: unexpected character `%c'\n", yylineno, yytext[0]); }
 
 %%
 
+/*
 static int
 yywrap(void)
 {
 	return 1;
 }
+*/
 
 /*
  * We use this routine instead a lex pattern because we don't need
@@ -227,8 +231,6 @@ skip_comment(void)
 	c2 = input();
 
 	while (c2 != EOF && !(c1 == '*' && c2 == '/')) {
-		if (c1 == '\n')
-			++lineno;
 		c1 = c2;
 		c2 = input();
 	}
@@ -244,7 +246,6 @@ skip_until_eol(void)
 
 	while ((c = input()) != EOF && c != '\n')
 		;
-	++lineno;
 }
 
 static int
@@ -264,4 +265,24 @@ check_identifier(const char *s)
 	}
 
 	return IDENTIFIER;
+}
+
+int lex_file_init(char *f)
+{
+    sprintf(lex_file_name,"%s",f);
+
+    yyin=fopen(f,"r");
+    if( NULL==yyin )
+    {
+        printf("     error open [%s]\n",f);
+        return 0;
+    }
+
+    return 1;
+}
+
+
+void lex_file_end(void)
+{
+    fclose(yyin);
 }

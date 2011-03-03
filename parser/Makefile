@@ -1,5 +1,5 @@
 YACC=yacc
-LEX=flex
+LEX=lex
 
 OBJS = parser_descent.o lexer.o main.o
 CC = g++
@@ -30,7 +30,11 @@ parser.c parser.h: parser.y
 lexer.c: lexer.l
 	$(LEX) -t lexer.l >lexer.c
 
+parser_descent.o: lex_yacc.h
+
 lexer.o: parser.h
+
+lex_yacc.h: parser.h
 
 clean:
 	rm -f tryit *.o
