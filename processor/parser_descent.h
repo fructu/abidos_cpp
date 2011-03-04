@@ -22,6 +22,7 @@ class c_parser_descent
   private:
     int yy_actual;
     
+    void token_print(void);
     int token_get(void);
     void token_next(void);
   public:    
