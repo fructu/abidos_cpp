@@ -23,11 +23,11 @@ c_parser_descent::c_parser_descent()
 c_parser_descent::~c_parser_descent()
 {
 }
-
+/*----------------------------------------------------------------------------*/
 void yytname_print(void)
 {
   int i = 0;
-  while(yytname[i] != 0)
+  while(yytokens[i] != 0)
   {
      printf(" i=[%d] -> [%s]\n", i, yytokens[i]);
      i++;
@@ -36,7 +36,7 @@ void yytname_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::token_print(void)
 {
-  printf(" yy_actual=[%d] -> [%s]\n", yy_actual, yytokens[yy_actual]);
+  printf(" yy_actual=[%3d] -> yytokens[%s] yytext[%s]\n", yy_actual, yytokens[yy_actual], yytext);
 }
 /*----------------------------------------------------------------------------*/
 int c_parser_descent::token_get(void)
@@ -65,7 +65,6 @@ void c_parser_descent::yyparse(char * file_name)
   token_next();
   while( yy_actual != 0 )
   {
-    
     token_next();
   }
 
