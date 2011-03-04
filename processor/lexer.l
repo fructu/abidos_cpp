@@ -206,7 +206,7 @@ stringtext				([^"])|(\\.)
 "\""{stringtext}*"\""			{ return STRING; }
 "L\""{stringtext}*"\""			{ return STRING; }
 
-.					{ fprintf(stderr, "%d: unexpected character `%c'\n", yylineno, yytext[0]); }
+.					{ fprintf(stderr, "lexx errro line[%d]: unexpected character [%c]\n", yylineno, yytext[0]); }
 
 %%
 

@@ -22,10 +22,13 @@ tryit_descent:  $(OBJS)
 tryit: parser.o lexer.o
 	cc -o tryit parser.o lexer.o
 
+# extract_symbols.pl tokens.h
 parser.c parser.h: parser.y
 	$(YACC) -dt parser.y
 	mv -f y.tab.c parser.c
 	mv -f y.tab.h parser.h
+	extract_symbols.pl
+
 
 lexer.c: lexer.l
 	$(LEX) -t lexer.l >lexer.c
@@ -38,4 +41,5 @@ lex_yacc.h: parser.h
 
 clean:
 	rm -f tryit *.o
-	rm -f lexer.c parser.c parser.h
+	rm -f lexer.c parser.c parser.h tokens.h
+	rm *~
