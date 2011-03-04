@@ -1,0 +1,7 @@
+*.o
+processor/abidos
+processor/lexer.c
+processor/nohup.out
+processor/parser.c
+processor/parser.h
+
