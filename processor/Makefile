@@ -27,7 +27,7 @@ parser.c parser.h: parser.y
 	$(YACC) -dt parser.y
 	mv -f y.tab.c parser.c
 	mv -f y.tab.h parser.h
-	extract_symbols.pl
+	./extract_symbols.pl
 
 
 lexer.c: lexer.l
@@ -42,4 +42,4 @@ lex_yacc.h: parser.h
 clean:
 	rm -f tryit *.o
 	rm -f lexer.c parser.c parser.h tokens.h
-	rm *~
+	rm -f *~

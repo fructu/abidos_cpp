@@ -14,10 +14,6 @@
 ------------------------------------------------------------------------------*/
 #include "parser_descent.h"
 #include "tokens.h"
-
-/*----------------------------------------------------------------------------*/
-
-
 /*----------------------------------------------------------------------------*/
 c_parser_descent::c_parser_descent()
 {
@@ -40,7 +36,6 @@ void yytname_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::token_print(void)
 {
-  printf(" yy_actual=[%d]\n", yy_actual);
   printf(" yy_actual=[%d] -> [%s]\n", yy_actual, yytokens[yy_actual]);
 }
 /*----------------------------------------------------------------------------*/
@@ -65,16 +60,14 @@ void c_parser_descent::yyparse(char * file_name)
     return;
   }
 
-  yytname_print();
-  /*
+  //yytname_print();
+  
   token_next();
   while( yy_actual != 0 )
   {
     
     token_next();
   }
-  */
-
 
   yylex_destroy();  
 }

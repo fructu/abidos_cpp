@@ -28,13 +28,13 @@ sub p1
     else
     {
       $c = chr($i);
-      if($c eq '\"')
+      if($c eq "\"")
       {
         print f_out "  \"$i->\\\"\",\n";
       }
-      elsif ($c eq '\\')
+      elsif ($c eq "\\")
       {
-        print f_out "  \"$i->\\\",\n";
+        print f_out "  \"$i->\\\\\",\n";
       }
       else
       {
