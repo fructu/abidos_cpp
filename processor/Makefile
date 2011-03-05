@@ -1,7 +1,11 @@
 YACC=yacc
 LEX=lex
 
-OBJS = parser_descent.o lexer.o main.o
+OBJS = 	lexer.o \
+		parser_descent.o \
+		parser_descent_rules.o \
+		main.o
+
 CC = g++
 DEBUG = -g
 CFLAGS = -Wall -c $(DEBUG)
@@ -28,7 +32,6 @@ parser.c parser.h: parser.y
 	mv -f y.tab.c parser.c
 	mv -f y.tab.h parser.h
 	./extract_symbols.pl
-
 
 lexer.c: lexer.l
 	$(LEX) -t lexer.l >lexer.c

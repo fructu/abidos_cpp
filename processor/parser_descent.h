@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
 
-    Proyecto            : show_includes
+    Proyecto            : abidos
     Codigo              : parser_descent.h
     Descripcion         :
     Version             : 0.1
@@ -25,6 +25,28 @@ class c_parser_descent
     void token_print(void);
     int token_get(void);
     void token_next(void);
+/*
+	rules from yacc
+*/
+	//Translation unit.
+	//this is the start rule in yacc
+	int translation_unit(void);
+
+ 	//Epsilon (optional) definitions.
+	int declaration_seq_opt(void);
+
+	//declarations
+	int declaration_seq(void);
+	int declaration(void);
+	int block_declaration(void);
+	int simple_declaration(void);
+	int decl_specifier_seq(void);
+	int decl_specifier(void);
+	int type_specifier(void);
+	int class_specifier(void);
+	int class_head(void);
+	int class_name(void);
+
   public:    
     c_parser_descent();
     ~c_parser_descent();
