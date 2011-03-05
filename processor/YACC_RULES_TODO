@@ -1068,7 +1068,7 @@ condition_opt:
 	/* epsilon */
 	| condition
 	;
-
+// #did
 decl_specifier_seq_opt:
 	/* epsilon */
 	| decl_specifier_seq
