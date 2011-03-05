@@ -24,19 +24,11 @@ translation_unit:
 */
 int c_parser_descent::translation_unit(void)
 {
-	return 0;
-}
-/*----------------------------------------------------------------------
- * Epsilon (optional) definitions.
- *----------------------------------------------------------------------*/
-/*
-declaration_seq_opt:
-	//epsilon 
-	| declaration_seq
-	;
-*/
-int c_parser_descent::declaration_seq_opt(void)
-{
+	if( 1 == declaration_seq_opt() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------
@@ -50,7 +42,14 @@ declaration_seq:
 */
 int c_parser_descent::declaration_seq(void)
 {
-	return 0;
+	int result = 0;
+
+	while( 1 == declaration() )
+	{
+		result = 1;
+	}
+
+	return result;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -64,8 +63,14 @@ declaration:
 	| namespace_definition
 	;
 */
+//## todo rest of | ...
 int c_parser_descent::declaration(void)
 {
+	if( 1 == block_declaration() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -78,8 +83,14 @@ block_declaration:
 	| using_directive
 	;
 */
+//## todo rest of | ...
 int c_parser_descent::block_declaration(void)
 {
+	if( 1 == simple_declaration() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -100,6 +111,11 @@ decl_specifier_seq:
 */
 int c_parser_descent::decl_specifier_seq(void)
 {
+	if( 1 == decl_specifier() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -112,8 +128,14 @@ decl_specifier:
 	| TYPEDEF
 	;
 */
+//## todo rest of | ...
 int c_parser_descent::decl_specifier(void)
 {
+	if( 1 == type_specifier() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -126,8 +148,14 @@ type_specifier:
 	| cv_qualifier
 	;
 */
+//## todo rest of | ...
 int c_parser_descent::type_specifier(void)
 {
+	if( 1 == class_specifier() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -136,8 +164,14 @@ class_specifier:
 	class_head '{' member_specification_opt '}'
 	;
 */
+//## todo rest of rule
 int c_parser_descent::class_specifier(void)
 {
+	if( 1 == class_head() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -147,8 +181,14 @@ class_head:
 	| class_key nested_name_specifier identifier base_clause_opt
 	;
 */
+//## todo next |
 int c_parser_descent::class_head(void)
 {
+	if( 0 == class_key() )
+	{
+		return 0;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -159,9 +199,56 @@ class_key:
 	| UNION
 	;
 */
-int c_parser_descent::class_name(void)
+int c_parser_descent::class_key(void)
 {
+	token_next();
+
+	if( CLASS == token_get() )
+	{
+		return 1;
+	}
+
+	if( STRUCT == token_get() )
+	{
+		return 1;
+	}
+
+	if( UNION == token_get() )
+	{
+		return 1;
+	}
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
 
+/*----------------------------------------------------------------------
+ * Epsilon (optional) definitions.
+ *----------------------------------------------------------------------*/
+/*
+declaration_seq_opt:
+	//epsilon 
+	| declaration_seq
+	;
+*/
+//todo epsilon
+int c_parser_descent::declaration_seq_opt(void)
+{
+	declaration_seq();
+
+	return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+decl_specifier_seq_opt:
+	//epsilon
+	| decl_specifier_seq
+	;
+*/
+int c_parser_descent::decl_specifier_seq_opt(void)
+{
+	decl_specifier_seq();
+
+	return 1;
+}
+/*----------------------------------------------------------------------------*/
