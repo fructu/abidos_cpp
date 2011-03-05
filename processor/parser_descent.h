@@ -45,8 +45,15 @@ typedef vector<c_token> t_tokens;
 class c_parser_descent
 {
   private:
+	int just_reloaded;
+	t_tokens::iterator i_token_actual;
+//	c_token  token_actual;
 	t_tokens tokens_vector;
-    
+  
+	void tokens_vector_print(void);
+	void tokens_vector_reload(void);
+	void tokens_vector_clear(void);
+  
     void token_print(void);
     int  token_get(void);
     void token_next(void);
@@ -73,10 +80,16 @@ class c_parser_descent
 	int declaration_seq_opt(void);
 	int decl_specifier_seq_opt(void);
 
+
   public:    
     c_parser_descent();
     ~c_parser_descent();
     void yyparse(char * file_name);
+
+/*
+	tests
+*/
+	int test_01(void);
 };
 
 #endif
