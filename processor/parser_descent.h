@@ -64,6 +64,9 @@ class c_parser_descent
 	//this is the start rule in yacc
 	int translation_unit(void);
 
+	// Lexical elements.
+	int identifier(c_token & token_identifier);
+
 	//declarations
 	int declaration_seq(void);
 	int declaration(void);
@@ -79,7 +82,7 @@ class c_parser_descent
  	//Epsilon (optional) definitions.
 	int declaration_seq_opt(void);
 	int decl_specifier_seq_opt(void);
-
+	int init_declarator_list_opt(void);
 
   public:    
     c_parser_descent();

@@ -463,7 +463,7 @@ block_declaration:
 	| using_directive
 	;
 
-## did
+//## did
 simple_declaration:
 	decl_specifier_seq_opt init_declarator_list_opt ';'
 	;
@@ -1068,12 +1068,12 @@ condition_opt:
 	/* epsilon */
 	| condition
 	;
-// #did
+// ##did
 decl_specifier_seq_opt:
 	/* epsilon */
 	| decl_specifier_seq
 	;
-
+// ##did
 init_declarator_list_opt:
 	/* epsilon */
 	| init_declarator_list

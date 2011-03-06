@@ -58,3 +58,4 @@ clean:
 	rm -f tryit *.o
 	rm -f lexer.c parser.c parser.h tokens.h
 	rm -f *~
+	rm -f *.bk

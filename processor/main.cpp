@@ -25,7 +25,7 @@ void test_01(void)
   parser.test_01();
 }
 
-void test_02(char file_name[])
+void process_file(char file_name[])
 {
   c_parser_descent parser;
   
@@ -34,9 +34,9 @@ void test_02(char file_name[])
 
 int main(int argc, char* argv[])
 {
-  printf("abidos v0.0.01\n");
+  printf("abidos v0.0.02\n");
 
-  test_01();
+//  test_01();
 
   if( argc < 2)
   {
@@ -44,6 +44,6 @@ int main(int argc, char* argv[])
     exit(1);
   }
   
-  test_02(argv[1]);
+  process_file(argv[1]);
   return 0;
 }
