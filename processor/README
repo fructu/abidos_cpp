@@ -1,6 +1,8 @@
 1. A brief description of the project.
    sudo apt-get install graphviz
 
+	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
+
 2. A pointer to the project website (if it has one).
 3. Notes on the developer’s build environment and potential portability problems.
 4. A roadmap describing important files and subdirectories.
@@ -8,3 +10,9 @@
 6. Either a maintainers/credits list or a pointer to a file containing same (usually CREDITS).
 7. Either recent project news or a pointer to a file containing same (usually NEWS).
 8. Project mailing list addresses.
+
+todo
+	-[] do a class for the input parameters, first do it in show_includes.
+	-[] table of types first for class and structs.
+	-[] continue with the work of the yacc rules to get class definitions.
+	-[] refactor test in a class.
