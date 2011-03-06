@@ -24,13 +24,14 @@ translation_unit:
 */
 int c_parser_descent::translation_unit(void)
 {
-  printf("## translation_unit(void)\n");
+  printf("\n## translation_unit(void)-----------------------------------\n");
 
 	if( 1 == declaration_seq_opt() )
 	{
 		return 1;
 	}
 
+	printf("error sintax*********************************************\n");
 	return 0;
 }
 /*----------------------------------------------------------------------
@@ -44,17 +45,14 @@ identifier:
 int c_parser_descent::identifier(c_token & token_identifier)
 {
   printf("## declaration_seq(void)\n");
-	t_tokens::iterator i_token = i_token_actual;
 
 	token_next();
 	if( IDENTIFIER == token_get() )
 	{
-		token_identifier = *i_token_actual;
 		return 1;
 	}
 
-	// restore
-	i_token_actual = i_token;
+	--i_token_actual;
 	return 0;
 }
 
@@ -124,6 +122,9 @@ int c_parser_descent::block_declaration(void)
 		return 1;
 	}
 
+//	tokens_vector_reload();
+
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -135,10 +136,8 @@ simple_declaration:
 int c_parser_descent::simple_declaration(void)
 {
   printf("## simple_declaration(void)\n");
-	t_tokens::iterator i_token = i_token_actual;
-
+	
 	decl_specifier_seq_opt();
-
 	init_declarator_list_opt();
 
 	token_next();
@@ -148,7 +147,7 @@ int c_parser_descent::simple_declaration(void)
 		return 1;
 	}
 
-	i_token_actual = i_token;
+	--i_token_actual;
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -223,18 +222,16 @@ int c_parser_descent::class_specifier(void)
 {
   printf("## class_specifier(void)\n");
 
-	t_tokens::iterator i_token = i_token_actual;
 
 	if( 0 == class_head() )
 	{
-		i_token_actual = i_token;
 		return 0;
 	}
 
 	token_next();
 	if( '{' != token_get() )
 	{
-		i_token_actual = i_token;
+		--i_token_actual;
 		return 0;
 	}
 
@@ -245,7 +242,7 @@ int c_parser_descent::class_specifier(void)
 	token_next();
 	if( '}' != token_get() )
 	{
-		i_token_actual = i_token;
+		--i_token_actual;
 		return 0;
 	}
 	
@@ -290,7 +287,6 @@ class_key:
 int c_parser_descent::class_key(void)
 {
   printf("## class_key(void)\n");
-	t_tokens::iterator i_token = i_token_actual;
 
 	token_next();
 
@@ -309,7 +305,8 @@ int c_parser_descent::class_key(void)
 		return 1;
 	}
 
-	i_token_actual = i_token;
+	--i_token_actual;
+  printf("## class_key(void)-> return 0\n");
 	return 0;
 }
 /*----------------------------------------------------------------------------*/

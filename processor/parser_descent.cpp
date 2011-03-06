@@ -48,7 +48,7 @@ void c_parser_descent::tokens_vector_print(void)
 		c_token token;
 		token = (*i_token);
 
-		printf(" yy_actual=[%3d] -> yytokens[%s] token.text[%s]\n"
+		printf(" [%3d] -> yytokens[%s] token.text[%s]\n"
 			, token.token
 			, yytokens[token.token]
 			, token.text.c_str()
@@ -62,10 +62,27 @@ void c_parser_descent::tokens_vector_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::token_print(void)
 {
-  printf(" yy_actual=[%3d] -> yytokens[%s] token.text[%s]\n"
+	if( tokens_vector.empty() )
+	{
+		printf("error c_parser_descent::token_print() -> tokens_vector.empty() \n");
+		exit( -1 );
+	}
+
+  printf(" yy_actual=[%3d] "
+	, token_get()
+  );
+  printf("-> yytokens[%s] "
+	, yytokens[token_get()]
+  );
+  printf(" token.text[%s]\n"
+	, (*i_token_actual).text.c_str()
+  );
+
+	t_tokens::iterator i_token = i_token_actual;
+  printf("### yy_actual=[%3d] -> yytokens[%s] token.text[%s]\n"
 	, token_get()
 	, yytokens[token_get()]
-	, (*i_token_actual).text.c_str()
+	, (*i_token).text.c_str()
   );
 }
 /*----------------------------------------------------------------------------*/
@@ -134,11 +151,15 @@ void c_parser_descent::token_next(void)
 		c_token token(t, yytext);
 		tokens_vector.push_back(token);
 
-		i_token_actual = tokens_vector.end();
-		--i_token_actual;
+		i_token_actual = (tokens_vector.end() - 1);
 
 		token_print();
+
+		return;
 	}
+
+	printf("error c_parser_descent::token_next(void)\n");
+	exit(-1);
 }
 /*----------------------------------------------------------------------------*/
 
@@ -151,7 +172,12 @@ void c_parser_descent::yyparse(char * file_name)
     return;
   }
 
-  translation_unit();
+  do
+  {
+	translation_unit();
+  }
+  while( token_get() != 0 );
+
 
   yylex_destroy();  
 
