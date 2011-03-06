@@ -42,6 +42,18 @@ lexer.o: parser.h
 
 lex_yacc.h: parser.h
 
+debug_put:
+	cp parser_descent_rules.cpp parser_descent_rules.cpp.bk
+	./put_printf_debug.pl
+	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
+	rm parser_descent_rules.cpp_debug
+
+debug_drop:
+	cp parser_descent_rules.cpp parser_descent_rules.cpp.debug.bk
+	./drop_printf_debug.pl
+	cp parser_descent_rules.cpp_no_debug parser_descent_rules.cpp
+	rm parser_descent_rules.cpp_no_debug
+
 clean:
 	rm -f tryit *.o
 	rm -f lexer.c parser.c parser.h tokens.h
