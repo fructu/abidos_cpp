@@ -29,7 +29,7 @@ sub p1
 		{
 			if( $_ =~ /{/ )
 			{
-				$_ = "{\n  printf(\"## $method_id\");";
+				$_ = "{\n  printf(\"## $method_id\\n\");";
 				$method_detected = 0;
 			    $method_id = "";
 			}

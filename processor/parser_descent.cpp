@@ -15,7 +15,8 @@
 #include <stdlib.h>
 #include "parser_descent.h"
 #include "tokens.h"
-/*----------------------------------------------------------------------------*/c_parser_descent::c_parser_descent()
+/*----------------------------------------------------------------------------*/
+c_parser_descent::c_parser_descent()
 {
 	just_reloaded  = 1;
 	i_token_actual = tokens_vector.begin();
@@ -150,15 +151,8 @@ void c_parser_descent::yyparse(char * file_name)
     return;
   }
 
-  //yytname_print();
-  tokens_vector_reload();
-  token_next();
-  while( token_get() != 0 )
-  {
-    token_next();
-  }
+  translation_unit();
 
-  tokens_vector_print();
   yylex_destroy();  
 
 }

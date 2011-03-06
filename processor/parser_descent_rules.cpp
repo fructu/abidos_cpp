@@ -24,6 +24,8 @@ translation_unit:
 */
 int c_parser_descent::translation_unit(void)
 {
+  printf("## translation_unit(void)\n");
+
 	if( 1 == declaration_seq_opt() )
 	{
 		return 1;
@@ -31,6 +33,31 @@ int c_parser_descent::translation_unit(void)
 
 	return 0;
 }
+/*----------------------------------------------------------------------
+ * Lexical elements.
+ *----------------------------------------------------------------------*/
+/*
+identifier:
+	IDENTIFIER
+	;
+*/
+int c_parser_descent::identifier(c_token & token_identifier)
+{
+  printf("## declaration_seq(void)\n");
+	t_tokens::iterator i_token = i_token_actual;
+
+	token_next();
+	if( IDENTIFIER == token_get() )
+	{
+		token_identifier = *i_token_actual;
+		return 1;
+	}
+
+	// restore
+	i_token_actual = i_token;
+	return 0;
+}
+
 /*----------------------------------------------------------------------
  * Declarations.
  *----------------------------------------------------------------------*/
@@ -42,6 +69,8 @@ declaration_seq:
 */
 int c_parser_descent::declaration_seq(void)
 {
+  printf("## declaration_seq(void)\n");
+
 	int result = 0;
 
 	while( 1 == declaration() )
@@ -66,6 +95,8 @@ declaration:
 //## todo rest of | ...
 int c_parser_descent::declaration(void)
 {
+  printf("## declaration(void)\n");
+
 	if( 1 == block_declaration() )
 	{
 		return 1;
@@ -86,6 +117,8 @@ block_declaration:
 //## todo rest of | ...
 int c_parser_descent::block_declaration(void)
 {
+  printf("## block_declaration(void)\n");
+
 	if( 1 == simple_declaration() )
 	{
 		return 1;
@@ -101,6 +134,21 @@ simple_declaration:
 */
 int c_parser_descent::simple_declaration(void)
 {
+  printf("## simple_declaration(void)\n");
+	t_tokens::iterator i_token = i_token_actual;
+
+	decl_specifier_seq_opt();
+
+	init_declarator_list_opt();
+
+	token_next();
+
+	if( ';' == token_get() )
+	{
+		return 1;
+	}
+
+	i_token_actual = i_token;
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -111,6 +159,8 @@ decl_specifier_seq:
 */
 int c_parser_descent::decl_specifier_seq(void)
 {
+  printf("## decl_specifier_seq(void)\n");
+
 	if( 1 == decl_specifier() )
 	{
 		return 1;
@@ -131,6 +181,8 @@ decl_specifier:
 //## todo rest of | ...
 int c_parser_descent::decl_specifier(void)
 {
+  printf("## decl_specifier(void)\n");
+
 	if( 1 == type_specifier() )
 	{
 		return 1;
@@ -151,6 +203,8 @@ type_specifier:
 //## todo rest of | ...
 int c_parser_descent::type_specifier(void)
 {
+  printf("## type_specifier(void)\n");
+
 	if( 1 == class_specifier() )
 	{
 		return 1;
@@ -167,12 +221,35 @@ class_specifier:
 //## todo rest of rule
 int c_parser_descent::class_specifier(void)
 {
-	if( 1 == class_head() )
+  printf("## class_specifier(void)\n");
+
+	t_tokens::iterator i_token = i_token_actual;
+
+	if( 0 == class_head() )
 	{
-		return 1;
+		i_token_actual = i_token;
+		return 0;
 	}
 
-	return 0;
+	token_next();
+	if( '{' != token_get() )
+	{
+		i_token_actual = i_token;
+		return 0;
+	}
+
+//## todo
+//	member_specification_opt();
+
+
+	token_next();
+	if( '}' != token_get() )
+	{
+		i_token_actual = i_token;
+		return 0;
+	}
+	
+	return 1;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -184,12 +261,23 @@ class_head:
 //## todo next |
 int c_parser_descent::class_head(void)
 {
+  printf("## class_head(void)\n");
+
 	if( 0 == class_key() )
 	{
 		return 0;
 	}
 
-	return 0;
+	//## todo
+	c_token token_identifier;
+	if( 0 == identifier(token_identifier) )
+	{		
+		return 0;
+	}
+
+	printf( " #### class_head-> [%s]\n",token_identifier.text.c_str() );
+
+	return 1;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -201,6 +289,9 @@ class_key:
 */
 int c_parser_descent::class_key(void)
 {
+  printf("## class_key(void)\n");
+	t_tokens::iterator i_token = i_token_actual;
+
 	token_next();
 
 	if( CLASS == token_get() )
@@ -218,6 +309,7 @@ int c_parser_descent::class_key(void)
 		return 1;
 	}
 
+	i_token_actual = i_token;
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -234,6 +326,8 @@ declaration_seq_opt:
 //todo epsilon
 int c_parser_descent::declaration_seq_opt(void)
 {
+  printf("## declaration_seq_opt(void)\n");
+
 	declaration_seq();
 
 	return 1;
@@ -247,7 +341,25 @@ decl_specifier_seq_opt:
 */
 int c_parser_descent::decl_specifier_seq_opt(void)
 {
+  printf("## decl_specifier_seq_opt(void)\n");
+
 	decl_specifier_seq();
+
+	return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+init_declarator_list_opt:
+	//epsilon
+	| init_declarator_list
+	;
+*/
+int c_parser_descent::init_declarator_list_opt(void)
+{
+  printf("## init_declarator_list_opt(void)\n");
+
+// ## todo
+//	init_declarator_list();
 
 	return 1;
 }
