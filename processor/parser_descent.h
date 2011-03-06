@@ -56,10 +56,13 @@ class c_parser_descent
   
     void token_print(void);
     int  token_get(void);
+	void token_previous(void);
     void token_next(void);
 /*
 	rules from yacc
 */
+	int error_recover(void);
+
 	//Translation unit.
 	//this is the start rule in yacc
 	int translation_unit(void);

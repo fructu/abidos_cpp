@@ -15,6 +15,32 @@
 #include "parser_descent.h"
 #include "tokens.h"
 /*----------------------------------------------------------------------
+ * error_recover.
+ *----------------------------------------------------------------------*/
+int c_parser_descent::error_recover(void)
+{
+  while( token_get() != 0 )
+  {
+    token_next();
+	if( ';' == token_get() )
+	{
+		return 1;
+	}
+
+	if( '}' == token_get() )
+	{
+		return 1;
+	}
+	if( ')' == token_get() )
+	{
+		return 1;
+	}
+  }
+
+	printf("\nc_parser_descent::error_recover() -> token_get() == 0 !! \n");
+  return 0;
+}
+/*----------------------------------------------------------------------
  * Translation unit.
  *----------------------------------------------------------------------*/
 /*
@@ -25,9 +51,21 @@ translation_unit:
 int c_parser_descent::translation_unit(void)
 {
   printf("\n## translation_unit(void)-----------------------------------\n");
+	tokens_vector_clear();
 
 	if( 1 == declaration_seq_opt() )
 	{
+		return 1;
+	}
+	printf("##########recover START *********************************************{\n");
+	if( 1 == error_recover() )
+	{	
+		printf("##########recover END *********************************************}\n");
+		return 1;
+	}
+	if( 0 == token_get() )
+	{
+		printf("translation_unit() -> EOF\n");
 		return 1;
 	}
 
@@ -44,7 +82,7 @@ identifier:
 */
 int c_parser_descent::identifier(c_token & token_identifier)
 {
-  printf("## declaration_seq(void)\n");
+  printf("## identifier(void)\n");
 
 	token_next();
 	if( IDENTIFIER == token_get() )
@@ -52,7 +90,7 @@ int c_parser_descent::identifier(c_token & token_identifier)
 		return 1;
 	}
 
-	--i_token_actual;
+	token_previous();
 	return 0;
 }
 
@@ -76,6 +114,7 @@ int c_parser_descent::declaration_seq(void)
 		result = 1;
 	}
 
+  printf("## declaration_seq(void)->[%d]\n", result);
 	return result;
 }
 /*----------------------------------------------------------------------------*/
@@ -100,6 +139,7 @@ int c_parser_descent::declaration(void)
 		return 1;
 	}
 
+  printf("## declaration(void)->[0]\n");
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -147,7 +187,8 @@ int c_parser_descent::simple_declaration(void)
 		return 1;
 	}
 
-	--i_token_actual;
+	token_previous();
+  printf("## simple_declaration(void)->0\n");
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -231,7 +272,7 @@ int c_parser_descent::class_specifier(void)
 	token_next();
 	if( '{' != token_get() )
 	{
-		--i_token_actual;
+		token_previous();
 		return 0;
 	}
 
@@ -242,7 +283,7 @@ int c_parser_descent::class_specifier(void)
 	token_next();
 	if( '}' != token_get() )
 	{
-		--i_token_actual;
+		token_previous();
 		return 0;
 	}
 	
@@ -305,7 +346,7 @@ int c_parser_descent::class_key(void)
 		return 1;
 	}
 
-	--i_token_actual;
+	token_previous();
   printf("## class_key(void)-> return 0\n");
 	return 0;
 }
@@ -325,9 +366,13 @@ int c_parser_descent::declaration_seq_opt(void)
 {
   printf("## declaration_seq_opt(void)\n");
 
-	declaration_seq();
+	//## todo epsilon ...
+	if( 1 == declaration_seq() )
+	{
+		return 1;
+	}
 
-	return 1;
+	return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*
