@@ -1,3 +1,7 @@
 class A
 {
 };
+
+class B
+{
+};
