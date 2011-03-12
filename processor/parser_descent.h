@@ -42,6 +42,15 @@ struct c_token
 
 typedef vector<c_token> t_tokens;
 
+struct c_context_tokens
+{
+	t_tokens::iterator i_token;
+
+	c_context_tokens(t_tokens::iterator i_token_param);
+	void save(t_tokens::iterator i_token_param);
+	t_tokens::iterator restore(void);
+};
+
 class c_parser_descent
 {
   private:
@@ -51,12 +60,14 @@ class c_parser_descent
 	t_tokens tokens_vector;
   
 	void tokens_vector_print(void);
+	void tokens_vector_print_from_actual(void);
+
 	void tokens_vector_reload(void);
 	void tokens_vector_clear(void);
   
     void token_print(void);
     int  token_get(void);
-	void token_previous(void);
+//	void token_previous(void);
     void token_next(void);
 /*
 	rules from yacc
