@@ -81,7 +81,7 @@ namespace_alias:
 	/* identifier */
 	NAMESPACE_NAME
 	;
-
+//##did
 class_name:
 	/* identifier */
 	CLASS_NAME
@@ -752,6 +752,7 @@ class_specifier:
 	class_head '{' member_specification_opt '}'
 	;
 
+//	## did
 class_head:
 	class_key identifier_opt base_clause_opt
 	| class_key nested_name_specifier identifier base_clause_opt
@@ -805,22 +806,25 @@ constant_initializer:
 /*----------------------------------------------------------------------
  * Derived classes.
  *----------------------------------------------------------------------*/
-
+//## did
 base_clause:
 	':' base_specifier_list
 	;
 
+//## did
 base_specifier_list:
 	base_specifier
 	| base_specifier_list ',' base_specifier
 	;
 
+//## did
 base_specifier:
 	COLONCOLON_opt nested_name_specifier_opt class_name
 	| VIRTUAL access_specifier_opt COLONCOLON_opt nested_name_specifier_opt class_name
 	| access_specifier VIRTUAL_opt COLONCOLON_opt nested_name_specifier_opt class_name
 	;
 
+//## did
 access_specifier:
 	PRIVATE
 	| PROTECTED
@@ -1078,7 +1082,7 @@ init_declarator_list_opt:
 	/* epsilon */
 	| init_declarator_list
 	;
-
+// ##did
 identifier_opt:
 	/* epsilon */
 	| identifier
@@ -1153,7 +1157,7 @@ member_specification_opt:
 	/* epsilon */
 	| member_specification
 	;
-
+// ##did
 base_clause_opt:
 	/* epsilon */
 	| base_clause

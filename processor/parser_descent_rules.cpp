@@ -78,6 +78,37 @@ int c_parser_descent::translation_unit(void)
 	return 0;
 }
 /*----------------------------------------------------------------------
+ * Context-dependent identifiers.
+ *----------------------------------------------------------------------*/
+/*
+class_name:
+//identifier
+	CLASS_NAME
+	| template_id
+	;
+*/
+int c_parser_descent::class_name(void)
+{
+  printf("## class_name(void)\n");
+	c_context_tokens context_tokens(i_token_actual);
+
+	token_next();
+
+//##todo CLASS_NAME i need type table
+
+	if( IDENTIFIER == token_get() )
+	{
+		return 1;
+	}
+
+//##todo | template_id
+
+	i_token_actual = context_tokens.restore();
+	return 0;
+}
+
+
+/*----------------------------------------------------------------------
  * Lexical elements.
  *----------------------------------------------------------------------*/
 /*
@@ -85,7 +116,7 @@ identifier:
 	IDENTIFIER
 	;
 */
-int c_parser_descent::identifier(c_token & token_identifier)
+int c_parser_descent::identifier(void)
 {
   printf("## identifier(void)\n");
 	c_context_tokens context_tokens(i_token_actual);
@@ -316,14 +347,11 @@ int c_parser_descent::class_head(void)
 		return 0;
 	}
 
-	//## todo
-	c_token token_identifier;
-	if( 0 == identifier(token_identifier) )
-	{		
-		return 0;
-	}
+	identifier_opt();
 
-	printf( " #### class_head-> [%s]\n",token_identifier.text.c_str() );
+	base_clause_opt();
+
+//	printf( " #### class_head-> [%s]\n",token_identifier.text.c_str() );
 
 	return 1;
 }
@@ -363,7 +391,124 @@ int c_parser_descent::class_key(void)
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------
+ * Derived classes.
+ *----------------------------------------------------------------------*/
+/*
+base_clause:
+	':' base_specifier_list
+	;
+*/
+int c_parser_descent::base_clause(void)
+{
+  printf("## base_clause(void)\n");
+tokens_vector_print_from_actual();
 
+	token_print();
+	c_context_tokens context_tokens(i_token_actual);
+	token_next();
+
+	if( ':' != token_get() )
+	{
+		i_token_actual = context_tokens.restore();
+		token_print();
+		return 0;
+	}
+
+	if( 0 == base_specifier_list() )
+	{
+		i_token_actual = context_tokens.restore();
+		return 0;
+	}
+
+	return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+base_specifier_list:
+	base_specifier
+	| base_specifier_list ',' base_specifier
+	;
+*/
+int c_parser_descent::base_specifier_list(void)
+{
+	printf("## base_specifier_list(void)\n");
+
+	if( 1 == base_specifier() )
+	{
+		return 1;
+	}
+
+	//## todo | ...
+	return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+base_specifier:
+	COLONCOLON_opt nested_name_specifier_opt class_name
+	| VIRTUAL access_specifier_opt COLONCOLON_opt nested_name_specifier_opt class_name
+	| access_specifier VIRTUAL_opt COLONCOLON_opt nested_name_specifier_opt class_name
+	;
+*/
+int c_parser_descent::base_specifier(void)
+{
+	printf("## base_specifier(void)\n");
+
+
+	//##todo rest of rules
+
+
+//  | access_specifier VIRTUAL_opt COLONCOLON_opt nested_name_specifier_opt class_name
+	
+	if( 0 == access_specifier() )
+	{
+		return 0;
+	}
+
+	//## todo midle
+
+
+	if( 1 == class_name() )
+	{
+		return 1;
+	}
+
+
+	return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+access_specifier:
+	PRIVATE
+	| PROTECTED
+	| PUBLIC
+	;
+*/
+int c_parser_descent::access_specifier(void)
+{
+	printf("## access_specifier(void)\n");
+
+	c_context_tokens context_tokens(i_token_actual);
+	token_next();
+
+	if( PRIVATE == token_get() )
+	{
+		return 1;
+	}
+
+	if( PROTECTED == token_get() )
+	{
+		return 1;
+	}
+
+	if( PUBLIC == token_get() )
+	{
+		return 1;
+	}
+
+	i_token_actual = context_tokens.restore();
+	return 0;
+}
 /*----------------------------------------------------------------------
  * Epsilon (optional) definitions.
  *----------------------------------------------------------------------*/
@@ -418,3 +563,34 @@ int c_parser_descent::init_declarator_list_opt(void)
 	return 1;
 }
 /*----------------------------------------------------------------------------*/
+/*
+identifier_opt:
+//	 epsilon 
+	| identifier
+	;
+*/
+int c_parser_descent::identifier_opt(void)
+{
+  printf("## identifier_opt(void)\n");
+//	c_token token_identifier;
+
+	identifier();
+
+	return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+base_clause_opt:
+//	epsilon 
+	| base_clause
+	;
+*/
+int c_parser_descent::base_clause_opt(void)
+{
+  printf("## base_clause_opt(void)\n");
+
+	base_clause();
+
+	return 1;
+}
+

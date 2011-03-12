@@ -44,18 +44,18 @@ typedef vector<c_token> t_tokens;
 
 struct c_context_tokens
 {
-	t_tokens::iterator i_token;
+	unsigned i_token;
 
-	c_context_tokens(t_tokens::iterator i_token_param);
-	void save(t_tokens::iterator i_token_param);
-	t_tokens::iterator restore(void);
+	c_context_tokens(unsigned i_token_param);
+	void save(unsigned i_token_param);
+	unsigned restore(void);
 };
 
 class c_parser_descent
 {
   private:
 	int just_reloaded;
-	t_tokens::iterator i_token_actual;
+	unsigned i_token_actual;
 //	c_token  token_actual;
 	t_tokens tokens_vector;
   
@@ -78,8 +78,11 @@ class c_parser_descent
 	//this is the start rule in yacc
 	int translation_unit(void);
 
+	 //Context-dependent identifiers.
+	int class_name(void);
+
 	// Lexical elements.
-	int identifier(c_token & token_identifier);
+	int identifier(void);
 
 	//declarations
 	int declaration_seq(void);
@@ -93,10 +96,18 @@ class c_parser_descent
 	int class_head(void);
 	int class_key(void);
 
+	// Derived classes.
+	int base_clause(void);
+	int base_specifier_list(void);
+	int base_specifier(void);
+	int access_specifier(void);
+
  	//Epsilon (optional) definitions.
 	int declaration_seq_opt(void);
 	int decl_specifier_seq_opt(void);
 	int init_declarator_list_opt(void);
+	int identifier_opt(void);
+	int base_clause_opt(void);
 
   public:    
     c_parser_descent();
