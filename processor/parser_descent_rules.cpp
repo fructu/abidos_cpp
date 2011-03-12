@@ -57,19 +57,24 @@ int c_parser_descent::translation_unit(void)
 	{
 		return 1;
 	}
+/*
 	printf("##########recover START *********************************************{\n");
 	if( 1 == error_recover() )
 	{	
 		printf("##########recover END *********************************************}\n");
 		return 1;
 	}
+*/
+	c_context_tokens context_tokens(i_token_actual);
+	token_next();
 	if( 0 == token_get() )
 	{
 		printf("translation_unit() -> EOF\n");
 		return 1;
 	}
+	i_token_actual = context_tokens.restore();
 
-	printf("error sintax*********************************************\n");
+	printf("c_parser_descent::translation_unit() error sintax\n");
 	return 0;
 }
 /*----------------------------------------------------------------------
@@ -112,11 +117,12 @@ int c_parser_descent::declaration_seq(void)
 
 	while( 1 == declaration() )
 	{
+		printf("#----------------------------------------declaration [ok]\n\n");
 		result = 1;
 	}
 
-  printf("## declaration_seq(void)->[%d]\n", result);
-	return result;
+    printf("## declaration_seq(void)->[%d]\n", 0);
+	return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*
