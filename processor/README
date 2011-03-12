@@ -3,6 +3,8 @@
 
 	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
 
+	gdb -q -x X abidos
+
 2. A pointer to the project website (if it has one).
 3. Notes on the developer’s build environment and potential portability problems.
 4. A roadmap describing important files and subdirectories.
