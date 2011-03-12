@@ -1,5 +1,7 @@
 dir .
 set print address off
 #b c_parser_descent::simple_declaration()
-b c_parser_descent::class_key()
+#b c_parser_descent::class_key()
+#b c_parser_descent::simple_declaration()
+b c_parser_descent::token_next()
 run  parser_descent_rules.cpp
