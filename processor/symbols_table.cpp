@@ -49,7 +49,7 @@ void c_symbols_table::unset()
   stack.pop_back();
 }
 /*----------------------------------------------------------------------------*/
-void c_symbols_table::insert(c_token token)
+void c_symbols_table::insert(c_symbol symbol)
 {
   long i = stack.size() - 1;
 
@@ -67,17 +67,17 @@ void c_symbols_table::insert(c_token token)
     exit(-1);
   }
 
-  c_symbol symbol(token);
-  stack[last][token.text] = symbol;
+  //c_symbol symbol(token);
+  stack[last][symbol.token.text] = symbol;
 }
 /*----------------------------------------------------------------------------*/
 void c_symbols_table::print(void)
 {
   unsigned i_stack = 0;
 
-  t_symbols::iterator i_vector;
+  t_symbols::iterator i_map;
 
-  printf("ts::print\n");
+  printf("c_symbols_table::print\n");
   printf("{\n");
   if( stack.size() <= 0)
   {
@@ -88,12 +88,12 @@ void c_symbols_table::print(void)
   {
     printf("  stack level[%d]\n",i_stack);
     printf("  {\n");
-    for( i_vector = stack[i_stack].begin(); i_vector != stack[i_stack].end(); ++i_vector )
+    for( i_map = stack[i_stack].begin(); i_map != stack[i_stack].end(); ++i_map )
     {
       printf("    first[%s] id[%d] text[%s]\n"
-        , ((*i_vector).first).c_str()
-        , ((*i_vector).second).token.id
-        , ((*i_vector).second).token.text.c_str()
+        , ((*i_map).first).c_str()
+        , ((*i_map).second).token.id
+        , ((*i_map).second).token.text.c_str()
       );
     }
     printf("  }\n");
@@ -101,14 +101,55 @@ void c_symbols_table::print(void)
   printf("}\n");
 }
 /*----------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------*/
-
-/*----------------------------------------------------------------------------*/
-void ts_tests(void)
+c_symbol c_symbols_table::search_symbol(string str)
 {
-  printf("symbols_table testing\n");
-  c_symbols_table ts;
-  c_token t1(1,(char *)"level 0 ->1");
+  c_symbol symbol;
+
+  unsigned i_stack = 0;
+
+  t_symbols::iterator i_map;
+
+  printf("c_symbols_table::search_symbol\n");
+  printf("{\n");
+  if( stack.size() <= 0)
+  {
+    printf("  empty\n");
+  }
+
+  for( i_stack = 0; i_stack < stack.size(); ++i_stack )
+  {
+    printf("  stack level[%d]\n",i_stack);
+    printf("  {\n");
+//    for( i_map = stack[i_stack].begin(); i_map != stack[i_stack].end(); ++i_map )
+//    {
+
+      i_map = stack[i_stack].find(str);
+      if( i_map !=  stack[i_stack].end())
+      {
+        symbol = (*i_map).second;
+        printf("    first[%s] id[%d] text[%s]\n"
+          , ((*i_map).first).c_str()
+          , ((*i_map).second).token.id
+          , ((*i_map).second).token.text.c_str()
+        );
+      }
+//    }
+    printf("  }\n");
+  }
+  printf("}\n");
+
+  return symbol;
+}
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+c_symbols_table ts;
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+void ts_tests_load_fixture_01(void)
+{
+    c_token t1(1,(char *)"level 0 ->1");
 //  c_symbol s1(t1);
 
   ts.set();
@@ -129,6 +170,11 @@ void ts_tests(void)
   ts.set();
   c_token t5(5,(char *)"level 2 -> 5");
   ts.insert(t5);
+}
+/*----------------------------------------------------------------------------*/
+void ts_tests_01(void)
+{
+  ts_tests_load_fixture_01();
 
   printf("print [0-2]\n");
   ts.print();
@@ -144,6 +190,24 @@ void ts_tests(void)
   printf("print [empty]\n");
   ts.unset();
   ts.print();
+}
+/*----------------------------------------------------------------------------*/
+void ts_tests_02(void)
+{
+  c_symbol symbol;
+
+  ts_tests_load_fixture_01();
+
+  symbol = ts.search_symbol("level 1 -> 3");
+}
+/*----------------------------------------------------------------------------*/
+void ts_tests(void)
+{
+  printf("symbols_table testing\n");
+//  c_symbols_table ts;
+//  ts_tests_load_fixture_01();
+  ts_tests_01();
+  ts_tests_02();
 
 // this is useful to lock if stack detect empty state
 //  ts.unset();
