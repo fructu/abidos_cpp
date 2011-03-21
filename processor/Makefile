@@ -60,3 +60,4 @@ clean:
 	rm -f lexer.c parser.c parser.h tokens.h
 	rm -f *~
 	rm -f *.bk
+	rm -f $(EXECUTABLE)

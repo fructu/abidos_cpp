@@ -15,10 +15,6 @@
 #include "symbols_table.h"
 #include <stdio.h>
 #include <stdlib.h>
-/*
-typedef map<string, c_symbol> t_symbols;
-typedef vector<t_symbols> stack_symbols;
-*/
 /*----------------------------------------------------------------------------*/
 c_symbols_table::c_symbols_table()
 {
@@ -38,13 +34,15 @@ void c_symbols_table::set()
 /*----------------------------------------------------------------------------*/
 void c_symbols_table::unset()
 {
-  unsigned last = stack.size() - 1;
+  long i = stack.size() - 1;
 
-  if( last < 0)
+  if( i < 0)
   {
     printf("error void c_symbols_table::unset(c_token token) -> ( last < 0)\n");
     exit(-1);
   }
+
+  unsigned last = stack.size() - 1;
 
   stack[last].clear();
 
@@ -53,9 +51,17 @@ void c_symbols_table::unset()
 /*----------------------------------------------------------------------------*/
 void c_symbols_table::insert(c_token token)
 {
+  long i = stack.size() - 1;
+
+  if( i < 0)
+  {
+    printf("error void c_symbols_table::unset(c_token token) -> ( last < 0)\n");
+    exit(-1);
+  }
+
   unsigned last = stack.size() - 1;
 
-  if( last < 0)
+  if( i < 0)
   {
     printf("error void c_symbols_table::insert(c_token token) -> ( last < 0)\n");
     exit(-1);
@@ -69,7 +75,7 @@ void c_symbols_table::print(void)
 {
   unsigned i_stack = 0;
 
-  t_symbols::iterator i_vector = stack[0].begin();
+  t_symbols::iterator i_vector;
 
   printf("ts::print\n");
   printf("{\n");
@@ -139,6 +145,7 @@ void ts_tests(void)
   ts.unset();
   ts.print();
 
+// this is useful to lock if stack detect empty state
 //  ts.unset();
   printf("symbols_table testing end\n");
 }
