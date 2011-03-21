@@ -24,26 +24,31 @@ using namespace std;
 
 struct c_token
 {
-	int 	token;
+	int 	id;
 	string  text;
 
 	c_token()
 	{
-		token = 0;
+		id = 0;
 		text  = "";
 	}
 
 	c_token(int t, char * s)
 	{
-		token = t;
+		id = t;
 		text  = s;
 	}
 };
 
 typedef vector<c_token> t_tokens;
 
+/*
+  this class save the context and restore it
+  to support parsers' backtraking
+*/
 struct c_context_tokens
 {
+    // index of tokens
 	unsigned i_token;
 
 	c_context_tokens(unsigned i_token_param);

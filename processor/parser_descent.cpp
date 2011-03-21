@@ -68,8 +68,8 @@ void c_parser_descent::tokens_vector_print(void)
 		token = tokens_vector[n];
 
 		printf(" [%3d] -> yytokens[%s] token.text[%s]\n"
-			, token.token
-			, yytokens[token.token]
+			, token.id
+			, yytokens[token.id]
 			, token.text.c_str()
 	  	);
 
@@ -92,8 +92,8 @@ void c_parser_descent::tokens_vector_print_from_actual(void)
 		token = (*i_token);
 
 		printf(" [%3d] -> yytokens[%s] token.text[%s]\n"
-			, token.token
-			, yytokens[token.token]
+			, token.id
+			, yytokens[token.id]
 			, token.text.c_str()
 	  	);
 
@@ -167,7 +167,7 @@ int c_parser_descent::token_get(void)
 		i_token_actual = 0;
 	}
 
-	return  tokens_vector[i_token_actual].token;
+	return  tokens_vector[i_token_actual].id;
 }
 /*----------------------------------------------------------------------------*/
 /*
