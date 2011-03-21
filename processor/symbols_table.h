@@ -17,9 +17,11 @@
 
 #include <string>
 #include <map>
-//#include <vector>
+#include <vector>
 
 using namespace std;
+
+void ts_tests(void);
 
 struct c_token
 {
@@ -62,5 +64,21 @@ struct c_symbol
 };
 
 typedef map<string, c_symbol> t_symbols;
+typedef vector<t_symbols> stack_symbols;
+
+class c_symbols_table
+{
+  private:
+    stack_symbols stack;
+
+  public:
+    c_symbols_table();
+    ~c_symbols_table();
+    void set();
+    void unset();
+
+    void insert(c_token token);
+    void print(void);
+};
 
 #endif
