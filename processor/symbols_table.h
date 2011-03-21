@@ -18,6 +18,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <stdio.h>
 
 using namespace std;
 
@@ -52,14 +53,26 @@ struct c_token
 struct c_symbol
 {
   c_token token;
+  int      type;
 
   c_symbol()
   {
+    type  = 0;
   }
 
   c_symbol(c_token token_1)
   {
       token = token_1;
+      type  = 0;
+  }
+
+  void print(void)
+  {
+    printf("  id[%d], text[%s] type[%d]\n"
+      , token.id
+      , token.text.c_str()
+      , type
+    );
   }
 };
 
@@ -77,8 +90,12 @@ class c_symbols_table
     void set();
     void unset();
 
-    void insert(c_token token);
+    void insert(c_symbol symbol);
     void print(void);
+
+    c_symbol search_symbol(string str);
 };
+
+extern c_symbols_table ts;
 
 #endif

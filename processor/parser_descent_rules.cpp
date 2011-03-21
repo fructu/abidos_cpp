@@ -372,16 +372,19 @@ int c_parser_descent::class_key(void)
 
 	if( CLASS == token_get() )
 	{
+        context.class_key = CLASS;
 		return 1;
 	}
 
 	if( STRUCT == token_get() )
 	{
+        context.class_key = STRUCT;
 		return 1;
 	}
 
 	if( UNION == token_get() )
 	{
+        context.class_key = UNION;
 		return 1;
 	}
 

@@ -5,6 +5,7 @@ OBJS = 	lexer.o \
 	parser_descent.o \
 	parser_descent_rules.o \
 	symbols_table.o \
+	semantic.o \
 	main.o
 
 CC = g++
