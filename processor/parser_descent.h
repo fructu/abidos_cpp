@@ -22,23 +22,7 @@
 
 using namespace std;
 
-struct c_token
-{
-	int 	id;
-	string  text;
-
-	c_token()
-	{
-		id = 0;
-		text  = "";
-	}
-
-	c_token(int t, char * s)
-	{
-		id = t;
-		text  = s;
-	}
-};
+#include "symbols_table.h"
 
 typedef vector<c_token> t_tokens;
 

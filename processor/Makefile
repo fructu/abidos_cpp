@@ -2,9 +2,10 @@ YACC=yacc
 LEX=lex
 
 OBJS = 	lexer.o \
-		parser_descent.o \
-		parser_descent_rules.o \
-		main.o
+	parser_descent.o \
+	parser_descent_rules.o \
+	symbols_table.o \
+	main.o
 
 CC = g++
 DEBUG = -g
