@@ -27,25 +27,53 @@ using namespace std;
 typedef vector<c_token> t_tokens;
 
 /*
+  tokens_vector =[CLASS A { } ;]
+  when we are parsing A
+  context will have class_key == CLASS
+  to know what is a
+*/
+struct c_context
+{
+  unsigned i_token;
+  int      class_key; //the rule when CLASS STRUCT UNION are set
+
+  c_context()
+  {
+    i_token = 0;
+    class_key = 0;
+  }
+  void clear(void)
+  {
+    i_token = 0;
+    class_key = 0;
+  }
+};
+
+/*
   this class save the context and restore it
   to support parsers' backtraking
 */
 struct c_context_tokens
 {
     // index of tokens
-	unsigned i_token;
+//	unsigned i_token;
+    c_context context;
 
-	c_context_tokens(unsigned i_token_param);
-	void save(unsigned i_token_param);
-	unsigned restore(void);
+	c_context_tokens(c_context context_param);
+	void save(c_context context_param);
+	c_context restore(void);
 };
+
+
 
 class c_parser_descent
 {
   private:
 	int just_reloaded;
-	unsigned i_token_actual;
+//	unsigned i_token_actual;
 //	c_token  token_actual;
+    c_context context;
+
 	t_tokens tokens_vector;
   
 	void tokens_vector_print(void);
