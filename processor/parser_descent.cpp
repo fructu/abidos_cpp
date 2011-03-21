@@ -16,19 +16,19 @@
 #include "parser_descent.h"
 #include "tokens.h"
 /*----------------------------------------------------------------------------*/
-c_context_tokens::c_context_tokens(unsigned i_token_param)
+c_context_tokens::c_context_tokens(c_context context_param)
 {
-	i_token = i_token_param;
+    context = context_param;
 }
 /*----------------------------------------------------------------------------*/
-void c_context_tokens::save(unsigned i_token_param)
+void c_context_tokens::save(c_context context_param)
 {
-	i_token = i_token_param;
+    context = context_param;
 }
 /*----------------------------------------------------------------------------*/
-unsigned c_context_tokens::restore(void)
+c_context c_context_tokens::restore(void)
 {
-	return i_token;
+	return context;
 }
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -36,7 +36,6 @@ unsigned c_context_tokens::restore(void)
 c_parser_descent::c_parser_descent()
 {
 	just_reloaded  = 1;
-	i_token_actual = 0;
 }
 /*----------------------------------------------------------------------------*/
 c_parser_descent::~c_parser_descent()
@@ -81,7 +80,7 @@ void c_parser_descent::tokens_vector_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_print_from_actual(void)
 {
-	t_tokens::iterator i_token = tokens_vector.begin() + i_token_actual;	
+	t_tokens::iterator i_token = tokens_vector.begin() + context.i_token;
 
 	printf("tokens_vector_print_from_actual\n");
 	printf("{\n");
@@ -111,12 +110,12 @@ void c_parser_descent::token_print(void)
 		exit( -1 );
 	}
 
-	if( !( (0 <= i_token_actual) && 
-		   (i_token_actual < tokens_vector.size())  
+	if( !( (0 <= context.i_token) &&
+		   (context.i_token < tokens_vector.size())
 		 )
 	  )
 	{
-		printf("error c_parser_descent::token_print() -> (i_token_actual out of vector) \n");
+		printf("error c_parser_descent::token_print() -> (context.i_token out of vector) \n");
 		exit( -1 );
 	}
 
@@ -127,14 +126,14 @@ void c_parser_descent::token_print(void)
 	, yytokens[token_get()]
   );
   printf(" token.text[%s]\n"
-	, tokens_vector[i_token_actual].text.c_str()
+	, tokens_vector[context.i_token].text.c_str()
   );
 }
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_reload(void)
 {
 	just_reloaded = 1;
-	i_token_actual = 0;
+	context.clear();
 }
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_clear(void)
@@ -146,7 +145,8 @@ void c_parser_descent::tokens_vector_clear(void)
 	{
 		printf("########################## tokens_vector_clear COMOR  !tokens_vector.empty() !!! \n");
 	}
-	i_token_actual = 0;
+
+    context.clear();
 }
 /*----------------------------------------------------------------------------*/
 int c_parser_descent::token_get(void)
@@ -157,17 +157,17 @@ int c_parser_descent::token_get(void)
 		exit( -1 );
 	}
 
-	if( !( (0 <= i_token_actual) && 
-		   (i_token_actual < tokens_vector.size())  
+	if( !( (0 <= context.i_token) &&
+		   (context.i_token < tokens_vector.size())
 		 )
 	  )
 	{
-		printf("error c_parser_descent::token_get() -> (i_token_actual out of vector) \n");
+		printf("error c_parser_descent::token_get() -> (context.i_token out of vector) \n");
 //		exit( -1 );
-		i_token_actual = 0;
+        context.clear();
 	}
 
-	return  tokens_vector[i_token_actual].id;
+	return  tokens_vector[context.i_token].id;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -175,13 +175,13 @@ void c_parser_descent::token_previous(void)
 {
 	if( tokens_vector.empty() )
 	{
-		i_token_actual = tokens_vector.begin();
+		context.i_token = tokens_vector.begin();
 		return;
 	}
 
-	if( i_token_actual > tokens_vector.begin() )
+	if( context.i_token > tokens_vector.begin() )
 	{
-		--i_token_actual;
+		--context.i_token;
 		return;
 	}
 }
@@ -194,13 +194,13 @@ void c_parser_descent::token_next(void)
 
 printf("## token_next()\n");
 
-	if( !( (0 <= i_token_actual) && 
-		   (i_token_actual < tokens_vector.size())  
+	if( !( (0 <= context.i_token) &&
+		   (context.i_token < tokens_vector.size())
 		 )
 	  )
 	{
-		printf("c_parser_descent::token_next() -> (i_token_actual out of vector) \n");
-		i_token_actual = 0;
+		printf("c_parser_descent::token_next() -> (context.i_token out of vector) \n");
+        context.clear();
 	}
 
 
@@ -210,7 +210,7 @@ printf("## token_next()\n");
 	}
 	else
 	{
-		if( i_token_actual < tokens_vector.size() )
+		if( context.i_token < tokens_vector.size() )
 		{
 			if( 1 == just_reloaded )
 			{
@@ -220,9 +220,9 @@ printf("## token_next()\n");
 				return;
 			}
 
-			if( i_token_actual < ( tokens_vector.size() - 1 ) )
+			if( context.i_token < ( tokens_vector.size() - 1 ) )
 			{
-				++i_token_actual;
+				++context.i_token;
 				token_print();
 
 				return;
@@ -241,7 +241,7 @@ printf("################next() (1 == get_from_lex)\n");
 		c_token token(t, yytext);
 		tokens_vector.push_back(token);
 
-		i_token_actual = (tokens_vector.size() - 1);
+		context.i_token = (tokens_vector.size() - 1);
 
 		token_print();
 

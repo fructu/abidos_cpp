@@ -65,14 +65,14 @@ int c_parser_descent::translation_unit(void)
 		return 1;
 	}
 */
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 	token_next();
 	if( 0 == token_get() )
 	{
 		printf("translation_unit() -> EOF\n");
 		return 1;
 	}
-	i_token_actual = context_tokens.restore();
+	context = context_tokens.restore();
 
 	printf("c_parser_descent::translation_unit() error sintax\n");
 	return 0;
@@ -90,7 +90,7 @@ class_name:
 int c_parser_descent::class_name(void)
 {
   printf("## class_name(void)\n");
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 
 	token_next();
 
@@ -103,7 +103,7 @@ int c_parser_descent::class_name(void)
 
 //##todo | template_id
 
-	i_token_actual = context_tokens.restore();
+	context = context_tokens.restore();
 	return 0;
 }
 
@@ -119,7 +119,7 @@ identifier:
 int c_parser_descent::identifier(void)
 {
   printf("## identifier(void)\n");
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 
 	token_next();
 	if( IDENTIFIER == token_get() )
@@ -127,7 +127,7 @@ int c_parser_descent::identifier(void)
 		return 1;
 	}
 
-	i_token_actual = context_tokens.restore();
+	context = context_tokens.restore();
 	return 0;
 }
 
@@ -218,7 +218,7 @@ int c_parser_descent::simple_declaration(void)
 	decl_specifier_seq_opt();
 	init_declarator_list_opt();
 
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 
 	token_next();
 
@@ -227,7 +227,7 @@ int c_parser_descent::simple_declaration(void)
 		return 1;
 	}
 
-	i_token_actual = context_tokens.restore();
+	context = context_tokens.restore();
   printf("## simple_declaration(void)->0\n");
 	return 0;
 }
@@ -309,12 +309,12 @@ int c_parser_descent::class_specifier(void)
 		return 0;
 	}
 
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 	token_next();
 	if( '{' != token_get() )
 	{
 
-		i_token_actual = context_tokens.restore();
+		context = context_tokens.restore();
 		return 0;
 	}
 
@@ -324,7 +324,7 @@ int c_parser_descent::class_specifier(void)
 	token_next();
 	if( '}' != token_get() )
 	{
-		i_token_actual = context_tokens.restore();
+		context = context_tokens.restore();
 		return 0;
 	}
 	
@@ -367,7 +367,7 @@ int c_parser_descent::class_key(void)
 {
   printf("## class_key(void)\n");
 
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 	token_next();
 
 	if( CLASS == token_get() )
@@ -385,7 +385,7 @@ int c_parser_descent::class_key(void)
 		return 1;
 	}
 
-	i_token_actual = context_tokens.restore();
+	context = context_tokens.restore();
 
   printf("## class_key(void)-> return 0\n");
 	return 0;
@@ -405,19 +405,19 @@ int c_parser_descent::base_clause(void)
 tokens_vector_print_from_actual();
 
 	token_print();
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 	token_next();
 
 	if( ':' != token_get() )
 	{
-		i_token_actual = context_tokens.restore();
+		context = context_tokens.restore();
 		token_print();
 		return 0;
 	}
 
 	if( 0 == base_specifier_list() )
 	{
-		i_token_actual = context_tokens.restore();
+		context = context_tokens.restore();
 		return 0;
 	}
 
@@ -488,7 +488,7 @@ int c_parser_descent::access_specifier(void)
 {
 	printf("## access_specifier(void)\n");
 
-	c_context_tokens context_tokens(i_token_actual);
+	c_context_tokens context_tokens(context);
 	token_next();
 
 	if( PRIVATE == token_get() )
@@ -506,7 +506,7 @@ int c_parser_descent::access_specifier(void)
 		return 1;
 	}
 
-	i_token_actual = context_tokens.restore();
+	context = context_tokens.restore();
 	return 0;
 }
 /*----------------------------------------------------------------------
