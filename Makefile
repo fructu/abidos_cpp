@@ -114,6 +114,8 @@ clean:
 	rm -f includes_lex.c
 	rm -f includes_yacc.c
 	rm -f includes_yacc.h
+	rm -f *~
+	rm -f $(EXEC)
 
 execute: $(EXEC)
 #	./$(EXEC) -batch input.txt -follow -print -no-sharp
