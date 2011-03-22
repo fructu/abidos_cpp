@@ -24,4 +24,5 @@ class c_semantic
     void identifier(c_context context, c_token token);
 };
 
+extern c_semantic semantic;
 #endif

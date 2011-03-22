@@ -37,6 +37,7 @@
 
 #include "parser.h"
 #define LONG_STR (4000)
+
 //static int yywrap(void);
 char lex_file_name[LONG_STR];
 
@@ -255,7 +256,7 @@ check_identifier(const char *s)
 	 * This function should check if `s' is a typedef name or a class
 	 * name, or a enum name, ... etc. or an identifier.
 	 */
-
+/*
 	switch (s[0]) {
 	case 'D': return TYPEDEF_NAME;
 	case 'N': return NAMESPACE_NAME;
@@ -263,7 +264,9 @@ check_identifier(const char *s)
 	case 'E': return ENUM_NAME;
 	case 'T': return TEMPLATE_NAME;
 	}
-
+*/
+/* this is doing in parser_descent token_next()
+*/
 	return IDENTIFIER;
 }
 

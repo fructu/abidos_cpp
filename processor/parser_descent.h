@@ -84,6 +84,7 @@ class c_parser_descent
   
     void token_print(void);
     int  token_get(void);
+    c_token c_token_get(void);
 //	void token_previous(void);
     void token_next(void);
 /*
