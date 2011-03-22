@@ -52,18 +52,23 @@ struct c_token
   class -> does not become a symbol
   A -> become a symbol
 */
+struct base_class
+{
+  string text;
+  int     access_specifier;
+};
+typedef map<string, base_class> map_base_class;
+
 struct c_symbol
 {
   c_token token;
   int type;
   int class_key;
-  int access_specifier;
 
   c_symbol()
   {
     type  = 0;
     class_key = 0;
-    access_specifier = 0;
   }
 
   c_symbol(c_token token_1)
@@ -71,12 +76,11 @@ struct c_symbol
       token = token_1;
       type  = 0;
       class_key = 0;
-      access_specifier = 0;
   }
 
   void print(const char * tab)
   {
-      printf("%sid[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s] access_specifier[%d]->[%s]\n"
+      printf("%sid[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n"
         , tab
         , token.id
         , yytokens[token.id]
@@ -85,8 +89,6 @@ struct c_symbol
         , yytokens[type]
         , class_key
         , yytokens[class_key]
-        , access_specifier
-        , yytokens[access_specifier]
       );
   }
 };
