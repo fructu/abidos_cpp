@@ -498,16 +498,19 @@ int c_parser_descent::access_specifier(void)
 
 	if( PRIVATE == token_get() )
 	{
+        context.access_specifier = PRIVATE;
 		return 1;
 	}
 
 	if( PROTECTED == token_get() )
 	{
+        context.access_specifier = PROTECTED;
 		return 1;
 	}
 
 	if( PUBLIC == token_get() )
 	{
+        context.access_specifier = PUBLIC;
 		return 1;
 	}
 
