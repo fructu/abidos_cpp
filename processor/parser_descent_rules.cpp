@@ -441,12 +441,29 @@ int c_parser_descent::base_specifier_list(void)
 {
 	printf("## base_specifier_list(void)\n");
 
-	if( 1 == base_specifier() )
+	if( 0 == base_specifier() )
 	{
-		return 1;
-	}
+		return 0;
+	}	
 
-	//## todo | ...
+    c_context_tokens context_tokens(context);
+
+    for(;;)
+    {
+      token_next();    
+      if( ',' != token_get() )
+      {
+        context = context_tokens.restore();
+        return 1;
+      }
+
+      if( 0 == base_specifier() )
+      {
+        context = context_tokens.restore();
+        return 0;
+      }
+    }
+
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
