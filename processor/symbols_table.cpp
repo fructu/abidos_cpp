@@ -163,11 +163,13 @@ c_symbol * c_symbols_table::search_symbol(string str)
     if( i_map !=  stack[i_stack].end())
     {
       p_symbol = &( (*i_map).second );
+      /*
       printf("    first[%s] id[%d] text[%s]\n"
         , ((*i_map).first).c_str()
         , ((*i_map).second).token.id
         , ((*i_map).second).token.text.c_str()
       );
+      */
     }
 //    printf("  }\n");
   }
@@ -234,7 +236,7 @@ void ts_tests_02(void)
   c_symbol * p_symbol = ts.search_symbol("level 1 -> 3");
   if( p_symbol )
   {
-    p_symbol->print("##");
+    p_symbol->print("  ");
   }
 
   ts.unset();
