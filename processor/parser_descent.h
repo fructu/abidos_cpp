@@ -36,16 +36,19 @@ struct c_context
 {
   unsigned i_token;
   int      class_key; //the rule when CLASS STRUCT UNION are set
+  int      access_specifier;
 
   c_context()
   {
     i_token = 0;
     class_key = 0;
+    access_specifier = 0;
   }
   void clear(void)
   {
     i_token = 0;
     class_key = 0;
+    access_specifier = 0;
   }
 };
 

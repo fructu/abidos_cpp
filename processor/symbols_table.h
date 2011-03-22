@@ -20,6 +20,8 @@
 #include <vector>
 #include <stdio.h>
 
+#include "tokens.h"
+
 using namespace std;
 
 void ts_tests(void);
@@ -53,13 +55,15 @@ struct c_token
 struct c_symbol
 {
   c_token token;
-  int   type;
-  int   class_key;
+  int type;
+  int class_key;
+  int access_specifier;
 
   c_symbol()
   {
     type  = 0;
     class_key = 0;
+    access_specifier = 0;
   }
 
   c_symbol(c_token token_1)
@@ -67,15 +71,23 @@ struct c_symbol
       token = token_1;
       type  = 0;
       class_key = 0;
+      access_specifier = 0;
   }
 
-  void print(void)
+  void print(const char * tab)
   {
-    printf("  id[%d], text[%s] type[%d]\n"
-      , token.id
-      , token.text.c_str()
-      , type
-    );
+      printf("%sid[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s] access_specifier[%d]->[%s]\n"
+        , tab
+        , token.id
+        , yytokens[token.id]
+        , token.text.c_str()
+        , type
+        , yytokens[type]
+        , class_key
+        , yytokens[class_key]
+        , access_specifier
+        , yytokens[access_specifier]
+      );
   }
 };
 
