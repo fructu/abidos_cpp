@@ -18,7 +18,7 @@
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context context, c_token token)
 {
-    printf("## void c_semantic::identifier(c_context context)");
+    printf("## void c_semantic::identifier(c_context context)\n\n");
     c_symbol symbol(token);
 
     if( CLASS == context.class_key )
@@ -34,9 +34,11 @@ void c_semantic::identifier(c_context context, c_token token)
     //## todo
     if( UNION == context.class_key )
     {
-        context.class_key = UNION;
+        symbol.type = UNION;
     }
 
     ts.insert(symbol);
 }
+/*----------------------------------------------------------------------------*/
+c_semantic semantic;
 /*----------------------------------------------------------------------------*/

@@ -14,6 +14,8 @@
 ------------------------------------------------------------------------------*/
 #include "parser_descent.h"
 #include "tokens.h"
+
+#include "semantic.h"
 /*----------------------------------------------------------------------
  * error_recover.
  *----------------------------------------------------------------------*/
@@ -94,9 +96,7 @@ int c_parser_descent::class_name(void)
 
 	token_next();
 
-//##todo CLASS_NAME i need type table
-
-	if( IDENTIFIER == token_get() )
+	if( CLASS_NAME == token_get() )
 	{
 		return 1;
 	}
@@ -124,6 +124,7 @@ int c_parser_descent::identifier(void)
 	token_next();
 	if( IDENTIFIER == token_get() )
 	{
+        semantic.identifier( context, c_token_get() );
 		return 1;
 	}
 
@@ -465,7 +466,8 @@ int c_parser_descent::base_specifier(void)
 	
 	if( 0 == access_specifier() )
 	{
-		return 0;
+      //## this dont must break the down
+      //return 0;
 	}
 
 	//## todo midle

@@ -170,6 +170,28 @@ int c_parser_descent::token_get(void)
 	return  tokens_vector[context.i_token].id;
 }
 /*----------------------------------------------------------------------------*/
+c_token c_parser_descent::c_token_get(void)
+{
+    if( tokens_vector.empty() )
+    {
+        printf("error c_parser_descent::c_token_get() -> tokens_vector.empty() \n");
+        exit( -1 );
+    }
+
+    if( !( (0 <= context.i_token) &&
+           (context.i_token < tokens_vector.size())
+         )
+      )
+    {
+        printf("error c_parser_descent::c_token_get() -> (context.i_token out of vector) \n");
+//      exit( -1 );
+        context.clear();
+    }
+
+    return  tokens_vector[context.i_token];
+}
+
+/*----------------------------------------------------------------------------*/
 /*
 void c_parser_descent::token_previous(void)
 {
@@ -189,10 +211,8 @@ void c_parser_descent::token_previous(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::token_next(void)
 {
-  	int t = 0;
+	int t = 0;
 	int get_from_lex = 0;
-
-printf("## token_next()\n");
 
 	if( !( (0 <= context.i_token) &&
 		   (context.i_token < tokens_vector.size())
@@ -234,11 +254,25 @@ printf("## token_next()\n");
 
 	if( 1 == get_from_lex )
 	{
-printf("################next() (1 == get_from_lex)\n");
 		just_reloaded = 0;
 
 		t = yylex();
-		c_token token(t, yytext);
+        c_token token(t, yytext);
+        /*
+          i tried put this part in lex but did not compile
+          maybe for the link C mode of lexical module
+        */
+        if( IDENTIFIER == t )
+        {
+          c_symbol symbol = ts.search_symbol(yytext);
+          if(symbol.type != 0)
+          {
+            //return symbol.type;
+            printf("\n\n ## next_token found symbol [%s]\n\n",yytext);
+            token.id = symbol.type;
+          }
+        }
+
 		tokens_vector.push_back(token);
 
 		context.i_token = (tokens_vector.size() - 1);
@@ -261,14 +295,15 @@ void c_parser_descent::yyparse(char * file_name)
     printf("\nERROR: yyparse did not can open [%s]\n",file_name);
     return;
   }
-
+  ts.set();
   do
   {
 //	tokens_vector_clear();
 	translation_unit();
   }
   while( token_get() != 0 );
-
+  ts.print();
+  ts.unset();
 
   yylex_destroy();  
 
