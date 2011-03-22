@@ -24,17 +24,20 @@ void c_semantic::identifier(c_context context, c_token token)
     if( CLASS == context.class_key )
     {
         symbol.type = CLASS_NAME;
+        symbol.class_key = context.class_key;
     }
 
     if( STRUCT == context.class_key )
     {
         symbol.type = CLASS_NAME;
+        symbol.class_key = context.class_key;
     }
 
     //## todo
     if( UNION == context.class_key )
     {
         symbol.type = UNION;
+        symbol.class_key = context.class_key;
     }
 
     ts.insert(symbol);

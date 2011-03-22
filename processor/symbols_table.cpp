@@ -91,13 +91,15 @@ void c_symbols_table::print(void)
     printf("  {\n");
     for( i_map = stack[i_stack].begin(); i_map != stack[i_stack].end(); ++i_map )
     {
-      printf("    first[%s] id[%d]->[%s] text[%s] type[%d]->[%s]\n"
+      printf("    first[%s] id[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n"
         , ((*i_map).first).c_str()
         , ((*i_map).second).token.id
         , yytokens[((*i_map).second).token.id]
         , ((*i_map).second).token.text.c_str()
         , ((*i_map).second).type
         , yytokens[((*i_map).second).type]
+        , ((*i_map).second).class_key
+        , yytokens[((*i_map).second).class_key]
       );
     }
     printf("  }\n");

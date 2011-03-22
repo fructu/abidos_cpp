@@ -2,6 +2,7 @@
    sudo apt-get install graphviz
 
 	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
+    kate Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO semantic.cpp semantic.h symbols_table.h symbols_table.cpp
 
 	gdb -q -x X abidos
 
@@ -14,7 +15,20 @@
 8. Project mailing list addresses.
 
 todo
-	-[] do a class for the input parameters, first do it in show_includes.
+  -[] put other field to know when a type is a class or a struct
+  -[]
+
 	-[] table of types first for class and structs.
 	-[] continue with the work of the yacc rules to get class definitions.
 	-[] refactor test in a class.
+
+show includes todo
+-[] class config_parameters
+-[] refactor code from main.cpp to the previous class.
+-[] move code inside of abidos.
+-[] parser will be invoke from preprocesso
+    mabye the easy way is create a big file preprocesed with gcc
+
+abidos
+-[v] draft first version of types_table.
+-[v] draft first version of symbol_table.
