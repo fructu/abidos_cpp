@@ -53,17 +53,20 @@ struct c_token
 struct c_symbol
 {
   c_token token;
-  int      type;
+  int   type;
+  int   class_key;
 
   c_symbol()
   {
     type  = 0;
+    class_key = 0;
   }
 
   c_symbol(c_token token_1)
   {
       token = token_1;
       type  = 0;
+      class_key = 0;
   }
 
   void print(void)
