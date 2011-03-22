@@ -551,13 +551,12 @@ int c_parser_descent::declaration_seq_opt(void)
 {
   printf("## declaration_seq_opt(void)\n");
 
-	//## todo epsilon ...
 	if( 1 == declaration_seq() )
 	{
 		return 1;
 	}
 
-	return 0;
+	return 1;
 }
 /*----------------------------------------------------------------------------*/
 /*

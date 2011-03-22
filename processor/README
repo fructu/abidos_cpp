@@ -18,10 +18,11 @@
 8. Project mailing list addresses.
 
 todo
-  -[] put other field to know when a type is a class or a struct
+  -[] clear context when class has been processed
+  -[v] put other field to know when a type is a class or a struct
   -[]
 
-	-[] table of types first for class and structs.
+	-[v] table of types first for class and structs.
 	-[] continue with the work of the yacc rules to get class definitions.
 	-[] refactor test in a class.
 
