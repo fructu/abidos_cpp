@@ -15,6 +15,46 @@
 #include "symbols_table.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+void c_symbol::print(const char * tab)
+{
+  printf("%sid[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n"
+    , tab
+    , token.id
+    , yytokens[token.id]
+    , token.text.c_str()
+    , type
+    , yytokens[type]
+    , class_key
+    , yytokens[class_key]
+  );
+
+//  t_map_base_class map_base_class;
+
+  t_map_base_class::iterator i_map = map_base_class.begin();
+
+  printf("%s  map_base_class\n",tab);
+  printf("%s  {\n",tab);
+
+  if( map_base_class.size() <= 0)
+  {
+    printf("%s    empty\n",tab);
+  }
+
+  for( i_map = map_base_class.begin(); i_map != map_base_class.end(); ++i_map )
+  {
+    printf("%s    first[%s]->[%s][%s]\n"
+      , tab
+      , ((*i_map).first).c_str()
+      , yytokens[((*i_map).second).access_specifier]
+      , ((*i_map).second).text.c_str()
+    );
+  }
+
+  printf("%s  }\n",tab);
+}
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 c_symbols_table::c_symbols_table()
 {
@@ -93,16 +133,16 @@ void c_symbols_table::print(void)
       printf("    first[%s]"
         , ((*i_map).first).c_str()
       );
-      ((*i_map).second).print("");
+      ((*i_map).second).print("    ");
     }
     printf("  }\n");
   }
   printf("}\n");
 }
 /*----------------------------------------------------------------------------*/
-c_symbol c_symbols_table::search_symbol(string str)
+c_symbol * c_symbols_table::search_symbol(string str)
 {
-  c_symbol symbol;
+  c_symbol * p_symbol = 0;
 
   unsigned i_stack = 0;
 
@@ -122,7 +162,7 @@ c_symbol c_symbols_table::search_symbol(string str)
     i_map = stack[i_stack].find(str);
     if( i_map !=  stack[i_stack].end())
     {
-      symbol = (*i_map).second;
+      p_symbol = &( (*i_map).second );
       printf("    first[%s] id[%d] text[%s]\n"
         , ((*i_map).first).c_str()
         , ((*i_map).second).token.id
@@ -133,7 +173,7 @@ c_symbol c_symbols_table::search_symbol(string str)
   }
 //  printf("}\n");
 
-  return symbol;
+  return p_symbol;
 }
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
@@ -189,11 +229,13 @@ void ts_tests_01(void)
 /*----------------------------------------------------------------------------*/
 void ts_tests_02(void)
 {
-  c_symbol symbol;
-
   ts_tests_load_fixture_01();
 
-  symbol = ts.search_symbol("level 1 -> 3");
+  c_symbol * p_symbol = ts.search_symbol("level 1 -> 3");
+  if( p_symbol )
+  {
+    p_symbol->print("##");
+  }
 
   ts.unset();
   ts.unset();

@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 /*----------------------------------------------------------------------------*/
-void c_semantic::identifier(c_context context, c_token token)
+void c_semantic::identifier(c_context & context, c_token token)
 {
     printf("## void c_semantic::identifier(c_context context)\n\n");
     c_symbol symbol(token);
@@ -40,7 +40,38 @@ void c_semantic::identifier(c_context context, c_token token)
         symbol.class_key = context.class_key;
     }
 
+    // we only take the name of the class the fist time after CLASS
+    if( BASE_CLASS_DECLARATION == context.class_declaration)
+    {
+        context.class_name_declaration = token.text;
+    }
+
     ts.insert(symbol);
+}
+/*----------------------------------------------------------------------------*/
+/*
+  contexts:
+   class A: public B // B enter for this way BASE_CLASS_DECLARATION
+*/
+void c_semantic::class_name(c_context & context, c_token token)
+{
+    //we are in the base class declaration
+    // example class A : public B
+    if( BASE_CLASS_DECLARATION == context.class_declaration)
+    {
+      printf("\n\n###  WE ADDING BASES CLASS TO [%s]\n\n",context.class_name_declaration.c_str());
+
+      c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
+      if( p_symbol )
+      {
+        p_symbol->print("***");
+
+        c_base_class base_class(token.text, context.access_specifier);
+        p_symbol->map_base_class[token.text] = base_class;
+
+        return;
+      }
+    }
 }
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;

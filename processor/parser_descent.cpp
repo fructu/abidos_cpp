@@ -264,12 +264,15 @@ void c_parser_descent::token_next(void)
         */
         if( IDENTIFIER == t )
         {
-          c_symbol symbol = ts.search_symbol(yytext);
-          if(symbol.type != 0)
+          c_symbol * p_symbol = ts.search_symbol(yytext);
+          if( p_symbol )
           {
-            //return symbol.type;
-            printf("\n\n ## next_token found symbol [%s]\n\n",yytext);
-            token.id = symbol.type;
+            if(p_symbol->type != 0)
+            {
+              //return symbol.type;
+              printf("\n\n ## next_token found symbol [%s]\n\n",yytext);
+              token.id = p_symbol->type;
+            }
           }
         }
 

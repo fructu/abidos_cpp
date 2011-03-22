@@ -98,6 +98,7 @@ int c_parser_descent::class_name(void)
 
 	if( CLASS_NAME == token_get() )
 	{
+        semantic.class_name( context, c_token_get() );
 		return 1;
 	}
 
@@ -347,6 +348,8 @@ int c_parser_descent::class_head(void)
 	{
 		return 0;
 	}
+
+    context.class_declaration = BASE_CLASS_DECLARATION;
 
 	identifier_opt();
 

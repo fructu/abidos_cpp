@@ -32,23 +32,34 @@ typedef vector<c_token> t_tokens;
   context will have class_key == CLASS
   to know what is a
 */
+enum
+{
+  BASE_CLASS_DECLARATION = 1
+};
+
 struct c_context
 {
   unsigned i_token;
   int      class_key; //the rule when CLASS STRUCT UNION are set
   int      access_specifier;
+  int      class_declaration;
+  string   class_name_declaration; //class class_name_declaration
 
   c_context()
   {
     i_token = 0;
     class_key = 0;
     access_specifier = 0;
+    class_declaration = 0;
+    class_name_declaration = "";
   }
   void clear(void)
   {
     i_token = 0;
     class_key = 0;
     access_specifier = 0;
+    class_declaration = 0;
+    class_name_declaration = "";
   }
 };
 

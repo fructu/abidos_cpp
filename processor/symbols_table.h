@@ -52,12 +52,24 @@ struct c_token
   class -> does not become a symbol
   A -> become a symbol
 */
-struct base_class
+struct c_base_class
 {
   string text;
   int     access_specifier;
+
+  c_base_class()
+  {
+    text = "";
+    access_specifier = 0;
+  }
+
+  c_base_class(string t, int access)
+  {
+    text = t;
+    access_specifier = access;
+  }
 };
-typedef map<string, base_class> map_base_class;
+typedef map<string, c_base_class> t_map_base_class;
 
 struct c_symbol
 {
@@ -65,10 +77,13 @@ struct c_symbol
   int type;
   int class_key;
 
+  t_map_base_class map_base_class;
+
   c_symbol()
   {
     type  = 0;
     class_key = 0;
+    map_base_class.clear();
   }
 
   c_symbol(c_token token_1)
@@ -76,21 +91,16 @@ struct c_symbol
       token = token_1;
       type  = 0;
       class_key = 0;
+      map_base_class.clear();
   }
 
-  void print(const char * tab)
+  ~c_symbol()
   {
-      printf("%sid[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n"
-        , tab
-        , token.id
-        , yytokens[token.id]
-        , token.text.c_str()
-        , type
-        , yytokens[type]
-        , class_key
-        , yytokens[class_key]
-      );
+      type  = 0;
+      class_key = 0;
+      map_base_class.clear();
   }
+  void print(const char * tab);
 };
 
 typedef map<string, c_symbol> t_symbols;
@@ -110,7 +120,7 @@ class c_symbols_table
     void insert(c_symbol symbol);
     void print(void);
 
-    c_symbol search_symbol(string str);
+    c_symbol * search_symbol(string str);
 };
 
 extern c_symbols_table ts;

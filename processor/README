@@ -5,6 +5,9 @@
     kate Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO semantic.cpp semantic.h symbols_table.h symbols_table.cpp
 
 	gdb -q -x X abidos
+    ulimit -c unlimited
+
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos test/t1.cpp
 
 2. A pointer to the project website (if it has one).
 3. Notes on the developer’s build environment and potential portability problems.
