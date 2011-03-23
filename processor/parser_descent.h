@@ -44,6 +44,7 @@ struct c_context
   int      access_specifier;
   int      class_declaration;
   string   class_name_declaration; //class class_name_declaration
+  int just_reloaded;
 
   c_context()
   {
@@ -52,6 +53,7 @@ struct c_context
     access_specifier = 0;
     class_declaration = 0;
     class_name_declaration = "";
+    just_reloaded = 0;
   }
   void clear(void)
   {
@@ -60,6 +62,7 @@ struct c_context
     access_specifier = 0;
     class_declaration = 0;
     class_name_declaration = "";
+    just_reloaded = 0;
   }
 };
 
@@ -70,7 +73,7 @@ struct c_context
 struct c_context_tokens
 {
     // index of tokens
-//	unsigned i_token;
+//	unsigned i_token;    
     c_context context;
 
 	c_context_tokens(c_context context_param);
@@ -78,12 +81,10 @@ struct c_context_tokens
 	c_context restore(void);
 };
 
-
-
 class c_parser_descent
 {
   private:
-	int just_reloaded;
+	//int just_reloaded;
 //	unsigned i_token_actual;
 //	c_token  token_actual;
     c_context context;
@@ -110,6 +111,11 @@ class c_parser_descent
 	//this is the start rule in yacc
 	int translation_unit(void);
 
+    //Expressions
+    int id_expression(void);
+    int unqualified_id(void);
+    int qualified_id(void);
+
 	 //Context-dependent identifiers.
 	int class_name(void);
 
@@ -124,9 +130,18 @@ class c_parser_descent
 	int decl_specifier_seq(void);
 	int decl_specifier(void);
 	int type_specifier(void);
+    int simple_type_specifier(void);
 	int class_specifier(void);
 	int class_head(void);
 	int class_key(void);
+    int member_specification(void);
+    int member_declaration(void);
+
+    //Declarators
+    int declarator(void);
+    int direct_declarator(void);
+    int declarator_id(void);
+    int function_definition(void);
 
 	// Derived classes.
 	int base_clause(void);
@@ -139,6 +154,7 @@ class c_parser_descent
 	int decl_specifier_seq_opt(void);
 	int init_declarator_list_opt(void);
 	int identifier_opt(void);
+    int member_specification_opt(void);
 	int base_clause_opt(void);
 
   public:    
