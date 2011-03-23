@@ -28,6 +28,10 @@ void c_context_tokens::save(c_context context_param)
 /*----------------------------------------------------------------------------*/
 c_context c_context_tokens::restore(void)
 {
+    if( 0 == context.i_token)
+    {
+      context.just_reloaded = 1;
+    }
 	return context;
 }
 /*----------------------------------------------------------------------------*/
@@ -35,7 +39,7 @@ c_context c_context_tokens::restore(void)
 /*----------------------------------------------------------------------------*/
 c_parser_descent::c_parser_descent()
 {
-	just_reloaded  = 1;
+	context.just_reloaded  = 1;
 }
 /*----------------------------------------------------------------------------*/
 c_parser_descent::~c_parser_descent()
@@ -132,14 +136,14 @@ void c_parser_descent::token_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_reload(void)
 {
-	just_reloaded = 1;
+	context.just_reloaded = 1;
 	context.clear();
 }
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_clear(void)
 {
 	tokens_vector.clear();
-	just_reloaded = 1;
+	context.just_reloaded = 1;
 
 	if( !tokens_vector.empty() )
 	{
@@ -232,9 +236,10 @@ void c_parser_descent::token_next(void)
 	{
 		if( context.i_token < tokens_vector.size() )
 		{
-			if( 1 == just_reloaded )
+			if( 1 == context.just_reloaded )
 			{
-				just_reloaded = 0;
+				context.just_reloaded = 0;
+                printf("\n\n ## **************** just_reloaded == 1 \n\n \n");
 				token_print();
 
 				return;
@@ -254,7 +259,7 @@ void c_parser_descent::token_next(void)
 
 	if( 1 == get_from_lex )
 	{
-		just_reloaded = 0;
+		context.just_reloaded = 0;
 
 		t = yylex();
         c_token token(t, yytext);

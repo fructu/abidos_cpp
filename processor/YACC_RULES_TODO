@@ -156,12 +156,12 @@ primary_expression:
 	| '(' expression ')'
 	| id_expression
 	;
-
+//## did
 id_expression:
 	unqualified_id
 	| qualified_id
 	;
-
+//## did
 unqualified_id:
 	identifier
 	| operator_function_id
@@ -170,6 +170,7 @@ unqualified_id:
 	| template_id
 	;
 
+//## did
 qualified_id:
 	nested_name_specifier TEMPLATE_opt unqualified_id
 	;
@@ -509,7 +510,7 @@ type_specifier:
 	| elaborated_type_specifier
 	| cv_qualifier
 	;
-
+//## did
 simple_type_specifier:
 	COLONCOLON_opt nested_name_specifier_opt type_name
 	| CHAR
@@ -643,12 +644,12 @@ init_declarator_list:
 init_declarator:
 	declarator initializer_opt
 	;
-
+//## did
 declarator:
 	direct_declarator
 	| ptr_operator declarator
 	;
-
+//## did
 direct_declarator:
 	declarator_id
 	| direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq_opt exception_specification_opt
@@ -670,7 +671,7 @@ cv_qualifier:
 	CONST
 	| VOLATILE
 	;
-
+//##did
 declarator_id:
 	COLONCOLON_opt id_expression
 	| COLONCOLON_opt nested_name_specifier_opt type_name
@@ -711,7 +712,7 @@ parameter_declaration:
 	| decl_specifier_seq abstract_declarator_opt
 	| decl_specifier_seq abstract_declarator_opt '=' assignment_expression
 	;
-
+//##did
 function_definition:
 	decl_specifier_seq_opt declarator ctor_initializer_opt function_body
 	| decl_specifier_seq_opt declarator function_try_block
@@ -747,7 +748,7 @@ class_name:
 	| template_id
 	;
 */
-
+//  ## did
 class_specifier:
 	class_head '{' member_specification_opt '}'
 	;
@@ -765,12 +766,12 @@ class_key:
 	| STRUCT
 	| UNION
 	;
-
+//  ## did
 member_specification:
 	member_declaration member_specification_opt
 	| access_specifier ':' member_specification_opt
 	;
-
+//  ## did
 member_declaration:
 	decl_specifier_seq_opt member_declarator_list_opt ';'
 	| function_definition SEMICOLON_opt
@@ -1152,7 +1153,7 @@ COMMA_opt:
 	/* epsilon */
 	| ','
 	;
-
+// ##did
 member_specification_opt:
 	/* epsilon */
 	| member_specification
