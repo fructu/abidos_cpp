@@ -779,12 +779,12 @@ member_declaration:
 	| using_declaration
 	| template_declaration
 	;
-
+// ## did
 member_declarator_list:
 	member_declarator
 	| member_declarator_list ',' member_declarator
 	;
-
+// ## did
 member_declarator:
 	declarator pure_specifier_opt
 	| declarator constant_initializer_opt
@@ -1163,7 +1163,7 @@ base_clause_opt:
 	/* epsilon */
 	| base_clause
 	;
-
+// ##did
 member_declarator_list_opt:
 	/* epsilon */
 	| member_declarator_list
