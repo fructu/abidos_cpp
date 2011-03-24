@@ -18,7 +18,8 @@
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
-//    printf("## void c_semantic::identifier(c_context context)\n\n");
+    printf("## void c_semantic::identifier(c_context context)\n\n");
+    
     c_symbol symbol(token);
 
     if( CLASS == context.class_key )

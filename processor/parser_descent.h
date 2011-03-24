@@ -136,6 +136,8 @@ class c_parser_descent
 	int class_key(void);
     int member_specification(void);
     int member_declaration(void);
+    int member_declarator_list(void);
+    int member_declarator(void);
 
     //Declarators
     int declarator(void);
@@ -156,6 +158,7 @@ class c_parser_descent
 	int identifier_opt(void);
     int member_specification_opt(void);
 	int base_clause_opt(void);
+    int member_declarator_list_opt(void);
 
   public:    
     c_parser_descent();

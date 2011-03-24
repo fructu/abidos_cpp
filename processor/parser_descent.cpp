@@ -218,6 +218,8 @@ void c_parser_descent::token_next(void)
 	int t = 0;
 	int get_from_lex = 0;
 
+    printf("### token_next");
+    
 	if( !( (0 <= context.i_token) &&
 		   (context.i_token < tokens_vector.size())
 		 )
@@ -304,10 +306,14 @@ void c_parser_descent::yyparse(char * file_name)
     return;
   }
   ts.set();
+  translation_unit();
+
+  printf("##---------------- rest of tokens didnt consume \n");
+
   do
   {
 //	tokens_vector_clear();
-	translation_unit();
+	token_next();
   }
   while( token_get() != 0 );
   ts.print();
