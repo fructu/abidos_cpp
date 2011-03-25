@@ -22,6 +22,10 @@
 
 using namespace std;
 
+
+
+# define TAB " "
+void trace(string & tab, string s);
 #include "symbols_table.h"
 
 typedef vector<c_token> t_tokens;
@@ -101,7 +105,7 @@ class c_parser_descent
     int  token_get(void);
     c_token c_token_get(void);
 //	void token_previous(void);
-    void token_next(void);
+    void token_next(string tab);
 /*
 	rules from yacc
 */

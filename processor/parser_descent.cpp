@@ -15,6 +15,12 @@
 #include <stdlib.h>
 #include "parser_descent.h"
 #include "tokens.h"
+
+void trace(string & tab, string s)
+{
+  tab = tab + TAB;
+  printf("%s%s\n",tab.c_str(),s.c_str());
+}
 /*----------------------------------------------------------------------------*/
 c_context_tokens::c_context_tokens(c_context context_param)
 {
@@ -213,19 +219,19 @@ void c_parser_descent::token_previous(void)
 }
 */
 /*----------------------------------------------------------------------------*/
-void c_parser_descent::token_next(void)
+void c_parser_descent::token_next(string tab)
 {
 	int t = 0;
 	int get_from_lex = 0;
 
-    printf("### token_next");
+    trace(tab, "### token_next");
     
 	if( !( (0 <= context.i_token) &&
 		   (context.i_token < tokens_vector.size())
 		 )
 	  )
 	{
-		printf("c_parser_descent::token_next() -> (context.i_token out of vector) \n");
+		trace(tab, "c_parser_descent::token_next() -> (context.i_token out of vector) \n");
         context.clear();
 	}
 
@@ -241,9 +247,7 @@ void c_parser_descent::token_next(void)
 			if( 1 == context.just_reloaded )
 			{
 				context.just_reloaded = 0;
-                printf("\n\n ## **************** just_reloaded == 1 \n\n \n");
-				token_print();
-
+                trace(tab, " ##** just_reloaded == 1\n");
 				return;
 			}
 
@@ -277,7 +281,7 @@ void c_parser_descent::token_next(void)
             if(p_symbol->type != 0)
             {
               //return symbol.type;
-              printf("\n\n ## next_token found symbol [%s]\n\n",yytext);
+              printf(" ## next_token found symbol [%s]",yytext);
               token.id = p_symbol->type;
             }
           }
@@ -313,7 +317,7 @@ void c_parser_descent::yyparse(char * file_name)
   do
   {
 //	tokens_vector_clear();
-	token_next();
+	token_next("");
   }
   while( token_get() != 0 );
   ts.print();
@@ -340,18 +344,18 @@ int c_parser_descent::test_01(void)
 
   //yytname_print();
   tokens_vector_reload();
-  token_next();
+  token_next("");
   while( token_get() != 0 )
   {
-    token_next();
+    token_next("");
   }
 
   printf("reload\n");
   tokens_vector_reload();
-  token_next();
+  token_next("");
   while( token_get() != 0 )
   {
-    token_next();
+    token_next("");
   }
 
   tokens_vector_print();
