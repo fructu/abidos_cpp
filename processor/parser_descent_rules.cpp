@@ -16,10 +16,18 @@
 #include "tokens.h"
 
 #include "semantic.h"
+
+# define TAB " "
+
+void trace(string & tab, string s)
+{
+  tab = tab + TAB;
+  printf("%s%s\n",tab.c_str(),s.c_str());
+}
 /*----------------------------------------------------------------------
  * error_recover.
  *----------------------------------------------------------------------*/
-int c_parser_descent::error_recover(void)
+int c_parser_descent::error_recover(string tab)
 {
   while( token_get() != 0 )
   {
@@ -52,15 +60,15 @@ translation_unit:
 */
 int c_parser_descent::translation_unit(void)
 {
-  printf("\n## translation_unit(void)-----------------------------------\n");
+  printf("## translation_unit(void)-----------------------------------\n");
 	tokens_vector_clear();
 
-	if( 1 == declaration_seq_opt() )
+	if( 1 == declaration_seq_opt(TAB) )
 	{
 		return 1;
 	}
 /*
-	if( 1 == error_recover() )
+	if( 1 == error_recover(tab) )
 	{	
 		return 1;
 	}
@@ -87,15 +95,15 @@ id_expression:
     | qualified_id
     ;
 */
-int c_parser_descent::id_expression(void)
+int c_parser_descent::id_expression(string tab)
 {
   
-  if( 1 == unqualified_id() )
+  if( 1 == unqualified_id(tab) )
   {
     return 1;
   }
 
-  if( 1 == qualified_id() )
+  if( 1 == qualified_id(tab) )
   {
     return 1;
   }
@@ -111,10 +119,10 @@ unqualified_id:
     | template_id
     ;
 */
-int c_parser_descent::unqualified_id(void)
+int c_parser_descent::unqualified_id(string tab)
 {
   
-  if( 1 == identifier() )
+  if( 1 == identifier(tab) )
   {    
     return 1;
   }
@@ -127,7 +135,7 @@ qualified_id:
     nested_name_specifier TEMPLATE_opt unqualified_id
     ;
 */    
-int c_parser_descent::qualified_id(void)
+int c_parser_descent::qualified_id(string tab)
 {
 
   return 0;
@@ -144,7 +152,7 @@ class_name:
 	| template_id
 	;
 */
-int c_parser_descent::class_name(void)
+int c_parser_descent::class_name(string tab)
 {
 	c_context_tokens context_tokens(context);
 
@@ -171,7 +179,7 @@ identifier:
 	IDENTIFIER
 	;
 */
-int c_parser_descent::identifier(void)
+int c_parser_descent::identifier(string tab)
 {
 	c_context_tokens context_tokens(context);
     
@@ -197,12 +205,12 @@ declaration_seq:
 	| declaration_seq declaration
 	;
 */
-int c_parser_descent::declaration_seq(void)
+int c_parser_descent::declaration_seq(string tab)
 {
 
 	int result = 0;
 
-	while( 1 == declaration() )
+	while( 1 == declaration(tab) )
 	{
 		printf("#----------------------------------------declaration [ok]\n\n");
 		result = 1;
@@ -223,10 +231,10 @@ declaration:
 	;
 */
 //## todo rest of | ...
-int c_parser_descent::declaration(void)
+int c_parser_descent::declaration(string tab)
 {
 
-	if( 1 == block_declaration() )
+	if( 1 == block_declaration(tab) )
 	{
 		return 1;
 	}
@@ -244,10 +252,10 @@ block_declaration:
 	;
 */
 //## todo rest of | ...
-int c_parser_descent::block_declaration(void)
+int c_parser_descent::block_declaration(string tab)
 {
 
-	if( 1 == simple_declaration() )
+	if( 1 == simple_declaration(tab) )
 	{
 		return 1;
 	}
@@ -263,11 +271,11 @@ simple_declaration:
 	decl_specifier_seq_opt init_declarator_list_opt ';'
 	;
 */
-int c_parser_descent::simple_declaration(void)
+int c_parser_descent::simple_declaration(string tab)
 {
 	
-	decl_specifier_seq_opt();
-	init_declarator_list_opt();
+	decl_specifier_seq_opt(tab);
+	init_declarator_list_opt(tab);
 
 	c_context_tokens context_tokens(context);
 
@@ -288,16 +296,16 @@ decl_specifier_seq:
 	decl_specifier_seq_opt decl_specifier
 	;  
 */
-int c_parser_descent::decl_specifier_seq(void)
+int c_parser_descent::decl_specifier_seq(string tab)
 {
   
     //decl_specifier_seq_opt->decl_specifier_seq->decl_specifier_seq_opt...INFINITE
-    //decl_specifier_seq_opt();
+    //decl_specifier_seq_opt(tab);
 
     int result = 0;
     c_context_tokens context_tokens(context);
     
-	while( 1 == decl_specifier() )
+	while( 1 == decl_specifier(tab) )
 	{
         tokens_vector_print_from_actual();
         result = 1;
@@ -329,10 +337,10 @@ decl_specifier:
 	;
 */
 //## todo rest of | ...
-int c_parser_descent::decl_specifier(void)
+int c_parser_descent::decl_specifier(string tab)
 {
 
-	if( 1 == type_specifier() )
+	if( 1 == type_specifier(tab) )
 	{
 		return 1;
 	}
@@ -350,15 +358,15 @@ type_specifier:
 	;
 */
 //## todo rest of | ...
-int c_parser_descent::type_specifier(void)
+int c_parser_descent::type_specifier(string tab)
 {
   
-    if( 1 == simple_type_specifier() )
+    if( 1 == simple_type_specifier(tab) )
     {
       return 1;
     }
 
-	if( 1 == class_specifier() )
+	if( 1 == class_specifier(tab) )
 	{
 		return 1;
 	}
@@ -382,7 +390,7 @@ simple_type_specifier:
     | VOID
     ;
 */
-int c_parser_descent::simple_type_specifier(void)
+int c_parser_descent::simple_type_specifier(string tab)
 {
   
   //## todo  COLONCOLON_opt nested_name_specifier_opt type_name
@@ -454,12 +462,12 @@ class_specifier:
 	;
 */
 //## todo rest of rule
-int c_parser_descent::class_specifier(void)
+int c_parser_descent::class_specifier(string tab)
 {
 
 tokens_vector_print_from_actual();
 
-	if( 0 == class_head() )
+	if( 0 == class_head(tab) )
 	{
 		return 0;
 	}
@@ -476,7 +484,7 @@ tokens_vector_print_from_actual();
     tokens_vector_clear();
     context_tokens.save(context);
 
-	member_specification_opt();
+	member_specification_opt(tab);
 
 	token_next();
 	if( '}' != token_get() )
@@ -495,19 +503,19 @@ class_head:
 	;
 */
 //## todo next |
-int c_parser_descent::class_head(void)
+int c_parser_descent::class_head(string tab)
 {
 
-	if( 0 == class_key() )
+	if( 0 == class_key(tab) )
 	{
 		return 0;
 	}
 
     context.class_declaration = BASE_CLASS_DECLARATION;
 
-	identifier_opt();
+	identifier_opt(tab);
 
-	base_clause_opt();
+	base_clause_opt(tab);
 
 //	printf( " #### class_head-> [%s]\n",token_identifier.text.c_str() );
 
@@ -521,7 +529,7 @@ class_key:
 	| UNION
 	;
 */
-int c_parser_descent::class_key(void)
+int c_parser_descent::class_key(string tab)
 {
 
   //#### here is the error
@@ -560,13 +568,13 @@ member_specification:
     
 member_specification_opt have while to drop the recursion    
 */ 
-int c_parser_descent::member_specification(void)
+int c_parser_descent::member_specification(string tab)
 {
 
-  if( 0 == member_declaration() )
+  if( 0 == member_declaration(tab) )
   {
     //| access_specifier ':'
-    if( 0 == access_specifier() )
+    if( 0 == access_specifier(tab) )
     {
       return 0;
     }
@@ -596,15 +604,15 @@ member_declaration:
     | template_declaration
     ;
 */
-int c_parser_descent::member_declaration(void)
+int c_parser_descent::member_declaration(string tab)
 {
   
-  decl_specifier_seq_opt();
+  decl_specifier_seq_opt(tab);
   
   //## todo save context
   //token_next();
 
-  if( 1 == member_declarator_list_opt() )
+  if( 1 == member_declarator_list_opt(tab) )
   {
     c_context_tokens context_tokens(context);
     token_next();    
@@ -633,10 +641,10 @@ example
   consume 
     a, b, c, d  
 */
-int c_parser_descent::member_declarator_list(void)
+int c_parser_descent::member_declarator_list(string tab)
 {
   
-  if( 0 == member_declarator() )
+  if( 0 == member_declarator(tab) )
   {
     return 0;
   }
@@ -652,7 +660,7 @@ int c_parser_descent::member_declarator_list(void)
         return 1;
     }
 
-    if( 0 == member_declarator() )
+    if( 0 == member_declarator(tab) )
     {
       context = context_tokens.restore();
       return 0;
@@ -670,13 +678,13 @@ member_declarator:
     | identifier_opt ':' constant_expression
     ;
 */
-int c_parser_descent::member_declarator(void)
+int c_parser_descent::member_declarator(string tab)
 {
   
   //declarator pure_specifier_opt
-  if( 1 == declarator() )
+  if( 1 == declarator(tab) )
   {
-    //if( 1 == pure_specifier_opt() ) //## todo
+    //if( 1 == pure_specifier_opt(tab) ) //## todo
     {
         return 1;      
     }
@@ -694,7 +702,7 @@ base_clause:
 	':' base_specifier_list
 	;
 */
-int c_parser_descent::base_clause(void)
+int c_parser_descent::base_clause(string tab)
 {
 
 	c_context_tokens context_tokens(context);
@@ -706,7 +714,7 @@ int c_parser_descent::base_clause(void)
 		return 0;
 	}
 
-	if( 0 == base_specifier_list() )
+	if( 0 == base_specifier_list(tab) )
 	{
 		context = context_tokens.restore();
 		return 0;
@@ -721,10 +729,10 @@ base_specifier_list:
 	| base_specifier_list ',' base_specifier
 	;
 */
-int c_parser_descent::base_specifier_list(void)
+int c_parser_descent::base_specifier_list(string tab)
 {
 
-	if( 0 == base_specifier() )
+	if( 0 == base_specifier(tab) )
 	{
 		return 0;
 	}	
@@ -740,7 +748,7 @@ int c_parser_descent::base_specifier_list(void)
         return 1;
       }
 
-      if( 0 == base_specifier() )
+      if( 0 == base_specifier(tab) )
       {
         context = context_tokens.restore();
         return 0;
@@ -757,7 +765,7 @@ base_specifier:
 	| access_specifier VIRTUAL_opt COLONCOLON_opt nested_name_specifier_opt class_name
 	;
 */
-int c_parser_descent::base_specifier(void)
+int c_parser_descent::base_specifier(string tab)
 {
 
 
@@ -766,7 +774,7 @@ int c_parser_descent::base_specifier(void)
 
 //  | access_specifier VIRTUAL_opt COLONCOLON_opt nested_name_specifier_opt class_name
 	
-	if( 0 == access_specifier() )
+	if( 0 == access_specifier(tab) )
 	{
       //## this dont must break the down
       //return 0;
@@ -775,7 +783,7 @@ int c_parser_descent::base_specifier(void)
 	//## todo midle
 
 
-	if( 1 == class_name() )
+	if( 1 == class_name(tab) )
 	{
 		return 1;
 	}
@@ -791,7 +799,7 @@ access_specifier:
 	| PUBLIC
 	;
 */
-int c_parser_descent::access_specifier(void)
+int c_parser_descent::access_specifier(string tab)
 {
 
 	c_context_tokens context_tokens(context);
@@ -828,10 +836,9 @@ declaration_seq_opt:
 	;
 */
 //todo epsilon
-int c_parser_descent::declaration_seq_opt(void)
+int c_parser_descent::declaration_seq_opt(string tab)
 {
-
-	if( 1 == declaration_seq() )
+	if( 1 == declaration_seq(tab) )
 	{
 		return 1;
 	}
@@ -845,10 +852,10 @@ decl_specifier_seq_opt:
 	| decl_specifier_seq
 	;
 */
-int c_parser_descent::decl_specifier_seq_opt(void)
+int c_parser_descent::decl_specifier_seq_opt(string tab)
 {
 
-    decl_specifier_seq();
+    decl_specifier_seq(tab);
 
 	return 1;
 }
@@ -859,11 +866,11 @@ init_declarator_list_opt:
 	| init_declarator_list
 	;
 */
-int c_parser_descent::init_declarator_list_opt(void)
+int c_parser_descent::init_declarator_list_opt(string tab)
 {
 
 // ## todo
-//	init_declarator_list();
+//	init_declarator_list(tab);
 
 	return 1;
 }
@@ -874,11 +881,11 @@ identifier_opt:
 	| identifier
 	;
 */
-int c_parser_descent::identifier_opt(void)
+int c_parser_descent::identifier_opt(string tab)
 {
 //	c_token token_identifier;
 
-	identifier();
+	identifier(tab);
 
 	return 1;
 }
@@ -892,11 +899,11 @@ member_specification_opt:
 i try to drop indirect recursion
 member_specification_opt -> member_declaration -> member_specification_opt ...
 */
-int c_parser_descent::member_specification_opt(void)
+int c_parser_descent::member_specification_opt(string tab)
 {
     int result = 0;
     
-    while( 1 == member_specification() )
+    while( 1 == member_specification(tab) )
     {
        result = 1;
     }
@@ -910,10 +917,10 @@ base_clause_opt:
 	| base_clause
 	;
 */
-int c_parser_descent::base_clause_opt(void)
+int c_parser_descent::base_clause_opt(string tab)
 {
 
-	base_clause();
+	base_clause(tab);
 
 	return 1;
 }
@@ -924,10 +931,10 @@ member_declarator_list_opt:
     | member_declarator_list
     ;
 */
-int c_parser_descent::member_declarator_list_opt(void)
+int c_parser_descent::member_declarator_list_opt(string tab)
 {
 
-    return member_declarator_list();
+    return member_declarator_list(tab);
 }
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
@@ -940,10 +947,10 @@ declarator:
     | ptr_operator declarator
     ;
 */
-int c_parser_descent::declarator(void)
+int c_parser_descent::declarator(string tab)
 {
 
-    if( 1 == direct_declarator() )
+    if( 1 == direct_declarator(tab) )
     {
       return 1;
     }
@@ -960,11 +967,11 @@ direct_declarator:
     | '(' declarator ')'
     ;
 */
-int c_parser_descent::direct_declarator(void)
+int c_parser_descent::direct_declarator(string tab)
 {
   
     //## todo while ...
-    if( 1 == declarator_id() )
+    if( 1 == declarator_id(tab) )
     {
       return 1;
     }
@@ -978,12 +985,12 @@ declarator_id:
     | COLONCOLON_opt nested_name_specifier_opt type_name
     ;
 */
-int c_parser_descent::declarator_id(void)
+int c_parser_descent::declarator_id(string tab)
 {
   
-    //## COLONCOLON_opt()
+    //## COLONCOLON_opt(tab)
     
-    if( 1 == id_expression() )
+    if( 1 == id_expression(tab) )
     {
        return 1;
     }
@@ -997,11 +1004,11 @@ function_definition:
     | decl_specifier_seq_opt declarator function_try_block
     ;
 */
-int c_parser_descent::function_definition(void)
+int c_parser_descent::function_definition(string tab)
 {
     //## todo the rest
     
-    if( 0 == declarator() )
+    if( 0 == declarator(tab) )
     {
         return 0;
     }

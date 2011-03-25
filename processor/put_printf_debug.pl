@@ -29,7 +29,8 @@ sub p1
 		{
 			if( $_ =~ /{/ )
 			{
-				$_ = "{\n  printf(\"## $method_id\\n\");";
+#				$_ = "{\n  printf(\"## $method_id\\n\");";
+                $_ = "{\n  trace(tab, \"## declaration_seq_opt()\");");";
 				$method_detected = 0;
 			    $method_id = "";
 			}
