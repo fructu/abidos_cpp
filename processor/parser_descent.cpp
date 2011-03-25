@@ -34,10 +34,12 @@ void c_context_tokens::save(c_context context_param)
 /*----------------------------------------------------------------------------*/
 c_context c_context_tokens::restore(void)
 {
+/*
     if( 0 == context.i_token)
     {
       context.just_reloaded = 1;
     }
+*/
 	return context;
 }
 /*----------------------------------------------------------------------------*/
@@ -142,15 +144,13 @@ void c_parser_descent::token_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_reload(void)
 {
-	context.just_reloaded = 1;
 	context.clear();
 }
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_clear(void)
 {
 	tokens_vector.clear();
-	context.just_reloaded = 1;
-
+	
 	if( !tokens_vector.empty() )
 	{
 		printf("########################## tokens_vector_clear COMOR  !tokens_vector.empty() !!! \n");
@@ -224,14 +224,14 @@ void c_parser_descent::token_next(string tab)
 	int t = 0;
 	int get_from_lex = 0;
 
-    trace(tab, "### token_next");
+    printf("%s## token_next",tab.c_str());
     
 	if( !( (0 <= context.i_token) &&
 		   (context.i_token < tokens_vector.size())
 		 )
 	  )
 	{
-		trace(tab, "c_parser_descent::token_next() -> (context.i_token out of vector) \n");
+		printf(" c_parser_descent::token_next() -> (context.i_token out of vector)");
         context.clear();
 	}
 
@@ -247,7 +247,7 @@ void c_parser_descent::token_next(string tab)
 			if( 1 == context.just_reloaded )
 			{
 				context.just_reloaded = 0;
-                trace(tab, " ##** just_reloaded == 1\n");
+                printf("%s## just_reloaded == 1\n",tab.c_str());
 				return;
 			}
 
@@ -281,7 +281,7 @@ void c_parser_descent::token_next(string tab)
             if(p_symbol->type != 0)
             {
               //return symbol.type;
-              printf(" ## next_token found symbol [%s]",yytext);
+              printf("%s## next_token found symbol [%s]",tab.c_str(),yytext);
               token.id = p_symbol->type;
             }
           }
@@ -312,7 +312,7 @@ void c_parser_descent::yyparse(char * file_name)
   ts.set();
   translation_unit();
 
-  printf("##---------------- rest of tokens didnt consume \n");
+  printf("\n##---------------- rest of tokens has not been consumed -------------------------------\n");
 
   do
   {
