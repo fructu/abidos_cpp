@@ -556,7 +556,8 @@ int c_parser_descent::class_key(string tab)
 
 	if( CLASS == token_get() )
 	{
-        context.class_key = CLASS;
+		trace(tab, "## class_key -> CLASS [ok]");
+		context.class_key = CLASS;
 		return 1;
 	}
 
@@ -764,10 +765,11 @@ int c_parser_descent::base_specifier_list(string tab)
 
     for(;;)
     {
+	  context_tokens.save(context);	  
       token_next(tab);    
       if( ',' != token_get() )
       {
-//        context = context_tokens.restore();
+        context = context_tokens.restore();
         return 1;
       }
 
