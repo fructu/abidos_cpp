@@ -60,10 +60,8 @@ int c_parser_descent::translation_unit(void)
 		return 1;
 	}
 /*
-	printf("##########recover START *********************************************{\n");
 	if( 1 == error_recover() )
 	{	
-		printf("##########recover END *********************************************}\n");
 		return 1;
 	}
 */
@@ -91,11 +89,9 @@ id_expression:
 */
 int c_parser_descent::id_expression(void)
 {
-  printf("## id_expression(void)\n");
   
   if( 1 == unqualified_id() )
   {
-    printf("## id_expression(void) -> [1] ***\n");
     return 1;
   }
 
@@ -117,7 +113,6 @@ unqualified_id:
 */
 int c_parser_descent::unqualified_id(void)
 {
-  printf("## unqualified_id(void)\n");
   
   if( 1 == identifier() )
   {    
@@ -134,7 +129,6 @@ qualified_id:
 */    
 int c_parser_descent::qualified_id(void)
 {
-  printf("## qualified_id(void)\n");
 
   return 0;
 }
@@ -152,7 +146,6 @@ class_name:
 */
 int c_parser_descent::class_name(void)
 {
-  printf("## class_name(void)\n");
 	c_context_tokens context_tokens(context);
 
 	token_next();
@@ -180,7 +173,6 @@ identifier:
 */
 int c_parser_descent::identifier(void)
 {
-  printf("## identifier(void)\n");  
 	c_context_tokens context_tokens(context);
     
     tokens_vector_print_from_actual();
@@ -207,7 +199,6 @@ declaration_seq:
 */
 int c_parser_descent::declaration_seq(void)
 {
-  printf("## declaration_seq(void)\n");
 
 	int result = 0;
 
@@ -217,7 +208,6 @@ int c_parser_descent::declaration_seq(void)
 		result = 1;
 	}
 
-    printf("## declaration_seq(void)->[%d]\n", 0);
 	return result;
 }
 /*----------------------------------------------------------------------------*/
@@ -235,14 +225,12 @@ declaration:
 //## todo rest of | ...
 int c_parser_descent::declaration(void)
 {
-  printf("## declaration(void)\n");
 
 	if( 1 == block_declaration() )
 	{
 		return 1;
 	}
 
-  printf("## declaration(void)->[0]\n");
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -258,7 +246,6 @@ block_declaration:
 //## todo rest of | ...
 int c_parser_descent::block_declaration(void)
 {
-  printf("## block_declaration(void)\n");
 
 	if( 1 == simple_declaration() )
 	{
@@ -278,25 +265,21 @@ simple_declaration:
 */
 int c_parser_descent::simple_declaration(void)
 {
-  printf("## simple_declaration(void)\n");
 	
 	decl_specifier_seq_opt();
 	init_declarator_list_opt();
 
 	c_context_tokens context_tokens(context);
 
-    printf("## simple_declaration(void) we want ';' \n");
 	token_next();
 
 	if( ';' == token_get() )
 	{
-        printf("## simple_declaration(void)->1 YEAAAAA *********\n");
         tokens_vector_clear();
 		return 1;
 	}
 
 	context = context_tokens.restore();
-  printf("## simple_declaration(void)->0\n");
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -307,7 +290,6 @@ decl_specifier_seq:
 */
 int c_parser_descent::decl_specifier_seq(void)
 {
-  printf("## decl_specifier_seq(void)\n");
   
     //decl_specifier_seq_opt->decl_specifier_seq->decl_specifier_seq_opt...INFINITE
     //decl_specifier_seq_opt();
@@ -317,29 +299,22 @@ int c_parser_descent::decl_specifier_seq(void)
     
 	while( 1 == decl_specifier() )
 	{
-      printf("## ---------------------------------------------------- dentro\n");               
         tokens_vector_print_from_actual();
-      printf("## ---------------------------------------------------- \n");
         result = 1;
 	}
 
     if( 1 == result )
     {
-      printf("## decl_specifier_seq --- fuera con 1 *************************\n");
       token_next();
       token_next();
     }
     else
     {
-      printf("## decl_specifier_seq --- fuera con 0 *************************\n");
       context = context_tokens.restore();
     }
     
-      printf("## ---------------------------------------------------- fuera\n");        
         
         tokens_vector_print_from_actual();
-      printf("## ---------------------------------------------------- \n");    
-	printf("## decl_specifier_seq(void) -> [%d] ** \n\n",result);
 
 	return result;
 }
@@ -356,7 +331,6 @@ decl_specifier:
 //## todo rest of | ...
 int c_parser_descent::decl_specifier(void)
 {
-  printf("## decl_specifier(void)\n");
 
 	if( 1 == type_specifier() )
 	{
@@ -378,7 +352,6 @@ type_specifier:
 //## todo rest of | ...
 int c_parser_descent::type_specifier(void)
 {
-  printf("## type_specifier(void)\n");
   
     if( 1 == simple_type_specifier() )
     {
@@ -411,7 +384,6 @@ simple_type_specifier:
 */
 int c_parser_descent::simple_type_specifier(void)
 {
-  printf("## simple_type_specifier(void)\n");
   
   //## todo  COLONCOLON_opt nested_name_specifier_opt type_name
   c_context_tokens context_tokens(context);
@@ -472,7 +444,6 @@ int c_parser_descent::simple_type_specifier(void)
     return 1;
   }
 
-  printf("## simple_type_specifier(void) -> return 0\n");
   context = context_tokens.restore();  
   return 0;
 }
@@ -485,7 +456,6 @@ class_specifier:
 //## todo rest of rule
 int c_parser_descent::class_specifier(void)
 {
-  printf("## class_specifier(void)\n");
 
 tokens_vector_print_from_actual();
 
@@ -527,7 +497,6 @@ class_head:
 //## todo next |
 int c_parser_descent::class_head(void)
 {
-  printf("## class_head(void)\n");
 
 	if( 0 == class_key() )
 	{
@@ -554,7 +523,6 @@ class_key:
 */
 int c_parser_descent::class_key(void)
 {
-  printf("## class_key(void)\n");
 
   //#### here is the error
   // token_next() pass the class token
@@ -581,7 +549,6 @@ int c_parser_descent::class_key(void)
 
 	context = context_tokens.restore();
 
-  printf("## class_key(void)-> return 0\n");
 	return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -595,7 +562,6 @@ member_specification_opt have while to drop the recursion
 */ 
 int c_parser_descent::member_specification(void)
 {
-  printf("## member_specification(void)\n");
 
   if( 0 == member_declaration() )
   {
@@ -632,7 +598,6 @@ member_declaration:
 */
 int c_parser_descent::member_declaration(void)
 {
-  printf("## member_declaration(void)\n");
   
   decl_specifier_seq_opt();
   
@@ -670,7 +635,6 @@ example
 */
 int c_parser_descent::member_declarator_list(void)
 {
-  printf("## member_declarator_list(void)\n");
   
   if( 0 == member_declarator() )
   {
@@ -695,7 +659,6 @@ int c_parser_descent::member_declarator_list(void)
     }
   }
   
-  printf("## member_declarator_list(void) -> [1] ***\n");
 
   return 1;
 }
@@ -709,7 +672,6 @@ member_declarator:
 */
 int c_parser_descent::member_declarator(void)
 {
-  printf("## member_declarator(void)\n");
   
   //declarator pure_specifier_opt
   if( 1 == declarator() )
@@ -734,7 +696,6 @@ base_clause:
 */
 int c_parser_descent::base_clause(void)
 {
-  printf("## base_clause(void)\n");
 
 	c_context_tokens context_tokens(context);
 	token_next();
@@ -762,7 +723,6 @@ base_specifier_list:
 */
 int c_parser_descent::base_specifier_list(void)
 {
-	printf("## base_specifier_list(void)\n");
 
 	if( 0 == base_specifier() )
 	{
@@ -799,7 +759,6 @@ base_specifier:
 */
 int c_parser_descent::base_specifier(void)
 {
-	printf("## base_specifier(void)\n");
 
 
 	//##todo rest of rules
@@ -834,7 +793,6 @@ access_specifier:
 */
 int c_parser_descent::access_specifier(void)
 {
-	printf("## access_specifier(void)\n");
 
 	c_context_tokens context_tokens(context);
 	token_next();
@@ -872,7 +830,6 @@ declaration_seq_opt:
 //todo epsilon
 int c_parser_descent::declaration_seq_opt(void)
 {
-  printf("## declaration_seq_opt(void)\n");
 
 	if( 1 == declaration_seq() )
 	{
@@ -890,7 +847,6 @@ decl_specifier_seq_opt:
 */
 int c_parser_descent::decl_specifier_seq_opt(void)
 {
-  printf("## decl_specifier_seq_opt(void)\n");
 
     decl_specifier_seq();
 
@@ -905,7 +861,6 @@ init_declarator_list_opt:
 */
 int c_parser_descent::init_declarator_list_opt(void)
 {
-  printf("## init_declarator_list_opt(void)\n");
 
 // ## todo
 //	init_declarator_list();
@@ -921,7 +876,6 @@ identifier_opt:
 */
 int c_parser_descent::identifier_opt(void)
 {
-  printf("## identifier_opt(void)\n");
 //	c_token token_identifier;
 
 	identifier();
@@ -940,12 +894,10 @@ member_specification_opt -> member_declaration -> member_specification_opt ...
 */
 int c_parser_descent::member_specification_opt(void)
 {
-  printf("## member_specification_opt(void)\n");
     int result = 0;
     
     while( 1 == member_specification() )
     {
-      printf("## member_specification_opt(void) ***********************************+DENTRO WHILE\n");
        result = 1;
     }
 
@@ -960,7 +912,6 @@ base_clause_opt:
 */
 int c_parser_descent::base_clause_opt(void)
 {
-  printf("## base_clause_opt(void)\n");
 
 	base_clause();
 
@@ -975,7 +926,6 @@ member_declarator_list_opt:
 */
 int c_parser_descent::member_declarator_list_opt(void)
 {
-  printf("## member_declarator_list_opt(void)\n");
 
     return member_declarator_list();
 }
@@ -992,7 +942,6 @@ declarator:
 */
 int c_parser_descent::declarator(void)
 {
-  printf("## declarator(void)\n");
 
     if( 1 == direct_declarator() )
     {
@@ -1013,12 +962,10 @@ direct_declarator:
 */
 int c_parser_descent::direct_declarator(void)
 {
-  printf("## direct_declarator(void)\n");
   
     //## todo while ...
     if( 1 == declarator_id() )
     {
-      printf("## direct_declarator(void) -> [1] ***\n");
       return 1;
     }
 
@@ -1033,7 +980,6 @@ declarator_id:
 */
 int c_parser_descent::declarator_id(void)
 {
-  printf("## declarator_id(void)\n");
   
     //## COLONCOLON_opt()
     
@@ -1053,7 +999,6 @@ function_definition:
 */
 int c_parser_descent::function_definition(void)
 {
-  printf("## function_definition(void)\n");
     //## todo the rest
     
     if( 0 == declarator() )
