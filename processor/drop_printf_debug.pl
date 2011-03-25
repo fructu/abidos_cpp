@@ -17,7 +17,8 @@ sub p1
         chomp($l);
         $_= $l;
 
-		if( $_ =~ /printf\("##/ )
+#		if( $_ =~ /printf\("##/ )
+        if( $_ =~ /  trace\(/ )
 		{
 			# i does not save this line
 		}

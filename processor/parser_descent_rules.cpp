@@ -16,22 +16,15 @@
 #include "tokens.h"
 
 #include "semantic.h"
-
-# define TAB " "
-
-void trace(string & tab, string s)
-{
-  tab = tab + TAB;
-  printf("%s%s\n",tab.c_str(),s.c_str());
-}
 /*----------------------------------------------------------------------
  * error_recover.
  *----------------------------------------------------------------------*/
 int c_parser_descent::error_recover(string tab)
 {
+  trace(tab, "## error_recover");
   while( token_get() != 0 )
   {
-    token_next();
+    token_next(tab);
 	if( ';' == token_get() )
 	{
 		return 1;
@@ -60,7 +53,8 @@ translation_unit:
 */
 int c_parser_descent::translation_unit(void)
 {
-  printf("## translation_unit(void)-----------------------------------\n");
+  string tab = "";
+  trace(tab, "## translation_unit");
 	tokens_vector_clear();
 
 	if( 1 == declaration_seq_opt(TAB) )
@@ -74,7 +68,7 @@ int c_parser_descent::translation_unit(void)
 	}
 */
 	c_context_tokens context_tokens(context);
-	token_next();
+	token_next(tab);
 	if( 0 == token_get() )
 	{
 		printf("translation_unit() -> EOF\n");
@@ -97,6 +91,7 @@ id_expression:
 */
 int c_parser_descent::id_expression(string tab)
 {
+  trace(tab, "## id_expression");
   
   if( 1 == unqualified_id(tab) )
   {
@@ -121,6 +116,7 @@ unqualified_id:
 */
 int c_parser_descent::unqualified_id(string tab)
 {
+  trace(tab, "## unqualified_id");
   
   if( 1 == identifier(tab) )
   {    
@@ -137,6 +133,7 @@ qualified_id:
 */    
 int c_parser_descent::qualified_id(string tab)
 {
+  trace(tab, "## qualified_id");
 
   return 0;
 }
@@ -154,9 +151,10 @@ class_name:
 */
 int c_parser_descent::class_name(string tab)
 {
+  trace(tab, "## class_name");
 	c_context_tokens context_tokens(context);
 
-	token_next();
+	token_next(tab);
 
 	if( CLASS_NAME == token_get() )
 	{
@@ -181,10 +179,11 @@ identifier:
 */
 int c_parser_descent::identifier(string tab)
 {
+  trace(tab, "## identifier");
 	c_context_tokens context_tokens(context);
     
     tokens_vector_print_from_actual();
-	token_next();
+	token_next(tab);
     tokens_vector_print_from_actual();
 	if( IDENTIFIER == token_get() )
 	{
@@ -207,6 +206,7 @@ declaration_seq:
 */
 int c_parser_descent::declaration_seq(string tab)
 {
+  trace(tab, "## declaration_seq");
 
 	int result = 0;
 
@@ -233,6 +233,7 @@ declaration:
 //## todo rest of | ...
 int c_parser_descent::declaration(string tab)
 {
+  trace(tab, "## declaration");
 
 	if( 1 == block_declaration(tab) )
 	{
@@ -254,6 +255,7 @@ block_declaration:
 //## todo rest of | ...
 int c_parser_descent::block_declaration(string tab)
 {
+  trace(tab, "## block_declaration");
 
 	if( 1 == simple_declaration(tab) )
 	{
@@ -273,13 +275,14 @@ simple_declaration:
 */
 int c_parser_descent::simple_declaration(string tab)
 {
+  trace(tab, "## simple_declaration");
 	
 	decl_specifier_seq_opt(tab);
 	init_declarator_list_opt(tab);
 
 	c_context_tokens context_tokens(context);
 
-	token_next();
+	token_next(tab);
 
 	if( ';' == token_get() )
 	{
@@ -298,6 +301,7 @@ decl_specifier_seq:
 */
 int c_parser_descent::decl_specifier_seq(string tab)
 {
+  trace(tab, "## decl_specifier_seq");
   
     //decl_specifier_seq_opt->decl_specifier_seq->decl_specifier_seq_opt...INFINITE
     //decl_specifier_seq_opt(tab);
@@ -313,8 +317,8 @@ int c_parser_descent::decl_specifier_seq(string tab)
 
     if( 1 == result )
     {
-      token_next();
-      token_next();
+      token_next(tab);
+      token_next(tab);
     }
     else
     {
@@ -339,6 +343,7 @@ decl_specifier:
 //## todo rest of | ...
 int c_parser_descent::decl_specifier(string tab)
 {
+  trace(tab, "## decl_specifier");
 
 	if( 1 == type_specifier(tab) )
 	{
@@ -360,6 +365,7 @@ type_specifier:
 //## todo rest of | ...
 int c_parser_descent::type_specifier(string tab)
 {
+  trace(tab, "## type_specifier");
   
     if( 1 == simple_type_specifier(tab) )
     {
@@ -392,10 +398,11 @@ simple_type_specifier:
 */
 int c_parser_descent::simple_type_specifier(string tab)
 {
+  trace(tab, "## simple_type_specifier");
   
   //## todo  COLONCOLON_opt nested_name_specifier_opt type_name
   c_context_tokens context_tokens(context);
-  token_next();
+  token_next(tab);
 
   if( CHAR == token_get())
   {
@@ -464,6 +471,7 @@ class_specifier:
 //## todo rest of rule
 int c_parser_descent::class_specifier(string tab)
 {
+  trace(tab, "## class_specifier");
 
 tokens_vector_print_from_actual();
 
@@ -473,7 +481,7 @@ tokens_vector_print_from_actual();
 	}
 
 	c_context_tokens context_tokens(context);
-	token_next();
+	token_next(tab);
 	if( '{' != token_get() )
 	{
 
@@ -486,7 +494,7 @@ tokens_vector_print_from_actual();
 
 	member_specification_opt(tab);
 
-	token_next();
+	token_next(tab);
 	if( '}' != token_get() )
 	{
 		context = context_tokens.restore();
@@ -505,6 +513,7 @@ class_head:
 //## todo next |
 int c_parser_descent::class_head(string tab)
 {
+  trace(tab, "## class_head");
 
 	if( 0 == class_key(tab) )
 	{
@@ -531,11 +540,12 @@ class_key:
 */
 int c_parser_descent::class_key(string tab)
 {
+  trace(tab, "## class_key");
 
   //#### here is the error
   // token_next() pass the class token
 	c_context_tokens context_tokens(context);
-	token_next(); 
+	token_next(tab); 
 
 	if( CLASS == token_get() )
 	{
@@ -570,6 +580,7 @@ member_specification_opt have while to drop the recursion
 */ 
 int c_parser_descent::member_specification(string tab)
 {
+  trace(tab, "## member_specification");
 
   if( 0 == member_declaration(tab) )
   {
@@ -583,7 +594,7 @@ int c_parser_descent::member_specification(string tab)
     //-> context.access_specifier
 
     c_context_tokens context_tokens(context);
-    token_next();
+    token_next(tab);
 
     if( ':' != token_get() )
     {
@@ -606,16 +617,17 @@ member_declaration:
 */
 int c_parser_descent::member_declaration(string tab)
 {
+  trace(tab, "## member_declaration");
   
   decl_specifier_seq_opt(tab);
   
   //## todo save context
-  //token_next();
+  //token_next(tab);
 
   if( 1 == member_declarator_list_opt(tab) )
   {
     c_context_tokens context_tokens(context);
-    token_next();    
+    token_next(tab);    
     
     if( ';' != token_get() )
     {
@@ -643,6 +655,7 @@ example
 */
 int c_parser_descent::member_declarator_list(string tab)
 {
+  trace(tab, "## member_declarator_list");
   
   if( 0 == member_declarator(tab) )
   {
@@ -650,7 +663,7 @@ int c_parser_descent::member_declarator_list(string tab)
   }
   
   c_context_tokens context_tokens(context);
-  token_next();
+  token_next(tab);
 
   for(;;)
   {
@@ -680,6 +693,7 @@ member_declarator:
 */
 int c_parser_descent::member_declarator(string tab)
 {
+  trace(tab, "## member_declarator");
   
   //declarator pure_specifier_opt
   if( 1 == declarator(tab) )
@@ -704,9 +718,10 @@ base_clause:
 */
 int c_parser_descent::base_clause(string tab)
 {
+  trace(tab, "## base_clause");
 
 	c_context_tokens context_tokens(context);
-	token_next();
+	token_next(tab);
 
 	if( ':' != token_get() )
 	{
@@ -731,6 +746,7 @@ base_specifier_list:
 */
 int c_parser_descent::base_specifier_list(string tab)
 {
+  trace(tab, "## base_specifier_list");
 
 	if( 0 == base_specifier(tab) )
 	{
@@ -741,7 +757,7 @@ int c_parser_descent::base_specifier_list(string tab)
 
     for(;;)
     {
-      token_next();    
+      token_next(tab);    
       if( ',' != token_get() )
       {
         context = context_tokens.restore();
@@ -767,6 +783,7 @@ base_specifier:
 */
 int c_parser_descent::base_specifier(string tab)
 {
+  trace(tab, "## base_specifier");
 
 
 	//##todo rest of rules
@@ -801,9 +818,10 @@ access_specifier:
 */
 int c_parser_descent::access_specifier(string tab)
 {
+  trace(tab, "## access_specifier");
 
 	c_context_tokens context_tokens(context);
-	token_next();
+	token_next(tab);
 
 	if( PRIVATE == token_get() )
 	{
@@ -838,6 +856,7 @@ declaration_seq_opt:
 //todo epsilon
 int c_parser_descent::declaration_seq_opt(string tab)
 {
+  trace(tab, "## declaration_seq_opt");
 	if( 1 == declaration_seq(tab) )
 	{
 		return 1;
@@ -854,6 +873,7 @@ decl_specifier_seq_opt:
 */
 int c_parser_descent::decl_specifier_seq_opt(string tab)
 {
+  trace(tab, "## decl_specifier_seq_opt");
 
     decl_specifier_seq(tab);
 
@@ -868,6 +888,7 @@ init_declarator_list_opt:
 */
 int c_parser_descent::init_declarator_list_opt(string tab)
 {
+  trace(tab, "## init_declarator_list_opt");
 
 // ## todo
 //	init_declarator_list(tab);
@@ -883,6 +904,7 @@ identifier_opt:
 */
 int c_parser_descent::identifier_opt(string tab)
 {
+  trace(tab, "## identifier_opt");
 //	c_token token_identifier;
 
 	identifier(tab);
@@ -901,6 +923,7 @@ member_specification_opt -> member_declaration -> member_specification_opt ...
 */
 int c_parser_descent::member_specification_opt(string tab)
 {
+  trace(tab, "## member_specification_opt");
     int result = 0;
     
     while( 1 == member_specification(tab) )
@@ -919,6 +942,7 @@ base_clause_opt:
 */
 int c_parser_descent::base_clause_opt(string tab)
 {
+  trace(tab, "## base_clause_opt");
 
 	base_clause(tab);
 
@@ -933,6 +957,7 @@ member_declarator_list_opt:
 */
 int c_parser_descent::member_declarator_list_opt(string tab)
 {
+  trace(tab, "## member_declarator_list_opt");
 
     return member_declarator_list(tab);
 }
@@ -949,6 +974,7 @@ declarator:
 */
 int c_parser_descent::declarator(string tab)
 {
+  trace(tab, "## declarator");
 
     if( 1 == direct_declarator(tab) )
     {
@@ -969,6 +995,7 @@ direct_declarator:
 */
 int c_parser_descent::direct_declarator(string tab)
 {
+  trace(tab, "## direct_declarator");
   
     //## todo while ...
     if( 1 == declarator_id(tab) )
@@ -987,6 +1014,7 @@ declarator_id:
 */
 int c_parser_descent::declarator_id(string tab)
 {
+  trace(tab, "## declarator_id");
   
     //## COLONCOLON_opt(tab)
     
@@ -1006,6 +1034,7 @@ function_definition:
 */
 int c_parser_descent::function_definition(string tab)
 {
+  trace(tab, "## function_definition");
     //## todo the rest
     
     if( 0 == declarator(tab) )

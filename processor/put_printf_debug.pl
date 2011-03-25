@@ -19,7 +19,7 @@ sub p1
 
 		#int c_parser_descent::translation_unit(void)
 		#{
-		if( $_ =~ /int c_parser_descent::([_a-zA-Z\(\) ]+)/ )
+		if( $_ =~ /int c_parser_descent::([_a-zA-Z]+)([_a-zA-Z\(\) ]+)/ )
 		{
 			$method_detected = 1;
 			$method_id = $1;
@@ -30,7 +30,7 @@ sub p1
 			if( $_ =~ /{/ )
 			{
 #				$_ = "{\n  printf(\"## $method_id\\n\");";
-                $_ = "{\n  trace(tab, \"## declaration_seq_opt()\");");";
+                 $_ = "{\n  trace(tab, \"## $method_id\");";
 				$method_detected = 0;
 			    $method_id = "";
 			}
