@@ -105,60 +105,60 @@ class c_parser_descent
 /*
 	rules from yacc
 */
-	int error_recover(void);
+	int error_recover(string tab);
 
 	//Translation unit.
 	//this is the start rule in yacc
 	int translation_unit(void);
 
     //Expressions
-    int id_expression(void);
-    int unqualified_id(void);
-    int qualified_id(void);
+    int id_expression(string tab);
+    int unqualified_id(string tab);
+    int qualified_id(string tab);
 
 	 //Context-dependent identifiers.
-	int class_name(void);
+	int class_name(string tab);
 
 	// Lexical elements.
-	int identifier(void);
+	int identifier(string tab);
 
 	//declarations
-	int declaration_seq(void);
-	int declaration(void);
-	int block_declaration(void);
-	int simple_declaration(void);
-	int decl_specifier_seq(void);
-	int decl_specifier(void);
-	int type_specifier(void);
-    int simple_type_specifier(void);
-	int class_specifier(void);
-	int class_head(void);
-	int class_key(void);
-    int member_specification(void);
-    int member_declaration(void);
-    int member_declarator_list(void);
-    int member_declarator(void);
+	int declaration_seq(string tab);
+	int declaration(string tab);
+	int block_declaration(string tab);
+	int simple_declaration(string tab);
+	int decl_specifier_seq(string tab);
+	int decl_specifier(string tab);
+	int type_specifier(string tab);
+    int simple_type_specifier(string tab);
+	int class_specifier(string tab);
+	int class_head(string tab);
+	int class_key(string tab);
+    int member_specification(string tab);
+    int member_declaration(string tab);
+    int member_declarator_list(string tab);
+    int member_declarator(string tab);
 
     //Declarators
-    int declarator(void);
-    int direct_declarator(void);
-    int declarator_id(void);
-    int function_definition(void);
+    int declarator(string tab);
+    int direct_declarator(string tab);
+    int declarator_id(string tab);
+    int function_definition(string tab);
 
 	// Derived classes.
-	int base_clause(void);
-	int base_specifier_list(void);
-	int base_specifier(void);
-	int access_specifier(void);
+	int base_clause(string tab);
+	int base_specifier_list(string tab);
+	int base_specifier(string tab);
+	int access_specifier(string tab);
 
  	//Epsilon (optional) definitions.
-	int declaration_seq_opt(void);
-	int decl_specifier_seq_opt(void);
-	int init_declarator_list_opt(void);
-	int identifier_opt(void);
-    int member_specification_opt(void);
-	int base_clause_opt(void);
-    int member_declarator_list_opt(void);
+	int declaration_seq_opt(string tab);
+	int decl_specifier_seq_opt(string tab);
+	int init_declarator_list_opt(string tab);
+	int identifier_opt(string tab);
+    int member_specification_opt(string tab);
+	int base_clause_opt(string tab);
+    int member_declarator_list_opt(string tab);
 
   public:    
     c_parser_descent();
