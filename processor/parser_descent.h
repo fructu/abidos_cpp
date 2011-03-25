@@ -66,7 +66,7 @@ struct c_context
     access_specifier = 0;
     class_declaration = 0;
     class_name_declaration = "";
-    just_reloaded = 0;
+    just_reloaded = 1;
   }
 };
 
@@ -144,6 +144,8 @@ class c_parser_descent
     int member_declarator(string tab);
 
     //Declarators
+    int init_declarator_list(string tab);
+    int init_declarator(string tab);
     int declarator(string tab);
     int direct_declarator(string tab);
     int declarator_id(string tab);

@@ -635,12 +635,12 @@ linkage_specification:
 /*----------------------------------------------------------------------
  * Declarators.
  *----------------------------------------------------------------------*/
-
+//## did
 init_declarator_list:
 	init_declarator
 	| init_declarator_list ',' init_declarator
 	;
-
+//## did
 init_declarator:
 	declarator initializer_opt
 	;

@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 {
   printf("abidos v0.0.02\n");
 
-  ts_tests();
+//  ts_tests();
 
 //  test_01();
 
