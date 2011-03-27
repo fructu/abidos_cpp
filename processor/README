@@ -1,5 +1,9 @@
 1. A brief description of the project.
    sudo apt-get install graphviz
+   UniversalIndentGUI
+   universalindentgui
+   indent -nbad -bap -nbc -bbo -bl -bli2 -bls -ncdb -nce -cp1 -cs -di2 -ndj -nfc1 -nfca -hnl -i2 -ip5 -lp -pcs -psl -nsc -nsob
+
 
 	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
     kate Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO semantic.cpp semantic.h symbols_table.h symbols_table.cpp
