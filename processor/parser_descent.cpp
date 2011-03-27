@@ -313,18 +313,16 @@ void c_parser_descent::yyparse(char * file_name)
   translation_unit();
 
   printf("\n##---------------- rest of tokens has not been consumed -------------------------------\n");
-
   do
   {
-//	tokens_vector_clear();
 	token_next("");
   }
   while( token_get() != 0 );
   ts.print();
   ts.unset();
 
-  yylex_destroy();  
-
+  lex_file_end();
+  yylex_destroy();
 }
 /*----------------------------------------------------------------------------*/
 
