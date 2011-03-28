@@ -84,7 +84,56 @@ decl_specifier:
 
 ## todo vector<c_decl_specifier> t_vector_decl_specifier
 */
+struct c_decl_specifier
+{
+	c_token token;
 
+	int storage_class_specifier;
+	int type_specifier;
+	int function_specifier;
+	int friend_specifier;
+	int typedef_specifier;
+
+	c_decl_specifier(c_token t)
+	{
+		token = t;
+
+		storage_class_specifier = 0;
+		type_specifier = 0;
+		function_specifier = 0;
+		friend_specifier = 0;
+		typedef_specifier = 0;
+	}
+
+	void clear(void)
+	{
+		storage_class_specifier = 0;
+		type_specifier = 0;
+		function_specifier = 0;
+		friend_specifier = 0;
+		typedef_specifier = 0;
+	}
+};
+
+typedef vector<c_decl_specifier> t_vector_decl_specifier;
+
+struct c_class_member
+{
+	c_token token;
+	t_vector_decl_specifier vector_decl_specifier;
+
+	c_class_member()
+	{
+	}
+
+	c_class_member(c_token t, t_vector_decl_specifier v)
+	{
+		token = t;
+		vector_decl_specifier = v;
+	}
+};
+
+typedef map<string, c_class_member> t_map_class_member;
 
 struct c_symbol
 {
@@ -93,12 +142,14 @@ struct c_symbol
   int class_key;
 
   t_map_base_class map_base_class;
+  t_map_class_member map_class_member;
 
   c_symbol()
   {
     type  = 0;
     class_key = 0;
     map_base_class.clear();
+    map_class_member.clear();
   }
 
   c_symbol(c_token token_1)
@@ -107,6 +158,7 @@ struct c_symbol
       type  = 0;
       class_key = 0;
       map_base_class.clear();
+	  map_class_member.clear();
   }
 
   ~c_symbol()
@@ -114,6 +166,7 @@ struct c_symbol
       type  = 0;
       class_key = 0;
       map_base_class.clear();
+      map_class_member.clear();
   }
   void print(const char * tab);
 };

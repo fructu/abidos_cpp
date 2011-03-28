@@ -408,63 +408,73 @@ int c_parser_descent::simple_type_specifier(string tab)
   printf("%s## simple_type_specifier antes context.just_reloaded [%d] ------------------------------------------\n",tab.c_str(),context.just_reloaded);
 
   //## todo  COLONCOLON_opt nested_name_specifier_opt type_name
+  int result = 0;
   c_context_tokens context_tokens(context);
   token_next(tab);
 
   if( CHAR == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( WCHAR_T == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( BOOL == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( SHORT == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( INT == token_get())
   {
     printf("%s## simple_type_specifier -> [INT]",tab.c_str());
-    return 1;
+    result = 1;
   }
 
   if( LONG == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( SIGNED == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( UNSIGNED == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( FLOAT == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( DOUBLE == token_get())
   {
-    return 1;
+    result = 1;
   }
 
   if( VOID == token_get())
   {
-    return 1;
+    result = 1;
+  }
+
+  if( 1 == result )
+  {
+  	c_decl_specifier decl(c_token_get());
+  	decl.type_specifier = 1;
+  	semantic.push_back_vector_c_decl_specifier(decl);
+
+  	return 1;
   }
 
   printf("%s## simple_type_specifier -> [0]",tab.c_str());
@@ -633,15 +643,15 @@ member_declaration:
 int c_parser_descent::member_declaration(string tab)
 {
   trace(tab, "## member_declaration");
+  c_context_tokens context_tokens(context);
 
+  context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER;
+  semantic.clear_c_decl_specifier();
   decl_specifier_seq_opt(tab);
 
-  //## todo save context
-  //token_next(tab);
-
+  context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
   if( 1 == member_declarator_list_opt(tab) )
   {
-    c_context_tokens context_tokens(context);
     token_next(tab);
 
     if( ';' != token_get() )

@@ -20,9 +20,23 @@
 
 class c_semantic
 {
+  private:
+	t_vector_decl_specifier vector_decl_specifier;
+
   public:
+	void push_back_vector_c_decl_specifier(c_decl_specifier decl)
+	{
+		vector_decl_specifier.push_back(decl);
+	}
+
+	void clear_c_decl_specifier(void)
+	{
+		vector_decl_specifier.clear();
+	}
+
     void identifier(c_context & context, c_token token);
     void class_specifier_identifier(c_context & context, c_token token);
+    void class_member_declarator(c_context & context, c_token token);
 
     void class_name(c_context & context, c_token token);
 };
