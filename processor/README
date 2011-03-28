@@ -40,4 +40,7 @@ show includes todo
 abidos
 -[v] draft first version of types_table.
 -[v] draft first version of symbol_table.
--[] class B : A { ... put public by default
+-[v] class B : A { ... put public by default
+-[] symbols_table.h do vector<c_decl_specifier> t_vector_decl_specifier
+-[] put members in previous vector inside his class
+

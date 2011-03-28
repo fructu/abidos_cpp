@@ -36,35 +36,43 @@ typedef vector<c_token> t_tokens;
   context will have class_key == CLASS
   to know what is a
 */
-enum
+enum t_class_specifier_status
 {
-  BASE_CLASS_DECLARATION = 1
-};
+  NO_STATUS = 0
+  , CLASS_SPECIFIER_STATUS_IDENTIFIER
+  , CLASS_SPECIFIER_STATUS_BASE_DECLARATION
+  , CLASS_SPECIFIER_STATUS_MEMBER_DECLARATION
+} ;
 
 struct c_context
 {
   unsigned i_token;
+  enum t_class_specifier_status  class_specifier_status; //the semantic will know is inside a class/struct/union declaration
+
   int      class_key; //the rule when CLASS STRUCT UNION are set
   int      access_specifier;
-  int      class_declaration;
+
   string   class_name_declaration; //class class_name_declaration
+
   int just_reloaded;
 
   c_context()
   {
     i_token = 0;
+    class_specifier_status = NO_STATUS;
     class_key = 0;
     access_specifier = 0;
-    class_declaration = 0;
+
     class_name_declaration = "";
     just_reloaded = 0;
   }
   void clear(void)
   {
     i_token = 0;
+    class_specifier_status = NO_STATUS;
     class_key = 0;
     access_specifier = 0;
-    class_declaration = 0;
+
     class_name_declaration = "";
     just_reloaded = 1;
   }
@@ -77,7 +85,7 @@ struct c_context
 struct c_context_tokens
 {
     // index of tokens
-//	unsigned i_token;    
+//	unsigned i_token;
     c_context context;
 
 	c_context_tokens(c_context context_param);
@@ -94,13 +102,13 @@ class c_parser_descent
     c_context context;
 
 	t_tokens tokens_vector;
-  
+
 	void tokens_vector_print(void);
 	void tokens_vector_print_from_actual(void);
 
 	void tokens_vector_reload(void);
 	void tokens_vector_clear(void);
-  
+
     void token_print(void);
     int  token_get(void);
     c_token c_token_get(void);
@@ -166,7 +174,7 @@ class c_parser_descent
 	int base_clause_opt(string tab);
     int member_declarator_list_opt(string tab);
 
-  public:    
+  public:
     c_parser_descent();
     ~c_parser_descent();
     void yyparse(char * file_name);
@@ -178,3 +186,4 @@ class c_parser_descent
 };
 
 #endif
+

@@ -22,8 +22,11 @@ class c_semantic
 {
   public:
     void identifier(c_context & context, c_token token);
+    void class_specifier_identifier(c_context & context, c_token token);
+
     void class_name(c_context & context, c_token token);
 };
 
 extern c_semantic semantic;
 #endif
+
