@@ -14,7 +14,7 @@ CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 EXECUTABLE=abidos
 
-all: tryit_descent
+all: clean tryit_descent
 
 .c.o:
 	cc -c $<
@@ -62,3 +62,4 @@ clean:
 	rm -f *~
 	rm -f *.bk
 	rm -f $(EXECUTABLE)
+

@@ -5,3 +5,8 @@ class A
   int a1;
 };
 
+class B: A
+{
+  int b1;
+};
+

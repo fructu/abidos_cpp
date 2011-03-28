@@ -16,11 +16,20 @@
 
 #include <stdio.h>
 /*----------------------------------------------------------------------------*/
-void c_semantic::identifier(c_context & context, c_token token)
+//void c_semantic::member_declarator(c_context & context, c_token token)
+//{
+//	context.member_declarator = 1;
+//}
+/*----------------------------------------------------------------------------*/
+void c_semantic::class_specifier_identifier(c_context & context, c_token token)
 {
-    printf("## c_semantic::identifier(c_context context)\n\n");
-    
     c_symbol symbol(token);
+	printf("## c_semantic::class_(c_context context)\n\n");
+    if( CLASS_SPECIFIER_STATUS_IDENTIFIER != context.class_specifier_status)
+    {
+	    printf("##error c_semantic::class_ CLASS_IDENTIFIER != context.class_specifier_status\n\n");
+    	return;
+    }
 
     if( CLASS == context.class_key )
     {
@@ -42,12 +51,23 @@ void c_semantic::identifier(c_context & context, c_token token)
     }
 
     // we only take the name of the class the fist time after CLASS
-    if( BASE_CLASS_DECLARATION == context.class_declaration)
+//    if( 1 == context.class_head)
     {
         context.class_name_declaration = token.text;
     }
 
     ts.insert(symbol);
+}
+/*----------------------------------------------------------------------------*/
+void c_semantic::identifier(c_context & context, c_token token)
+{
+    printf("## c_semantic::identifier(c_context context)\n\n");
+
+	if( CLASS_SPECIFIER_STATUS_IDENTIFIER == context.class_specifier_status)
+	{
+		class_specifier_identifier(context, token);
+	}
+
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -58,13 +78,18 @@ void c_semantic::class_name(c_context & context, c_token token)
 {
     //we are in the base class declaration
     // example class A : public B
-    if( BASE_CLASS_DECLARATION == context.class_declaration)
+    if( CLASS_SPECIFIER_STATUS_BASE_DECLARATION == context.class_specifier_status)
     {
       //printf("\n\n###  WE ADDING BASES CLASS TO [%s]\n\n",context.class_name_declaration.c_str());
 
       c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
       if( p_symbol )
       {
+      	if( 0 == context.access_specifier )
+      	{
+      		context.access_specifier = PUBLIC;
+      	}
+
         c_base_class base_class(token.text, context.access_specifier);
         p_symbol->map_base_class[token.text] = base_class;
 
@@ -75,3 +100,4 @@ void c_semantic::class_name(c_context & context, c_token token)
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;
 /*----------------------------------------------------------------------------*/
+

@@ -71,6 +71,21 @@ struct c_base_class
 };
 typedef map<string, c_base_class> t_map_base_class;
 
+
+
+/*
+decl_specifier:
+	storage_class_specifier
+	| type_specifier
+	| function_specifier
+	| FRIEND
+	| TYPEDEF
+	;
+
+## todo vector<c_decl_specifier> t_vector_decl_specifier
+*/
+
+
 struct c_symbol
 {
   c_token token;
@@ -126,3 +141,4 @@ class c_symbols_table
 extern c_symbols_table ts;
 
 #endif
+
