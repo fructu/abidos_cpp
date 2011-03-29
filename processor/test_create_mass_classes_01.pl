@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #
 # autor:Manuel Hevia
-# description: 
+# description:
 #
 #-------------------------------------------
 sub create_class
@@ -10,6 +10,13 @@ sub create_class
 
   print f_out "class A$n\n";
   print f_out "{\n";
+
+  $i2 = 0;
+  for( $i2 = 0; $i2 < 5; $i2++ )
+  {
+    print f_out "  int a$n\_$i2 ;\n";
+  }
+
   print f_out "};\n";
 }
 
@@ -27,6 +34,13 @@ sub create_class_with_parents
   print f_out "  A$p\n";
 
   print f_out "{\n";
+
+  $i2 = 0;
+  for( $i2 = 0; $i2 < 5; $i2++ )
+  {
+    print f_out "  int a$n\_$i2;\n";
+  }
+
   print f_out "};\n";
 }
 
@@ -40,7 +54,7 @@ sub p1
 
   create_class($i);
 
-  for( $i = 1; $i < 100; $i++)
+  for( $i = 1; $i < 10; $i++)
   {
 	create_class_with_parents($i);
   }
@@ -49,3 +63,4 @@ sub p1
 }
 
 p1;
+

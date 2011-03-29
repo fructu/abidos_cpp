@@ -288,7 +288,6 @@ int c_parser_descent::simple_declaration(string tab)
 
 	if( ';' == token_get() )
 	{
-      trace(tab, "## simple_declaration -> [OK] YUJUUUUUUUUUUUU ******************");
         tokens_vector_clear();
 		return 1;
 	}
@@ -305,7 +304,6 @@ decl_specifier_seq:
 int c_parser_descent::decl_specifier_seq(string tab)
 {
   trace(tab, "## decl_specifier_seq");
-
     //decl_specifier_seq_opt->decl_specifier_seq->decl_specifier_seq_opt...INFINITE
     //decl_specifier_seq_opt(tab);
 
@@ -315,19 +313,11 @@ int c_parser_descent::decl_specifier_seq(string tab)
 	while( 1 == decl_specifier(tab) )
 	{
         result = 1;
-//        token_next(tab);
 	}
 
     if( 1 == result )
     {
-      //we must force pass just_reloaded
-
-      trace(tab, "############### ******************************************************* place 2 token_next *********************{");
-      tokens_vector_print_from_actual();
-
-//      token_next(tab);
-      //token_next(tab);
-      trace(tab, "############### ******************************************************* place 2 token_next *********************}");
+      //tokens_vector_print_from_actual();
     }
     else
     {
@@ -373,15 +363,25 @@ int c_parser_descent::type_specifier(string tab)
 {
   trace(tab, "## type_specifier");
 
+	string class_name = context.class_name_declaration;
+	c_context_tokens context_tokens(context);
+
     if( 1 == simple_type_specifier(tab) )
     {
       return 1;
     }
 
+
 	if( 1 == class_specifier(tab) )
 	{
+//## bad idea i need investigate other way to do this
+//		context = context_tokens.restore();
+// for the moment i use this string class_name
+		context.class_name_declaration = class_name;
 		return 1;
 	}
+
+	context = context_tokens.restore();
 
 	return 0;
 }
@@ -410,7 +410,10 @@ int c_parser_descent::simple_type_specifier(string tab)
   //## todo  COLONCOLON_opt nested_name_specifier_opt type_name
   int result = 0;
   c_context_tokens context_tokens(context);
+
+string class_name = context.class_name_declaration;
   token_next(tab);
+context.class_name_declaration = class_name;
 
   if( CHAR == token_get())
   {
@@ -479,7 +482,7 @@ int c_parser_descent::simple_type_specifier(string tab)
 
   printf("%s## simple_type_specifier -> [0]",tab.c_str());
   context = context_tokens.restore();
-  printf("%s## despues context.just_reloaded [%d]\n",tab.c_str(),context.just_reloaded);
+
   tokens_vector_print_from_actual();
   return 0;
 }
@@ -511,7 +514,11 @@ int c_parser_descent::class_specifier(string tab)
 		return 0;
 	}
 
+	//we need to know what class is processing
+	string class_name = context.class_name_declaration;
     tokens_vector_clear();
+	context.class_name_declaration = class_name;
+
     trace(tab, "## class_specifier--------------------cabecera consume all tokens before { [ok] ------------------------");
     context_tokens.save(context);
 
@@ -950,6 +957,7 @@ member_specification_opt -> member_declaration -> member_specification_opt ...
 int c_parser_descent::member_specification_opt(string tab)
 {
   trace(tab, "## member_specification_opt");
+
     int result = 0;
 
     while( 1 == member_specification(tab) )
