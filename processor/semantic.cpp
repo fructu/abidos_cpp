@@ -99,7 +99,6 @@ void c_semantic::class_member_declarator(c_context & context, c_token token)
         return;
       }
     }
-
 }
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
@@ -115,7 +114,6 @@ void c_semantic::identifier(c_context & context, c_token token)
 	{
 		class_member_declarator(context, token);
 	}
-
 }
 /*----------------------------------------------------------------------------*/
 /*

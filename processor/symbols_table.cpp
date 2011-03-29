@@ -31,7 +31,7 @@ void c_symbol::print(const char * tab)
 
 //  t_map_base_class map_base_class;
 
-  t_map_base_class::iterator i_map = map_base_class.begin();
+  t_map_base_class::iterator i_map_base = map_base_class.begin();
 
   printf("%s  map_base_class\n",tab);
   printf("%s  {\n",tab);
@@ -41,13 +41,45 @@ void c_symbol::print(const char * tab)
     printf("%s    empty\n",tab);
   }
 
-  for( i_map = map_base_class.begin(); i_map != map_base_class.end(); ++i_map )
+  for( i_map_base = map_base_class.begin(); i_map_base != map_base_class.end(); ++i_map_base )
   {
     printf("%s    first[%s]->[%s][%s]\n"
       , tab
-      , ((*i_map).first).c_str()
-      , yytokens[((*i_map).second).access_specifier]
-      , ((*i_map).second).text.c_str()
+      , ((*i_map_base).first).c_str()
+      , yytokens[((*i_map_base).second).access_specifier]
+      , ((*i_map_base).second).text.c_str()
+    );
+  }
+
+  printf("%s  }\n",tab);
+
+
+  t_map_class_member::iterator i_map_member = map_class_member.begin();
+
+  printf("%s  map_class_member\n",tab);
+  printf("%s  {\n",tab);
+  if( map_class_member.size() <= 0)
+  {
+    printf("%s    empty\n",tab);
+  }
+
+  for( i_map_member = map_class_member.begin(); i_map_member != map_class_member.end(); ++i_map_member )
+  {
+//    printf("%s    first[%s]->[%s][%s]\n"
+
+	unsigned i_decl = 0;
+
+	printf("%s   ",tab);
+
+	for( i_decl = 0; i_decl < (i_map_member->second).vector_decl_specifier.size(); ++i_decl )
+	{
+		printf("[%s] ", (i_map_member->second).vector_decl_specifier[i_decl].token.text.c_str() );
+	}
+
+	printf("first[%s]->[%s]\n"
+      , ((*i_map_member).first).c_str()
+//      , yytokens[((*i_map_member).second).access_specifier]
+      , ((*i_map_member).second).token.text.c_str()
     );
   }
 
@@ -60,7 +92,7 @@ c_symbols_table::c_symbols_table()
 {
   stack.clear();
 }
-/*----------------------------------------------------------------------------*/  
+/*----------------------------------------------------------------------------*/
 c_symbols_table::~c_symbols_table()
 {
   stack.clear();
@@ -257,3 +289,4 @@ void ts_tests(void)
   printf("symbols_table testing end\n");
 }
 /*----------------------------------------------------------------------------*/
+

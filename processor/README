@@ -41,6 +41,20 @@ abidos
 -[v] draft first version of types_table.
 -[v] draft first version of symbol_table.
 -[v] class B : A { ... put public by default
--[] symbols_table.h do vector<c_decl_specifier> t_vector_decl_specifier
--[] put members in previous vector inside his class
+-[v] symbols_table.h do vector<c_decl_specifier> t_vector_decl_specifier
+-[v] put members in previous vector inside his class
+-[] investigate
+	int c_parser_descent::type_specifier(string tab)
+	{
+	...
+	if( 1 == class_specifier(tab) )
+	{
+		//## bad idea i need investigate other way to do this
+		//		context = context_tokens.restore();
+		return 1;
+	}
+-[]
+
+
+printf("##14**      class[%s]\n", context.class_name_declaration.c_str());
 

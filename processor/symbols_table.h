@@ -117,6 +117,14 @@ struct c_decl_specifier
 
 typedef vector<c_decl_specifier> t_vector_decl_specifier;
 
+/*
+	class A
+	{
+		int a;
+	}
+
+	c_class_member has 'int a' inside
+*/
 struct c_class_member
 {
 	c_token token;
@@ -130,6 +138,10 @@ struct c_class_member
 	{
 		token = t;
 		vector_decl_specifier = v;
+	}
+
+	void print(const char * tab)
+	{
 	}
 };
 

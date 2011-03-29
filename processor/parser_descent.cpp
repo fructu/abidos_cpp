@@ -68,7 +68,7 @@ void c_parser_descent::tokens_vector_print(void)
 {
 //	t_tokens::iterator i_token = tokens_vector.begin();
 
-	unsigned n = 0;	
+	unsigned n = 0;
 
 	printf("tokens_vector_print\n");
 	printf("{\n");
@@ -150,7 +150,7 @@ void c_parser_descent::tokens_vector_reload(void)
 void c_parser_descent::tokens_vector_clear(void)
 {
 	tokens_vector.clear();
-	
+
 	if( !tokens_vector.empty() )
 	{
 		printf("########################## tokens_vector_clear COMOR  !tokens_vector.empty() !!! \n");
@@ -225,16 +225,18 @@ void c_parser_descent::token_next(string tab)
 	int get_from_lex = 0;
 
     printf("%s## token_next",tab.c_str());
-    
+
 	if( !( (0 <= context.i_token) &&
 		   (context.i_token < tokens_vector.size())
 		 )
 	  )
 	{
 		printf(" c_parser_descent::token_next() -> (context.i_token out of vector)");
-        context.clear();
+//        context.clear();
+		//we don't want loose other information of context
+	    context.i_token = 0;
+    	context.just_reloaded = 1;
 	}
-
 
 	if( tokens_vector.empty() )
 	{
@@ -358,10 +360,11 @@ int c_parser_descent::test_01(void)
   }
 
   tokens_vector_print();
-  yylex_destroy();  
+  yylex_destroy();
 
   printf("}\n");
 
   return 0;
 }
 /*----------------------------------------------------------------------------*/
+
