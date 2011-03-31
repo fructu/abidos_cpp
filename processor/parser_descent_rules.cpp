@@ -695,10 +695,18 @@ int c_parser_descent::member_declarator_list(string tab)
   }
 
   c_context_tokens context_tokens(context);
-  token_next(tab);
 
   for(;;)
   {
+    token_next(tab);
+
+    if( ';' == token_get() )
+    {
+		// yes i restore here to consume ';' more up in the tree
+        context = context_tokens.restore();
+        return 1;
+    }
+
     if( ',' != token_get() )
     {
         context = context_tokens.restore();
