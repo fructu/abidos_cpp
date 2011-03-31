@@ -363,7 +363,6 @@ int c_parser_descent::type_specifier(string tab)
 {
   trace(tab, "## type_specifier");
 
-	string class_name = context.class_name_declaration;
 	c_context_tokens context_tokens(context);
 
     if( 1 == simple_type_specifier(tab) )
@@ -371,13 +370,9 @@ int c_parser_descent::type_specifier(string tab)
       return 1;
     }
 
-
 	if( 1 == class_specifier(tab) )
 	{
-//## bad idea i need investigate other way to do this
-//		context = context_tokens.restore();
-// for the moment i use this string class_name
-		context.class_name_declaration = class_name;
+		context_tokens.restore_but_not_i_token(context);
 		return 1;
 	}
 
@@ -695,15 +690,17 @@ int c_parser_descent::member_declarator_list(string tab)
   }
 
   c_context_tokens context_tokens(context);
+  c_context_tokens context_good_way(context);
 
   for(;;)
   {
+    context_good_way.save(context);
     token_next(tab);
 
     if( ';' == token_get() )
     {
 		// yes i restore here to consume ';' more up in the tree
-        context = context_tokens.restore();
+        context = context_good_way.restore();
         return 1;
     }
 

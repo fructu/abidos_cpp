@@ -43,6 +43,19 @@ c_context c_context_tokens::restore(void)
 	return context;
 }
 /*----------------------------------------------------------------------------*/
+void c_context_tokens::restore_but_not_i_token(c_context & context_param)
+{
+/*
+    if( 0 == context.i_token)
+    {
+      context.just_reloaded = 1;
+    }
+*/
+//	return context;
+
+	context_param.restore_but_not_i_token(context_param);
+}
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 c_parser_descent::c_parser_descent()
