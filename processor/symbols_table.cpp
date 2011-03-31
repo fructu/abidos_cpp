@@ -15,7 +15,71 @@
 #include "symbols_table.h"
 #include <stdio.h>
 #include <stdlib.h>
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+void c_class_members::clear(void)
+{
+	map_class_member.clear();
+	vector_class_member.clear();
+}
+/*----------------------------------------------------------------------------*/
+void c_class_members::print(const char * tab)
+{
+  t_map_class_member::iterator i_map_member = map_class_member.begin();
+  printf("%s  vector_class_member\n",tab);
+  printf("%s  {\n",tab);
+  unsigned i_member = 0;
+  for(i_member = 0; i_member < vector_class_member.size(); ++i_member)
+  {
+	unsigned i_decl = 0;
 
+	printf("%s   ",tab);
+
+	for( i_decl = 0; i_decl < vector_class_member[i_member].vector_decl_specifier.size(); ++i_decl )
+	{
+		printf("[%s] ", vector_class_member[i_member].vector_decl_specifier[i_decl].token.text.c_str() );
+	}
+	printf("[%s]\n",vector_class_member[i_member].token.text.c_str());
+  }
+  printf("%s  }\n",tab);
+
+  printf("%s  map_class_member\n",tab);
+  printf("%s  {\n",tab);
+  if( map_class_member.size() <= 0)
+  {
+    printf("%s    empty\n",tab);
+  }
+
+  for( i_map_member = map_class_member.begin(); i_map_member != map_class_member.end(); ++i_map_member )
+  {
+//    printf("%s    first[%s]->[%s][%s]\n"
+
+	unsigned i_decl = 0;
+
+	printf("%s   ",tab);
+
+	for( i_decl = 0; i_decl < (i_map_member->second).vector_decl_specifier.size(); ++i_decl )
+	{
+		printf("[%s] ", (i_map_member->second).vector_decl_specifier[i_decl].token.text.c_str() );
+	}
+
+	printf("first[%s]->[%s]\n"
+      , ((*i_map_member).first).c_str()
+//      , yytokens[((*i_map_member).second).access_specifier]
+      , ((*i_map_member).second).token.text.c_str()
+    );
+  }
+}
+/*----------------------------------------------------------------------------*/
+void c_class_members::insert(c_class_member member)
+{
+	map_class_member[member.token.text] = member;
+	vector_class_member.push_back(member);
+}
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 void c_symbol::print(const char * tab)
 {
   printf("%sid[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n"
@@ -53,35 +117,7 @@ void c_symbol::print(const char * tab)
 
   printf("%s  }\n",tab);
 
-
-  t_map_class_member::iterator i_map_member = map_class_member.begin();
-
-  printf("%s  map_class_member\n",tab);
-  printf("%s  {\n",tab);
-  if( map_class_member.size() <= 0)
-  {
-    printf("%s    empty\n",tab);
-  }
-
-  for( i_map_member = map_class_member.begin(); i_map_member != map_class_member.end(); ++i_map_member )
-  {
-//    printf("%s    first[%s]->[%s][%s]\n"
-
-	unsigned i_decl = 0;
-
-	printf("%s   ",tab);
-
-	for( i_decl = 0; i_decl < (i_map_member->second).vector_decl_specifier.size(); ++i_decl )
-	{
-		printf("[%s] ", (i_map_member->second).vector_decl_specifier[i_decl].token.text.c_str() );
-	}
-
-	printf("first[%s]->[%s]\n"
-      , ((*i_map_member).first).c_str()
-//      , yytokens[((*i_map_member).second).access_specifier]
-      , ((*i_map_member).second).token.text.c_str()
-    );
-  }
+  members.print(tab);
 
   printf("%s  }\n",tab);
 }

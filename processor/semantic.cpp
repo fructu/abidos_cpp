@@ -94,7 +94,8 @@ void c_semantic::class_member_declarator(c_context & context, c_token token)
 
 	    c_class_member class_member( token , vector_decl_specifier);
 
-	    p_symbol->map_class_member[token.text] = class_member;
+//	    p_symbol->map_class_member[token.text] = class_member;
+	    p_symbol->members.insert(class_member);
 
         return;
       }

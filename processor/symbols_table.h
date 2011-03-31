@@ -120,10 +120,10 @@ typedef vector<c_decl_specifier> t_vector_decl_specifier;
 /*
 	class A
 	{
-		int a;
+		long int a;
 	}
 
-	c_class_member has 'int a' inside
+	c_class_member has 'long int a' inside
 */
 struct c_class_member
 {
@@ -146,6 +146,22 @@ struct c_class_member
 };
 
 typedef map<string, c_class_member> t_map_class_member;
+typedef vector<c_class_member> t_vector_class_member;
+
+/*
+	i store members in map to have fast access
+	i store members in vector to haver the original order
+*/
+class c_class_members
+{
+	private:
+		t_map_class_member 		map_class_member;
+		t_vector_class_member	vector_class_member;
+	public:
+		void clear(void);
+		void print(const char * tab);
+		void insert(c_class_member member);
+};
 
 struct c_symbol
 {
@@ -154,14 +170,16 @@ struct c_symbol
   int class_key;
 
   t_map_base_class map_base_class;
-  t_map_class_member map_class_member;
+
+//  t_map_class_member map_class_member;
+  c_class_members members;
 
   c_symbol()
   {
     type  = 0;
     class_key = 0;
     map_base_class.clear();
-    map_class_member.clear();
+    members.clear();
   }
 
   c_symbol(c_token token_1)
@@ -170,7 +188,7 @@ struct c_symbol
       type  = 0;
       class_key = 0;
       map_base_class.clear();
-	  map_class_member.clear();
+	  members.clear();
   }
 
   ~c_symbol()
@@ -178,7 +196,7 @@ struct c_symbol
       type  = 0;
       class_key = 0;
       map_base_class.clear();
-      map_class_member.clear();
+      members.clear();
   }
   void print(const char * tab);
 };
