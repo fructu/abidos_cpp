@@ -44,7 +44,10 @@ enum t_class_specifier_status
   , CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER
   , CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR
 } ;
-
+/*
+	if you adde more members pls actualize
+	c_context_tokens::restore_but_not_i_token()
+*/
 struct c_context
 {
   unsigned i_token;
@@ -77,6 +80,14 @@ struct c_context
     class_name_declaration = "";
     just_reloaded = 1;
   }
+  void restore_but_not_i_token(c_context & context_param)
+  {
+    context_param.class_specifier_status = class_specifier_status;
+    context_param.class_key = class_key;
+    context_param.access_specifier = access_specifier;
+
+    context_param.class_name_declaration = class_name_declaration;
+  }
 };
 
 /*
@@ -92,6 +103,8 @@ struct c_context_tokens
 	c_context_tokens(c_context context_param);
 	void save(c_context context_param);
 	c_context restore(void);
+
+	void restore_but_not_i_token(c_context & context_param);
 };
 
 class c_parser_descent

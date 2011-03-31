@@ -43,7 +43,7 @@ abidos
 -[v] class B : A { ... put public by default
 -[v] symbols_table.h do vector<c_decl_specifier> t_vector_decl_specifier
 -[v] put members in previous vector inside his class
--[] investigate
+-[v] investigate
 	int c_parser_descent::type_specifier(string tab)
 	{
 	...
@@ -53,10 +53,16 @@ abidos
 		//		context = context_tokens.restore();
 		return 1;
 	}
+
+	maybe in the call of the rule, or restore all but i_token not
+
+	fix->context_tokens.restore_but_not_i_token(context);
+
 -[v] fixed parser more than 3 members in oneline inside a class
 -[v] in members whe store in map and in a vector to have fast access
      and to have original order
--[]
+-[] inprint members put empty in vector
+-[] implement parse of functions members
 
 
 printf("##14**      class[%s]\n", context.class_name_declaration.c_str());
