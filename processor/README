@@ -53,6 +53,9 @@ abidos
 		//		context = context_tokens.restore();
 		return 1;
 	}
+-[v] fixed parser more than 3 members in oneline inside a class
+-[v] in members whe store in map and in a vector to have fast access
+     and to have original order
 -[]
 
 
