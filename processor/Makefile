@@ -14,7 +14,7 @@ CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 EXECUTABLE=abidos
 
-all: clean tryit_descent
+all: clean tryit_descent test_run
 
 .c.o:
 	cc -c $<
@@ -43,6 +43,9 @@ parser_descent.o: lex_yacc.h
 lexer.o: parser.h
 
 lex_yacc.h: parser.h
+
+test_run: tests_run.pl
+	./tests_run.pl
 
 debug_put:
 	cp parser_descent_rules.cpp parser_descent_rules.cpp.bk

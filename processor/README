@@ -62,7 +62,10 @@ abidos
 -[v] in members whe store in map and in a vector to have fast access
      and to have original order
 -[] inprint members put empty in vector
--[] implement parse of functions members
+-[v] implement parse of functions members
+-[] implement symbol save of parametes of functions members.
+-[] implement parse of free functions
+-[] implement symbol save of parametes of free functions
 
 
 printf("##14**      class[%s]\n", context.class_name_declaration.c_str());
