@@ -949,6 +949,39 @@ int c_parser_descent::identifier_opt(string tab)
 
 	return 1;
 }
+/*
+parameter_declaration_list_opt:
+//	epsilon
+	| parameter_declaration_list
+	;
+*/
+int c_parser_descent::parameter_declaration_list_opt(string tab)
+{
+  trace(tab, "## parameter_declaration_list_opt");
+
+	return parameter_declaration_list(tab);
+}
+/*
+ELLIPSIS_opt:
+//	epsilon
+	| ELLIPSIS
+	;
+*/
+int c_parser_descent::ELLIPSIS_opt(string tab)
+{
+  trace(tab, "## ELLIPSIS_opt");
+
+	c_context_tokens context_tokens(context);
+
+	token_next(tab);
+	if( ELLIPSIS == token_get() )
+	{
+		return 1;
+	}
+
+	context = context_tokens.restore();
+	return 0;
+}
 /*----------------------------------------------------------------------------*/
 /*
 member_specification_opt:
@@ -1056,7 +1089,7 @@ int c_parser_descent::declarator(string tab)
     }
 
   //## todo the rest
-    return 1;
+    return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -1100,14 +1133,16 @@ int c_parser_descent::direct_declarator(string tab)
 			{
 				if( 1 == declarator(tab) )
 				{
+					printf("### 1 == declarator(tab)\n");
 				}
-				else if( 1 == 1/*parameter_declaration_clause(tab)*/ )
+				else if( 1 == parameter_declaration_clause(tab) )
 				{
-					printf("yes we are in a member function !\n");
+					printf("### yes we are in a member function !\n");
 					//## todo yes we are in a member function !
 				}
 				else
 				{
+					printf("### no we are in a member function !\n\n\n");
 					context = context_tokens.restore();
 					return 0;
 				}
@@ -1168,6 +1203,117 @@ int c_parser_descent::declarator_id(string tab)
     }
 
     return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+parameter_declaration_clause:
+	parameter_declaration_list_opt ELLIPSIS_opt
+	| parameter_declaration_list ',' ELLIPSIS
+	;
+
+## i really dont undertand this 2 rules
+i think first is a super set of second ... :-S
+*/
+int c_parser_descent::parameter_declaration_clause(string tab)
+{
+  trace(tab, "## parameter_declaration_clause");
+
+	parameter_declaration_list_opt(tab);
+
+	ELLIPSIS_opt(tab);
+
+	c_context_tokens context_good_way(context);
+    context_good_way.save(context);
+    token_next(tab);
+
+    if( ')' == token_get() )
+    {
+        context = context_good_way.restore();
+        return 1;
+    }
+
+	return 0;
+}
+
+/*
+parameter_declaration_list:
+	parameter_declaration
+	| parameter_declaration_list ',' parameter_declaration
+	;
+*/
+int c_parser_descent::parameter_declaration_list(string tab)
+{
+  trace(tab, "## parameter_declaration_list");
+
+	c_context_tokens context_good_way(context);
+
+	if( 0 == parameter_declaration(tab) )
+	{
+		c_context_tokens context_tokens(context);
+	    context_good_way.save(context);
+	    token_next(tab);
+
+	    if( ')' == token_get() )
+	    {
+	        context = context_good_way.restore();
+	        return 1;
+	    }
+
+		context = context_tokens.restore();
+		return 0;
+	}
+
+	c_context_tokens context_tokens(context);
+
+	for(;;)
+	{
+	    context_good_way.save(context);
+	    token_next(tab);
+
+	    if( ')' == token_get() )
+	    {
+	        context = context_good_way.restore();
+	        return 1;
+	    }
+
+	    if( ',' != token_get() )
+	    {
+	        context = context_tokens.restore();
+	        return 1;
+	    }
+
+	    if( 0 == parameter_declaration(tab) )
+	    {
+	      context = context_tokens.restore();
+	      return 0;
+	    }
+	}
+
+	return 0;
+}
+/*
+parameter_declaration:
+	decl_specifier_seq declarator
+	| decl_specifier_seq declarator '=' assignment_expression
+	| decl_specifier_seq abstract_declarator_opt
+	| decl_specifier_seq abstract_declarator_opt '=' assignment_expression
+	;
+*/
+int c_parser_descent::parameter_declaration(string tab)
+{
+  trace(tab, "## parameter_declaration");
+	if( 0 == decl_specifier_seq(tab) )
+	{
+		return 0;
+	}
+
+	if( 1 == declarator(tab) )
+	{
+		//## todo the rest...
+		return 1;
+	}
+
+	return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*

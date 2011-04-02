@@ -327,13 +327,22 @@ void c_parser_descent::yyparse(char * file_name)
   ts.set();
   translation_unit();
 
-  printf("\n##---------------- rest of tokens has not been consumed -------------------------------\n");
-  printf("##{\n");
-  while( token_get() != 0 )
-  {
-	token_next("");
-  }
-  printf("##}\n");
+
+	if( token_get() == 0 )
+	{
+		  printf("##ALL_TOKENS_CONSUMED\n");
+	}
+	else
+	{
+		printf("\n##---------------- rest of tokens has not been consumed -------------------------------\n");
+		printf("##{\n");
+		while( token_get() != 0 )
+		{
+		token_next("");
+		}
+		printf("##}\n");
+	}
+
   ts.print();
   ts.unset();
 

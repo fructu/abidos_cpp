@@ -171,6 +171,9 @@ class c_parser_descent
     int declarator(string tab);
     int direct_declarator(string tab);
     int declarator_id(string tab);
+	int parameter_declaration_clause(string tab);
+	int parameter_declaration_list(string tab);
+	int parameter_declaration(string tab);
     int function_definition(string tab);
 
 	// Derived classes.
@@ -184,6 +187,8 @@ class c_parser_descent
 	int decl_specifier_seq_opt(string tab);
 	int init_declarator_list_opt(string tab);
 	int identifier_opt(string tab);
+	int parameter_declaration_list_opt(string tab);
+	int ELLIPSIS_opt(string tab);
     int member_specification_opt(string tab);
 	int base_clause_opt(string tab);
     int member_declarator_list_opt(string tab);

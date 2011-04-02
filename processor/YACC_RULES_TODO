@@ -695,17 +695,17 @@ direct_abstract_declarator:
 	| direct_abstract_declarator_opt '[' constant_expression_opt ']'
 	| '(' abstract_declarator ')'
 	;
-
+//##did
 parameter_declaration_clause:
 	parameter_declaration_list_opt ELLIPSIS_opt
 	| parameter_declaration_list ',' ELLIPSIS
 	;
-
+//##did
 parameter_declaration_list:
 	parameter_declaration
 	| parameter_declaration_list ',' parameter_declaration
 	;
-
+//##did
 parameter_declaration:
 	decl_specifier_seq declarator
 	| decl_specifier_seq declarator '=' assignment_expression
@@ -1133,12 +1133,12 @@ direct_abstract_declarator_opt:
 	/* epsilon */
 	| direct_abstract_declarator
 	;
-
+// ##did
 parameter_declaration_list_opt:
 	/* epsilon */
 	| parameter_declaration_list
 	;
-
+// ##did
 ELLIPSIS_opt:
 	/* epsilon */
 	| ELLIPSIS
