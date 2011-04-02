@@ -50,7 +50,9 @@ sub all_tests
 	@tests_files= readdir(IMD);
 	closedir(IMD);
 
-	foreach $f (@tests_files)
+	@tests_files_sorted = sort(@tests_files);
+
+	foreach $f (@tests_files_sorted)
 	{
 		unless ( ($f eq ".") || ($f eq "..") )
 		{

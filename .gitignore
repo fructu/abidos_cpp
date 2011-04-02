@@ -5,4 +5,5 @@ processor/nohup.out
 processor/parser.c
 processor/parser.h
 processor/tokens.h
+processor/test_out/*
 
