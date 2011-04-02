@@ -1066,16 +1066,86 @@ direct_declarator:
     | direct_declarator '[' constant_expression_opt ']'
     | '(' declarator ')'
     ;
+
+changing a litle the original order to ser clearly the terminals of 
+the recursion
+
+direct_declarator:
+    declarator_id
+    | '(' declarator ')'
+
+    | direct_declarator '('parameter_declaration_clause ')' cv_qualifier_seq_opt exception_specification_opt
+    | direct_declarator '[' constant_expression_opt ']'
+    ;
 */
 int c_parser_descent::direct_declarator(string tab)
 {
   trace(tab, "## direct_declarator");
+	c_context_tokens context_tokens(context);
+	c_context_tokens context_good_way(context);
 
-    //## todo while ...
-    if( 1 == declarator_id(tab) )
-    {
-      return 1;
-    }
+	int result = 0;
+	for(;;)
+	{
+		result = 0;
+
+	    if( 1 == declarator_id(tab) )
+    	{
+			result = 1;
+
+			context_good_way.save(context);
+			token_next(tab);
+
+			if( '(' == token_get() )
+			{
+				if( 1 == declarator(tab) )
+				{
+				}
+				else if( 1 == 1/*parameter_declaration_clause(tab)*/ )
+				{
+					printf("yes we are in a member function !\n");
+					//## todo yes we are in a member function !
+				}
+				else
+				{
+					context = context_tokens.restore();
+					return 0;
+				}
+
+				token_next(tab);
+				if( ')' != token_get() )
+				{
+					context = context_tokens.restore();
+					return 0;
+				}
+
+				context_good_way.save(context);
+				token_next(tab);
+
+				if( ';' == token_get() )
+				{
+	                // yes i restore here to consume ';' more up in the tree
+					context = context_good_way.restore();
+					return 1;
+				}
+			}
+			else
+			{
+				//## todo | direct_declarator '[' constant_expression_opt ']'
+			}
+		}
+
+		if( 1 == result )
+		{
+			context = context_good_way.restore();
+			return 1;
+		}
+		else
+		{
+			context = context_tokens.restore();
+			return 0;
+		}
+	}
 
     return 0;
 }
