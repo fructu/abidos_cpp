@@ -18,6 +18,74 @@
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
+void c_parameter::print(const char * tab)
+{
+	unsigned i_decl = 0;
+	for(i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl)
+	{
+		printf(" [%s]", vector_decl_specifier[i_decl].token.text.c_str() );
+	}
+
+	printf(" [%s]", token.text.c_str() );
+}
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+void c_class_member::parameter_insert(c_parameter parameter)
+{
+	if( 0 == is_function )
+	{
+	    printf("error c_class_member::parameter_insert(%s) not is_function \n"
+			,parameter.token.text.c_str()
+		);
+
+    	exit(-1);
+	}
+	map_parameter[parameter.token.text] = parameter;
+	vector_parameter.push_back(parameter);
+}
+/*----------------------------------------------------------------------------*/
+void c_class_member::print(const char * tab)
+{
+	unsigned i_decl = 0;
+
+	printf("%s   ",tab);
+
+	for( i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl )
+	{
+		printf("[%s] ", vector_decl_specifier[i_decl].token.text.c_str() );
+	}
+
+	if( 1 == is_function )
+	{
+		printf("[%s]", token.text.c_str());
+
+		if( vector_parameter.size() == 0 )
+		{			
+			printf("()\n");
+			return;
+		}
+
+		printf("(");
+		unsigned i_parameter = 0;
+		for( i_parameter = 0; i_parameter < vector_parameter.size(); ++i_parameter)
+		{
+			vector_parameter[i_parameter].print(tab);
+			if( (i_parameter + 1) < vector_parameter.size() )
+			{
+				printf(",");
+			}
+		}
+		printf(")\n");
+	}
+	else
+	{
+		printf("[%s]\n", token.text.c_str());
+	}
+}
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
 void c_class_members::clear(void)
 {
 	map_class_member.clear();
@@ -27,24 +95,16 @@ void c_class_members::clear(void)
 void c_class_members::print(const char * tab)
 {
   t_map_class_member::iterator i_map_member = map_class_member.begin();
-  printf("%s  vector_class_member\n",tab);
+  printf("%s  vector_class_member [%d]\n",tab, vector_class_member.size());
   printf("%s  {\n",tab);
   unsigned i_member = 0;
   for(i_member = 0; i_member < vector_class_member.size(); ++i_member)
   {
-	unsigned i_decl = 0;
-
-	printf("%s   ",tab);
-
-	for( i_decl = 0; i_decl < vector_class_member[i_member].vector_decl_specifier.size(); ++i_decl )
-	{
-		printf("[%s] ", vector_class_member[i_member].vector_decl_specifier[i_decl].token.text.c_str() );
-	}
-	printf("[%s]\n",vector_class_member[i_member].token.text.c_str());
+		vector_class_member[i_member]->print(tab);
   }
   printf("%s  }\n",tab);
 
-  printf("%s  map_class_member\n",tab);
+  printf("%s  map_class_member [%d]\n",tab,map_class_member.size());
   printf("%s  {\n",tab);
   if( map_class_member.size() <= 0)
   {
@@ -75,7 +135,22 @@ void c_class_members::print(const char * tab)
 void c_class_members::insert(c_class_member member)
 {
 	map_class_member[member.token.text] = member;
-	vector_class_member.push_back(member);
+	vector_class_member.push_back(& map_class_member[member.token.text] );
+}
+/*----------------------------------------------------------------------------*/
+c_class_member * c_class_members::get(string member)
+{
+	t_map_class_member::iterator i_member;
+
+	i_member = map_class_member.find(member);
+
+	if( i_member == map_class_member.end() )
+	{
+		printf("error c_class_member * c_class_members::get(%s)", member.c_str());
+		exit(-1);
+	}
+
+	return ( &(i_member->second) );
 }
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/

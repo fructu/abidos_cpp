@@ -82,20 +82,62 @@ void c_semantic::class_member_declarator(c_context & context, c_token token)
       c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
       if( p_symbol )
       {
-      /*
-        c_base_class base_class(token.text, context.access_specifier);
-        p_symbol->map_base_class[token.text] = base_class;
-	  */
 	    if( 0 == p_symbol->class_key )
 	    {
 	    	printf("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
 	    	exit(-1);
 	    }
 
-	    c_class_member class_member( token , vector_decl_specifier);
+	    c_class_member class_member( token , member_vector_decl_specifier);
 
-//	    p_symbol->map_class_member[token.text] = class_member;
 	    p_symbol->members.insert(class_member);
+
+        return;
+      }
+    }
+}
+/*----------------------------------------------------------------------------*/
+/*
+	p1 is param of function member f1
+
+	class A
+	{
+	  int f1(int p1);
+	};
+*/
+void c_semantic::member_param_declarator(c_context & context, c_token token)
+{
+    printf("## c_semantic::member_param_declarator(c_context context [%s])\n\n",token.text.c_str());
+
+	if( CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status )
+	{
+      printf("error c_semantic::member_param_declarator() "
+			"CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR != context.class_specifier_status\n\n");
+      exit(-1);
+    }
+    else
+    {
+      c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
+      if( p_symbol )
+      {
+	    if( 0 == p_symbol->class_key )
+	    {
+	    	printf("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
+	    	exit(-1);
+	    }
+
+		c_class_member * p_member = 0;
+		c_parameter parameter(token , context.param_vector_decl_specifier );
+
+		p_member = p_symbol->members.get(context.member_declaration);
+		if( 0 == p_member )
+		{
+	    	printf("error c_semantic::member_param_declarator()  ( 0 == p_member ) )\n\n");
+	    	exit(-1);
+		}
+
+		p_member->is_function = 1;
+		p_member->parameter_insert(parameter);
 
         return;
       }
@@ -113,7 +155,18 @@ void c_semantic::identifier(c_context & context, c_token token)
 
 	if( CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR ==	context.class_specifier_status )
 	{
+		if( 1 == context.i_am_in_parameter_declaration )
+		{
+			member_param_declarator(context, token);
+			return;
+		}
+
 		class_member_declarator(context, token);
+
+		if( 1 == context.i_am_in_member )
+		{
+			context.member_declaration = token.text;
+		}
 	}
 }
 /*----------------------------------------------------------------------------*/

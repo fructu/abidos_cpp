@@ -400,7 +400,6 @@ simple_type_specifier:
 int c_parser_descent::simple_type_specifier(string tab)
 {
   trace(tab, "## simple_type_specifier");
-  printf("%s## simple_type_specifier antes context.just_reloaded [%d] ------------------------------------------\n",tab.c_str(),context.just_reloaded);
 
   //## todo  COLONCOLON_opt nested_name_specifier_opt type_name
   int result = 0;
@@ -432,7 +431,6 @@ context.class_name_declaration = class_name;
 
   if( INT == token_get())
   {
-    printf("%s## simple_type_specifier -> [INT]",tab.c_str());
     result = 1;
   }
 
@@ -468,17 +466,23 @@ context.class_name_declaration = class_name;
 
   if( 1 == result )
   {
-  	c_decl_specifier decl(c_token_get());
-  	decl.type_specifier = 1;
-  	semantic.push_back_vector_c_decl_specifier(decl);
+	c_decl_specifier decl(c_token_get());
+	decl.type_specifier = 1;
+
+	if( 1 == context.i_am_in_parameter_declaration )
+	{
+		context.param_vector_decl_specifier.push_back(decl);
+	}
+	else
+	{  	  		
+  		semantic.push_back_vector_member_decl_specifier(decl);
+	}
 
   	return 1;
   }
 
-  printf("%s## simple_type_specifier -> [0]",tab.c_str());
   context = context_tokens.restore();
 
-  tokens_vector_print_from_actual();
   return 0;
 }
 /*----------------------------------------------------------------------------*/
@@ -508,13 +512,13 @@ int c_parser_descent::class_specifier(string tab)
 		context = context_tokens.restore();
 		return 0;
 	}
+	printf("%s## class_specifier {\n",tab.c_str());
 
 	//we need to know what class is processing
 	string class_name = context.class_name_declaration;
     tokens_vector_clear();
 	context.class_name_declaration = class_name;
 
-    trace(tab, "## class_specifier--------------------cabecera consume all tokens before { [ok] ------------------------");
     context_tokens.save(context);
 
 	member_specification_opt(tab);
@@ -522,7 +526,7 @@ int c_parser_descent::class_specifier(string tab)
 	token_next(tab);
 	if( '}' == token_get() )
 	{
-        trace(tab, "## class_specifier--------------------return 1 ****************************** yeaaaAAAAA !!!**************");
+		printf("%s## class_specifier }\n",tab.c_str());
 		return 1;
 	}
 
@@ -648,7 +652,7 @@ int c_parser_descent::member_declaration(string tab)
   c_context_tokens context_tokens(context);
 
   context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER;
-  semantic.clear_c_decl_specifier();
+  semantic.clear_member_decl_specifier();
   decl_specifier_seq_opt(tab);
 
   context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
@@ -684,13 +688,13 @@ int c_parser_descent::member_declarator_list(string tab)
 {
   trace(tab, "## member_declarator_list");
 
+  c_context_tokens context_tokens(context);
+  c_context_tokens context_good_way(context);
+
   if( 0 == member_declarator(tab) )
   {
     return 0;
   }
-
-  c_context_tokens context_tokens(context);
-  c_context_tokens context_good_way(context);
 
   for(;;)
   {
@@ -733,6 +737,7 @@ int c_parser_descent::member_declarator(string tab)
   trace(tab, "## member_declarator");
 
   //declarator pure_specifier_opt
+  context.i_am_in_member = 1;
   if( 1 == declarator(tab) )
   {
     //if( 1 == pure_specifier_opt(tab) ) //## todo
@@ -740,7 +745,8 @@ int c_parser_descent::member_declarator(string tab)
         return 1;
     }
   }
-
+  context.i_am_in_member = 0;
+  context.member_declaration = "";
   //## todo rest of | ...
 
   return 0;
@@ -976,6 +982,14 @@ int c_parser_descent::ELLIPSIS_opt(string tab)
 	token_next(tab);
 	if( ELLIPSIS == token_get() )
 	{
+		c_decl_specifier decl(c_token_get());
+		decl.type_specifier = 1;
+
+		if( 1 == context.i_am_in_parameter_declaration )
+		{
+			context.param_vector_decl_specifier.push_back(decl);
+		}
+
 		return 1;
 	}
 
@@ -1130,7 +1144,7 @@ int c_parser_descent::direct_declarator(string tab)
 			token_next(tab);
 
 			if( '(' == token_get() )
-			{
+			{				
 				if( 1 == declarator(tab) )
 				{
 					printf("### 1 == declarator(tab)\n");
@@ -1217,10 +1231,12 @@ i think first is a super set of second ... :-S
 int c_parser_descent::parameter_declaration_clause(string tab)
 {
   trace(tab, "## parameter_declaration_clause");
-
+	context.i_am_in_parameter_declaration = 1;
 	parameter_declaration_list_opt(tab);
 
 	ELLIPSIS_opt(tab);
+
+	context.i_am_in_parameter_declaration = 0;
 
 	c_context_tokens context_good_way(context);
     context_good_way.save(context);
@@ -1246,6 +1262,7 @@ int c_parser_descent::parameter_declaration_list(string tab)
   trace(tab, "## parameter_declaration_list");
 
 	c_context_tokens context_good_way(context);
+	context.param_vector_decl_specifier.clear();
 
 	if( 0 == parameter_declaration(tab) )
 	{
@@ -1282,6 +1299,8 @@ int c_parser_descent::parameter_declaration_list(string tab)
 	        return 1;
 	    }
 
+		context.param_vector_decl_specifier.clear();
+
 	    if( 0 == parameter_declaration(tab) )
 	    {
 	      context = context_tokens.restore();
@@ -1298,6 +1317,10 @@ parameter_declaration:
 	| decl_specifier_seq abstract_declarator_opt
 	| decl_specifier_seq abstract_declarator_opt '=' assignment_expression
 	;
+
+	a function can be declared 
+		f1( int );
+	without declarator
 */
 int c_parser_descent::parameter_declaration(string tab)
 {
@@ -1313,7 +1336,25 @@ int c_parser_descent::parameter_declaration(string tab)
 		return 1;
 	}
 
-	return 0;
+	if( VOID == token_get() )
+	{
+		c_token token(IDENTIFIER, (char *)"void");
+		semantic.identifier( context, token );
+		return 1;
+	}
+
+	c_token token(IDENTIFIER, (char *)"@IDENTIFIER#");
+	semantic.identifier( context, token );
+
+	return 1;
+/*
+	if( IDENTIFIER == token_get() )
+	{
+    	semantic.identifier( context, c_token_get() );    
+		return 1;
+	}
+*/
+//	return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*

@@ -117,6 +117,28 @@ struct c_decl_specifier
 
 typedef vector<c_decl_specifier> t_vector_decl_specifier;
 
+struct c_parameter
+{
+	t_vector_decl_specifier vector_decl_specifier;
+
+	c_token token;
+
+	c_parameter()
+	{
+
+	}
+
+	c_parameter(c_token t, t_vector_decl_specifier v)
+	{
+		token = t;
+		vector_decl_specifier = v;
+	}
+	void print(const char * tab);
+};
+
+typedef vector<c_parameter> t_vector_parameter;
+typedef map<string, c_parameter> t_map_parameter;
+
 /*
 	class A
 	{
@@ -124,29 +146,39 @@ typedef vector<c_decl_specifier> t_vector_decl_specifier;
 	}
 
 	c_class_member has 'long int a' inside
+
+	if is a function member can have parameters
 */
-struct c_class_member
+class c_class_member
 {
+	private:
+		t_map_parameter		map_parameter;
+		t_vector_parameter	vector_parameter;
+	public:
+		
 	c_token token;
 	t_vector_decl_specifier vector_decl_specifier;
 
+		int is_function;
+		void parameter_insert(c_parameter parameter);
+		void print(const char * tab);
+
 	c_class_member()
 	{
+		is_function = 0;
 	}
 
 	c_class_member(c_token t, t_vector_decl_specifier v)
 	{
 		token = t;
 		vector_decl_specifier = v;
-	}
 
-	void print(const char * tab)
-	{
+		is_function = 0;
 	}
 };
 
 typedef map<string, c_class_member> t_map_class_member;
-typedef vector<c_class_member> t_vector_class_member;
+typedef vector<c_class_member * > t_vector_class_member;
 
 /*
 	i store members in map to have fast access
@@ -161,6 +193,7 @@ class c_class_members
 		void clear(void);
 		void print(const char * tab);
 		void insert(c_class_member member);
+		c_class_member * get(string member);
 };
 
 struct c_symbol
