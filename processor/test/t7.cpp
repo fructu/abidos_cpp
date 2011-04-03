@@ -11,5 +11,7 @@ class A
 	void f6(void);
 	float f7(int long p1, char p2), f8(int p1);
 	void f9(int long , char);
+	void f10(int);
+	int f11(...);
 };
 
