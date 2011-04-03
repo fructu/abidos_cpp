@@ -990,6 +990,9 @@ int c_parser_descent::ELLIPSIS_opt(string tab)
 			context.param_vector_decl_specifier.push_back(decl);
 		}
 
+		c_token token(IDENTIFIER, (char *)"...");
+		semantic.identifier( context, token );
+
 		return 1;
 	}
 

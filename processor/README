@@ -67,6 +67,10 @@ abidos
 -[] implement parse of free functions
 -[v] implement symbol save of parametes of free functions
 -[v] in semantic i must work in put in correct point of code vector_decl_specifier.clear();
+-[] generate orignal .cpp or .h with information from ts.
+-[] f(int, char) in ts must have "f(int,char)" string name in member map.
+    we must save parameters in context and in the ')' put this in ts.
+
 
 
 printf("##14**      class[%s]\n", context.class_name_declaration.c_str());
