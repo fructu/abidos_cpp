@@ -46,7 +46,7 @@ enum t_class_specifier_status
 } ;
 /*
 	if you adde more members pls actualize
-	c_context_tokens::restore_but_not_i_token()
+		restore_but_not_i_token()
 */
 struct c_context
 {
@@ -58,7 +58,14 @@ struct c_context
 
   string   class_name_declaration; //class class_name_declaration
 
+  int      i_am_in_member;
+  string   member_declaration; //member of class
+
+  int i_am_in_parameter_declaration;
+
   int just_reloaded;
+
+  t_vector_decl_specifier param_vector_decl_specifier;
 
   c_context()
   {
@@ -68,7 +75,14 @@ struct c_context
     access_specifier = 0;
 
     class_name_declaration = "";
+
+	i_am_in_member = 0;
+	member_declaration = "";
+
+	i_am_in_parameter_declaration = 0;
     just_reloaded = 0;
+
+	param_vector_decl_specifier.clear();
   }
   void clear(void)
   {
@@ -78,15 +92,26 @@ struct c_context
     access_specifier = 0;
 
     class_name_declaration = "";
+
+	i_am_in_member = 0;
+	member_declaration = "";
+
+	i_am_in_parameter_declaration = 0;
     just_reloaded = 1;
+
+	param_vector_decl_specifier.clear();
   }
   void restore_but_not_i_token(c_context & context_param)
   {
     context_param.class_specifier_status = class_specifier_status;
     context_param.class_key = class_key;
     context_param.access_specifier = access_specifier;
+    context_param.i_am_in_member = i_am_in_member;
+    context_param.member_declaration = member_declaration;
+	context_param.i_am_in_parameter_declaration = i_am_in_parameter_declaration;
 
     context_param.class_name_declaration = class_name_declaration;
+	context_param.param_vector_decl_specifier = param_vector_decl_specifier;
   }
 };
 
