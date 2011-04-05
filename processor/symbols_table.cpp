@@ -13,6 +13,7 @@
 
 ------------------------------------------------------------------------------*/
 #include "symbols_table.h"
+#include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 /*----------------------------------------------------------------------------*/
@@ -33,6 +34,7 @@ string c_parameter::get_string(void)
 {
 	string str = "";
 	unsigned i_decl = 0;
+	int have_test = 1;
 	for(i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl)
 	{
 		str = str + vector_decl_specifier[i_decl].token.text;
@@ -40,9 +42,23 @@ string c_parameter::get_string(void)
 		{
 			str = str + " ";
 		}
+		switch( vector_decl_specifier[i_decl].token.id )
+		{
+			case VOID :
+				have_test = 0;
+				break;
+			case ELLIPSIS :
+				have_test = 0;
+				break;
+			default:
+				have_test = 1;
+		}
 	}
 
-	str = str + " " + token.text;
+	if( 1 == have_test )
+	{
+		str = str + " " + token.text;
+	}
 
 	return str;
 }
