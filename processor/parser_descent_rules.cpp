@@ -745,6 +745,7 @@ int c_parser_descent::member_declarator(string tab)
         return 1;
     }
   }
+
   context.i_am_in_member = 0;
   context.member_declaration = "";
   //## todo rest of | ...
@@ -1151,10 +1152,12 @@ int c_parser_descent::direct_declarator(string tab)
 				if( 1 == declarator(tab) )
 				{
 					printf("### 1 == declarator(tab)\n");
+					semantic.member_insert(context);
 				}
 				else if( 1 == parameter_declaration_clause(tab) )
 				{
 					printf("### yes we are in a member function !\n");
+					semantic.member_insert(context);
 					//## todo yes we are in a member function !
 				}
 				else

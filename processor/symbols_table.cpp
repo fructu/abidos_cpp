@@ -29,6 +29,24 @@ void c_parameter::print(const char * tab)
 	printf(" [%s]", token.text.c_str() );
 }
 /*----------------------------------------------------------------------------*/
+string c_parameter::get_string(void)
+{
+	string str = "";
+	unsigned i_decl = 0;
+	for(i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl)
+	{
+		str = str + vector_decl_specifier[i_decl].token.text;
+		if( (i_decl + 1) < vector_decl_specifier.size() )
+		{
+			str = str + " ";
+		}
+	}
+
+	str = str + " " + token.text;
+
+	return str;
+}
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 void c_class_member::parameter_insert(c_parameter parameter)
@@ -84,6 +102,38 @@ void c_class_member::print(const char * tab)
 	}
 }
 /*----------------------------------------------------------------------------*/
+string c_class_member::get_full_name(void)
+{
+	string name = token.text;
+
+	if( 1 == is_function )
+	{
+		if( vector_parameter.size() == 0 )
+		{
+			name = name + "()";
+			return name;
+		}
+
+		name = name + "(";
+		unsigned i_parameter = 0;
+		for( i_parameter = 0; i_parameter < vector_parameter.size(); ++i_parameter)
+		{
+			name = name + vector_parameter[i_parameter].get_string();
+			if( (i_parameter + 1) < vector_parameter.size() )
+			{
+				name = name + ",";
+			}
+		}
+		name = name + ")";
+	}
+	else
+	{
+		string name = token.text;
+	}
+
+	return name;
+}
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 void c_class_members::clear(void)
@@ -95,7 +145,7 @@ void c_class_members::clear(void)
 void c_class_members::print(const char * tab)
 {
   t_map_class_member::iterator i_map_member = map_class_member.begin();
-  printf("%s  vector_class_member [%d]\n",tab, vector_class_member.size());
+  printf("%s  vector_class_member [%ld]\n",tab, (long) vector_class_member.size());
   printf("%s  {\n",tab);
   unsigned i_member = 0;
   for(i_member = 0; i_member < vector_class_member.size(); ++i_member)
@@ -104,7 +154,7 @@ void c_class_members::print(const char * tab)
   }
   printf("%s  }\n",tab);
 
-  printf("%s  map_class_member [%d]\n",tab,map_class_member.size());
+  printf("%s  map_class_member [%ld]\n",tab, (long) map_class_member.size());
   printf("%s  {\n",tab);
   if( map_class_member.size() <= 0)
   {
@@ -134,8 +184,10 @@ void c_class_members::print(const char * tab)
 /*----------------------------------------------------------------------------*/
 void c_class_members::insert(c_class_member member)
 {
-	map_class_member[member.token.text] = member;
-	vector_class_member.push_back(& map_class_member[member.token.text] );
+//	map_class_member[member.token.text] = member;
+	map_class_member[member.get_full_name()] = member;
+//	vector_class_member.push_back(& map_class_member[member.token.text] );
+	vector_class_member.push_back(& map_class_member[member.get_full_name()] );
 }
 /*----------------------------------------------------------------------------*/
 c_class_member * c_class_members::get(string member)

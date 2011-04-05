@@ -42,6 +42,11 @@ struct c_token
         id = t;
         text  = s;
     }
+    void clear(void)
+    {
+        id = 0;
+        text  = "";
+    }
 };
 
 /*
@@ -134,6 +139,7 @@ struct c_parameter
 		vector_decl_specifier = v;
 	}
 	void print(const char * tab);
+	string get_string(void);
 };
 
 typedef vector<c_parameter> t_vector_parameter;
@@ -175,6 +181,14 @@ class c_class_member
 
 		is_function = 0;
 	}
+	void clear(void)
+	{
+		map_parameter.clear();
+		vector_parameter.clear();
+		token.clear();
+		is_function = 0;
+	}
+	string get_full_name(void);
 };
 
 typedef map<string, c_class_member> t_map_class_member;

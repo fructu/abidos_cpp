@@ -67,6 +67,8 @@ struct c_context
 
   t_vector_decl_specifier param_vector_decl_specifier;
 
+  c_class_member class_member;
+
   c_context()
   {
     i_token = 0;
@@ -83,6 +85,7 @@ struct c_context
     just_reloaded = 0;
 
 	param_vector_decl_specifier.clear();
+	class_member.clear();
   }
   void clear(void)
   {
@@ -100,6 +103,8 @@ struct c_context
     just_reloaded = 1;
 
 	param_vector_decl_specifier.clear();
+
+	class_member.clear();
   }
   void restore_but_not_i_token(c_context & context_param)
   {
@@ -112,6 +117,7 @@ struct c_context
 
     context_param.class_name_declaration = class_name_declaration;
 	context_param.param_vector_decl_specifier = param_vector_decl_specifier;
+	context_param.class_member = class_member;
   }
 };
 
