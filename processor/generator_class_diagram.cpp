@@ -21,7 +21,13 @@ void c_generator_class_diagram::members_url(t_vector_class_member &	vector_class
   unsigned i_member = 0;
   for(i_member = 0; i_member < vector_class_member.size(); ++i_member)
   {
-		fprintf(f_out,"%s;",vector_class_member[i_member]->token.text.c_str());
+		fprintf(f_out,"%s"
+			,vector_class_member[i_member]->token.text.c_str()
+		);
+		if( ( i_member + 1 ) < vector_class_member.size() )
+		{
+			fprintf(f_out,";");
+		}
   }
 }
 
@@ -31,7 +37,7 @@ void c_generator_class_diagram::members_label(t_vector_class_member &	vector_cla
   unsigned i_member = 0;
   for(i_member = 0; i_member < vector_class_member.size(); ++i_member)
   {
-		fprintf(f_out,"%s\\l",vector_class_member[i_member]->token.text.c_str());
+		fprintf(f_out,"%s",vector_class_member[i_member]->token.text.c_str());
 		fprintf(f_out,"\\l");
   }
 }
@@ -83,10 +89,6 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
 }
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::run(char * p_file_out)
-/*
-	## todo this is a print copied from ts::print, 
-	   change this code to generate graphviz diagram
-*/
 {
   printf("## void c_generator_class_diagram::run(char * p_file_out [%s])\n",p_file_out);
 
@@ -99,15 +101,10 @@ void c_generator_class_diagram::run(char * p_file_out)
 		return;
 	}
 
-//	fprintf(f_out,"digraph defines {\n");
-//	fprintf(f_out,"  graph [ranksep=0];\n");<
-  
-
   unsigned i_stack = 0;
 
   t_symbols::iterator i_map;
 
-  printf("##{\n");
   for( i_stack = 0; i_stack < ts.stack.size(); ++i_stack )
   {
     printf("  stack level[%d]\n",i_stack);
@@ -116,10 +113,7 @@ void c_generator_class_diagram::run(char * p_file_out)
     	classes( (*i_map).second );
     }
   }
-  printf("}\n");
-  
-  
-  printf("##{\n");
+
   for( i_stack = 0; i_stack < ts.stack.size(); ++i_stack )
   {
     printf("  stack level[%d]\n",i_stack);
@@ -128,7 +122,6 @@ void c_generator_class_diagram::run(char * p_file_out)
     	inheritance( (*i_map).second );
     }
   }
-  printf("}\n");  
   
   if( NULL != f_out )
   {
