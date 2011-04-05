@@ -18,7 +18,10 @@
 #include "parser_descent.h"
 
 //included only to do tests
-#include "symbols_table.h"
+#include "generator_class_diagram.h"
+//#include "symbols_table.h"
+
+
 
 void test_01(void)
 {
@@ -30,8 +33,11 @@ void test_01(void)
 void process_file(char file_name[])
 {
   c_parser_descent parser;
-  
+  c_generator_class_diagram generator;
+
   parser.yyparse(file_name);
+  
+  generator.run((char *)"out.gv");
 }
 
 int main(int argc, char* argv[])
