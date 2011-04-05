@@ -1187,6 +1187,7 @@ int c_parser_descent::direct_declarator(string tab)
 			else
 			{
 				//## todo | direct_declarator '[' constant_expression_opt ']'
+				semantic.member_insert(context);
 			}
 		}
 

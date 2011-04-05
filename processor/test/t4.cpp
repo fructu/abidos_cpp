@@ -8,5 +8,6 @@ class A
 class B: A
 {
   int b1;
+  void f1(void);
 };
 
