@@ -90,7 +90,7 @@ void c_semantic::class_member_declarator(c_context & context, c_token token)
 
 	    c_class_member class_member( token , member_vector_decl_specifier);
 
-	    p_symbol->members.insert(class_member);
+	    context.class_member = class_member;
 
         return;
       }
@@ -125,7 +125,7 @@ void c_semantic::member_param_declarator(c_context & context, c_token token)
 	    	printf("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
 	    	exit(-1);
 	    }
-
+/*
 		c_class_member * p_member = 0;
 		c_parameter parameter(token , context.param_vector_decl_specifier );
 
@@ -138,6 +138,10 @@ void c_semantic::member_param_declarator(c_context & context, c_token token)
 
 		p_member->is_function = 1;
 		p_member->parameter_insert(parameter);
+*/
+		c_parameter parameter(token , context.param_vector_decl_specifier );
+		context.class_member.is_function = 1;
+		context.class_member.parameter_insert(parameter);
 
         return;
       }
@@ -160,7 +164,7 @@ void c_semantic::identifier(c_context & context, c_token token)
 			member_param_declarator(context, token);
 			return;
 		}
-
+		//## move this line inside next if ... posible ?
 		class_member_declarator(context, token);
 
 		if( 1 == context.i_am_in_member )
@@ -197,6 +201,32 @@ void c_semantic::class_name(c_context & context, c_token token)
       }
     }
 }
+/*----------------------------------------------------------------------------*/
+/*
+	int f1(int p1); has been parsed and we can insert in ts
+
+	class A
+	{
+	  int f1(int p1);
+	};
+*/
+void c_semantic::member_insert(c_context & context)
+{
+	printf("## c_semantic::member_insert(c_context context)\n\n");
+
+      c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
+      if( p_symbol )
+      {
+	    if( 0 == p_symbol->class_key )
+	    {
+			printf("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
+			exit(-1);
+	    }
+
+		p_symbol->members.insert(context.class_member);
+	}
+}
+
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;
 /*----------------------------------------------------------------------------*/

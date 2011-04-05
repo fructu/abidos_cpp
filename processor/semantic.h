@@ -38,6 +38,7 @@ class c_semantic
     void class_specifier_identifier(c_context & context, c_token token);
     void class_member_declarator(c_context & context, c_token token);
 	void member_param_declarator(c_context & context, c_token token);
+	void member_insert(c_context & context);
 
     void class_name(c_context & context, c_token token);
 };
