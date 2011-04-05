@@ -30,14 +30,23 @@ void c_generator_class_diagram::members_url(t_vector_class_member &	vector_class
 		}
   }
 }
-
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::members_label(t_vector_class_member &	vector_class_member)
 {
   unsigned i_member = 0;
   for(i_member = 0; i_member < vector_class_member.size(); ++i_member)
   {
-		fprintf(f_out,"%s",vector_class_member[i_member]->token.text.c_str());
+		unsigned i_decl = 0;
+
+		fprintf(f_out,"+ ");
+
+		for( i_decl = 0; i_decl < vector_class_member[i_member]->vector_decl_specifier.size(); ++i_decl )
+		{
+			fprintf(f_out,"%s ", vector_class_member[i_member]->vector_decl_specifier[i_decl].token.text.c_str() );
+		}
+
+		fprintf(f_out,"%s",vector_class_member[i_member]->get_full_name().c_str());
+
 		fprintf(f_out,"\\l");
   }
 }
