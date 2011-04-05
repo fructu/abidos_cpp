@@ -56,7 +56,7 @@ debug_put:
 
 execute: $(EXECUTABLE)
 #	./$(EXECUTABLE) test/mass_clases.cpp
-	./$(EXECUTABLE) test/t4.cpp
+	./$(EXECUTABLE) test/t7.cpp
 	cat python/out_begin.py > out_run.py
 	cat out.gv >> out_run.py
 	cat python/out_end.py >> out_run.py
