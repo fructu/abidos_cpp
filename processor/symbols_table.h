@@ -203,6 +203,7 @@ class c_class_members
 	private:
 		t_map_class_member 		map_class_member;
 		t_vector_class_member	vector_class_member;
+		friend class c_generator_class_diagram;
 	public:
 		void clear(void);
 		void print(const char * tab);
@@ -255,7 +256,7 @@ class c_symbols_table
 {
   private:
     stack_symbols stack;
-
+	friend class c_generator_class_diagram;
   public:
     c_symbols_table();
     ~c_symbols_table();

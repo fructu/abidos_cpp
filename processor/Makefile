@@ -6,6 +6,7 @@ OBJS = 	lexer.o \
 	parser_descent_rules.o \
 	symbols_table.o \
 	semantic.o \
+	generator_class_diagram.o \
 	main.o
 
 CC = g++
@@ -52,6 +53,15 @@ debug_put:
 	./put_printf_debug.pl
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
+
+execute: $(EXECUTABLE)
+#	./$(EXECUTABLE) test/mass_clases.cpp
+	./$(EXECUTABLE) test/t7.cpp
+	cat python/out_begin.py > out_run.py
+	cat out.gv >> out_run.py
+	cat python/out_end.py >> out_run.py
+	chmod +x out_run.py
+	./out_run.py
 
 debug_drop:
 	cp parser_descent_rules.cpp parser_descent_rules.cpp.debug.bk

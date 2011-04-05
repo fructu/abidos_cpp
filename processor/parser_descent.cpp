@@ -344,7 +344,7 @@ void c_parser_descent::yyparse(char * file_name)
 	}
 
   ts.print();
-  ts.unset();
+//  ts.unset();
 
   lex_file_end();
   yylex_destroy();
