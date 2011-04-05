@@ -42,7 +42,7 @@ void process_file(char file_name[])
 
 int main(int argc, char* argv[])
 {
-  printf("abidos v0.0.02\n");
+  printf("abidos v0.0.03\n");
 
 //  ts_tests();
 
