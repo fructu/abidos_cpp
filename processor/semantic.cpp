@@ -195,7 +195,7 @@ void c_semantic::class_name(c_context & context, c_token token)
       	}
 
         c_base_class base_class(token.text, context.access_specifier);
-        p_symbol->map_base_class[token.text] = base_class;
+        p_symbol->insert(base_class);
 
         return;
       }

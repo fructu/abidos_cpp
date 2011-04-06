@@ -88,6 +88,7 @@ struct c_base_class
   }
 };
 typedef map<string, c_base_class> t_map_base_class;
+typedef vector<c_base_class> t_vector_base_class;
 
 
 
@@ -217,6 +218,7 @@ class c_class_members
 		t_map_class_member 		map_class_member;
 		t_vector_class_member	vector_class_member;
 		friend class c_generator_class_diagram;
+		friend class c_generator_original;
 	public:
 		void clear(void);
 		void print(const char * tab);
@@ -224,13 +226,24 @@ class c_class_members
 		c_class_member * get(string member);
 };
 
-struct c_symbol
+class c_symbol
 {
+  private:
+	t_map_base_class map_base_class;
+	t_vector_base_class vector_base_class;
+	friend class c_generator_class_diagram;
+	friend class c_generator_original;  
+
+  public:
+  void insert(c_base_class base_class)
+  {
+  	map_base_class[base_class.text] = base_class;
+  	vector_base_class.push_back(base_class);
+  }
+
   c_token token;
   int type;
   int class_key;
-
-  t_map_base_class map_base_class;
 
 //  t_map_class_member map_class_member;
   c_class_members members;
@@ -270,6 +283,7 @@ class c_symbols_table
   private:
     stack_symbols stack;
 	friend class c_generator_class_diagram;
+	friend class c_generator_original;	
   public:
     c_symbols_table();
     ~c_symbols_table();
