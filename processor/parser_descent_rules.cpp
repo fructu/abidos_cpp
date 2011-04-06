@@ -1152,7 +1152,7 @@ int c_parser_descent::direct_declarator(string tab)
 				if( 1 == declarator(tab) )
 				{
 					printf("### 1 == declarator(tab)\n");
-					semantic.member_insert(context);
+//					semantic.member_insert(context);
 				}
 				else if( 1 == parameter_declaration_clause(tab) )
 				{
@@ -1187,7 +1187,11 @@ int c_parser_descent::direct_declarator(string tab)
 			else
 			{
 				//## todo | direct_declarator '[' constant_expression_opt ']'
-				semantic.member_insert(context);
+
+				if( 1 != context.class_member.is_function)
+				{
+					semantic.member_insert(context);
+				}
 			}
 		}
 

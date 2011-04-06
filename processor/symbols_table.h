@@ -21,6 +21,7 @@
 #include <stdio.h>
 
 #include "tokens.h"
+#include "lex_yacc.h"
 
 using namespace std;
 
@@ -31,21 +32,33 @@ struct c_token
     int     id;
     string  text;
 
+    string file;
+    int line;
+
     c_token()
     {
         id = 0;
         text  = "";
+
+		file = "";
+		line = 0;
     }
 
     c_token(int t, char * s)
     {
         id = t;
         text  = s;
+
+		file = lex_file_name;
+		line = yylineno;
     }
     void clear(void)
     {
         id = 0;
         text  = "";
+
+		file = "";
+		line = 0;
     }
 };
 

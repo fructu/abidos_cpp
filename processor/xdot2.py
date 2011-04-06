@@ -400,7 +400,7 @@ class Node(Element):
 #        print "x["+str(x)+"][y"+str(y)+"]   / x2_global["+str(self.x2)+"] y2_global ["+str(self.y2)+"]"
 #        print "self.y1["+str(self.y1)+"]-> y_inside["+str(y_inside)+"]"
         url=Url(self, self.url)
-        print"url"+url.url
+#        print"## url"+url.url
         l_class_parts = url.url.split(";")
         n_parts = len(l_class_parts)
 #        print "l_class_parts.len["+ str(n_parts) +"]"
@@ -417,11 +417,16 @@ class Node(Element):
           item_selected = l_class_parts[n_element];
 
         if( item_selected != ""):
-          print " item_selected["+item_selected+"]"
-          url.url += "->[" + item_selected + "]"
+#          url.url += "->[" + item_selected + "]"
+			call_parts = item_selected.split(":")
+			file_parts = call_parts[0].split("[");
+			line_parts  = call_parts[1].split("]");
+#gedit
+			url.url = "gedit "+ file_parts[1]+" +"+ line_parts[0]
+#kate
+#			url.url = "kate " + file_parts[1]+" -l"+ line_parts[0]
 
         return url;
-
 
 
     def get_url(self, x, y):
@@ -434,7 +439,7 @@ class Node(Element):
         url = self.get_item_url(x,y)
 
         if self.is_inside(x, y):
-            print"## return url"+ url.url
+#            print"## return url"+ url.url
             return url
         return None
 
