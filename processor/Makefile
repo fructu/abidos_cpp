@@ -7,6 +7,7 @@ OBJS = 	lexer.o \
 	symbols_table.o \
 	semantic.o \
 	generator_class_diagram.o \
+	generator_original.o \
 	main.o
 
 CC = g++
@@ -56,7 +57,7 @@ debug_put:
 
 execute: $(EXECUTABLE)
 #	./$(EXECUTABLE) test/mass_clases.cpp
-	./$(EXECUTABLE) test/t7.cpp
+	./$(EXECUTABLE) test/t3.cpp
 	cat python/out_begin.py > out_run.py
 	cat out.gv >> out_run.py
 	cat python/out_end.py >> out_run.py

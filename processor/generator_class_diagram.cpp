@@ -113,7 +113,7 @@ void c_generator_class_diagram::run(char * p_file_out)
 
 	f_out = NULL;
 
-	f_out = fopen("out.gv","w");
+	f_out = fopen(p_file_out,"w");
 	if( NULL == f_out )
 	{
 		printf("  c_generator_class_diagram::run() cant fopen()\n");

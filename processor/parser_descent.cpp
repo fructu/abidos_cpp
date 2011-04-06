@@ -13,9 +13,11 @@
 
 ------------------------------------------------------------------------------*/
 #include <stdlib.h>
+#include <string.h>
 #include "parser_descent.h"
 #include "tokens.h"
 #include "generator_class_diagram.h"
+#include "generator_original.h"
 
 void trace(string & tab, string s)
 {
@@ -316,7 +318,28 @@ void c_parser_descent::token_next(string tab)
 	exit(-1);
 }
 /*----------------------------------------------------------------------------*/
+void extract_file_from_path(char * file, char * path)
+{
+	unsigned n = strlen(path);
+	
+	while( n )
+	{
+		if( '/' == path[n] )
+		{
+			++n;
+			break;
+		}
+		--n;
+	}
 
+	unsigned n2 = 0;
+	while( '\0' != path[n] )
+	{
+		file[n2] = path[n];
+		++n2;
+		++n;
+	}
+}
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::yyparse(char * file_name)
 {
@@ -346,8 +369,18 @@ void c_parser_descent::yyparse(char * file_name)
 
   ts.print();
 
+  char str_temp[100] = {'\0'};
+  char file_gv[100];
+  extract_file_from_path(str_temp, file_name);
+  
+  sprintf(file_gv, "out/out_%s.gv",str_temp);
   c_generator_class_diagram generator;
-  generator.run((char *)"out.gv");
+  generator.run(file_gv);
+
+  char file_original[100];
+  sprintf(file_original, "out/out_%s", str_temp);
+  c_generator_original generator_original;
+  generator_original.run(file_original);
 
   ts.unset();
 
@@ -394,4 +427,5 @@ int c_parser_descent::test_01(void)
   return 0;
 }
 /*----------------------------------------------------------------------------*/
+
 
