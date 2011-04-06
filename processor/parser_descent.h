@@ -22,7 +22,7 @@
 
 using namespace std;
 
-
+#define NO_IDENTIFIER "@IDENTIFIER#"
 
 # define TAB " "
 void trace(string & tab, string s);

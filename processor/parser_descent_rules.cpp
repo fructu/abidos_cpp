@@ -1354,7 +1354,7 @@ int c_parser_descent::parameter_declaration(string tab)
 		return 1;
 	}
 
-	c_token token(IDENTIFIER, (char *)"@IDENTIFIER#");
+	c_token token(IDENTIFIER, (char *)NO_IDENTIFIER);
 	semantic.identifier( context, token );
 
 	return 1;
