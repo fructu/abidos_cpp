@@ -6,4 +6,9 @@ processor/parser.c
 processor/parser.h
 processor/tokens.h
 processor/test_out/*
+processor/out.cpp
+processor/out.gv
+processor/out/*
+processor/out_run.py
+
 
