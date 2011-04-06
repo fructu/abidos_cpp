@@ -73,9 +73,7 @@ abidos
 -[] use
 	http://www.gnu.org/s/libc/manual/html_node/Getopt-Long-Option-Example.html#Getopt-Long-Option-Example 
 	to create options.h struct c_options with the argv[] passed to the program
--[] save the file and the line in the c_token
-
-
-
-printf("##14**      class[%s]\n", context.class_name_declaration.c_str());
+-[v] save the file and the line in the c_token
+-[] improve click in members of clasess.
+-[v] if a funcion member have parameters with only tipes -> show only types.
 

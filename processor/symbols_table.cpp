@@ -13,6 +13,7 @@
 
 ------------------------------------------------------------------------------*/
 #include "symbols_table.h"
+#include "parser_descent.h"
 #include "parser.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +35,7 @@ string c_parameter::get_string(void)
 {
 	string str = "";
 	unsigned i_decl = 0;
-	int have_test = 1;
+	int have_text = 1;
 	for(i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl)
 	{
 		str = str + vector_decl_specifier[i_decl].token.text;
@@ -45,19 +46,23 @@ string c_parameter::get_string(void)
 		switch( vector_decl_specifier[i_decl].token.id )
 		{
 			case VOID :
-				have_test = 0;
+				have_text = 0;
 				break;
 			case ELLIPSIS :
-				have_test = 0;
+				have_text = 0;
 				break;
 			default:
-				have_test = 1;
+				have_text = 1;
 		}
 	}
 
-	if( 1 == have_test )
+	if( 1 == have_text )
 	{
-		str = str + " " + token.text;
+		//if parameter dont have name i puted @IDENTIFIER#
+		if( NO_IDENTIFIER != token.text)
+		{
+			str = str + " " + token.text;
+		}
 	}
 
 	return str;
