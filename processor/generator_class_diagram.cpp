@@ -24,6 +24,12 @@ void c_generator_class_diagram::members_url(t_vector_class_member &	vector_class
 		fprintf(f_out,"%s"
 			,vector_class_member[i_member]->token.text.c_str()
 		);
+
+		fprintf(f_out,"[%s:%d]"
+			,vector_class_member[i_member]->token.file.c_str()
+			,vector_class_member[i_member]->token.line
+		);
+
 		if( ( i_member + 1 ) < vector_class_member.size() )
 		{
 			fprintf(f_out,";");
@@ -65,7 +71,11 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
 		return;
 	}
 	fprintf(f_out,"  %s [\n",symbol.token.text.c_str() );
-	fprintf(f_out,"    URL=\"%s;", symbol.token.text.c_str());
+	fprintf(f_out,"    URL=\"%s[%s:%d];"
+		, symbol.token.text.c_str()
+		, symbol.token.file.c_str()
+		, symbol.token.line
+	);
 	members_url(symbol.members.vector_class_member);
 	fprintf(f_out,"\",\n");
 

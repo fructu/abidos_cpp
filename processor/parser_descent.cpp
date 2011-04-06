@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include "parser_descent.h"
 #include "tokens.h"
+#include "generator_class_diagram.h"
 
 void trace(string & tab, string s)
 {
@@ -319,14 +320,14 @@ void c_parser_descent::token_next(string tab)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::yyparse(char * file_name)
 {
-  if (!(yyin=fopen(file_name,"r")))
+  if( 1 != lex_file_init(file_name) )
   {
     printf("\nERROR: yyparse did not can open [%s]\n",file_name);
     return;
   }
+
   ts.set();
   translation_unit();
-
 
 	if( token_get() == 0 )
 	{
@@ -344,7 +345,11 @@ void c_parser_descent::yyparse(char * file_name)
 	}
 
   ts.print();
-//  ts.unset();
+
+  c_generator_class_diagram generator;
+  generator.run((char *)"out.gv");
+
+  ts.unset();
 
   lex_file_end();
   yylex_destroy();

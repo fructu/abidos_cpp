@@ -68,8 +68,12 @@ abidos
 -[v] implement symbol save of parametes of free functions
 -[v] in semantic i must work in put in correct point of code vector_decl_specifier.clear();
 -[] generate orignal .cpp or .h with information from ts.
--[] f(int, char) in ts must have "f(int,char)" string name in member map.
+-[v] f(int, char) in ts must have "f(int,char)" string name in member map.
     we must save f and parameters in context and in the ')' put this in ts.
+-[] use
+	http://www.gnu.org/s/libc/manual/html_node/Getopt-Long-Option-Example.html#Getopt-Long-Option-Example 
+	to create options.h struct c_options with the argv[] passed to the program
+-[] save the file and the line in the c_token
 
 
 
