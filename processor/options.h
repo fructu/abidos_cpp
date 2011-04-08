@@ -15,12 +15,16 @@
 #ifndef options_h
 #define options_h
 
+#define FILE_NAME_LEN (1000)
+
 struct c_options
 {
 	int verbose_flag;
 	int test_original_flag;
 	int ts_show_flag;
-	char file[1000];
+	int test_all_tokens_consumed_flag;
+
+	char file[FILE_NAME_LEN];
 
 	c_options();
 	void proccess(int argc, char* argv[]);
