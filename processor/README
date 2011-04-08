@@ -11,7 +11,9 @@
 	gdb -q -x X abidos
     ulimit -c unlimited
 
-    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos test/t1.cpp
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/mass_clases.cpp
+    ./$(EXECUTABLE)  test/$(FILE_TEST)
+    
 
 2. A pointer to the project website (if it has one).
 3. Notes on the developer’s build environment and potential portability problems.
@@ -31,9 +33,9 @@ todo
 	-[] refactor test in a class.
 
 show includes todo
--[] class config_parameters
+-[] class config_parameters do like abidos/processor/options.cpp 
 -[] refactor code from main.cpp to the previous class.
--[] move code inside of abidos.
+-[] move code inside of abidos/preprocessor.
 -[] parser will be invoke from preprocesso
     mabye the easy way is create a big file preprocesed with gcc
 
@@ -70,10 +72,11 @@ abidos
 -[] generate orignal .cpp or .h with information from ts.
 -[v] f(int, char) in ts must have "f(int,char)" string name in member map.
     we must save f and parameters in context and in the ')' put this in ts.
--[] use
+-[v] use
 	http://www.gnu.org/s/libc/manual/html_node/Getopt-Long-Option-Example.html#Getopt-Long-Option-Example 
 	to create options.h struct c_options with the argv[] passed to the program
 -[v] save the file and the line in the c_token
--[] improve click in members of clasess.
+-[v] improve click in members of clasess.
 -[v] if a funcion member have parameters with only tipes -> show only types.
+-[] indent all code
 
