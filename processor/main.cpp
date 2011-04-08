@@ -16,6 +16,7 @@
 #include <stdlib.h>
 
 #include "parser_descent.h"
+#include "options.h"
 
 //included only to do tests
 //#include "symbols_table.h"
@@ -32,14 +33,15 @@ void process_file(char file_name[])
   c_parser_descent parser;
 
   parser.yyparse(file_name);
-//  in this place there are some importar thinks destroyed
+//  in this place there are some important thinks destroyed
 //  like  lex_file_name
 //  generator.run((char *)"out.gv");
 }
 
 int main(int argc, char* argv[])
 {
-  printf("abidos v0.0.03\n");
+  printf("abidos v0.0.04\n");
+  options.proccess(argc, argv);
 
 //  ts_tests();
 
@@ -50,7 +52,7 @@ int main(int argc, char* argv[])
     printf( "error file expected\n");
     exit(1);
   }
-  
-  process_file(argv[1]);
+
+  process_file(options.file);
   return 0;
 }

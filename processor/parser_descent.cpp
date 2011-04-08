@@ -15,12 +15,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include "parser_descent.h"
+#include "options.h"
 #include "tokens.h"
 #include "generator_class_diagram.h"
 #include "generator_original.h"
 
 void trace(string & tab, string s)
 {
+	if( 1 != options.verbose_flag )
+	{
+		return;
+	}
+	
   tab = tab + TAB;
   printf("%s%s\n",tab.c_str(),s.c_str());
 }
@@ -367,7 +373,10 @@ void c_parser_descent::yyparse(char * file_name)
 		printf("##}\n");
 	}
 
-  ts.print();
+  if( 1 == options.ts_show_flag)
+  {
+	ts.print();
+  }
 
   char str_temp[100] = {'\0'};
   char file_gv[100];
@@ -377,11 +386,13 @@ void c_parser_descent::yyparse(char * file_name)
   c_generator_class_diagram generator;
   generator.run(file_gv);
 
-  char file_original[100];
-  sprintf(file_original, "out/out_%s", str_temp);
-  c_generator_original generator_original;
-  generator_original.run(file_original);
-
+  if( 1 == options.test_original_flag )
+  {	
+	char file_original[100];
+	sprintf(file_original, "out/out_%s", str_temp);
+	c_generator_original generator_original;
+	generator_original.run(file_original);
+  }
   ts.unset();
 
   lex_file_end();

@@ -1,7 +1,8 @@
 YACC=yacc
 LEX=lex
 
-OBJS = 	lexer.o \
+OBJS = options.o \
+	lexer.o \
 	parser_descent.o \
 	parser_descent_rules.o \
 	symbols_table.o \
@@ -57,7 +58,7 @@ debug_put:
 
 execute: $(EXECUTABLE)
 #	./$(EXECUTABLE) test/mass_clases.cpp
-	./$(EXECUTABLE) test/t3.cpp
+	./$(EXECUTABLE) --verbose test/t3.cpp
 	cat python/out_begin.py > out_run.py
 	cat out.gv >> out_run.py
 	cat python/out_end.py >> out_run.py
