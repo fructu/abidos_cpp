@@ -76,6 +76,11 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
 		, symbol.token.file.c_str()
 		, symbol.token.line
 	);
+	fprintf(f_out,"%s[%s:%d];"
+		, symbol.token.text.c_str()
+		, symbol.token.file.c_str()
+		, symbol.token.line
+	);
 	members_url(symbol.members.vector_class_member);
 	fprintf(f_out,"\",\n");
 

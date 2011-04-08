@@ -56,14 +56,17 @@ debug_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
+#FILE_TEST=t5.cpp
+FILE_TEST=mass_clases.cpp
 execute: $(EXECUTABLE)
+	cp xdot2.py out/
 #	./$(EXECUTABLE) test/mass_clases.cpp
-	./$(EXECUTABLE) --verbose test/t3.cpp
-	cat python/out_begin.py > out_run.py
-	cat out.gv >> out_run.py
-	cat python/out_end.py >> out_run.py
-	chmod +x out_run.py
-	./out_run.py
+	./$(EXECUTABLE) --verbose test/$(FILE_TEST)
+	cat python/out_begin.py > out/out_run.py
+	cat out/out_$(FILE_TEST).gv >> out/out_run.py
+	cat python/out_end.py >> out/out_run.py
+	chmod +x out/out_run.py
+	out/out_run.py
 
 debug_drop:
 	cp parser_descent_rules.cpp parser_descent_rules.cpp.debug.bk
