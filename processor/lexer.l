@@ -274,6 +274,8 @@ int lex_file_init(char *f)
 {
     sprintf(lex_file_name,"%s",f);
 
+//    printf("lex_file_name[%s]\n",lex_file_name);
+
     yyin=fopen(f,"r");
     if( NULL==yyin )
     {
