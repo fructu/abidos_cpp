@@ -45,12 +45,9 @@ void c_options::proccess(int argc, char* argv[])
                /* These options set a flag. */
                {"verbose", no_argument,       &verbose_flag, 1},
                {"brief",   no_argument,       &verbose_flag, 0},
-               {"test_original_on", no_argument,     &test_original_flag, 1},
-               {"test_original_off", no_argument,     &test_original_flag, 0},
-               {"ts_show_on", no_argument,     &ts_show_flag, 1},
-               {"ts_show_off", no_argument,     &ts_show_flag, 0},
+               {"test_original", no_argument,     &test_original_flag, 1},
+               {"ts_show", no_argument,     &ts_show_flag, 1},
                {"test_all_tokens_consumed_flag", no_argument,     &test_all_tokens_consumed_flag, 1},
-               {"test_all_tokens_consumed_flag", no_argument,     &test_all_tokens_consumed_flag, 0},
 
                /* These options don't set a flag.
                   We distinguish them by their indices. */
