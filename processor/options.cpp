@@ -25,7 +25,13 @@ c_options::c_options()
 	verbose_flag       = 0;
 	test_original_flag = 0;
 	ts_show_flag	   = 0;
-	sprintf(file,"");
+	test_all_tokens_consumed_flag = 0;
+
+	int i = 0;
+	for(i = 0; i < FILE_NAME_LEN; ++i)
+	{
+		file[i]='\0';
+	}
 }
 
 void c_options::proccess(int argc, char* argv[])
@@ -43,7 +49,9 @@ void c_options::proccess(int argc, char* argv[])
                {"test_original_off", no_argument,     &test_original_flag, 0},
                {"ts_show_on", no_argument,     &ts_show_flag, 1},
                {"ts_show_off", no_argument,     &ts_show_flag, 0},
-               
+               {"test_all_tokens_consumed_flag", no_argument,     &test_all_tokens_consumed_flag, 1},
+               {"test_all_tokens_consumed_flag", no_argument,     &test_all_tokens_consumed_flag, 0},
+
                /* These options don't set a flag.
                   We distinguish them by their indices. */
                {"add",     no_argument,       0, 'a'},

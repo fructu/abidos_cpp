@@ -358,6 +358,8 @@ void c_parser_descent::yyparse(char * file_name)
   ts.set();
   translation_unit();
 
+  if( 1 == options.test_all_tokens_consumed_flag)
+  {
 	if( token_get() == 0 )
 	{
 		  printf("##ALL_TOKENS_CONSUMED\n");
@@ -372,6 +374,7 @@ void c_parser_descent::yyparse(char * file_name)
 		}
 		printf("##}\n");
 	}
+  }
 
   if( 1 == options.ts_show_flag)
   {
