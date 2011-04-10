@@ -79,4 +79,5 @@ abidos
 -[v] improve click in members of clasess.
 -[v] if a funcion member have parameters with only tipes -> show only types.
 -[] indent all code
+-[v] put level in the printf of rules
 

@@ -28,7 +28,8 @@ void trace(string & tab, string s)
 	}
 	
   tab = tab + TAB;
-  printf("%s%s\n",tab.c_str(),s.c_str());
+  unsigned l = tab.size();
+  printf("%s[%2u]%s\n",tab.c_str(),l,s.c_str());
 }
 /*----------------------------------------------------------------------------*/
 c_context_tokens::c_context_tokens(c_context context_param)

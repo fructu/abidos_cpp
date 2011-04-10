@@ -279,8 +279,8 @@ int c_parser_descent::simple_declaration(string tab)
 {
   trace(tab, "## simple_declaration");
 
-	decl_specifier_seq_opt(tab);
-	init_declarator_list_opt(tab);
+	decl_specifier_seq_opt(tab); // long int a = 0; this is 'long int'
+	init_declarator_list_opt(tab); // long int a = 0; this is 'a = 0'
 
 	c_context_tokens context_tokens(context);
 
