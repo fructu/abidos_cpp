@@ -1,0 +1,6 @@
+/*
+ free variables
+*/
+
+int a;
+
