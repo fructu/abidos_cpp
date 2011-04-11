@@ -139,8 +139,18 @@ c_semantic::member_param_declarator(c_context & context, c_token token)
         }
     }
 }
+/*----------------------------------------------------------------------------*/
+void
+c_semantic::free_function_param_declarator(c_context & context, c_token token)
+{
+  printf
+  ("## c_semantic::free_function_param_declarator(c_context context [%s])\n\n",
+   token.text.c_str());
 
-
+  c_parameter parameter(token,context.param_vector_decl_specifier);
+  context.declarator.is_function = 1;
+  context.declarator.parameter_insert(parameter);
+}
 /*----------------------------------------------------------------------------*/
 void
 c_semantic::free_declarator(c_context & context, c_token token)
@@ -194,9 +204,7 @@ void c_semantic::identifier(c_context & context, c_token token)
     {
       if (1 == context.i_am_in_parameter_declaration)
         {
-//## todo for free functions
-// int f1(int a);
-//          free_param_declarator(context, token);
+          free_function_param_declarator(context, token);
           return;
         }
 
@@ -272,24 +280,11 @@ void c_semantic::declarator_insert(c_context & context)
   if (NO_CLASS_STATUS ==
       context.class_specifier_status)
   {
-/*
-  c_symbol symbol(token);
-
-  ts.insert(symbol);
-  
-  c_declarator declarator(token, vector_decl_specifier);
-  context.declarator = declarator;  
-  int free_declarator;
-  c_declarator declarator;  
-  
-    ts.insert[]
-*/
     c_symbol symbol(context.declarator.token);
     symbol.free_declarator = 1;
     symbol.declarator = context.declarator;
     
     ts.insert(symbol);
-
   }
   else
   {
