@@ -214,7 +214,7 @@ int c_parser_descent::declaration_seq(string tab)
 
 	while( 1 == declaration(tab) )
 	{
-		printf("##----------------------------------------declaration [ok]-----------------------------------------while-\n\n");
+		printf("## while declaration [ok]\n\n");
 		result = 1;
 	}
 
