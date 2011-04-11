@@ -78,6 +78,7 @@ abidos
 -[v] save the file and the line in the c_token
 -[v] improve click in members of clasess.
 -[v] if a funcion member have parameters with only tipes -> show only types.
--[] indent all code
+-[v] indent preprocessor
+-[] indent show_includes
 -[v] put level in the printf of rules
 

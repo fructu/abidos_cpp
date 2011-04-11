@@ -20,29 +20,26 @@
 
 class c_semantic
 {
-  private:
-	t_vector_decl_specifier member_vector_decl_specifier;
+private:
+  t_vector_decl_specifier member_vector_decl_specifier;
 
-  public:
-	void push_back_vector_member_decl_specifier(c_decl_specifier decl)
-	{
-		member_vector_decl_specifier.push_back(decl);
-	}
+public:
+  void push_back_vector_member_decl_specifier(c_decl_specifier decl)
+  {
+    member_vector_decl_specifier.push_back(decl);
+  } void clear_member_decl_specifier(void)
+  {
+    member_vector_decl_specifier.clear();
+  }
 
-	void clear_member_decl_specifier(void)
-	{
-		member_vector_decl_specifier.clear();
-	}
+  void identifier(c_context & context, c_token token);
+  void class_specifier_identifier(c_context & context, c_token token);
+  void class_member_declarator(c_context & context, c_token token);
+  void member_param_declarator(c_context & context, c_token token);
+  void member_insert(c_context & context);
 
-    void identifier(c_context & context, c_token token);
-    void class_specifier_identifier(c_context & context, c_token token);
-    void class_member_declarator(c_context & context, c_token token);
-	void member_param_declarator(c_context & context, c_token token);
-	void member_insert(c_context & context);
-
-    void class_name(c_context & context, c_token token);
+  void class_name(c_context & context, c_token token);
 };
 
 extern c_semantic semantic;
 #endif
-
