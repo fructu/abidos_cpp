@@ -81,4 +81,8 @@ abidos
 -[v] indent preprocessor
 -[] indent show_includes
 -[v] put level in the printf of rules
+-[] use t_class_specifier_status c_context::class_specifier_status in parser and in semantic
+    now there are several flags doing this
+-[v] parse free variables.
+-[] parse free functions.
 
