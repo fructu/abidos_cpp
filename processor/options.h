@@ -19,15 +19,15 @@
 
 struct c_options
 {
-	int verbose_flag;
-	int test_original_flag;
-	int ts_show_flag;
-	int test_all_tokens_consumed_flag;
+  int verbose_flag;
+  int test_original_flag;
+  int ts_show_flag;
+  int test_all_tokens_consumed_flag;
 
-	char file[FILE_NAME_LEN];
+  char file[FILE_NAME_LEN];
 
-	c_options();
-	void proccess(int argc, char* argv[]);
+  c_options();
+  void proccess(int argc, char *argv[]);
 };
 
 extern c_options options;

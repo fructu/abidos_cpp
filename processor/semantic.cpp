@@ -17,217 +17,226 @@
 #include <stdio.h>
 #include <stdlib.h>
 /*----------------------------------------------------------------------------*/
-//void c_semantic::member_declarator(c_context & context, c_token token)
-//{
-//	context.member_declarator = 1;
-//}
-/*----------------------------------------------------------------------------*/
-void c_semantic::class_specifier_identifier(c_context & context, c_token token)
+void
+c_semantic::class_specifier_identifier(c_context & context, c_token token)
 {
-    c_symbol symbol(token);
-	printf("## c_semantic::class_(c_context context)\n\n");
-    if( CLASS_SPECIFIER_STATUS_IDENTIFIER != context.class_specifier_status)
+  c_symbol symbol(token);
+  printf("## c_semantic::class_(c_context context)\n\n");
+  if (CLASS_SPECIFIER_STATUS_IDENTIFIER !=
+      context.class_specifier_status)
     {
-	    printf("##error c_semantic::class_ CLASS_IDENTIFIER != context.class_specifier_status\n\n");
-    	return;
+      printf
+      ("##error c_semantic::class_ CLASS_IDENTIFIER != context.class_specifier_status\n\n");
+      return;
     }
 
-    if( CLASS == context.class_key )
+  if (CLASS == context.class_key)
     {
-        symbol.type = CLASS_NAME;
-        symbol.class_key = context.class_key;
+      symbol.type = CLASS_NAME;
+      symbol.class_key = context.class_key;
     }
 
-    if( STRUCT == context.class_key )
+  if (STRUCT == context.class_key)
     {
-        symbol.type = CLASS_NAME;
-        symbol.class_key = context.class_key;
+      symbol.type = CLASS_NAME;
+      symbol.class_key = context.class_key;
     }
-
-    //## todo
-    if( UNION == context.class_key )
+  // ## todo
+  if (UNION == context.class_key)
     {
-        symbol.type = UNION;
-        symbol.class_key = context.class_key;
+      symbol.type = UNION;
+      symbol.class_key = context.class_key;
     }
+  // we only take the name of the class the fist time after CLASS
+  // if( 1 == context.class_head)
+  {
+    context.class_name_declaration = token.text;
+  }
 
-    // we only take the name of the class the fist time after CLASS
-//    if( 1 == context.class_head)
-    {
-        context.class_name_declaration = token.text;
-    }
-
-    ts.insert(symbol);
+  ts.insert(symbol);
 }
+
 /*----------------------------------------------------------------------------*/
+
+void
+c_semantic::class_member_declarator(c_context & context, c_token token)
 /*
-	a member is for example a1
-
-	class A
-	{
-	  int a1;
-	};
-*/
-void c_semantic::class_member_declarator(c_context & context, c_token token)
+ * a member is for example a1
+ *
+ * class A { int a1; };
+ */
 {
-    printf("## c_semantic::class_member_declarator()\n\n");
+  printf("## c_semantic::class_member_declarator()\n\n");
 
-	if( CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status )
-	{
-      printf("error c_semantic::class_member_declarator() CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status\n\n");
+  if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
+      context.class_specifier_status)
+    {
+      printf
+      ("error c_semantic::class_member_declarator() CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status\n\n");
       exit(-1);
     }
-    else
+  else
     {
-      c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
-      if( p_symbol )
-      {
-	    if( 0 == p_symbol->class_key )
-	    {
-	    	printf("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
-	    	exit(-1);
-	    }
+      c_symbol *p_symbol =
+        ts.search_symbol(context.class_name_declaration);
+      if (p_symbol)
+        {
+          if (0 == p_symbol->class_key)
+            {
+              printf
+              ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
+              exit(-1);
+            }
 
-	    c_class_member class_member( token , member_vector_decl_specifier);
+          c_class_member class_member(token,
+                                      member_vector_decl_specifier);
 
-	    context.class_member = class_member;
+          context.class_member = class_member;
 
-        return;
-      }
+          return;
+        }
     }
 }
 /*----------------------------------------------------------------------------*/
+void
+c_semantic::member_param_declarator(c_context & context, c_token token)
 /*
-	p1 is param of function member f1
-
-	class A
-	{
-	  int f1(int p1);
-	};
-*/
-void c_semantic::member_param_declarator(c_context & context, c_token token)
+ * p1 is param of function member f1
+ *
+ * class A { int f1(int p1); };
+ */
 {
-    printf("## c_semantic::member_param_declarator(c_context context [%s])\n\n",token.text.c_str());
+  printf
+  ("## c_semantic::member_param_declarator(c_context context [%s])\n\n",
+   token.text.c_str());
 
-	if( CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status )
-	{
+  if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
+      context.class_specifier_status)
+    {
       printf("error c_semantic::member_param_declarator() "
-			"CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR != context.class_specifier_status\n\n");
+             "CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR != context.class_specifier_status\n\n");
       exit(-1);
     }
-    else
+  else
     {
-      c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
-      if( p_symbol )
-      {
-	    if( 0 == p_symbol->class_key )
-	    {
-	    	printf("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
-	    	exit(-1);
-	    }
-/*
-		c_class_member * p_member = 0;
-		c_parameter parameter(token , context.param_vector_decl_specifier );
+      c_symbol *p_symbol =
+        ts.search_symbol(context.class_name_declaration);
+      if (p_symbol)
+        {
+          if (0 == p_symbol->class_key)
+            {
+              printf
+              ("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
+              exit(-1);
+            }
+          /*
+           * c_class_member * p_member = 0; c_parameter parameter(token
+           * , context.param_vector_decl_specifier );
+           *
+           * p_member =
+           * p_symbol->members.get(context.member_declaration); if( 0 ==
+           * p_member ) { printf("error
+           * c_semantic::member_param_declarator() ( 0 == p_member )
+           * )\n\n"); exit(-1); }
+           *
+           * p_member->is_function = 1;
+           * p_member->parameter_insert(parameter);
+           */
+          c_parameter parameter(token,
+                                context.param_vector_decl_specifier);
+          context.class_member.is_function = 1;
+          context.class_member.parameter_insert(parameter);
 
-		p_member = p_symbol->members.get(context.member_declaration);
-		if( 0 == p_member )
-		{
-	    	printf("error c_semantic::member_param_declarator()  ( 0 == p_member ) )\n\n");
-	    	exit(-1);
-		}
-
-		p_member->is_function = 1;
-		p_member->parameter_insert(parameter);
-*/
-		c_parameter parameter(token , context.param_vector_decl_specifier );
-		context.class_member.is_function = 1;
-		context.class_member.parameter_insert(parameter);
-
-        return;
-      }
+          return;
+        }
     }
 }
+
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
-    printf("## c_semantic::identifier(c_context context)\n\n");
+  printf("## c_semantic::identifier(c_context context)\n\n");
 
-	if( CLASS_SPECIFIER_STATUS_IDENTIFIER == context.class_specifier_status)
-	{
-		class_specifier_identifier(context, token);
-	}
-
-	if( CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR ==	context.class_specifier_status )
-	{
-		if( 1 == context.i_am_in_parameter_declaration )
-		{
-			member_param_declarator(context, token);
-			return;
-		}
-		//## move this line inside next if ... posible ?
-		class_member_declarator(context, token);
-
-		if( 1 == context.i_am_in_member )
-		{
-			context.member_declaration = token.text;
-		}
-	}
-}
-/*----------------------------------------------------------------------------*/
-/*
-  contexts:
-   class A: public B // B enter for this way BASE_CLASS_DECLARATION
-*/
-void c_semantic::class_name(c_context & context, c_token token)
-{
-    //we are in the base class declaration
-    // example class A : public B
-    if( CLASS_SPECIFIER_STATUS_BASE_DECLARATION == context.class_specifier_status)
+  if (CLASS_SPECIFIER_STATUS_IDENTIFIER ==
+      context.class_specifier_status)
     {
-      //printf("\n\n###  WE ADDING BASES CLASS TO [%s]\n\n",context.class_name_declaration.c_str());
+      class_specifier_identifier(context, token);
+    }
 
-      c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
-      if( p_symbol )
-      {
-      	if( 0 == context.access_specifier )
-      	{
-      		context.access_specifier = PUBLIC;
-      	}
+  if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR ==
+      context.class_specifier_status)
+    {
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          member_param_declarator(context, token);
+          return;
+        }
+      // ## move this line inside next if ... posible ?
+      class_member_declarator(context, token);
 
-        c_base_class base_class(token.text, context.access_specifier);
-        p_symbol->insert(base_class);
-
-        return;
-      }
+      if (1 == context.i_am_in_member)
+        {
+          context.member_declaration = token.text;
+        }
     }
 }
+
 /*----------------------------------------------------------------------------*/
+void c_semantic::class_name(c_context & context, c_token token)
 /*
-	int f1(int p1); has been parsed and we can insert in ts
-
-	class A
-	{
-	  int f1(int p1);
-	};
-*/
-void c_semantic::member_insert(c_context & context)
+ * contexts: class A: public B // B enter for this way
+ * BASE_CLASS_DECLARATION
+ */
 {
-	printf("## c_semantic::member_insert(c_context context)\n\n");
+  // we are in the base class declaration
+  // example class A : public B
+  if (CLASS_SPECIFIER_STATUS_BASE_DECLARATION ==
+      context.class_specifier_status)
+    {
+      // printf("\n\n### WE ADDING BASES CLASS TO
+      // [%s]\n\n",context.class_name_declaration.c_str());
 
-      c_symbol * p_symbol = ts.search_symbol( context.class_name_declaration );
-      if( p_symbol )
-      {
-	    if( 0 == p_symbol->class_key )
-	    {
-			printf("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
-			exit(-1);
-	    }
+      c_symbol *p_symbol =
+        ts.search_symbol(context.class_name_declaration);
+      if (p_symbol)
+        {
+          if (0 == context.access_specifier)
+            {
+              context.access_specifier = PUBLIC;
+            }
 
-		p_symbol->members.insert(context.class_member);
-	}
+          c_base_class base_class(token.text, context.access_specifier);
+          p_symbol->insert(base_class);
+
+          return;
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+void c_semantic::member_insert(c_context & context)
+/*
+ * int f1(int p1); has been parsed and we can insert in ts
+ *
+ * class A { int f1(int p1); };
+ */
+{
+  printf("## c_semantic::member_insert(c_context context)\n\n");
+
+  c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
+  if (p_symbol)
+    {
+      if (0 == p_symbol->class_key)
+        {
+          printf
+          ("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
+          exit(-1);
+        }
+
+      p_symbol->members.insert(context.class_member);
+    }
 }
 
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;
 /*----------------------------------------------------------------------------*/
-

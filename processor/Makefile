@@ -19,6 +19,10 @@ EXECUTABLE=abidos
 
 all: clean tryit_descent test_run
 
+indent_run:
+	./check_indent.sh
+	./indent_run.sh
+
 .c.o:
 	cc -c $<
 
@@ -81,3 +85,5 @@ clean:
 	rm -f $(EXECUTABLE)
 	rm -f out/*
 	rm -f test_out/*
+	rm -f *.orig
+
