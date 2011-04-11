@@ -146,16 +146,9 @@ struct c_parameter
 typedef vector < c_parameter > t_vector_parameter;
 typedef map < string, c_parameter > t_map_parameter;
 
-/*
- * class A { long int a; }
- *
- * c_class_member has 'long int a' inside
- *
- * if is a function member can have parameters
- */
-class c_class_member
+class c_declarator
 {
-private:
+protected:
   t_map_parameter map_parameter;
   t_vector_parameter vector_parameter;
 public:
@@ -167,10 +160,11 @@ public:
   void parameter_insert(c_parameter parameter);
   void print(const char *tab);
 
-  c_class_member()
+  c_declarator()
   {
     is_function = 0;
-  } c_class_member(c_token t, t_vector_decl_specifier v)
+  } 
+  c_declarator(c_token t, t_vector_decl_specifier v)
   {
     token = t;
     vector_decl_specifier = v;
@@ -185,6 +179,26 @@ public:
     is_function = 0;
   }
   string get_full_name(void);
+};
+
+
+/*
+ * class A { long int a; }
+ *
+ * c_class_member has 'long int a' inside
+ *
+ * if is a function member can have parameters
+ */
+class c_class_member: public c_declarator
+{
+public:
+  c_class_member()
+  {
+
+  } 
+  c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v)
+  {
+  }
 };
 
 typedef map < string, c_class_member > t_map_class_member;
@@ -221,12 +235,17 @@ public:
   {
     map_base_class[base_class.text] = base_class;
     vector_base_class.push_back(base_class);
-  } c_token token;
+  }
+
+  c_token token;
   int type;
   int class_key;
 
   // t_map_class_member map_class_member;
   c_class_members members;
+
+  int free_declarator;
+  c_declarator declarator;
 
   c_symbol()
   {
@@ -234,6 +253,8 @@ public:
     class_key = 0;
     map_base_class.clear();
     members.clear();
+    
+    free_declarator = 0;
   }
 
   c_symbol(c_token token_1)
@@ -243,6 +264,9 @@ public:
     class_key = 0;
     map_base_class.clear();
     members.clear();
+
+    free_declarator = 0;
+    declarator.clear();
   }
 
   ~c_symbol()
@@ -251,6 +275,9 @@ public:
     class_key = 0;
     map_base_class.clear();
     members.clear();
+
+    free_declarator = 0;
+    declarator.clear();    
   }
   void print(const char *tab);
 };

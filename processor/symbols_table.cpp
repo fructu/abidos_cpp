@@ -73,12 +73,13 @@ string c_parameter::get_string(void)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
-void c_class_member::parameter_insert(c_parameter parameter)
+
+void c_declarator::parameter_insert(c_parameter parameter)
 {
   if (0 == is_function)
     {
       printf
-      ("error c_class_member::parameter_insert(%s) not is_function \n",
+      ("error c_declarator::parameter_insert(%s) not is_function \n",
        parameter.token.text.c_str());
 
       exit(-1);
@@ -88,10 +89,10 @@ void c_class_member::parameter_insert(c_parameter parameter)
 }
 
 /*----------------------------------------------------------------------------*/
-void c_class_member::print(const char *tab)
+void c_declarator::print(const char *tab)
 {
   unsigned i_decl = 0;
-
+  
   printf("%s   ", tab);
 
   for (i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl)
@@ -129,7 +130,7 @@ void c_class_member::print(const char *tab)
 }
 
 /*----------------------------------------------------------------------------*/
-string c_class_member::get_full_name(void)
+string c_declarator::get_full_name(void)
 {
   string name = token.text;
 
@@ -279,6 +280,16 @@ void c_symbol::print(const char *tab)
 
   members.print(tab);
 
+  printf("%s  }\n", tab);
+  
+  
+  printf("%s  free_declarator\n", tab);
+  printf("%s  {\n", tab);  
+  if( 1 == free_declarator )
+  {
+    declarator.print(tab);
+  }
+    
   printf("%s  }\n", tab);
 }
 

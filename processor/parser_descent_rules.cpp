@@ -249,6 +249,11 @@ int c_parser_descent::block_declaration(string tab)
 int c_parser_descent::simple_declaration(string tab)
 {
   trace(tab, "## simple_declaration");
+  
+  if( CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER != context.class_specifier_status )
+    {            
+      semantic.clear_decl_specifier();
+    }
 
   decl_specifier_seq_opt(tab);	// long int a = 0; this is 'long
   // int'
@@ -428,7 +433,7 @@ int c_parser_descent::simple_type_specifier(string tab)
         }
       else
         {
-          semantic.push_back_vector_member_decl_specifier(decl);
+          semantic.push_back_vector_decl_specifier(decl);
         }
 
       return 1;
@@ -599,7 +604,7 @@ int c_parser_descent::member_declaration(string tab)
 
   context.class_specifier_status =
     CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER;
-  semantic.clear_member_decl_specifier();
+  semantic.clear_decl_specifier();
   decl_specifier_seq_opt(tab);
 
   context.class_specifier_status =
@@ -988,10 +993,40 @@ int c_parser_descent::member_declarator_list_opt(string tab)
 int c_parser_descent::init_declarator_list(string tab)
 {
   trace(tab, "## init_declarator_list");
+  c_context_tokens context_tokens(context);
+  c_context_tokens context_good_way(context);
 
-  return init_declarator(tab);
+  if (0 == init_declarator(tab))
+    {
+      return 0;
+    }
 
-  return 0;
+  for (;;)
+    {
+      context_good_way.save(context);
+      token_next(tab);
+
+      if (';' == token_get())
+        {
+          // yes i restore here to consume ';' more up in the tree
+          context = context_good_way.restore();
+          return 1;
+        }
+
+      if (',' != token_get())
+        {
+          context = context_tokens.restore();
+          return 1;
+        }
+
+      if (0 == init_declarator(tab))
+        {
+          context = context_tokens.restore();
+          return 0;
+        }
+    }
+
+  return 1;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -1068,12 +1103,12 @@ int c_parser_descent::direct_declarator(string tab)
               if (1 == declarator(tab))
                 {
                   printf("### 1 == declarator(tab)\n");
-                  // semantic.member_insert(context);
+                  // semantic.declarator_insert(context);
                 }
               else if (1 == parameter_declaration_clause(tab))
                 {
                   printf("### yes we are in a member function !\n");
-                  semantic.member_insert(context);
+                  semantic.declarator_insert(context);
                   // ## todo yes we are in a member function !
                 }
               else
@@ -1108,7 +1143,7 @@ int c_parser_descent::direct_declarator(string tab)
 
               if (1 != context.class_member.is_function)
                 {
-                  semantic.member_insert(context);
+                  semantic.declarator_insert(context);
                 }
             }
         }

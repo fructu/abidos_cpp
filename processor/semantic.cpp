@@ -89,7 +89,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
             }
 
           c_class_member class_member(token,
-                                      member_vector_decl_specifier);
+                                      vector_decl_specifier);
 
           context.class_member = class_member;
 
@@ -129,19 +129,7 @@ c_semantic::member_param_declarator(c_context & context, c_token token)
               ("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
               exit(-1);
             }
-          /*
-           * c_class_member * p_member = 0; c_parameter parameter(token
-           * , context.param_vector_decl_specifier );
-           *
-           * p_member =
-           * p_symbol->members.get(context.member_declaration); if( 0 ==
-           * p_member ) { printf("error
-           * c_semantic::member_param_declarator() ( 0 == p_member )
-           * )\n\n"); exit(-1); }
-           *
-           * p_member->is_function = 1;
-           * p_member->parameter_insert(parameter);
-           */
+
           c_parameter parameter(token,
                                 context.param_vector_decl_specifier);
           context.class_member.is_function = 1;
@@ -152,6 +140,25 @@ c_semantic::member_param_declarator(c_context & context, c_token token)
     }
 }
 
+
+/*----------------------------------------------------------------------------*/
+void
+c_semantic::free_declarator(c_context & context, c_token token)
+{
+  printf("## c_semantic::free_declarator()\n\n");
+
+  if (NO_CLASS_STATUS !=
+      context.class_specifier_status)
+    {
+      printf
+      ("error c_semantic::free_declarator() NO_CLASS_STATUS !=	context.class_specifier_status\n\n");
+      exit(-1);
+    }
+
+  c_declarator declarator(token, vector_decl_specifier);
+  declarator.print("###");
+  context.declarator = declarator;
+}
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
@@ -171,14 +178,36 @@ void c_semantic::identifier(c_context & context, c_token token)
           member_param_declarator(context, token);
           return;
         }
-      // ## move this line inside next if ... posible ?
-      class_member_declarator(context, token);
 
       if (1 == context.i_am_in_member)
         {
+          class_member_declarator(context, token);
           context.member_declaration = token.text;
         }
+
+      return;
     }
+    
+  // indentifier out of a class, struct...
+  if (NO_CLASS_STATUS ==
+      context.class_specifier_status)
+    {
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+//## todo for free functions
+// int f1(int a);
+//          free_param_declarator(context, token);
+          return;
+        }
+
+      if (0 == context.i_am_in_member)
+        {       
+          free_declarator(context, token);
+          context.declaration =  token.text;
+        }
+
+      return;
+    }   
 }
 
 /*----------------------------------------------------------------------------*/
@@ -236,7 +265,37 @@ void c_semantic::member_insert(c_context & context)
       p_symbol->members.insert(context.class_member);
     }
 }
+/*----------------------------------------------------------------------------*/
+void c_semantic::declarator_insert(c_context & context)
+{
+  printf("## c_semantic::declarator_insert(c_context context)\n\n");
+  if (NO_CLASS_STATUS ==
+      context.class_specifier_status)
+  {
+/*
+  c_symbol symbol(token);
 
+  ts.insert(symbol);
+  
+  c_declarator declarator(token, vector_decl_specifier);
+  context.declarator = declarator;  
+  int free_declarator;
+  c_declarator declarator;  
+  
+    ts.insert[]
+*/
+    c_symbol symbol(context.declarator.token);
+    symbol.free_declarator = 1;
+    symbol.declarator = context.declarator;
+    
+    ts.insert(symbol);
+
+  }
+  else
+  {
+    member_insert(context);
+  }
+}
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;
 /*----------------------------------------------------------------------------*/

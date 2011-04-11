@@ -36,7 +36,8 @@ typedef vector < c_token > t_tokens;
  */
 enum t_class_specifier_status
 {
-  NO_STATUS = 0, CLASS_SPECIFIER_STATUS_IDENTIFIER,
+  NO_CLASS_STATUS = 0,
+  CLASS_SPECIFIER_STATUS_IDENTIFIER,
   CLASS_SPECIFIER_STATUS_BASE_DECLARATION,
   CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER,
   CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR
@@ -66,6 +67,8 @@ struct c_context
   int i_am_in_member;
   string member_declaration;	// member of class
 
+  string declaration;
+
   int i_am_in_parameter_declaration;
 
   int just_reloaded;
@@ -73,11 +76,13 @@ struct c_context
   t_vector_decl_specifier param_vector_decl_specifier;
 
   c_class_member class_member;
+  
+  c_declarator declarator;
 
   c_context()
   {
     i_token = 0;
-    class_specifier_status = NO_STATUS;
+    class_specifier_status = NO_CLASS_STATUS;
     class_key = 0;
     access_specifier = 0;
 
@@ -85,16 +90,20 @@ struct c_context
 
     i_am_in_member = 0;
     member_declaration = "";
+
+    declaration = "";
 
     i_am_in_parameter_declaration = 0;
     just_reloaded = 0;
 
     param_vector_decl_specifier.clear();
     class_member.clear();
-  } void clear(void)
+    declarator.clear();
+  } 
+  void clear(void)
   {
     i_token = 0;
-    class_specifier_status = NO_STATUS;
+    class_specifier_status = NO_CLASS_STATUS;
     class_key = 0;
     access_specifier = 0;
 
@@ -102,6 +111,8 @@ struct c_context
 
     i_am_in_member = 0;
     member_declaration = "";
+    
+    declaration = "";
 
     i_am_in_parameter_declaration = 0;
     just_reloaded = 1;
@@ -109,6 +120,7 @@ struct c_context
     param_vector_decl_specifier.clear();
 
     class_member.clear();
+    declarator.clear();
   }
   void restore_but_not_i_token(c_context & context_param)
   {
@@ -124,6 +136,8 @@ struct c_context
     context_param.param_vector_decl_specifier =
       param_vector_decl_specifier;
     context_param.class_member = class_member;
+    context_param.declarator = declarator;
+    context_param.declaration = declaration;
   }
 };
 
