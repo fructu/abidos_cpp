@@ -12,6 +12,7 @@
 
 
 ------------------------------------------------------------------------------*/
+#include <stdlib.h>
 #include "parser_descent.h"
 #include "tokens.h"
 
@@ -512,6 +513,7 @@ int c_parser_descent::class_head(string tab)
 
   context.class_specifier_status =
     CLASS_SPECIFIER_STATUS_BASE_DECLARATION;
+
   base_clause_opt(tab);
 
   // printf( " #### class_head-> [%s]\n",token_identifier.text.c_str()
@@ -536,18 +538,21 @@ int c_parser_descent::class_key(string tab)
     {
       trace(tab, "## class_key -> CLASS [ok]");
       context.class_key = CLASS;
+      context.access_specifier = PRIVATE;
       return 1;
     }
 
   if (STRUCT == token_get())
     {
       context.class_key = STRUCT;
+      context.access_specifier = PUBLIC;
       return 1;
     }
 
   if (UNION == token_get())
     {
       context.class_key = UNION;
+      context.access_specifier = PUBLIC;
       return 1;
     }
 
@@ -559,7 +564,7 @@ int c_parser_descent::class_key(string tab)
 /*----------------------------------------------------------------------------*/
 /*
  * member_specification: member_declaration member_specification_opt |
- * access_specifier ':' member_specification_opt ;
+ *                       access_specifier ':' member_specification_opt ;
  *
  * member_specification_opt have while to drop the recursion
  */
@@ -832,6 +837,7 @@ int c_parser_descent::access_specifier(string tab)
     }
 
   context = context_tokens.restore();
+
   return 0;
 }
 

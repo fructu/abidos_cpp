@@ -91,6 +91,29 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
           c_class_member class_member(token,
                                       vector_decl_specifier);
 
+          // here i get the class_key from the symbol
+          // ## but i think it should be avalible in 
+          //    context.access_specifier
+          //    context.class_key
+          if( 0 == context.access_specifier)
+          {
+              context.class_key = p_symbol->class_key;
+              switch(p_symbol->class_key)
+                {
+                  case CLASS:
+                    context.access_specifier = PRIVATE;
+                    break;
+                  case STRUCT:
+                    context.access_specifier = PUBLIC;
+                    break;
+                  default:
+                      printf
+                        ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
+                      exit(-1);                  
+                }
+          }
+
+          class_member.access_specifier = context.access_specifier;
           context.class_member = class_member;
 
           return;

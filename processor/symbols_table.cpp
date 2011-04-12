@@ -198,10 +198,14 @@ void c_class_members::print(const char *tab)
        i_map_member != map_class_member.end(); ++i_map_member)
     {
       // printf("%s first[%s]->[%s][%s]\n"
-
-      unsigned i_decl = 0;
-
+      
       printf("%s   ", tab);
+
+      printf("[%s]: ",
+              yytokens[((*i_map_member).second).access_specifier]
+              );
+
+      unsigned i_decl = 0;      
 
       for (i_decl = 0;
            i_decl < (i_map_member->second).vector_decl_specifier.size();
@@ -212,9 +216,10 @@ void c_class_members::print(const char *tab)
                  vector_decl_specifier[i_decl].token.text.c_str());
         }
 
-      printf("first[%s]->[%s]\n", ((*i_map_member).first).c_str()
-             // , yytokens[((*i_map_member).second).access_specifier]
-             , ((*i_map_member).second).token.text.c_str());
+      printf("first[%s]->[%s]\n"
+              //, yytokens[((*i_map_member).second).access_specifier]
+              , ((*i_map_member).first).c_str()      
+              , ((*i_map_member).second).token.text.c_str());
     }
 }
 
