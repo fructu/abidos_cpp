@@ -26,6 +26,7 @@ using namespace std;
 
 # define TAB " "
 void trace(string & tab, string s);
+
 #include "symbols_table.h"
 
 typedef vector < c_token > t_tokens;

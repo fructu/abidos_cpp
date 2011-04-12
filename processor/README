@@ -84,5 +84,6 @@ abidos
 -[] use t_class_specifier_status c_context::class_specifier_status in parser and in semantic
     now there are several flags doing this
 -[v] parse free variables.
--[] parse free functions.
+-[v] parse free functions.
+-[] parse private public protected inside classes.
 

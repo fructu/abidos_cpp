@@ -23,6 +23,7 @@
 #include "tokens.h"
 #include "lex_yacc.h"
 
+
 using namespace std;
 
 void ts_tests(void);
@@ -189,15 +190,20 @@ public:
  *
  * if is a function member can have parameters
  */
+
 class c_class_member: public c_declarator
 {
 public:
+
+  int access_specifier;
+
   c_class_member()
   {
-
-  } 
+//    access_specifier = 0;
+  }
   c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v)
   {
+//    access_specifier = 0;
   }
 };
 
