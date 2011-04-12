@@ -392,11 +392,11 @@ labeled_statement:
 expression_statement:
 	expression_opt ';'
 	;
-
+//##did
 compound_statement:
 	'{' statement_seq_opt '}'
 	;
-
+//##did
 statement_seq:
 	statement
 	| statement_seq statement
@@ -717,7 +717,7 @@ function_definition:
 	decl_specifier_seq_opt declarator ctor_initializer_opt function_body
 	| decl_specifier_seq_opt declarator function_try_block
 	;
-
+//##did
 function_body:
 	compound_statement
 	;
@@ -1063,7 +1063,7 @@ expression_opt:
 	/* epsilon */
 	| expression
 	;
-
+//##did
 statement_seq_opt:
 	/* epsilon */
 	| statement_seq
