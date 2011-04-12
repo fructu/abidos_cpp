@@ -45,20 +45,20 @@ void c_generator_class_diagram::members_label(t_vector_class_member &
     {
       unsigned i_decl = 0;
 
-          switch( vector_class_member[i_member]->access_specifier )
-            {
-              case PUBLIC:
-                fprintf(f_out, "+ ");
-                break;
-              case PRIVATE:
-                fprintf(f_out, "- ");
-                break;
-              case PROTECTED:
-                fprintf(f_out, "- ");
-                break;
-              default:
-                fprintf(f_out, "# ");
-            }
+      switch ( vector_class_member[i_member]->access_specifier )
+        {
+        case PUBLIC:
+          fprintf(f_out, "+ ");
+          break;
+        case PRIVATE:
+          fprintf(f_out, "- ");
+          break;
+        case PROTECTED:
+          fprintf(f_out, "- ");
+          break;
+        default:
+          fprintf(f_out, "# ");
+        }
 
       for (i_decl = 0;
            i_decl <

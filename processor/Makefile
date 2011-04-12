@@ -60,8 +60,8 @@ debug_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
-FILE_TEST=t10.cpp
-#FILE_TEST=mass_clases.cpp
+#FILE_TEST=t10.cpp
+FILE_TEST=mass_clases.cpp
 execute: $(EXECUTABLE)
 	cp xdot2.py out/
 	./$(EXECUTABLE) --verbose --ts_show test/$(FILE_TEST)

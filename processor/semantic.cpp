@@ -92,26 +92,26 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
                                       vector_decl_specifier);
 
           // here i get the class_key from the symbol
-          // ## but i think it should be avalible in 
+          // ## but i think it should be avalible in
           //    context.access_specifier
           //    context.class_key
-          if( 0 == context.access_specifier)
-          {
+          if ( 0 == context.access_specifier)
+            {
               context.class_key = p_symbol->class_key;
-              switch(p_symbol->class_key)
+              switch (p_symbol->class_key)
                 {
-                  case CLASS:
-                    context.access_specifier = PRIVATE;
-                    break;
-                  case STRUCT:
-                    context.access_specifier = PUBLIC;
-                    break;
-                  default:
-                      printf
-                        ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
-                      exit(-1);                  
+                case CLASS:
+                  context.access_specifier = PRIVATE;
+                  break;
+                case STRUCT:
+                  context.access_specifier = PUBLIC;
+                  break;
+                default:
+                  printf
+                  ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
+                  exit(-1);
                 }
-          }
+            }
 
           class_member.access_specifier = context.access_specifier;
           context.class_member = class_member;
@@ -220,7 +220,7 @@ void c_semantic::identifier(c_context & context, c_token token)
 
       return;
     }
-    
+
   // indentifier out of a class, struct...
   if (NO_CLASS_STATUS ==
       context.class_specifier_status)
@@ -232,13 +232,13 @@ void c_semantic::identifier(c_context & context, c_token token)
         }
 
       if (0 == context.i_am_in_member)
-        {       
+        {
           free_declarator(context, token);
           context.declaration =  token.text;
         }
 
       return;
-    }   
+    }
 }
 
 /*----------------------------------------------------------------------------*/
@@ -302,17 +302,17 @@ void c_semantic::declarator_insert(c_context & context)
   printf("## c_semantic::declarator_insert(c_context context)\n\n");
   if (NO_CLASS_STATUS ==
       context.class_specifier_status)
-  {
-    c_symbol symbol(context.declarator.token);
-    symbol.free_declarator = 1;
-    symbol.declarator = context.declarator;
-    
-    ts.insert(symbol);
-  }
+    {
+      c_symbol symbol(context.declarator.token);
+      symbol.free_declarator = 1;
+      symbol.declarator = context.declarator;
+
+      ts.insert(symbol);
+    }
   else
-  {
-    member_insert(context);
-  }
+    {
+      member_insert(context);
+    }
 }
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;

@@ -250,9 +250,9 @@ int c_parser_descent::block_declaration(string tab)
 int c_parser_descent::simple_declaration(string tab)
 {
   trace(tab, "## simple_declaration");
-  
-  if( CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER != context.class_specifier_status )
-    {            
+
+  if ( CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER != context.class_specifier_status )
+    {
       semantic.clear_decl_specifier();
     }
 

@@ -92,7 +92,7 @@ void c_declarator::parameter_insert(c_parameter parameter)
 void c_declarator::print(const char *tab)
 {
   unsigned i_decl = 0;
-  
+
   printf("%s   ", tab);
 
   for (i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl)
@@ -198,14 +198,14 @@ void c_class_members::print(const char *tab)
        i_map_member != map_class_member.end(); ++i_map_member)
     {
       // printf("%s first[%s]->[%s][%s]\n"
-      
+
       printf("%s   ", tab);
 
       printf("[%s]: ",
-              yytokens[((*i_map_member).second).access_specifier]
-              );
+             yytokens[((*i_map_member).second).access_specifier]
+            );
 
-      unsigned i_decl = 0;      
+      unsigned i_decl = 0;
 
       for (i_decl = 0;
            i_decl < (i_map_member->second).vector_decl_specifier.size();
@@ -217,9 +217,9 @@ void c_class_members::print(const char *tab)
         }
 
       printf("first[%s]->[%s]\n"
-              //, yytokens[((*i_map_member).second).access_specifier]
-              , ((*i_map_member).first).c_str()      
-              , ((*i_map_member).second).token.text.c_str());
+             //, yytokens[((*i_map_member).second).access_specifier]
+             , ((*i_map_member).first).c_str()
+             , ((*i_map_member).second).token.text.c_str());
     }
 }
 
@@ -286,15 +286,15 @@ void c_symbol::print(const char *tab)
   members.print(tab);
 
   printf("%s  }\n", tab);
-  
-  
+
+
   printf("%s  free_declarator\n", tab);
-  printf("%s  {\n", tab);  
-  if( 1 == free_declarator )
-  {
-    declarator.print(tab);
-  }
-    
+  printf("%s  {\n", tab);
+  if ( 1 == free_declarator )
+    {
+      declarator.print(tab);
+    }
+
   printf("%s  }\n", tab);
 }
 

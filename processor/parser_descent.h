@@ -77,7 +77,7 @@ struct c_context
   t_vector_decl_specifier param_vector_decl_specifier;
 
   c_class_member class_member;
-  
+
   c_declarator declarator;
 
   c_context()
@@ -100,7 +100,7 @@ struct c_context
     param_vector_decl_specifier.clear();
     class_member.clear();
     declarator.clear();
-  } 
+  }
   void clear(void)
   {
     i_token = 0;
@@ -112,7 +112,7 @@ struct c_context
 
     i_am_in_member = 0;
     member_declaration = "";
-    
+
     declaration = "";
 
     i_am_in_parameter_declaration = 0;
