@@ -164,7 +164,7 @@ public:
   c_declarator()
   {
     is_function = 0;
-  } 
+  }
   c_declarator(c_token t, t_vector_decl_specifier v)
   {
     token = t;
@@ -259,7 +259,7 @@ public:
     class_key = 0;
     map_base_class.clear();
     members.clear();
-    
+
     free_declarator = 0;
   }
 
@@ -283,7 +283,7 @@ public:
     members.clear();
 
     free_declarator = 0;
-    declarator.clear();    
+    declarator.clear();
   }
   void print(const char *tab);
 };

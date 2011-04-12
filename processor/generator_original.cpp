@@ -73,22 +73,22 @@ members(t_vector_class_member & vector_class_member)
   for (i_member = 0; i_member < vector_class_member.size(); ++i_member)
     {
       unsigned i_decl = 0;
-      if( access != vector_class_member[i_member]->access_specifier )
+      if ( access != vector_class_member[i_member]->access_specifier )
         {
           access = vector_class_member[i_member]->access_specifier;
-          switch( access )
+          switch ( access )
             {
-              case PUBLIC:
-                fprintf(f_out, "public:\n");
-                break;
-              case PRIVATE:
-                fprintf(f_out, "private:\n");
-                break;
-              case PROTECTED:
-                fprintf(f_out, "protected:\n");
-                break;
-              default:
-                fprintf(f_out, "//bad access_specifier\n");
+            case PUBLIC:
+              fprintf(f_out, "public:\n");
+              break;
+            case PRIVATE:
+              fprintf(f_out, "private:\n");
+              break;
+            case PROTECTED:
+              fprintf(f_out, "protected:\n");
+              break;
+            default:
+              fprintf(f_out, "//bad access_specifier\n");
             }
         }
 
