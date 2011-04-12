@@ -158,12 +158,14 @@ public:
   t_vector_decl_specifier vector_decl_specifier;
 
   int is_function;
+  int has_body;
   void parameter_insert(c_parameter parameter);
   void print(const char *tab);
 
   c_declarator()
   {
     is_function = 0;
+    has_body = 0;
   }
   c_declarator(c_token t, t_vector_decl_specifier v)
   {
@@ -171,6 +173,7 @@ public:
     vector_decl_specifier = v;
 
     is_function = 0;
+    has_body = 0;
   }
   void clear(void)
   {
@@ -178,6 +181,7 @@ public:
     vector_parameter.clear();
     token.clear();
     is_function = 0;
+    has_body = 0;
   }
   string get_full_name(void);
 };

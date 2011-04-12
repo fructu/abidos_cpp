@@ -85,5 +85,7 @@ abidos
     now there are several flags doing this
 -[v] parse free variables.
 -[v] parse free functions.
--[] parse private public protected inside classes.
+-[v] parse private public protected inside classes.
+-[v] generate original with previous.
+-[v] generate graph with -, + showing if a member is private/protected or public
 

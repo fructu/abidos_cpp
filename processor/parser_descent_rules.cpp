@@ -183,6 +183,58 @@ int c_parser_descent::identifier(string tab)
 }
 
 /*----------------------------------------------------------------------
+ * Statements.
+ *----------------------------------------------------------------------*/
+/*
+compound_statement:
+	'{' statement_seq_opt '}'
+	;
+*/
+int c_parser_descent::compound_statement(string tab)
+{
+  trace(tab, "## compound_statement");
+
+  c_context_tokens context_tokens(context);
+
+  token_next(tab);
+  if ( '{' != token_get())
+    {
+      context = context_tokens.restore();
+      return 0;
+    }
+
+  context.declarator.has_body = 1;
+
+  if ( 0 == statement_seq_opt(tab) )
+    {
+//      context = context_tokens.restore();
+      return 0;
+    }
+
+  token_next(tab);
+  if ( '}' != token_get())
+    {
+      context = context_tokens.restore();
+      return 0;
+    }
+
+  return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+statement_seq:
+	statement
+	| statement_seq statement
+	;
+*/
+int c_parser_descent::statement_seq(string tab)
+{
+  trace(tab, "## statement_seq");
+
+  return 1;
+}
+
+/*----------------------------------------------------------------------
  * Declarations.
  *----------------------------------------------------------------------*/
 /*
@@ -215,6 +267,11 @@ int c_parser_descent::declaration(string tab)
   trace(tab, "## declaration");
 
   if (1 == block_declaration(tab))
+    {
+      return 1;
+    }
+
+  if (1 == function_definition(tab))
     {
       return 1;
     }
@@ -264,10 +321,21 @@ int c_parser_descent::simple_declaration(string tab)
 
   token_next(tab);
 
-  if (';' == token_get())
+  // functions with body does not have ; in the end
+  printf("\n\n#### context.declarator.has_body[%d]\n\n",context.declarator.has_body);
+  if ( 1 == context.declarator.has_body )
     {
+      context.declarator.has_body = 0;
       tokens_vector_clear();
       return 1;
+    }
+  else
+    {
+      if (';' == token_get())
+        {
+          tokens_vector_clear();
+          return 1;
+        }
     }
 
   context = context_tokens.restore();
@@ -614,8 +682,12 @@ int c_parser_descent::member_declaration(string tab)
 
   context.class_specifier_status =
     CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
+
+  c_context_tokens context_tokens_2(context);
+
   if (1 == member_declarator_list_opt(tab))
     {
+
       token_next(tab);
 
       if (';' != token_get())
@@ -627,6 +699,17 @@ int c_parser_descent::member_declaration(string tab)
       return 1;
     }
 
+  context = context_tokens_2.restore();
+
+  // | function_definition SEMICOLON_opt
+  if ( 1 == function_definition(tab) )
+    {
+      //SEMICOLON_opt(tab);
+
+      return 1;
+    }
+
+  context = context_tokens.restore();
   return 0;
 }
 
@@ -871,7 +954,19 @@ int c_parser_descent::decl_specifier_seq_opt(string tab)
 
   return 1;
 }
+/*----------------------------------------------------------------------------*/
+/*
+statement_seq_opt:
+	// epsilon
+	| statement_seq
+	;
+*/
+int c_parser_descent::statement_seq_opt(string tab)
+{
+  trace(tab, "## statement_seq_opt");
 
+  return statement_seq(tab);
+}
 /*----------------------------------------------------------------------------*/
 /*
  * init_declarator_list_opt: //epsilon | init_declarator_list ;
@@ -1328,12 +1423,37 @@ int c_parser_descent::function_definition(string tab)
   trace(tab, "## function_definition");
   // ## todo the rest
 
+  // ##decl_specifier_seq_opt
+
   if (0 == declarator(tab))
+    {
+      return 0;
+    }
+
+  //## ctor_initializer_opt
+
+  //## function_body
+
+  if (0 == function_body(tab))
     {
       return 0;
     }
 
   return 1;
 }
+
+/*----------------------------------------------------------------------------*/
+/*
+function_body:
+	compound_statement
+	;
+*/
+int c_parser_descent::function_body(string tab)
+{
+  trace(tab, "## function_body");
+
+  return compound_statement(tab);
+}
+
 
 /*----------------------------------------------------------------------------*/

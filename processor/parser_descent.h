@@ -200,6 +200,10 @@ private:
   // Lexical elements.
   int identifier(string tab);
 
+  // Statements
+  int compound_statement(string tab);
+  int statement_seq(string tab);
+
   // declarations
   int declaration_seq(string tab);
   int declaration(string tab);
@@ -227,6 +231,7 @@ private:
   int parameter_declaration_list(string tab);
   int parameter_declaration(string tab);
   int function_definition(string tab);
+  int function_body(string tab);
 
   // Derived classes.
   int base_clause(string tab);
@@ -236,6 +241,7 @@ private:
 
   // Epsilon (optional) definitions.
   int declaration_seq_opt(string tab);
+  int statement_seq_opt(string tab);
   int decl_specifier_seq_opt(string tab);
   int init_declarator_list_opt(string tab);
   int identifier_opt(string tab);
