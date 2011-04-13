@@ -1,7 +1,7 @@
 /*
 	functions with body
 */
-void f(void)
+int long f(void)
 {
 }
 

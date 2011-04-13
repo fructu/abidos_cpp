@@ -40,9 +40,9 @@ public:
   void member_param_declarator(c_context & context, c_token token);
   void free_function_param_declarator(c_context & context, c_token token);
   void free_declarator(c_context & context, c_token token);
-  void member_insert(c_context & context);
+  void member_insert(string & tab, c_context & context);
 
-  void declarator_insert(c_context & context);
+  void declarator_insert(string & tab, c_context & context);
 
   void class_name(c_context & context, c_token token);
 };

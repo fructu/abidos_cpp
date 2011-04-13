@@ -273,6 +273,7 @@ int c_parser_descent::declaration(string tab)
 
   if (1 == function_definition(tab))
     {
+      semantic.declarator_insert(tab, context);
       return 1;
     }
 
@@ -683,28 +684,33 @@ int c_parser_descent::member_declaration(string tab)
   context.class_specifier_status =
     CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
 
-  c_context_tokens context_tokens_2(context);
+//  c_context_tokens context_tokens_2(context);
 
   if (1 == member_declarator_list_opt(tab))
     {
 
       token_next(tab);
 
-      if (';' != token_get())
+      if (';' == token_get())
         {
-          context = context_tokens.restore();
-          return 0;
+
+          return 1;
         }
 
-      return 1;
     }
 
-  context = context_tokens_2.restore();
+  context = context_tokens.restore();
 
-  // | function_definition SEMICOLON_opt
+  context.class_specifier_status =
+    CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER;
+
+  context.i_am_in_member = 1;
+  semantic.clear_decl_specifier();
+
   if ( 1 == function_definition(tab) )
     {
       //SEMICOLON_opt(tab);
+      semantic.declarator_insert(tab, context);
 
       return 1;
     }
@@ -1204,17 +1210,13 @@ int c_parser_descent::direct_declarator(string tab)
               if (1 == declarator(tab))
                 {
                   printf("### 1 == declarator(tab)\n");
-                  // semantic.declarator_insert(context);
                 }
               else if (1 == parameter_declaration_clause(tab))
                 {
-                  printf("### yes we are in a member function !\n");
-                  semantic.declarator_insert(context);
-                  // ## todo yes we are in a member function !
                 }
               else
                 {
-                  printf("### no we are in a member function !\n\n\n");
+                  printf("### no, we are not in a member function !\n");
                   context = context_tokens.restore();
                   return 0;
                 }
@@ -1229,9 +1231,23 @@ int c_parser_descent::direct_declarator(string tab)
               context_good_way.save(context);
               token_next(tab);
 
-              if (';' == token_get())
+              if (';' == token_get()
+                 )
                 {
+                  printf("### yes we are in a function !\n");
+                  semantic.declarator_insert(tab, context);
                   // yes i restore here to consume ';' more up in the
+                  // tree
+                  context = context_good_way.restore();
+                  return 1;
+                }
+              if (',' == token_get()
+
+                 )
+                {
+                  printf("### yes we are in a function !\n");
+                  semantic.declarator_insert(tab, context);
+                  // yes i restore here to consume ',' more up in the
                   // tree
                   context = context_good_way.restore();
                   return 1;
@@ -1244,7 +1260,7 @@ int c_parser_descent::direct_declarator(string tab)
 
               if (1 != context.class_member.is_function)
                 {
-                  semantic.declarator_insert(context);
+                  semantic.declarator_insert(tab, context);
                 }
             }
         }
@@ -1405,11 +1421,6 @@ int c_parser_descent::parameter_declaration(string tab)
   semantic.identifier(context, token);
 
   return 1;
-  /*
-   * if( IDENTIFIER == token_get() ) { semantic.identifier( context,
-   * c_token_get() ); return 1; }
-   */
-  // return 0;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -1421,9 +1432,15 @@ int c_parser_descent::parameter_declaration(string tab)
 int c_parser_descent::function_definition(string tab)
 {
   trace(tab, "## function_definition");
-  // ## todo the rest
 
-  // ##decl_specifier_seq_opt
+  decl_specifier_seq_opt(tab);
+
+  if ( CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER ==
+       context.class_specifier_status )
+    {
+      context.class_specifier_status =
+        CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
+    }
 
   if (0 == declarator(tab))
     {
@@ -1431,8 +1448,6 @@ int c_parser_descent::function_definition(string tab)
     }
 
   //## ctor_initializer_opt
-
-  //## function_body
 
   if (0 == function_body(tab))
     {

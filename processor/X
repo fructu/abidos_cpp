@@ -1,6 +1,6 @@
 dir .
 set print address off
 #b c_parser_descent::token_next()
-b c_class_member::print()
+#b c_class_member::print()
 #run  parser_descent_rules.cpp
-run --verbose --ts_show test/t7.cpp
+run --verbose --ts_show test/t12.cpp
