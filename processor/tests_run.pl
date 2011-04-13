@@ -16,10 +16,10 @@ sub is_test_ok
 
   foreach $l (@raw_data)
   {
-        chomp($l);
-        $_= $l;
+    chomp($l);
+    $_= $l;
 
-        if( $_ =~ /ALL_TOKENS_CONSUMED/ )
+    if( $_ =~ /ALL_TOKENS_CONSUMED/ )
 		{
 			$result = "ok"
 		}
@@ -30,7 +30,7 @@ sub is_test_ok
   return $result;
 }
 
-sub test_run
+sub test_run_tokens_consumed
 {
   $f = $_[0];
 
@@ -42,6 +42,16 @@ sub test_run
   print "  [$f] -> [$result]\n";
   
 }
+
+sub test_gcc_diff
+{
+  $f = $_[0];
+  
+  print "#  [$f] ->";
+  
+  @args = ("test/g++", "-s", "$f");
+  system(@args) == 0 or die "system @args failed: $?";
+}   
 
 sub all_tests
 {
@@ -56,7 +66,8 @@ sub all_tests
 	{
 		unless ( ($f eq ".") || ($f eq "..") )
 		{
-			test_run($f)
+			test_run_tokens_consumed($f);
+#			test_gcc_diff($f);
 		}
 	}
 }

@@ -189,13 +189,12 @@ c_semantic::free_declarator(c_context & context, c_token token)
     }
 
   c_declarator declarator(token, vector_decl_specifier);
-  declarator.print("###");
   context.declarator = declarator;
 }
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
-  printf("## c_semantic::identifier(c_context context)\n\n");
+  printf("## c_semantic::identifier(c_context context) token.text[%s]\n\n",token.text.c_str());
 
   if (CLASS_SPECIFIER_STATUS_IDENTIFIER ==
       context.class_specifier_status)
@@ -274,14 +273,14 @@ void c_semantic::class_name(c_context & context, c_token token)
 }
 
 /*----------------------------------------------------------------------------*/
-void c_semantic::member_insert(c_context & context)
+void c_semantic::member_insert(string & tab, c_context & context)
 /*
  * int f1(int p1); has been parsed and we can insert in ts
  *
  * class A { int f1(int p1); };
  */
 {
-  printf("## c_semantic::member_insert(c_context context)\n\n");
+  printf("%s## c_semantic::member_insert(c_context context)\n",tab.c_str());
 
   c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
   if (p_symbol)
@@ -293,13 +292,15 @@ void c_semantic::member_insert(c_context & context)
           exit(-1);
         }
 
+
+      printf("%s##** context.class_member[%s]\n",tab.c_str(),context.class_member.token.text.c_str() );
       p_symbol->members.insert(context.class_member);
     }
 }
 /*----------------------------------------------------------------------------*/
-void c_semantic::declarator_insert(c_context & context)
+void c_semantic::declarator_insert(string & tab, c_context & context)
 {
-  printf("## c_semantic::declarator_insert(c_context context)\n\n");
+  printf("%s## c_semantic::declarator_insert(c_context context)\n\n",tab.c_str());
   if (NO_CLASS_STATUS ==
       context.class_specifier_status)
     {
@@ -311,7 +312,7 @@ void c_semantic::declarator_insert(c_context & context)
     }
   else
     {
-      member_insert(context);
+      member_insert(tab, context);
     }
 }
 /*----------------------------------------------------------------------------*/

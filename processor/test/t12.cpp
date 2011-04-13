@@ -3,7 +3,11 @@
 */
 class A
 {
-  void fa(void)
+  void fa1(void)
   {
-  };
+  }
+
+  int unsigned fa1(double float p1)
+  {
+  }
 };

@@ -88,4 +88,6 @@ abidos
 -[v] parse private public protected inside classes.
 -[v] generate original with previous.
 -[v] generate graph with -, + showing if a member is private/protected or public
+-[v] parsing free functions with body
+-[v] parsing member functions with body
 
