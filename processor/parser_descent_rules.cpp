@@ -1286,9 +1286,9 @@ int c_parser_descent::direct_declarator(string tab)
                   context = context_good_way.restore();
                   return 1;
                 }
-              if (',' == token_get()
-
-                 )
+              // this is posible:
+              // int f1(void), f2(void);
+              if (',' == token_get() )
                 {
                   printf("### yes we are in a function !\n");
                   semantic.declarator_insert(tab, context);

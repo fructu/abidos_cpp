@@ -8,14 +8,14 @@
 run_beautify_now()
 {
 	FNAME=$1
-	echo "FNAME" ${FNAME}
+	echo "file["${FNAME}"]"
 	if [ ! -f ${FNAME} ]; then
 		echo "Error: The file["${FNAME}"] does not exist!!. Aborting now ...."
 		exit
 	fi
 	aa=`basename $PRGM`
 	echo "Running, ["$aa"] on ["${FNAME}"]"
-	echo ${PRGM} ${TMP_CPPFILE}.cpp
+	echo ${PRGM} ${FNAME}
 	${PRGM} ${FNAME}
 }
 ########## Main of program begins here ##################3
@@ -27,26 +27,13 @@ TMP_FILE=beautify.tmp
 TMP_CPPFILE=beautify-tmp_cppfile
 #echo "Enter the C++ file name <default is *.cpp> : "
 #read ans
-if [ "$ans" = "" -o "$ans" = " " ]; then
-	ans="ALL"
-else
-	FILENAME=$ans
-fi
+for f in $( git ls-files *.cpp ); do
+		run_beautify_now ${f}
+		echo ""
+done
 
-if [ "$ans" != "ALL" ]; then
-	run_beautify_now ${FILENAME}
-else
-	ls *.cpp |
-	while read FILENAME 
-	do
-		run_beautify_now ${FILENAME}
+for f in $( git ls-files *.h ); do
+		run_beautify_now ${f}
 		echo ""
-	done
-	ls *.h |
-	while read FILENAME 
-	do
-		run_beautify_now ${FILENAME}
-		echo ""
-	done	
-fi
+done
 

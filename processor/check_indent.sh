@@ -11,16 +11,16 @@ check_beautify_now()
 	\rm -f ${TMP_FILE}
 	\rm -f ${TMP_CPPFILE}*.*
 	FNAME=$1
-	echo "FNAME" ${FNAME}
+	echo "file" ${FNAME}
 	if [ ! -f ${FNAME} ]; then
 		echo "Error: The file["${FNAME}"] does not exist!!. Aborting now ...."
-		exit
+		exit 1
 	fi
 	\cp  -f ${FNAME} ${TMP_CPPFILE}.cpp
 	${COMPILER} -c ${TMP_CPPFILE}.cpp
 	if [ ! -f ${TMP_CPPFILE}.o ]; then
 		echo "Fatal Error: Failed to compile ["${FNAME}"]. Aborting now... "
-		exit
+		exit 1
 	fi
 	\mv -f ${TMP_CPPFILE}.o ${TMP_CPPFILE}_orig.o
 	aa=`basename $PRGM`
@@ -37,7 +37,7 @@ check_beautify_now()
 		echo "success!! Beautifier [" $aa "] is working properly!!"
 	else
 		echo "fatal Error Beautifier is not working!!"
-		exit -1
+		exit 1
 	fi
 #	${COMPILER} -S ${TMP_CPPFILE}.cpp
 #	diff ${TMP_CPPFILE}.s ${TMP_CPPFILE}_orig.s
@@ -52,24 +52,17 @@ PRGM='astyle --style=gnu'
 COMPILER=/usr/bin/g++
 TMP_FILE=beautify.tmp
 TMP_CPPFILE=beautify-tmp_cppfile
-#echo "Enter the C++ file name <default is *.cpp> : "
-#read ans
-if [ "$ans" = "" -o "$ans" = " " ]; then
-	ans="ALL"
-else
-	FILENAME=$ans
-fi
 # Remove all the temp files....
 \rm -f ${TMP_FILE}
 \rm -f ${TMP_CPPFILE}*.*
-if [ "$ans" != "ALL" ]; then
-	check_beautify_now ${FILENAME}
-else
-	ls *.cpp |
-	while read FILENAME 
-	do
-		check_beautify_now ${FILENAME}
+
+for f in $( git ls-files *.cpp ); do
+		check_beautify_now ${f}
 		echo ""
-	done
-fi
+done
+
+for f in $( git ls-files *.h ); do
+		check_beautify_now ${f}
+		echo ""
+done
 
