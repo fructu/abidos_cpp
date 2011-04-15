@@ -526,6 +526,7 @@ simple_type_specifier:
 	| VOID
 	;
 
+//##
 type_name:
 	class_name
 	| enum_name

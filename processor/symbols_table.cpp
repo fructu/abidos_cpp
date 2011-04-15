@@ -226,6 +226,13 @@ void c_class_members::print(const char *tab)
 /*----------------------------------------------------------------------------*/
 void c_class_members::insert(c_class_member member)
 {
+  if ( 0 == member.token.text.size() )
+    {
+      printf("error c_class_members::insert() 0 == member.token.text.size()\n");
+      exit(-1);
+    }
+
+
   // map_class_member[member.token.text] = member;
   map_class_member[member.get_full_name()] = member;
   // vector_class_member.push_back(& map_class_member[member.token.text]
