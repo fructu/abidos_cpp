@@ -201,6 +201,7 @@ private:
   int identifier(string tab);
 
   // Statements
+  int statement(string tab);
   int compound_statement(string tab);
   int statement_seq(string tab);
 

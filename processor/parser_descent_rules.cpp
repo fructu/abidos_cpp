@@ -186,6 +186,24 @@ int c_parser_descent::identifier(string tab)
  * Statements.
  *----------------------------------------------------------------------*/
 /*
+statement:
+	labeled_statement
+	| expression_statement
+	| compound_statement
+	| selection_statement
+	| iteration_statement
+	| jump_statement
+	| declaration_statement
+	| try_block
+	;
+*/
+int c_parser_descent::statement(string tab)
+{
+  trace(tab, "## statement dummy version");
+  return 1;
+}
+
+/*
 compound_statement:
 	'{' statement_seq_opt '}'
 	;
@@ -230,6 +248,33 @@ statement_seq:
 int c_parser_descent::statement_seq(string tab)
 {
   trace(tab, "## statement_seq");
+
+  int n_open_braket = 0;
+
+  c_context_tokens context_good_way(context);
+
+  while (token_get() != 0)
+    {
+      //## dummy
+      statement(tab);
+
+      context_good_way.save(context);
+      token_next(tab);
+      if ('{' == token_get())
+        {
+          ++n_open_braket;
+        }
+
+      if ('}' == token_get())
+        {
+          if ( 0 == n_open_braket )
+            {
+              context = context_good_way.restore();
+              return 1;
+            }
+          --n_open_braket;
+        }
+    }
 
   return 1;
 }
