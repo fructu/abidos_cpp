@@ -54,10 +54,10 @@ void c_generator_class_diagram::members_label(t_vector_class_member &
           fprintf(f_out, "- ");
           break;
         case PROTECTED:
-          fprintf(f_out, "- ");
+          fprintf(f_out, "# ");
           break;
         default:
-          fprintf(f_out, "# ");
+          fprintf(f_out, "? ");
         }
 
       for (i_decl = 0;
@@ -121,8 +121,13 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
   for (i_map_base = symbol.map_base_class.begin();
        i_map_base != symbol.map_base_class.end(); ++i_map_base)
     {
-      fprintf(f_out, "  %s->%s;\n", symbol.token.text.c_str(),
+      // C1->B [dir = "back"];
+      fprintf(f_out, "  /*%s->%s*/", symbol.token.text.c_str(),
               ((*i_map_base).second).text.c_str());
+
+      fprintf(f_out, "  %s->%s [dir = \"back\", color = \"black\", arrowtail = \"empty\"];\n"
+              ,((*i_map_base).second).text.c_str()
+              , symbol.token.text.c_str() );
     }
 }
 

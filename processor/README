@@ -1,9 +1,10 @@
 1. A brief description of the project.
    sudo apt-get install graphviz
+   dot out_t2.cpp.gv -Tpng -o out_dot.png
+
    UniversalIndentGUI
    sudo apt-get install universalindentgui
    indent -nbad -bap -nbc -bbo -bl -bli2 -bls -ncdb -nce -cp1 -cs -di2 -ndj -nfc1 -nfca -hnl -i2 -ip5 -lp -pcs -psl -nsc -nsob
-
 
 	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
     kate Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO semantic.cpp semantic.h symbols_table.h symbols_table.cpp
@@ -90,4 +91,9 @@ abidos
 -[v] generate graph with -, + showing if a member is private/protected or public
 -[v] parsing free functions with body
 -[v] parsing member functions with body
+-[] generate original declaration of variables
+-[] generate original free functions
+-[v] put head arrows of class with not fill (like in UML specification)
+-[v] reverse the positions of class fathers and sons (father up in diagrams)
+
 
