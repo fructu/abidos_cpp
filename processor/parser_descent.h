@@ -214,6 +214,7 @@ private:
   int decl_specifier(string tab);
   int type_specifier(string tab);
   int simple_type_specifier(string tab);
+  int type_name(string tab);
   int class_specifier(string tab);
   int class_head(string tab);
   int class_key(string tab);

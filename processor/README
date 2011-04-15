@@ -14,7 +14,13 @@
 
     valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/mass_clases.cpp
     ./$(EXECUTABLE)  test/$(FILE_TEST)
-    
+
+git bundle create abidos_$(date '+%F_%H_%M')_master.bundle master
+mv abidos_2011-04-14_15_06_master.bundle /home/hevia/Descargas/
+cd /home/hevia/Descargas/working/abidos
+git pull /home/hevia/Descargas/abidos_2011-04-14_15_06_master.bundle master
+
+git commit -C HEAD -a --amend
 
 2. A pointer to the project website (if it has one).
 3. Notes on the developer’s build environment and potential portability problems.
@@ -95,4 +101,6 @@ abidos
 -[] generate original free functions
 -[v] put head arrows of class with not fill (like in UML specification)
 -[v] reverse the positions of class fathers and sons (father up in diagrams)
--[] pass the body of functions (with a dummy rule)
+-[v] pass the body of functions (with a dummy rule)
+-[v] parse constructors
+-[] parse destructors

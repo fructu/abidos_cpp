@@ -22,6 +22,7 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
 {
   c_symbol symbol(token);
   printf("## c_semantic::class_(c_context context)\n\n");
+
   if (CLASS_SPECIFIER_STATUS_IDENTIFIER !=
       context.class_specifier_status)
     {
@@ -269,6 +270,25 @@ void c_semantic::class_name(c_context & context, c_token token)
 
           return;
         }
+    }
+
+  if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR ==
+      context.class_specifier_status)
+    {
+      /*
+            if (1 == context.i_am_in_parameter_declaration)
+              {
+                member_param_declarator(context, token);
+                return;
+              }
+      */
+      if (1 == context.i_am_in_member)
+        {
+          class_member_declarator(context, token);
+          context.member_declaration = token.text;
+        }
+
+      return;
     }
 }
 

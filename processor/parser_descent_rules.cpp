@@ -559,6 +559,27 @@ int c_parser_descent::simple_type_specifier(string tab)
   return 0;
 }
 
+/*
+type_name:
+	class_name
+	| enum_name
+	| typedef_name
+	;
+*/
+int c_parser_descent::type_name(string tab)
+{
+  trace(tab, "## type_name");
+
+  if (1 == class_name(tab))
+    {
+      return 1;
+    }
+
+  //## todo rest
+
+  return 0;
+}
+
 /*----------------------------------------------------------------------------*/
 /*
  * class_specifier: class_head '{' member_specification_opt '}' ;
@@ -1337,6 +1358,15 @@ int c_parser_descent::declarator_id(string tab)
   // ## COLONCOLON_opt(tab)
 
   if (1 == id_expression(tab))
+    {
+      return 1;
+    }
+
+  //|
+  //## nested_name_specifier_opt
+
+  //contructors enter for here
+  if (1 == type_name(tab))
     {
       return 1;
     }
