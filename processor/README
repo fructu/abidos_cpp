@@ -95,5 +95,4 @@ abidos
 -[] generate original free functions
 -[v] put head arrows of class with not fill (like in UML specification)
 -[v] reverse the positions of class fathers and sons (father up in diagrams)
-
-
+-[] pass the body of functions (with a dummy rule)
