@@ -89,13 +89,37 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
               exit(-1);
             }
 
+          int is_constructor = 0;
+          int is_destructor = 0;
+          int is_function = 0;
+
+          if ( context.class_name_declaration == token.text )
+            {
+              if ( 1 == context.class_member.is_destructor)
+                {
+                  is_destructor = 1;
+                  is_function = 1;
+                }
+              else
+                {
+                  is_constructor = 1;
+                  is_function = 1;
+                }
+            }
+
           c_class_member class_member(token,
                                       vector_decl_specifier);
 
+          class_member.is_constructor = is_constructor;
+          class_member.is_destructor = is_destructor;
+          class_member.is_function = is_function;
           // here i get the class_key from the symbol
           // ## but i think it should be avalible in
           //    context.access_specifier
           //    context.class_key
+          // tested with t010.cpp
+          //   the first access_specifier is lost, i must do this:
+
           if ( 0 == context.access_specifier)
             {
               context.class_key = p_symbol->class_key;
@@ -300,7 +324,10 @@ void c_semantic::member_insert(string & tab, c_context & context)
  * class A { int f1(int p1); };
  */
 {
-  printf("%s## c_semantic::member_insert(c_context context)\n",tab.c_str());
+  printf("%s## c_semantic::member_insert(c_context context)[%s]\n"
+         ,tab.c_str()
+         ,context.class_member.token.text.c_str()
+        );
 
   c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
   if (p_symbol)
@@ -312,8 +339,6 @@ void c_semantic::member_insert(string & tab, c_context & context)
           exit(-1);
         }
 
-
-      printf("%s##** context.class_member[%s]\n",tab.c_str(),context.class_member.token.text.c_str() );
       p_symbol->members.insert(context.class_member);
     }
 }
