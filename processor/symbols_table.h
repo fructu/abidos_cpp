@@ -43,7 +43,9 @@ struct c_token
 
     file = "";
     line = 0;
-  } c_token(int t, char *s)
+  }
+
+  c_token(int t, char *s)
   {
     id = t;
     text = s;
@@ -51,6 +53,7 @@ struct c_token
     file = lex_file_name;
     line = yylineno;
   }
+
   void clear(void)
   {
     id = 0;
@@ -77,7 +80,9 @@ struct c_base_class
   {
     text = "";
     access_specifier = 0;
-  } c_base_class(string t, int access)
+  }
+
+  c_base_class(string t, int access)
   {
     text = t;
     access_specifier = access;
@@ -200,14 +205,20 @@ class c_class_member: public c_declarator
 public:
 
   int access_specifier;
+  int is_constructor;
+  int is_destructor;
 
   c_class_member()
   {
-//    access_specifier = 0;
+    access_specifier = 0;
+    is_constructor = 0;
+    is_destructor = 0;
   }
   c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v)
   {
-//    access_specifier = 0;
+    access_specifier = 0;
+    is_constructor = 0;
+    is_destructor = 0;
   }
 };
 
