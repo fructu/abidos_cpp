@@ -134,6 +134,17 @@ string c_declarator::get_full_name(void)
 {
   string name = token.text;
 
+  if ( 1 == is_constructor )
+    {
+      //for now i dont need do nothing
+      //name = token.text;
+    }
+
+  if ( 1 == is_destructor )
+    {
+      name = "~" + token.text;
+    }
+
   if (1 == is_function)
     {
       if (vector_parameter.size() == 0)
@@ -232,11 +243,7 @@ void c_class_members::insert(c_class_member member)
       exit(-1);
     }
 
-
-  // map_class_member[member.token.text] = member;
   map_class_member[member.get_full_name()] = member;
-  // vector_class_member.push_back(& map_class_member[member.token.text]
-  // );
   vector_class_member.push_back(&map_class_member
                                 [member.get_full_name()]);
 }

@@ -164,6 +164,11 @@ public:
 
   int is_function;
   int has_body;
+
+  int access_specifier;
+  int is_constructor;
+  int is_destructor;
+
   void parameter_insert(c_parameter parameter);
   void print(const char *tab);
 
@@ -171,6 +176,10 @@ public:
   {
     is_function = 0;
     has_body = 0;
+
+    access_specifier = 0;
+    is_constructor = 0;
+    is_destructor = 0;
   }
   c_declarator(c_token t, t_vector_decl_specifier v)
   {
@@ -179,6 +188,10 @@ public:
 
     is_function = 0;
     has_body = 0;
+
+    access_specifier = 0;
+    is_constructor = 0;
+    is_destructor = 0;
   }
   void clear(void)
   {
@@ -187,6 +200,10 @@ public:
     token.clear();
     is_function = 0;
     has_body = 0;
+
+    access_specifier = 0;
+    is_constructor = 0;
+    is_destructor = 0;
   }
   string get_full_name(void);
 };
@@ -203,22 +220,12 @@ public:
 class c_class_member: public c_declarator
 {
 public:
-
-  int access_specifier;
-  int is_constructor;
-  int is_destructor;
-
   c_class_member()
   {
-    access_specifier = 0;
-    is_constructor = 0;
-    is_destructor = 0;
+
   }
   c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v)
   {
-    access_specifier = 0;
-    is_constructor = 0;
-    is_destructor = 0;
   }
 };
 

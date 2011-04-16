@@ -103,4 +103,11 @@ abidos
 -[v] reverse the positions of class fathers and sons (father up in diagrams)
 -[v] pass the body of functions (with a dummy rule)
 -[v] parse constructors
--[] parse destructors
+-[v] parse destructors
+-[v] use is_constructor
+-[v] use is_destructor
+-[] parse AUTO|REGISTER...
+-[] parse INLINE|VIRTUAL...
+-[] parse FRIEND
+-[] do script to check generate original ~= original
+-[] count oks and fails tests
