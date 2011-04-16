@@ -1,0 +1,7 @@
+/*
+  constructor
+*/
+class A
+{
+  A();
+};

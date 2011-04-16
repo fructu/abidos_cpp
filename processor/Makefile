@@ -17,9 +17,9 @@ CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 EXECUTABLE=abidos
 
-all: clean tryit_descent test_run
+all: clean make_descent test_run
 
-indent_run:
+indent_run: clean make_descent
 	./check_indent.sh
 	./indent_run.sh
 
@@ -29,7 +29,7 @@ indent_run:
 .cpp.o:
 	$(CC) $(CFLAGS) $<
 
-tryit_descent:  $(OBJS)
+make_descent:  $(OBJS)
 	$(CC) -o $(EXECUTABLE)  $(OBJS)
 
 tryit: parser.o lexer.o

@@ -115,6 +115,23 @@ int c_parser_descent::unqualified_id(string tab)
       return 1;
     }
 
+  //## todo
+
+  // destructor
+  // | '~' class_name
+  c_context_tokens context_tokens(context);
+  token_next(tab);
+  if ( '~' == token_get() )
+    {
+      context.class_member.is_destructor = 1;
+      if (1 == class_name(tab))
+        {
+          return 1;
+        }
+      context.class_member.is_destructor = 0;
+    }
+  context = context_tokens.restore();
+
   return 0;
 }
 
