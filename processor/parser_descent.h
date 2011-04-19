@@ -243,6 +243,7 @@ private:
 
   // Epsilon (optional) definitions.
   int declaration_seq_opt(string tab);
+  int COLONCOLON_opt(string tab);
   int statement_seq_opt(string tab);
   int decl_specifier_seq_opt(string tab);
   int init_declarator_list_opt(string tab);

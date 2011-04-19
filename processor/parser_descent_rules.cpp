@@ -492,12 +492,48 @@ int c_parser_descent::simple_type_specifier(string tab)
   trace(tab, "## simple_type_specifier");
 
   // ## todo COLONCOLON_opt nested_name_specifier_opt type_name
+
+  string class_name = context.class_name_declaration;
+
   int result = 0;
   c_context_tokens context_tokens(context);
 
-  string class_name = context.class_name_declaration;
-  token_next(tab);
-  context.class_name_declaration = class_name;
+  /*
+    i think this is to consume for example
+
+      void A::f1(void){... <- A
+
+      A get_A(void){... <- A
+
+    but not constructors
+      A();
+  */
+  if (1 == type_name(tab))
+    {
+      c_context_tokens context_tokens_0(context);
+      //pre-analisys
+      token_next(tab);
+      if ( '(' != token_get())
+        {
+          printf("## MARK_2\n");
+          result = 1;
+        }
+
+      context = context_tokens_0.restore();
+/*
+      if ( COLONCOLON == token_get())
+        {
+          printf("## MARK_7\n");
+          return 1;
+        }
+*/
+    }
+
+  if( 0 == result )
+    {
+      token_next(tab);
+      context.class_name_declaration = class_name;
+    }
 
   if (CHAR == token_get())
     {
@@ -1033,15 +1069,36 @@ int c_parser_descent::declaration_seq_opt(string tab)
 
 /*----------------------------------------------------------------------------*/
 /*
+COLONCOLON_opt:
+	// epsilon
+	| COLONCOLON
+	;
+*/
+int c_parser_descent::COLONCOLON_opt(string tab)
+{
+  trace(tab, "## COLONCOLON_opt");
+
+  c_context_tokens context_tokens(context);
+
+  token_next(tab);
+  if (COLONCOLON == token_get())
+    {
+      return 1;
+    }
+
+  context = context_tokens.restore();
+  return 0;
+}
+
+/*----------------------------------------------------------------------------*/
+/*
  * decl_specifier_seq_opt: //epsilon | decl_specifier_seq ;
  */
 int c_parser_descent::decl_specifier_seq_opt(string tab)
 {
   trace(tab, "## decl_specifier_seq_opt");
 
-  decl_specifier_seq(tab);
-
-  return 1;
+  return decl_specifier_seq(tab);
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -1074,11 +1131,8 @@ int c_parser_descent::init_declarator_list_opt(string tab)
 int c_parser_descent::identifier_opt(string tab)
 {
   trace(tab, "## identifier_opt");
-  // c_token token_identifier;
 
-  identifier(tab);
-
-  return 1;
+  return identifier(tab);
 }
 
 /*
@@ -1155,9 +1209,7 @@ int c_parser_descent::base_clause_opt(string tab)
 {
   trace(tab, "## base_clause_opt");
 
-  base_clause(tab);
-
-  return 1;
+  return base_clause(tab);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -1372,7 +1424,11 @@ int c_parser_descent::declarator_id(string tab)
 {
   trace(tab, "## declarator_id");
 
-  // ## COLONCOLON_opt(tab)
+  //## whe must have a class name before of this
+  COLONCOLON_opt(tab);
+
+  printf("### MARK_01 passed :: \n");
+  tokens_vector_print_from_actual();
 
   if (1 == id_expression(tab))
     {
