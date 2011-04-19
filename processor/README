@@ -111,3 +111,5 @@ abidos
 -[] parse FRIEND
 -[] do script to check generate original ~= original
 -[] count oks and fails tests
+-[] parse definitions of functions members outside of classes
+    nested_name_specifier:
