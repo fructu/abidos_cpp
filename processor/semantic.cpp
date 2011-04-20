@@ -67,7 +67,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
  * class A { int a1; };
  */
 {
-  printf("## c_semantic::class_member_declarator()\n\n");
+  printf("## c_semantic::class_member_declarator()\n");
 
   if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
       context.class_specifier_status)
@@ -87,6 +87,13 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
               printf
               ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
               exit(-1);
+            }
+
+          if ( 1 == context.member_definition_outside )
+            {
+              //## maybe is good idea check if it has beed declared and save the file where are his definition
+              printf("## c_semantic::class_member_declarator() this is outside declaration the method must be declared before\n");
+              return;
             }
 
           int is_constructor = 0;
@@ -217,6 +224,32 @@ c_semantic::free_declarator(c_context & context, c_token token)
   context.declarator = declarator;
 }
 /*----------------------------------------------------------------------------*/
+/*
+  maybe is something like this void A::fa1(void){...
+  we must put the context like we are inside of the class A
+  ## -> ensure this context is clear when the } of member is consumed
+*/
+void c_semantic::check_coloncolon_member_function(c_context & context, c_token token)
+{
+  printf("## c_semantic::check_coloncolon_member_function(c_context context) token.text[%s]\n\n",token.text.c_str());
+
+  if ( 0 == vector_decl_specifier.size() )
+    {
+      return;
+    }
+
+  unsigned last = vector_decl_specifier.size() - 1;
+
+  if ( 1 == vector_decl_specifier[last].has_colon_colon_after )
+    {
+      printf("## MARK_20 we are in class[%s]\n", vector_decl_specifier[last].token.text.c_str());
+      context.i_am_in_member = 1;
+      context.member_definition_outside = 1;
+      context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
+      context.class_name_declaration = vector_decl_specifier[last].token.text;
+    }
+}
+/*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
   printf("## c_semantic::identifier(c_context context) token.text[%s]\n\n",token.text.c_str());
@@ -225,6 +258,13 @@ void c_semantic::identifier(c_context & context, c_token token)
       context.class_specifier_status)
     {
       class_specifier_identifier(context, token);
+    }
+
+  // maybe is something like this void A::fa1(void){...
+  if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
+      context.class_specifier_status)
+    {
+      check_coloncolon_member_function(context, token);
     }
 
   if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR ==
@@ -338,7 +378,14 @@ void c_semantic::member_insert(string & tab, c_context & context)
           ("error c_semantic::member_param_declarator()  0 == p_symbol->class_key )\n\n");
           exit(-1);
         }
-
+      //## it must bee declared yet
+      // todo -> put the file where is the definition
+      if ( 1 == context.member_definition_outside )
+        {
+          printf("## MARK_30");
+          context.class_member.token.print(" ");
+          return;
+        }
       p_symbol->members.insert(context.class_member);
     }
 }

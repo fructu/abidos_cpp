@@ -311,6 +311,7 @@ int c_parser_descent::declaration_seq(string tab)
   while (1 == declaration(tab))
     {
       printf("## while declaration [ok]\n\n");
+      tokens_vector_clear();
       result = 1;
     }
 
@@ -386,10 +387,12 @@ int c_parser_descent::simple_declaration(string tab)
 
   // functions with body does not have ; in the end
   printf("\n\n#### context.declarator.has_body[%d]\n\n",context.declarator.has_body);
+
   if ( 1 == context.declarator.has_body )
     {
       context.declarator.has_body = 0;
       tokens_vector_clear();
+      tokens_vector_print();
       return 1;
     }
   else
@@ -496,6 +499,7 @@ int c_parser_descent::simple_type_specifier(string tab)
   string class_name = context.class_name_declaration;
 
   int result = 0;
+  int has_colon_colon_after = 0;
   c_context_tokens context_tokens(context);
 
   /*
@@ -519,17 +523,19 @@ int c_parser_descent::simple_type_specifier(string tab)
           result = 1;
         }
 
-      context = context_tokens_0.restore();
-/*
       if ( COLONCOLON == token_get())
         {
           printf("## MARK_7\n");
-          return 1;
+          has_colon_colon_after = 1;
+          context = context_tokens_0.restore();
+//          return 1;
         }
-*/
+
+      context = context_tokens_0.restore();
+
     }
 
-  if( 0 == result )
+  if ( 0 == result )
     {
       token_next(tab);
       context.class_name_declaration = class_name;
@@ -594,6 +600,7 @@ int c_parser_descent::simple_type_specifier(string tab)
     {
       c_decl_specifier decl(c_token_get());
       decl.type_specifier = 1;
+      decl.has_colon_colon_after = has_colon_colon_after;
 
       if (1 == context.i_am_in_parameter_declaration)
         {

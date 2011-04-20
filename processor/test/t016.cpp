@@ -3,11 +3,29 @@
 */
 class A
 {
+  A();
+  ~A();
   void fa(void);
+
 };
+
+A::A()
+{
+}
+
+A::~A()
+{
+}
+
+void f1(void)
+{
+}
 
 void A::fa(void)
 {
 }
 
-A get_A(void);
+void f2(void)
+{
+}
+
