@@ -34,6 +34,8 @@ public:
     vector_decl_specifier.clear();
   }
 
+  void check_coloncolon_member_function(c_context & context, c_token token);
+
   void identifier(c_context & context, c_token token);
   void class_specifier_identifier(c_context & context, c_token token);
   void class_member_declarator(c_context & context, c_token token);

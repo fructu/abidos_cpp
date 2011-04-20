@@ -6,6 +6,13 @@
    sudo apt-get install universalindentgui
    indent -nbad -bap -nbc -bbo -bl -bli2 -bls -ncdb -nce -cp1 -cs -di2 -ndj -nfc1 -nfca -hnl -i2 -ip5 -lp -pcs -psl -nsc -nsob
 
+
+useful commands:
+
+  find . -name "*.cpp" -exec grep -EHn "\<c_decl_specifier\>" {} \;
+
+  git commit --amend -C HEAD
+
 	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
     kate Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO semantic.cpp semantic.h symbols_table.h symbols_table.cpp
 
@@ -111,5 +118,9 @@ abidos
 -[] parse FRIEND
 -[] do script to check generate original ~= original
 -[] count oks and fails tests
--[] parse definitions of functions members outside of classes
-    nested_name_specifier:
+-[v] parse definitions of functions members outside of classes
+     void A::fa(void)
+-[] parse definitions of constructors outside of classes
+-[] parse definitions of destructors outside of classes
+-[v] semantic for definitons of functions members outside of clasess.
+-[] save the file and line for the previous point.

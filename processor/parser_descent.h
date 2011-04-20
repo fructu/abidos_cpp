@@ -67,6 +67,7 @@ struct c_context
 
   int i_am_in_member;
   string member_declaration;	// member of class
+  int member_definition_outside; // it must be a first declaration inside
 
   string declaration;
 
@@ -91,6 +92,7 @@ struct c_context
 
     i_am_in_member = 0;
     member_declaration = "";
+    member_definition_outside = 0;
 
     declaration = "";
 
@@ -112,6 +114,7 @@ struct c_context
 
     i_am_in_member = 0;
     member_declaration = "";
+    member_definition_outside = 0;
 
     declaration = "";
 
@@ -130,6 +133,7 @@ struct c_context
     context_param.access_specifier = access_specifier;
     context_param.i_am_in_member = i_am_in_member;
     context_param.member_declaration = member_declaration;
+    context_param.member_definition_outside = member_definition_outside;
     context_param.i_am_in_parameter_declaration =
       i_am_in_parameter_declaration;
 

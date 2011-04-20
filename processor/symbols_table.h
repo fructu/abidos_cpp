@@ -62,6 +62,18 @@ struct c_token
     file = "";
     line = 0;
   }
+
+  void print(const char *tab)
+  {
+    printf("%sc_ctoken::print id[%d]->[%s] text[%s] file[%s] line[%d]\n"
+           ,tab
+           ,id
+           ,yytokens[id]
+           ,text.c_str()
+           ,file.c_str()
+           ,line
+          );
+  }
 };
 
 /*
@@ -109,6 +121,7 @@ struct c_decl_specifier
   int function_specifier;
   int friend_specifier;
   int typedef_specifier;
+  int has_colon_colon_after; // A:: ...
 
   c_decl_specifier(c_token t)
   {
@@ -119,6 +132,7 @@ struct c_decl_specifier
     function_specifier = 0;
     friend_specifier = 0;
     typedef_specifier = 0;
+    has_colon_colon_after = 0;
   } void clear(void)
   {
     storage_class_specifier = 0;
@@ -126,6 +140,7 @@ struct c_decl_specifier
     function_specifier = 0;
     friend_specifier = 0;
     typedef_specifier = 0;
+    has_colon_colon_after = 0;
   }
 };
 
