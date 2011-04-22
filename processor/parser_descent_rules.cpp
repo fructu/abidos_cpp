@@ -509,7 +509,7 @@ int c_parser_descent::simple_type_specifier(string tab)
 
       A get_A(void){... <- A
 
-    but not constructors
+    but not constructors (this must be consumed in declarator:)
       A();
   */
   if (1 == type_name(tab))

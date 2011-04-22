@@ -3,18 +3,15 @@
 */
 class A
 {
-  void fa(void);
+  A();
+  ~A();
 };
 
-void f1(void)
+A::A()
 {
 }
 
-void A::fa(void)
-{
-}
-
-void f2(void)
+A::~A()
 {
 }
 
