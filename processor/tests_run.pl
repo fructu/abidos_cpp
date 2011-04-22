@@ -40,7 +40,8 @@ sub test_run_tokens_consumed
   $result = is_test_ok("test_out/out_$f.txt");
 
   print "  [$f] -> [$result]\n";
-  
+
+  return $result;
 }
 
 sub test_gcc_diff
@@ -56,6 +57,9 @@ sub test_gcc_diff
 sub all_tests
 {
 	$tests_dir = "test/";
+  $result = "";
+  $tests_total = 0;
+  $tests_ok    = 0;
 	opendir(IMD, $tests_dir) || die("Cannot open directory");
 	@tests_files= readdir(IMD);
 	closedir(IMD);
@@ -66,14 +70,31 @@ sub all_tests
 	{
 		unless ( ($f eq ".") || ($f eq "..") )
 		{
-			test_run_tokens_consumed($f);
+      $result = test_run_tokens_consumed($f);
+      if( $result eq "ok" )
+      {
+        $tests_ok++;
+      }
+      $tests_total++;
 #			test_gcc_diff($f);
 		}
 	}
+  print "  -----------------------------------\n";
+  print "  tests ok $tests_ok/$tests_total\n";
+  print "  -----------------------------------\n";
+  if( $tests_ok == $tests_total )
+  {
+    return 0;
+  }
+  else
+  {
+    return -1;
+  }
 }
 
 print "abidos runing suit tests [v0.0.01]\n";
+$result = 0;
 print "{\n";
-all_tests;
+$result = all_tests;
 print "}\n";
-
+exit($result);

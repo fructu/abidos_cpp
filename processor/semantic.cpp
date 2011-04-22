@@ -21,13 +21,13 @@ void
 c_semantic::class_specifier_identifier(c_context & context, c_token token)
 {
   c_symbol symbol(token);
-  printf("## c_semantic::class_(c_context context)\n\n");
+  printf("## c_semantic::class_specifier_identifier(c_context context)\n");
 
   if (CLASS_SPECIFIER_STATUS_IDENTIFIER !=
       context.class_specifier_status)
     {
       printf
-      ("##error c_semantic::class_ CLASS_IDENTIFIER != context.class_specifier_status\n\n");
+      ("error c_semantic::class_ CLASS_IDENTIFIER != context.class_specifier_status\n");
       return;
     }
 
@@ -73,7 +73,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
       context.class_specifier_status)
     {
       printf
-      ("error c_semantic::class_member_declarator() CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status\n\n");
+      ("error c_semantic::class_member_declarator() CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status\n");
       exit(-1);
     }
   else
@@ -242,7 +242,6 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
 
   if ( 1 == vector_decl_specifier[last].has_colon_colon_after )
     {
-      printf("## MARK_20 we are in class[%s]\n", vector_decl_specifier[last].token.text.c_str());
       context.i_am_in_member = 1;
       context.member_definition_outside = 1;
       context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
@@ -312,6 +311,7 @@ void c_semantic::class_name(c_context & context, c_token token)
  * BASE_CLASS_DECLARATION
  */
 {
+  printf("## c_semantic::class_name() token.text[%s]\n",token.text.c_str());
   // we are in the base class declaration
   // example class A : public B
   if (CLASS_SPECIFIER_STATUS_BASE_DECLARATION ==
@@ -382,24 +382,39 @@ void c_semantic::member_insert(string & tab, c_context & context)
       // todo -> put the file where is the definition
       if ( 1 == context.member_definition_outside )
         {
-          printf("## MARK_30");
           context.class_member.token.print(" ");
           return;
         }
+
       p_symbol->members.insert(context.class_member);
     }
 }
 /*----------------------------------------------------------------------------*/
 void c_semantic::declarator_insert(string & tab, c_context & context)
 {
-  printf("%s## c_semantic::declarator_insert(c_context context)\n\n",tab.c_str());
+  printf("%s## c_semantic::declarator_insert(c_context context) context.declarator.token[%s]\n"
+         , tab.c_str()
+         , context.declarator.get_full_name().c_str()
+        );
+
   if (NO_CLASS_STATUS ==
       context.class_specifier_status)
     {
+      if ( 0 == context.declarator.token.text.size() )
+        {
+          printf("%s## warning c_semantic::declarator_insert context.declarator.token.text.size() == 0\n"
+                 , tab.c_str()
+                );
+          printf("%s##   aborting ts.insert(symbol); context.class_member.token.text[%s]\n", tab.c_str()
+                 , context.class_member.token.text.c_str()
+                );
+          printf("%s##   maybe this is the definition of function member and this is ok\n", tab.c_str()
+                );
+          return;
+        }
       c_symbol symbol(context.declarator.token);
       symbol.free_declarator = 1;
       symbol.declarator = context.declarator;
-
       ts.insert(symbol);
     }
   else

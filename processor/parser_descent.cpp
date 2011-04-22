@@ -134,20 +134,21 @@ void c_parser_descent::tokens_vector_print_from_actual(void)
     }
 
   printf("}\n");
+  /*
+    unsigned i = context.i_token;
+    printf("{\n");
+    while (i < tokens_vector.size())
+      {
+        c_token token;
+        token = tokens_vector[i];
 
-  unsigned i = context.i_token;
-  printf("{\n");
-  while (i < tokens_vector.size())
-    {
-      c_token token;
-      token = tokens_vector[i];
+        printf(" [%3d] -> yytokens[%s] token.text[%s]\n", token.id,
+               yytokens[token.id], token.text.c_str());
 
-      printf(" [%3d] -> yytokens[%s] token.text[%s]\n", token.id,
-             yytokens[token.id], token.text.c_str());
-
-      ++i;
-    }
-  printf("}\n");
+        ++i;
+      }
+    printf("}\n");
+  */
 }
 
 /*----------------------------------------------------------------------------*/
