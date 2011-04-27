@@ -25,9 +25,18 @@ void c_generator_class_diagram::members_url(t_vector_class_member &
       fprintf(f_out, "%s",
               vector_class_member[i_member]->token.text.c_str());
 
-      fprintf(f_out, "[%s:%d]",
-              vector_class_member[i_member]->token.file.c_str(),
-              vector_class_member[i_member]->token.line);
+      if ( 0 < vector_class_member[i_member]->token_definition.file.size())
+        {
+          fprintf(f_out, "[%s:%d]",
+                  vector_class_member[i_member]->token_definition.file.c_str(),
+                  vector_class_member[i_member]->token_definition.line);
+        }
+      else
+        {
+          fprintf(f_out, "[%s:%d]",
+                  vector_class_member[i_member]->token.file.c_str(),
+                  vector_class_member[i_member]->token.line);
+        }
 
       if ((i_member + 1) < vector_class_member.size())
         {

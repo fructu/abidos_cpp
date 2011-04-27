@@ -18,6 +18,10 @@ A::A(int p1)
 {
 }
 
+void A::fA(void)
+{
+}
+
 int unsigned A::fA(int i1, float double fd2, char c3)
 {
 }

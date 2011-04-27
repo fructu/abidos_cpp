@@ -257,9 +257,10 @@ c_class_member *c_class_members::get(string member)
 
   if (i_member == map_class_member.end())
     {
-      printf("error c_class_member * c_class_members::get(%s)",
+      printf("warning c_class_member * c_class_members::get(%s)",
              member.c_str());
-      exit(-1);
+//      exit(-1);
+      return 0;
     }
 
   return (&(i_member->second));
