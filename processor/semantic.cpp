@@ -93,7 +93,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
             {
               //## maybe is good idea check if it has beed declared and save the file where are his definition
               printf("## c_semantic::class_member_declarator() this is outside declaration the method must be declared before\n");
-              return;
+//              return;
             }
 
           int is_constructor = 0;
@@ -382,7 +382,24 @@ void c_semantic::member_insert(string & tab, c_context & context)
       // todo -> put the file where is the definition
       if ( 1 == context.member_definition_outside )
         {
-          context.class_member.token.print(" ");
+          c_class_member * p_member = 0;
+
+          printf("## mark_70\n");
+
+          context.class_member.token.print("--");
+          p_member = p_symbol->members.get(context.class_member.get_full_name());
+
+
+          printf("##   full_name[%s]\n",context.class_member.get_full_name().c_str());
+
+          if ( 0 == p_member )
+            {
+              printf("##   NOT FOUND\n");
+              return;
+            }
+          printf("##   FOUND\n");
+          p_member->token_definition = context.class_member.token;
+
           return;
         }
 

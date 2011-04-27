@@ -174,7 +174,12 @@ protected:
   t_vector_parameter vector_parameter;
 public:
 
+  //class A{ void a1(void);};
   c_token token;
+
+  //void A::a1(void){...}
+  c_token token_definition;
+
   t_vector_decl_specifier vector_decl_specifier;
 
   int is_function;
@@ -219,6 +224,8 @@ public:
     access_specifier = 0;
     is_constructor = 0;
     is_destructor = 0;
+
+    token_definition.clear();
   }
   string get_full_name(void);
 };
