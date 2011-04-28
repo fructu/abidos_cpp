@@ -15,3 +15,10 @@ class A
 	int f11(...);
 };
 
+float A::f4(int p1, float p2, char p3, long int p4)
+{
+}
+
+float f4(int p1, float p2, char p3, long int p4)
+{
+}
