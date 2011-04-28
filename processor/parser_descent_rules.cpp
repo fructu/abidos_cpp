@@ -155,7 +155,6 @@ int c_parser_descent::qualified_id(string tab)
 int c_parser_descent::class_name(string tab)
 {
   trace(tab, "## class_name");
-  printf("## class_name mark_78context.class_specifier_status[%d][%d]\n",context.class_specifier_status,CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR);
 
   c_context_tokens context_tokens(context);
 
@@ -467,7 +466,6 @@ int c_parser_descent::decl_specifier(string tab)
 int c_parser_descent::type_specifier(string tab)
 {
   trace(tab, "## type_specifier");
-  printf("## type_specifier mark_79 context.class_specifier_status[%d][%d]\n",context.class_specifier_status,CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR);
 
   c_context_tokens context_tokens(context);
 
@@ -522,13 +520,11 @@ int c_parser_descent::simple_type_specifier(string tab)
       token_next(tab);
       if ( '(' != token_get())
         {
-          printf("## MARK_2\n");
           result = 1;
         }
 
       if ( COLONCOLON == token_get())
         {
-          printf("## MARK_7\n");
           has_colon_colon_after = 1;
           context = context_tokens_0.restore();
 //          return 1;
@@ -822,10 +818,8 @@ int c_parser_descent::member_declaration(string tab)
 
       if (';' == token_get())
         {
-          printf("## member_declaration mark_77 context.class_specifier_status[%d][%d]\n",context.class_specifier_status,CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR);
           return 1;
         }
-
     }
 
   context = context_tokens.restore();
@@ -1438,7 +1432,6 @@ int c_parser_descent::declarator_id(string tab)
   //## whe must have a class name before of this
   COLONCOLON_opt(tab);
 
-  printf("### MARK_01 passed :: \n");
   tokens_vector_print_from_actual();
 
   if (1 == id_expression(tab))
