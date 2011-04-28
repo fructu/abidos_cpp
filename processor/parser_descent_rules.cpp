@@ -454,9 +454,61 @@ int c_parser_descent::decl_specifier(string tab)
       return 1;
     }
 
+  if ( 1 == ptr_specifier(tab))
+    {
+      return 1;
+    }
   return 0;
 }
+/*
+storage_class_specifier:
+	AUTO
+	| REGISTER
+	| STATIC
+	| EXTERN
+	| MUTABLE
+	;
+*/
+int c_parser_descent::storage_class_specifier(string tab)
+{
+  trace(tab, "## storage_class_specifier");
 
+  // ## todo COLONCOLON_opt nested_name_specifier_opt type_name
+
+  int result = 0;
+  c_context_tokens context_tokens(context);
+  token_next(tab);
+  /*
+    if ('*' == token_get())
+      {
+        result = 1;
+      }
+
+    if ('&' == token_get())
+      {
+        result = 1;
+      }
+  */
+  if (1 == result)
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      return 1;
+    }
+
+  context = context_tokens.restore();
+  return 0;
+}
 /*----------------------------------------------------------------------------*/
 /*
  * type_specifier: simple_type_specifier | class_specifier |
@@ -615,6 +667,50 @@ int c_parser_descent::simple_type_specifier(string tab)
 
   context = context_tokens.restore();
 
+  return 0;
+}
+
+/*
+  rule mine
+
+*/
+
+int c_parser_descent::ptr_specifier(string tab)
+{
+  trace(tab, "## ptr_specifier");
+
+  int result = 0;
+  c_context_tokens context_tokens(context);
+  token_next(tab);
+
+  if ('*' == token_get())
+    {
+      result = 1;
+    }
+
+  if ('&' == token_get())
+    {
+      result = 1;
+    }
+
+  if (1 == result)
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      return 1;
+    }
+
+  context = context_tokens.restore();
   return 0;
 }
 
@@ -1307,7 +1403,16 @@ int c_parser_descent::declarator(string tab)
     {
       return 1;
     }
-  // ## todo the rest
+
+  // | ptr_operator declarator
+  /*##
+    i do this in the part of decl_specifier
+  if( 1 == ptr_operator(tab))
+    {
+      return declarator(tab);
+    }
+  */
+
   return 0;
 }
 
@@ -1419,6 +1524,37 @@ int c_parser_descent::direct_declarator(string tab)
 
   return 0;
 }
+/*----------------------------------------------------------------------------*/
+/*
+ptr_operator:
+	'*' cv_qualifier_seq_opt
+	| '&'
+	| COLONCOLON_opt nested_name_specifier '*' cv_qualifier_seq_opt
+	;
+*/
+int c_parser_descent::ptr_operator(string tab)
+{
+  trace(tab, "## ptr_operator");
+
+  c_context_tokens context_tokens(context);
+  token_next(tab);
+
+  if ('*' == token_get())
+    {
+      return 1;
+    }
+
+  if ('&' == token_get())
+    {
+      return 1;
+    }
+
+  //## todo rest ...
+
+  context = context_tokens.restore();
+  return 0;
+}
+
 
 /*----------------------------------------------------------------------------*/
 /*

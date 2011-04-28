@@ -216,8 +216,10 @@ private:
   int simple_declaration(string tab);
   int decl_specifier_seq(string tab);
   int decl_specifier(string tab);
+  int storage_class_specifier(string tab);
   int type_specifier(string tab);
   int simple_type_specifier(string tab);
+  int ptr_specifier(string tab);    //rule mine
   int type_name(string tab);
   int class_specifier(string tab);
   int class_head(string tab);
@@ -232,6 +234,7 @@ private:
   int init_declarator(string tab);
   int declarator(string tab);
   int direct_declarator(string tab);
+  int ptr_operator(string tab);
   int declarator_id(string tab);
   int parameter_declaration_clause(string tab);
   int parameter_declaration_list(string tab);
