@@ -482,6 +482,7 @@ decl_specifier_seq:
 	decl_specifier_seq_opt decl_specifier
 	;
 
+//##did
 storage_class_specifier:
 	AUTO
 	| REGISTER
