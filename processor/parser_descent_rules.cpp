@@ -464,11 +464,57 @@ int c_parser_descent::decl_specifier(string tab)
       return 1;
     }
 
+  if ( 1 == friend_typedef_specifier(tab))
+    {
+      return 1;
+    }
+
   if ( 1 == ptr_specifier(tab))
     {
       return 1;
     }
+
   return 0;
+}
+
+
+
+int c_parser_descent::friend_typedef_specifier(string tab)
+{
+  trace(tab, "## fiend_typedef_specifier");
+  int result = 0;
+  c_context_tokens context_tokens(context);
+  token_next(tab);
+
+  if ( FRIEND == token_get())
+    {
+      result = 1;
+    }
+
+  if ( TYPEDEF == token_get())
+    {
+      result = 1;
+    }
+
+  if (1 == result)
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      return 1;
+    }
+
+  context = context_tokens.restore();
+  return 0;  
 }
 /*
 storage_class_specifier:
