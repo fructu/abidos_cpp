@@ -235,6 +235,7 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
 
   if ( 0 == vector_decl_specifier.size() )
     {
+      printf("## c_semantic::check_coloncolon_member_function(c_context context) 0 == vector_decl_specifier.size()\n");
       return;
     }
 
@@ -354,6 +355,25 @@ void c_semantic::class_name(c_context & context, c_token token)
 
       return;
     }
+
+  // maybe is something like this void A::A(){...
+  if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
+      context.class_specifier_status)
+    {
+      check_coloncolon_member_function(context, token);
+
+      printf("## c_semantic::class_name() context.i_am_in_member[%d]\n",context.i_am_in_member);
+
+      if (1 == context.i_am_in_member)
+        {
+          class_member_declarator(context, token);
+          context.member_declaration = token.text;
+        }
+
+      return;
+    }
+
+  printf("## c_semantic::class_name() token.text[%s] END\n",token.text.c_str());
 }
 
 /*----------------------------------------------------------------------------*/
