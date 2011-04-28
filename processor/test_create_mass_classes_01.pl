@@ -26,7 +26,7 @@ sub create_class_with_parents
   $p = 0;
 
   print f_out "class A$n:\n";
-  for( $p = 0; $p < ($n-1); $p++ )
+  for( $p = int(($n)/2); $p < ($n-1); $p++ )
   {
     print f_out "  A$p ,\n";
   }
