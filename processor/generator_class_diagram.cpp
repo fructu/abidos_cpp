@@ -141,6 +141,32 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
 }
 
 /*----------------------------------------------------------------------------*/
+/*
+ * B->Animal;
+ */
+void c_generator_class_diagram::friends(c_symbol & symbol)
+{
+  if (CLASS_NAME != symbol.type)
+    {
+      return;
+    }
+
+  t_map_friend_class::iterator i_map_friend = symbol.map_friend_class.begin();
+
+  for (i_map_friend = symbol.map_friend_class.begin();
+       i_map_friend != symbol.map_friend_class.end(); ++i_map_friend)
+    {
+      // C1->B [dir = "back"];
+      fprintf(f_out, "  /*%s->%s*/", symbol.token.text.c_str(),
+              ((*i_map_friend).second).text.c_str());
+
+      fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"open\"];\n"
+              ,((*i_map_friend).second).text.c_str()
+              , symbol.token.text.c_str() );
+    }
+}
+
+/*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::run(char *p_file_out)
 {
   printf
@@ -177,6 +203,7 @@ void c_generator_class_diagram::run(char *p_file_out)
            i_map != ts.stack[i_stack].end(); ++i_map)
         {
           inheritance((*i_map).second);
+          friends((*i_map).second);
         }
     }
 

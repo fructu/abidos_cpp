@@ -25,6 +25,7 @@ private:
   void members_label(t_vector_class_member & vector_class_member);
   void classes(c_symbol & symbol);
   void inheritance(c_symbol & symbol);
+  void friends(c_symbol & symbol);
 public:
   void run(char *p_file_out);
 };

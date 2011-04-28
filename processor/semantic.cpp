@@ -58,7 +58,6 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
 }
 
 /*----------------------------------------------------------------------------*/
-
 void
 c_semantic::class_member_declarator(c_context & context, c_token token)
 /*
@@ -331,7 +330,7 @@ void c_semantic::class_name(c_context & context, c_token token)
             }
 
           c_base_class base_class(token.text, context.access_specifier);
-          p_symbol->insert(base_class);
+          p_symbol->insert_base_class(base_class);
 
           return;
         }
@@ -374,6 +373,41 @@ void c_semantic::class_name(c_context & context, c_token token)
     }
 
   printf("## c_semantic::class_name() token.text[%s] END\n",token.text.c_str());
+}
+
+/*----------------------------------------------------------------------------*/
+
+void
+c_semantic::class_name_friend(c_context & context, c_token token)
+{
+  if ( CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR !=
+       context.class_specifier_status)
+    {
+      printf
+      ("error mark_07 c_semantic::class_name_friend() CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR ==	context.class_specifier_status\n");
+      exit(1);
+    }
+
+  //## todo save friends like acestors
+  token.print(" ");
+
+  {
+    // printf("\n\n### WE ADDING BASES CLASS TO
+    // [%s]\n\n",context.class_name_declaration.c_str());
+
+    c_symbol *p_symbol =
+      ts.search_symbol(context.class_name_declaration);
+    if (p_symbol)
+      {
+        c_friend_class friend_class(token.text);
+        p_symbol->insert_friend_class(friend_class);
+
+        return;
+      }
+  }
+
+
+  return;
 }
 
 /*----------------------------------------------------------------------------*/

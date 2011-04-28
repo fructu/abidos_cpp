@@ -298,6 +298,26 @@ void c_symbol::print(const char *tab)
 
   printf("%s  }\n", tab);
 
+
+  t_map_friend_class::iterator i_map_friend = map_friend_class.begin();
+  printf("%s  map_friend_class\n", tab);
+  printf("%s  {\n", tab);
+
+  if (map_friend_class.size() <= 0)
+    {
+      printf("%s    empty\n", tab);
+    }
+
+  for (i_map_friend = map_friend_class.begin();
+       i_map_friend != map_friend_class.end(); ++i_map_friend)
+    {
+      printf("%s    first[%s]->[%s]\n", tab,
+             ((*i_map_friend).first).c_str(),
+             ((*i_map_friend).second).text.c_str());
+    }
+
+  printf("%s  }\n", tab);
+
   members.print(tab);
 
   printf("%s  }\n", tab);

@@ -508,8 +508,6 @@ int c_parser_descent::friend_specifier(string tab)
         {
           semantic.push_back_vector_decl_specifier(decl);
         }
-
-      trace(tab, "## mark_01\n");
     }
   else
     {
@@ -522,7 +520,6 @@ int c_parser_descent::friend_specifier(string tab)
 
   if ( CLASS == token_get())
     {
-      trace(tab, "## mark_02\n");
       c_decl_specifier decl(c_token_get());
       decl.type_specifier = 1;
 
@@ -535,10 +532,16 @@ int c_parser_descent::friend_specifier(string tab)
           semantic.push_back_vector_decl_specifier(decl);
         }
 
+      token_next(tab);
+      context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
+      if (CLASS_NAME == token_get())
+        {
+          semantic.class_name_friend(context, c_token_get());
+          return 1;
+        }
       return 1;
     }
 
-  trace(tab, "## mark_03\n");
   context = context_tokens_2.restore();
   return 1;
 }
@@ -1082,6 +1085,20 @@ int c_parser_descent::member_declaration(string tab)
     CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER;
   semantic.clear_decl_specifier();
   decl_specifier_seq_opt(tab);
+
+  //friend class A;
+  //have not member_declarator_list_opt
+  if ( CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR == context.class_specifier_status )
+    {
+      token_next(tab);
+
+      if (';' == token_get())
+        {
+          return 1;
+        }
+
+      return 1;
+    }
 
   context.class_specifier_status =
     CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
