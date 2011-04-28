@@ -490,7 +490,7 @@ storage_class_specifier:
 	| EXTERN
 	| MUTABLE
 	;
-
+//##did
 function_specifier:
 	INLINE
 	| VIRTUAL
