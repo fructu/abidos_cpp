@@ -120,8 +120,8 @@ abidos
 -[] count oks and fails tests
 -[v] parse definitions of functions members outside of classes
      void A::fa(void)
--[] parse definitions of constructors outside of classes
--[] parse definitions of destructors outside of classes
+-[v] parse definitions of constructors outside of classes
+-[v] parse definitions of destructors outside of classes
 -[v] semantic for definitons of functions members outside of clasess.
 -[v] save the file and line for the previous point.
 -[] do get_full_name only with types of params 
@@ -129,5 +129,5 @@ abidos
         void f(int);
     outside class
         void A::f(int i){..}
--[] constructors file outside of class
--[] destructors file outside of class
+-[v] constructors file outside of class
+-[v] destructors file outside of class

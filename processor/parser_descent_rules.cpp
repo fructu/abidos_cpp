@@ -155,6 +155,8 @@ int c_parser_descent::qualified_id(string tab)
 int c_parser_descent::class_name(string tab)
 {
   trace(tab, "## class_name");
+  printf("## class_name mark_78context.class_specifier_status[%d][%d]\n",context.class_specifier_status,CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR);
+
   c_context_tokens context_tokens(context);
 
   token_next(tab);
@@ -465,6 +467,7 @@ int c_parser_descent::decl_specifier(string tab)
 int c_parser_descent::type_specifier(string tab)
 {
   trace(tab, "## type_specifier");
+  printf("## type_specifier mark_79 context.class_specifier_status[%d][%d]\n",context.class_specifier_status,CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR);
 
   c_context_tokens context_tokens(context);
 
@@ -819,7 +822,7 @@ int c_parser_descent::member_declaration(string tab)
 
       if (';' == token_get())
         {
-
+          printf("## member_declaration mark_77 context.class_specifier_status[%d][%d]\n",context.class_specifier_status,CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR);
           return 1;
         }
 
@@ -837,7 +840,7 @@ int c_parser_descent::member_declaration(string tab)
     {
       //SEMICOLON_opt(tab);
       semantic.declarator_insert(tab, context);
-
+      context.i_am_in_member = 0;
       return 1;
     }
 
@@ -908,6 +911,7 @@ int c_parser_descent::member_declarator(string tab)
     {
       // if( 1 == pure_specifier_opt(tab) ) //## todo
       {
+        context.i_am_in_member = 0;
         return 1;
       }
     }
