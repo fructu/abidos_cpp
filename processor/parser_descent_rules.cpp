@@ -459,6 +459,11 @@ int c_parser_descent::decl_specifier(string tab)
       return 1;
     }
 
+  if (1 == function_specifier(tab))
+    {
+      return 1;
+    }
+
   if ( 1 == ptr_specifier(tab))
     {
       return 1;
@@ -477,8 +482,6 @@ storage_class_specifier:
 int c_parser_descent::storage_class_specifier(string tab)
 {
   trace(tab, "## storage_class_specifier");
-
-  // ## todo COLONCOLON_opt nested_name_specifier_opt type_name
 
   int result = 0;
   c_context_tokens context_tokens(context);
@@ -688,6 +691,57 @@ int c_parser_descent::simple_type_specifier(string tab)
 
   context = context_tokens.restore();
 
+  return 0;
+}
+
+/*
+function_specifier:
+	INLINE
+	| VIRTUAL
+	| EXPLICIT
+	;
+*/
+int c_parser_descent::function_specifier(string tab)
+{
+  trace(tab, "## function_specifier");
+
+  int result = 0;
+  c_context_tokens context_tokens(context);
+  token_next(tab);
+
+  if ( INLINE == token_get())
+    {
+      result = 1;
+    }
+
+  if ( VIRTUAL == token_get())
+    {
+      result = 1;
+    }
+
+  if ( EXPLICIT == token_get())
+    {
+      result = 1;
+    }
+
+  if (1 == result)
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      return 1;
+    }
+
+  context = context_tokens.restore();
   return 0;
 }
 
