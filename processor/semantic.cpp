@@ -404,22 +404,14 @@ void c_semantic::member_insert(string & tab, c_context & context)
         {
           c_class_member * p_member = 0;
 
-          printf("## mark_70\n");
-
-          context.class_member.token.print("--");
           p_member = p_symbol->members.get(context.class_member.get_full_name());
-
-
-          printf("##   full_name[%s]\n",context.class_member.get_full_name().c_str());
 
           if ( 0 == p_member )
             {
-              printf("##   NOT FOUND\n");
               return;
             }
-          printf("##   FOUND\n");
-          p_member->token_definition = context.class_member.token;
 
+          p_member->token_definition = context.class_member.token;
           return;
         }
 
