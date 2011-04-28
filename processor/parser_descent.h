@@ -218,7 +218,8 @@ private:
   int decl_specifier(string tab);
   int storage_class_specifier(string tab);
   int type_specifier(string tab);
-  int friend_typedef_specifier(string tab);
+  int friend_specifier(string tab);
+  int typedef_specifier(string tab);
   int function_specifier(string tab);
   int simple_type_specifier(string tab);
   int ptr_specifier(string tab);    //rule mine

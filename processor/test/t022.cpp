@@ -10,6 +10,8 @@ typedef A t_A;
 
 class B
 {
-  friend A a;  
+  //context.class_specifier_status 
+  //## todo i need new state
+  friend class A;
 };
 

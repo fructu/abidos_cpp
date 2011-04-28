@@ -464,7 +464,12 @@ int c_parser_descent::decl_specifier(string tab)
       return 1;
     }
 
-  if ( 1 == friend_typedef_specifier(tab))
+  if ( 1 == friend_specifier(tab))
+    {
+      return 1;
+    }
+
+  if ( 1 == typedef_specifier(tab))
     {
       return 1;
     }
@@ -477,11 +482,9 @@ int c_parser_descent::decl_specifier(string tab)
   return 0;
 }
 
-
-
-int c_parser_descent::friend_typedef_specifier(string tab)
+int c_parser_descent::friend_specifier(string tab)
 {
-  trace(tab, "## fiend_typedef_specifier");
+  trace(tab, "## friend_specifier");
   int result = 0;
   c_context_tokens context_tokens(context);
   token_next(tab);
@@ -490,6 +493,62 @@ int c_parser_descent::friend_typedef_specifier(string tab)
     {
       result = 1;
     }
+
+// friend class c_generator_original;
+  if (1 == result)
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      trace(tab, "## mark_01\n");
+    }
+  else
+    {
+      context = context_tokens.restore();
+      return 0;
+    }
+
+  c_context_tokens context_tokens_2(context);
+  token_next(tab);
+
+  if ( CLASS == token_get())
+    {
+      trace(tab, "## mark_02\n");
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      return 1;
+    }
+
+  trace(tab, "## mark_03\n");
+  context = context_tokens_2.restore();
+  return 1;
+}
+
+int c_parser_descent::typedef_specifier(string tab)
+{
+  trace(tab, "## typedef_specifier");
+  int result = 0;
+  c_context_tokens context_tokens(context);
+  token_next(tab);
 
   if ( TYPEDEF == token_get())
     {
@@ -514,8 +573,9 @@ int c_parser_descent::friend_typedef_specifier(string tab)
     }
 
   context = context_tokens.restore();
-  return 0;  
+  return 0;
 }
+
 /*
 storage_class_specifier:
 	AUTO
