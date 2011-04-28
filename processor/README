@@ -115,9 +115,9 @@ abidos
 -[v] use is_destructor
 -[v] parse AUTO|REGISTER...
 -[v] parse INLINE|VIRTUAL...
--[] parse FRIEND
+-[v] parse FRIEND
 -[] do script to check generate original ~= original
--[] count oks and fails tests
+-[v] count oks and fails tests
 -[v] parse definitions of functions members outside of classes
      void A::fa(void)
 -[v] parse definitions of constructors outside of classes
@@ -135,4 +135,10 @@ abidos
 -[v] parse '&' in declarations
       the 2 previous points has been done with ptr_specifier:
       i use this rule instead of prt_operator in some places
+-[] do new state to test/t022.cpp
+    context.class_specifier_status 
+    ...
+      friend class A;
+    ...
+-[] added to ts friends of classes
 
