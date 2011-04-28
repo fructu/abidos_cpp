@@ -47,6 +47,7 @@ public:
   void declarator_insert(string & tab, c_context & context);
 
   void class_name(c_context & context, c_token token);
+  void class_name_friend(c_context & context, c_token token);
 };
 
 extern c_semantic semantic;

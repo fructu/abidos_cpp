@@ -104,6 +104,30 @@ struct c_base_class
 typedef map < string, c_base_class > t_map_base_class;
 typedef vector < c_base_class > t_vector_base_class;
 
+/*
+ * when a token is analised it can become to symbols_table
+ *
+ * class A
+ *
+ * class -> does not become a symbol A -> become a symbol
+ */
+struct c_friend_class
+{
+  string text;
+
+  c_friend_class()
+  {
+    text = "";
+  }
+
+  c_friend_class(string t)
+  {
+    text = t;
+  }
+};
+
+typedef map < string, c_friend_class > t_map_friend_class;
+typedef vector < c_friend_class > t_vector_friend_class;
 
 
 /*
@@ -277,14 +301,24 @@ class c_symbol
 private:
   t_map_base_class map_base_class;
   t_vector_base_class vector_base_class;
+
+  t_map_friend_class map_friend_class;
+  t_vector_friend_class vector_friend_class;
+
   friend class c_generator_class_diagram;
   friend class c_generator_original;
 
 public:
-  void insert(c_base_class base_class)
+  void insert_base_class(c_base_class base_class)
   {
     map_base_class[base_class.text] = base_class;
     vector_base_class.push_back(base_class);
+  }
+
+  void insert_friend_class(c_friend_class friend_class)
+  {
+    map_friend_class[friend_class.text] = friend_class;
+    vector_friend_class.push_back(friend_class);
   }
 
   c_token token;

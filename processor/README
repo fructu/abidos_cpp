@@ -135,10 +135,11 @@ abidos
 -[v] parse '&' in declarations
       the 2 previous points has been done with ptr_specifier:
       i use this rule instead of prt_operator in some places
--[] do new state to test/t022.cpp
+-[v] do new state to test/t022.cpp
     context.class_specifier_status 
     ...
       friend class A;
     ...
--[] added to ts friends of classes
+-[v] added to ts friends of classes
+-[v] draw friend classes
 
