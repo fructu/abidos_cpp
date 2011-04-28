@@ -449,6 +449,11 @@ int c_parser_descent::decl_specifier(string tab)
 {
   trace(tab, "## decl_specifier");
 
+  if (1 == storage_class_specifier(tab))
+    {
+      return 1;
+    }
+
   if (1 == type_specifier(tab))
     {
       return 1;
@@ -478,17 +483,33 @@ int c_parser_descent::storage_class_specifier(string tab)
   int result = 0;
   c_context_tokens context_tokens(context);
   token_next(tab);
-  /*
-    if ('*' == token_get())
-      {
-        result = 1;
-      }
 
-    if ('&' == token_get())
-      {
-        result = 1;
-      }
-  */
+  if ( AUTO == token_get())
+    {
+      result = 1;
+    }
+
+  if ( REGISTER == token_get())
+    {
+      result = 1;
+    }
+
+  if ( STATIC == token_get())
+    {
+      result = 1;
+    }
+
+  if ( EXTERN == token_get())
+    {
+      result = 1;
+    }
+
+  if ( MUTABLE == token_get())
+    {
+      result = 1;
+    }
+
+
   if (1 == result)
     {
       c_decl_specifier decl(c_token_get());
