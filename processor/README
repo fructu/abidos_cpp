@@ -131,3 +131,8 @@ abidos
         void A::f(int i){..}
 -[v] constructors file outside of class
 -[v] destructors file outside of class
+-[v] parse '*' in declarations
+-[v] parse '&' in declarations
+      the 2 previous points has been done with ptr_specifier:
+      i use this rule instead of prt_operator in some places
+

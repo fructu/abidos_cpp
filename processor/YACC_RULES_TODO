@@ -658,6 +658,7 @@ direct_declarator:
 	| '(' declarator ')'
 	;
 
+//## did
 ptr_operator:
 	'*' cv_qualifier_seq_opt
 	| '&'
