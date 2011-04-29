@@ -142,9 +142,6 @@ struct c_decl_specifier
 
   int storage_class_specifier;
   int type_specifier;
-  int function_specifier;
-  int friend_specifier;
-  int typedef_specifier;
   int has_colon_colon_after; // A:: ...
 
   c_decl_specifier(c_token t)
@@ -153,17 +150,11 @@ struct c_decl_specifier
 
     storage_class_specifier = 0;
     type_specifier = 0;
-    function_specifier = 0;
-    friend_specifier = 0;
-    typedef_specifier = 0;
     has_colon_colon_after = 0;
   } void clear(void)
   {
     storage_class_specifier = 0;
     type_specifier = 0;
-    function_specifier = 0;
-    friend_specifier = 0;
-    typedef_specifier = 0;
     has_colon_colon_after = 0;
   }
 };

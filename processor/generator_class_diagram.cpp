@@ -93,6 +93,7 @@ void c_generator_class_diagram::members_label(t_vector_class_member &
  */
 void c_generator_class_diagram::classes(c_symbol & symbol)
 {
+  fprintf(f_out, "/* c_generator_class_diagram::classes() */\n");
   // first[B] id[258]->[IDENTIFIER] text[B] type[265]->[CLASS_NAME]
   // class_key[300]->[CLASS]
   if (CLASS_NAME != symbol.type)
@@ -120,6 +121,7 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
  */
 void c_generator_class_diagram::inheritance(c_symbol & symbol)
 {
+  fprintf(f_out, "/* c_generator_class_diagram::inheritance() */\n");
   if (CLASS_NAME != symbol.type)
     {
       return;
@@ -146,6 +148,7 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
  */
 void c_generator_class_diagram::friends(c_symbol & symbol)
 {
+  fprintf(f_out, "/* c_generator_class_diagram::friends() */\n");
   if (CLASS_NAME != symbol.type)
     {
       return;
@@ -164,6 +167,87 @@ void c_generator_class_diagram::friends(c_symbol & symbol)
               ,((*i_map_friend).second).text.c_str()
               , symbol.token.text.c_str() );
     }
+}
+
+/*----------------------------------------------------------------------------*/
+void c_generator_class_diagram::members_compositions_aggregations(
+  c_symbol & symbol,
+  t_vector_class_member & vector_class_member)
+{
+  int is_ptr = 0;
+  string class_name = "";
+  unsigned i_member = 0;
+  for (i_member = 0; i_member < vector_class_member.size(); ++i_member)
+    {
+      unsigned i_decl = 0;
+
+      c_class_member * p_member = vector_class_member[i_member];
+
+      if ( 1 == p_member->is_function)
+        {
+          continue;
+        }
+
+      is_ptr=0;
+
+      for ( i_decl = 0;
+            i_decl < vector_class_member[i_member]->vector_decl_specifier.size();
+            ++i_decl)
+        {
+          c_decl_specifier * p_decl_specifier = & vector_class_member[i_member]->vector_decl_specifier[i_decl];
+
+          if ( 0 != class_name.size() )
+            {
+              if (
+                ('*' == p_decl_specifier->token.id) ||
+                ('&' == p_decl_specifier->token.id)
+              )
+                {
+                  is_ptr = 1;
+                }
+            }
+
+          if ( CLASS_NAME != p_decl_specifier->token.id )
+            {
+              continue;
+            }
+
+          class_name = p_decl_specifier->token.text;
+        }
+
+      fprintf(f_out, "  /*%s -> %s*/"
+              , symbol.token.text.c_str()
+              , class_name.c_str()
+             );
+
+      if ( 0 == is_ptr )
+        {
+          fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"diamond\"];\n"
+                  , symbol.token.text.c_str()
+                  , class_name.c_str()
+                 );
+        }
+      else
+        {
+          fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"odiamond\"];\n"
+                  , symbol.token.text.c_str()
+                  , class_name.c_str()
+                 );
+        }
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+
+void c_generator_class_diagram::compositions_aggregations(c_symbol & symbol)
+{
+  if (CLASS_NAME != symbol.type)
+    {
+      return;
+    }
+  fprintf(f_out, "/* compositions_aggregations */\n");
+
+  members_compositions_aggregations(symbol, symbol.members.vector_class_member);
 }
 
 /*----------------------------------------------------------------------------*/
@@ -204,6 +288,7 @@ void c_generator_class_diagram::run(char *p_file_out)
         {
           inheritance((*i_map).second);
           friends((*i_map).second);
+          compositions_aggregations((*i_map).second);
         }
     }
 
