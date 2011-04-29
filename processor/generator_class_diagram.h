@@ -26,6 +26,12 @@ private:
   void classes(c_symbol & symbol);
   void inheritance(c_symbol & symbol);
   void friends(c_symbol & symbol);
+
+  void members_compositions_aggregations(
+    c_symbol & symbol,
+    t_vector_class_member & vector_class_member
+  );
+  void compositions_aggregations(c_symbol & symbol);
 public:
   void run(char *p_file_out);
 };

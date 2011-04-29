@@ -142,4 +142,13 @@ abidos
     ...
 -[v] added to ts friends of classes
 -[v] draw friend classes
+-[v] draw compositions
+-[v] draw aggregations
+-[] typedef do create sinom in ts
+-[v] use this fields
+    int type_specifier;
+    int function_specifier; <-- dropped
+    int friend_specifier;   <-- dropped
+    int typedef_specifier;  <-- dropped
+    int has_colon_colon_after; // A:: ...
 
