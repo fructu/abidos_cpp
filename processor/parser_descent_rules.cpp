@@ -558,6 +558,7 @@ int c_parser_descent::typedef_specifier(string tab)
       result = 1;
     }
 
+// friend class c_generator_original;
   if (1 == result)
     {
       c_decl_specifier decl(c_token_get());
@@ -571,12 +572,44 @@ int c_parser_descent::typedef_specifier(string tab)
         {
           semantic.push_back_vector_decl_specifier(decl);
         }
+    }
+  else
+    {
+      context = context_tokens.restore();
+      return 0;
+    }
 
+  c_context_tokens context_tokens_2(context);
+  token_next(tab);
+
+  if ( CLASS  == token_get() ||
+       STRUCT == token_get()
+     )
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      token_next(tab);
+      context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
+      if (CLASS_NAME == token_get())
+        {
+          semantic.class_name_friend(context, c_token_get());
+          return 1;
+        }
       return 1;
     }
 
-  context = context_tokens.restore();
-  return 0;
+  context = context_tokens_2.restore();
+  return 1;
 }
 
 /*

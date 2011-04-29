@@ -27,6 +27,12 @@ mv abidos_2011-04-14_15_06_master.bundle /home/hevia/Descargas/
 cd /home/hevia/Descargas/working/abidos
 git pull /home/hevia/Descargas/abidos_2011-04-14_15_06_master.bundle master
 
+
+make clean
+tar -czvf working_$(date '+%F_%H_%M').tar.gz working/
+tar -xzvf working_2011-03-12_16_18.tar.gz
+
+
 git commit -C HEAD -a --amend
 
 2. A pointer to the project website (if it has one).
@@ -144,6 +150,7 @@ abidos
 -[v] draw friend classes
 -[v] draw compositions
 -[v] draw aggregations
+-[v] typedef parse typedef class A;
 -[] typedef do create sinom in ts
 -[v] use this fields
     int type_specifier;

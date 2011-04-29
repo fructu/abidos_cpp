@@ -249,9 +249,38 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
     }
 }
 /*----------------------------------------------------------------------------*/
+void c_semantic::identifier_typedef(c_token token)
+{
+  printf("## void c_semantic::identifier_typedef(c_token token) token.text[%s]\n\n",token.text.c_str());
+
+  /*
+    ## it must search in the stack
+
+    stack 0
+      class A{};
+
+    stack 1
+      int A;
+
+    typedef class A t_A;
+
+    typedef vector < c_decl_specifier > t_vector_decl_specifier;
+  */
+}
+/*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
   printf("## c_semantic::identifier(c_context context) token.text[%s]\n\n",token.text.c_str());
+
+  if ( 0 < vector_decl_specifier.size() )
+    {
+      vector_decl_specifier[0].token.print("## ");
+      if ( TYPEDEF == vector_decl_specifier[0].token.id )
+        {
+          identifier_typedef(token);
+          return;
+        }
+    }
 
   if (CLASS_SPECIFIER_STATUS_IDENTIFIER ==
       context.class_specifier_status)
