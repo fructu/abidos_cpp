@@ -28,6 +28,8 @@
 using namespace std;
 */
 void ts_tests(void);
+
+//##
 class string
 {
 };
@@ -67,7 +69,7 @@ struct c_token
     line = 0;
   }
 
-  void print(const char *tab)
+  void print(/*const*/ char *tab)
   {
     printf("%sc_ctoken::print id[%d]->[%s] text[%s] file[%s] line[%d]\n"
            ,tab
@@ -98,15 +100,15 @@ struct c_base_class
     access_specifier = 0;
   }
 
-  c_base_class(string t, int access)
+  c_base_class(/*string t,*/ int access)
   {
     text = t;
     access_specifier = access;
   }
 };
 
-typedef map < string, c_base_class > t_map_base_class;
-typedef vector < c_base_class > t_vector_base_class;
+//typedef map < string, c_base_class > t_map_base_class;
+//typedef vector < c_base_class > t_vector_base_class;
 
 /*
  * when a token is analised it can become to symbols_table
@@ -123,15 +125,16 @@ struct c_friend_class
   {
     text = "";
   }
-
+/*##
   c_friend_class(string t)
   {
     text = t;
   }
+*/
 };
 
-typedef map < string, c_friend_class > t_map_friend_class;
-typedef vector < c_friend_class > t_vector_friend_class;
+//typedef map < string, c_friend_class > t_map_friend_class;
+//typedef vector < c_friend_class > t_vector_friend_class;
 
 
 /*
@@ -148,7 +151,7 @@ struct c_decl_specifier
   int type_specifier;
   int has_colon_colon_after; // A:: ...
 
-  c_decl_specifier(c_token t)
+  c_decl_specifier(/*c_token t*/)
   {
     token = t;
 
@@ -163,34 +166,39 @@ struct c_decl_specifier
   }
 };
 
+/*##
 typedef vector < c_decl_specifier > t_vector_decl_specifier;
-
+*/
 struct c_parameter
 {
-  t_vector_decl_specifier vector_decl_specifier;
-
+/*##  t_vector_decl_specifier vector_decl_specifier;
+*/
+  c_decl_specifier vector_decl_specifier;
   c_token token;
 
   c_parameter()
   {
 
-  } c_parameter(c_token t, t_vector_decl_specifier v)
+  } c_parameter(/*## c_token t, t_vector_decl_specifier v*/)
   {
     token = t;
     vector_decl_specifier = v;
   }
-  void print(const char *tab);
+  void print(/*##const*/ char *tab);
   string get_string(void);
 };
-
+/*##
 typedef vector < c_parameter > t_vector_parameter;
 typedef map < string, c_parameter > t_map_parameter;
-
+*/
 class c_declarator
 {
 protected:
-  t_map_parameter map_parameter;
+/*##  t_map_parameter map_parameter;
   t_vector_parameter vector_parameter;
+*/
+  c_parameter map_parameter;
+  c_parameter vector_parameter;
 public:
 
   //class A{ void a1(void);};
@@ -198,8 +206,10 @@ public:
 
   //void A::a1(void){...}
   c_token token_definition;
-
+/*##
   t_vector_decl_specifier vector_decl_specifier;
+*/
+  c_decl_specifier vector_decl_specifier;
 
   int is_function;
   int has_body;
@@ -208,8 +218,8 @@ public:
   int is_constructor;
   int is_destructor;
 
-  void parameter_insert(c_parameter parameter);
-  void print(const char *tab);
+  void parameter_insert(/*c_parameter parameter*/);
+  void print(/*const*/ char *tab);
 
   c_declarator()
   {
@@ -220,7 +230,7 @@ public:
     is_constructor = 0;
     is_destructor = 0;
   }
-  c_declarator(c_token t, t_vector_decl_specifier v)
+  c_declarator(/*c_token t, t_vector_decl_specifier v*/)
   {
     token = t;
     vector_decl_specifier = v;
@@ -265,14 +275,14 @@ public:
   {
 
   }
-  c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v)
+  c_class_member(/*## c_token t, t_vector_decl_specifier v*/)/*:c_declarator(t, v)*/
   {
   }
 };
-
+/*##
 typedef map < string, c_class_member > t_map_class_member;
 typedef vector < c_class_member * >t_vector_class_member;
-
+*/
 /*
  * i store members in map to have fast access i store members in vector to
  * haver the original order
@@ -280,37 +290,49 @@ typedef vector < c_class_member * >t_vector_class_member;
 class c_class_members
 {
 private:
+/*
   t_map_class_member map_class_member;
   t_vector_class_member vector_class_member;
+*/
+  c_class_member map_class_member;
+  c_class_member vector_class_member;
   friend class c_generator_class_diagram;
   friend class c_generator_original;
 public:
   void clear(void);
-  void print(const char *tab);
-  void insert(c_class_member member);
-  c_class_member *get(string member);
+  void print(/*const*/ char *tab);
+  void insert(/*c_class_member member*/void);
+//## strange error in next line ...
+//  c_class_member * get(string member);
 };
 
 class c_symbol
 {
 private:
+/*##
   t_map_base_class map_base_class;
   t_vector_base_class vector_base_class;
-
+*/
+  c_base_class map_base_class;
+  c_base_class vector_base_class;
+/*##
   t_map_friend_class map_friend_class;
   t_vector_friend_class vector_friend_class;
+*/
+  c_friend_class map_friend_class;
+  c_friend_class vector_friend_class;
 
   friend class c_generator_class_diagram;
   friend class c_generator_original;
 
 public:
-  void insert_base_class(c_base_class base_class)
+  void insert_base_class(/*c_base_class base_class*/void)
   {
     map_base_class[base_class.text] = base_class;
     vector_base_class.push_back(base_class);
   }
 
-  void insert_friend_class(c_friend_class friend_class)
+  void insert_friend_class(/*c_friend_class friend_class*/ void)
   {
     map_friend_class[friend_class.text] = friend_class;
     vector_friend_class.push_back(friend_class);
@@ -336,7 +358,7 @@ public:
     free_declarator = 0;
   }
 
-  c_symbol(c_token token_1)
+  c_symbol(/*c_token token_1*/)
   {
     token = token_1;
     type = 0;
@@ -358,16 +380,19 @@ public:
     free_declarator = 0;
     declarator.clear();
   }
-  void print(const char *tab);
+  void print(/*const*/ char *tab);
 };
-
+/*
 typedef map < string, c_symbol > t_symbols;
 typedef vector < t_symbols > stack_symbols;
+*/
 
 class c_symbols_table
 {
 private:
-  stack_symbols stack;
+/*  stack_symbols stack;
+*/
+  c_symbol stack;
   friend class c_generator_class_diagram;
   friend class c_generator_original;
 public:
@@ -376,10 +401,10 @@ public:
   void set();
   void unset();
 
-  void insert(c_symbol symbol);
+  void insert(/*c_symbol symbol*/);
   void print(void);
-
-  c_symbol *search_symbol(string str);
+//##
+//  c_symbol *search_symbol(string str);
 };
 
 extern c_symbols_table ts;
