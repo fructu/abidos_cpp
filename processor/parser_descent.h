@@ -44,6 +44,18 @@ enum t_class_specifier_status
   CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR,
   CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR
 };
+
+static const char *const table_parser_status[] =
+{
+  "NO_CLASS_STATUS",
+  "CLASS_SPECIFIER_STATUS_IDENTIFIER",
+  "CLASS_SPECIFIER_STATUS_BASE_DECLARATION",
+  "CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER",
+  "CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR",
+  "CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR",
+  0
+};
+
 /*
  * if you adde more members pls actualize restore_but_not_i_token()
  */
