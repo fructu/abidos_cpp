@@ -215,6 +215,11 @@ void c_generator_class_diagram::members_compositions_aggregations(
           class_name = p_decl_specifier->token.text;
         }
 
+      if( 0 == class_name.size() )
+        {
+          continue;
+        }
+
       fprintf(f_out, "  /*%s -> %s*/"
               , symbol.token.text.c_str()
               , class_name.c_str()
@@ -234,6 +239,8 @@ void c_generator_class_diagram::members_compositions_aggregations(
                   , class_name.c_str()
                  );
         }
+
+      class_name = "";
     }
 }
 
