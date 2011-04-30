@@ -68,6 +68,9 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
 {
   printf("## c_semantic::class_member_declarator()\n");
 
+
+  printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
+
   if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
       context.class_specifier_status)
     {
@@ -385,10 +388,18 @@ void c_semantic::class_name(c_context & context, c_token token)
     }
 
   // maybe is something like this void A::A(){...
-  if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
-      context.class_specifier_status)
+  if (
+    CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER ==
+    context.class_specifier_status)
     {
       check_coloncolon_member_function(context, token);
+
+      if (
+        CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER ==
+        context.class_specifier_status)
+        {
+          return;
+        }
 
       printf("## c_semantic::class_name() context.i_am_in_member[%d]\n",context.i_am_in_member);
 
@@ -413,7 +424,7 @@ c_semantic::class_name_friend(c_context & context, c_token token)
        context.class_specifier_status)
     {
       printf
-      ("error mark_07 c_semantic::class_name_friend() CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR ==	context.class_specifier_status\n");
+      ("error c_semantic::class_name_friend() CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR ==	context.class_specifier_status\n");
       exit(1);
     }
 
