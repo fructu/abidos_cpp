@@ -251,6 +251,8 @@ private:
   int declarator(string tab);
   int direct_declarator(string tab);
   int ptr_operator(string tab);
+  int cv_qualifier_seq(string tab);
+  int cv_qualifier(string tab);
   int declarator_id(string tab);
   int parameter_declaration_clause(string tab);
   int parameter_declaration_list(string tab);

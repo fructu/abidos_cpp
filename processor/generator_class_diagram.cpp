@@ -215,7 +215,7 @@ void c_generator_class_diagram::members_compositions_aggregations(
           class_name = p_decl_specifier->token.text;
         }
 
-      if( 0 == class_name.size() )
+      if ( 0 == class_name.size() )
         {
           continue;
         }

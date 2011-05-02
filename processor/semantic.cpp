@@ -273,11 +273,10 @@ void c_semantic::identifier_typedef(c_token token)
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
-  printf("## c_semantic::identifier(c_context context) token.text[%s]\n\n",token.text.c_str());
+  printf("## c_semantic::identifier(c_context context) token.text[%s]\n",token.text.c_str());
 
   if ( 0 < vector_decl_specifier.size() )
     {
-      vector_decl_specifier[0].token.print("## ");
       if ( TYPEDEF == vector_decl_specifier[0].token.id )
         {
           identifier_typedef(token);
@@ -344,6 +343,10 @@ void c_semantic::class_name(c_context & context, c_token token)
  */
 {
   printf("## c_semantic::class_name() token.text[%s]\n",token.text.c_str());
+  printf("##       context.i_am_in_member[%d]\n",context.i_am_in_member);
+  printf("##       context.class_specifier_status[%s]\n",table_parser_status[context.class_specifier_status]);
+
+
   // we are in the base class declaration
   // example class A : public B
   if (CLASS_SPECIFIER_STATUS_BASE_DECLARATION ==
@@ -371,13 +374,15 @@ void c_semantic::class_name(c_context & context, c_token token)
   if (CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR ==
       context.class_specifier_status)
     {
-      /*
-            if (1 == context.i_am_in_parameter_declaration)
-              {
-                member_param_declarator(context, token);
-                return;
-              }
-      */
+      // void f_B(B b); b is a object of the class B
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          /* it will be processed when b be consumed
+                    member_param_declarator(context, token);
+          */
+          return;
+        }
+
       if (1 == context.i_am_in_member)
         {
           class_member_declarator(context, token);
@@ -400,8 +405,6 @@ void c_semantic::class_name(c_context & context, c_token token)
         {
           return;
         }
-
-      printf("## c_semantic::class_name() context.i_am_in_member[%d]\n",context.i_am_in_member);
 
       if (1 == context.i_am_in_member)
         {

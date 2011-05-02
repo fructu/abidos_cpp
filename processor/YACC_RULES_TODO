@@ -665,11 +665,11 @@ ptr_operator:
 	| '&'
 	| COLONCOLON_opt nested_name_specifier '*' cv_qualifier_seq_opt
 	;
-
+//## did
 cv_qualifier_seq:
 	cv_qualifier cv_qualifier_seq_opt
 	;
-
+//## did
 cv_qualifier:
 	CONST
 	| VOLATILE
