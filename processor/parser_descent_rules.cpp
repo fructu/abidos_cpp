@@ -698,6 +698,11 @@ int c_parser_descent::type_specifier(string tab)
       return 1;
     }
 
+  if (1 == cv_qualifier(tab))
+    {
+      return 1;
+    }
+
   context = context_tokens.restore();
 
   return 0;
@@ -744,7 +749,7 @@ int c_parser_descent::simple_type_specifier(string tab)
       if ( COLONCOLON == token_get())
         {
           has_colon_colon_after = 1;
-          context = context_tokens_0.restore();
+//          context = context_tokens_0.restore();
 //          return 1;
         }
 
@@ -1637,7 +1642,7 @@ int c_parser_descent::declarator(string tab)
 
   // | ptr_operator declarator
   /*##
-    i do this in the part of decl_specifier
+    i did this in the part of decl_specifier
   if( 1 == ptr_operator(tab))
     {
       return declarator(tab);
@@ -1649,10 +1654,13 @@ int c_parser_descent::declarator(string tab)
 
 /*----------------------------------------------------------------------------*/
 /*
- * direct_declarator: declarator_id | direct_declarator
- * '('parameter_declaration_clause ')' cv_qualifier_seq_opt
- * exception_specification_opt | direct_declarator '['
- * constant_expression_opt ']' | '(' declarator ')' ;
+ * direct_declarator: declarator_id
+ *  | direct_declarator
+ *    '('parameter_declaration_clause ')' cv_qualifier_seq_opt
+ *    exception_specification_opt
+ *  | direct_declarator '[' constant_expression_opt ']'
+ *  | '(' declarator ')'
+ *  ;
  *
  * changing a litle the original order to ser clearly the terminals of
  * the recursion
@@ -1680,15 +1688,17 @@ int c_parser_descent::direct_declarator(string tab)
 
           context_good_way.save(context);
           token_next(tab);
-
+          printf("###** mark_01\n");
           if ('(' == token_get())
             {
-              if (1 == declarator(tab))
+              printf("###** mark_02\n");
+              if (1 == parameter_declaration_clause(tab))
+                {
+                  printf("### 1 == parameter_declaration_clause(tab)\n");
+                }
+              else  if (1 == declarator(tab))
                 {
                   printf("### 1 == declarator(tab)\n");
-                }
-              else if (1 == parameter_declaration_clause(tab))
-                {
                 }
               else
                 {
@@ -1786,7 +1796,61 @@ int c_parser_descent::ptr_operator(string tab)
   return 0;
 }
 
+/*----------------------------------------------------------------------------*/
+/*
+cv_qualifier_seq:
+	cv_qualifier cv_qualifier_seq_opt
+	;
+*/
+int c_parser_descent::cv_qualifier_seq(string tab)
+{
+  trace(tab, "## cv_qualifier_seq");
+  return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+cv_qualifier:
+	CONST
+	| VOLATILE
+	;
+*/
+int c_parser_descent::cv_qualifier(string tab)
+{
+  trace(tab, "## cv_qualifier");
+  int result = 0;
+  c_context_tokens context_tokens(context);
+  token_next(tab);
 
+  if ( CONST == token_get())
+    {
+      result = 1;
+    }
+
+  if ( VOLATILE == token_get())
+    {
+      result = 1;
+    }
+
+  if (1 == result)
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+
+      return 1;
+    }
+
+  context = context_tokens.restore();
+  return 0;
+}
 /*----------------------------------------------------------------------------*/
 /*
  * declarator_id: COLONCOLON_opt id_expression | COLONCOLON_opt

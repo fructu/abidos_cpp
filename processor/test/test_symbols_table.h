@@ -69,7 +69,7 @@ struct c_token
     line = 0;
   }
 
-  void print(/*const*/ char *tab)
+  void print(const char *tab)
   {
     printf("%sc_ctoken::print id[%d]->[%s] text[%s] file[%s] line[%d]\n"
            ,tab
@@ -100,7 +100,7 @@ struct c_base_class
     access_specifier = 0;
   }
 
-  c_base_class(/*string t,*/ int access)
+  c_base_class(string t, int access)
   {
     text = t;
     access_specifier = access;
@@ -125,12 +125,11 @@ struct c_friend_class
   {
     text = "";
   }
-/*##
+
   c_friend_class(string t)
   {
     text = t;
   }
-*/
 };
 
 //typedef map < string, c_friend_class > t_map_friend_class;
@@ -151,7 +150,7 @@ struct c_decl_specifier
   int type_specifier;
   int has_colon_colon_after; // A:: ...
 
-  c_decl_specifier(/*c_token t*/)
+  c_decl_specifier(c_token t)
   {
     token = t;
 
@@ -179,12 +178,12 @@ struct c_parameter
   c_parameter()
   {
 
-  } c_parameter(/*## c_token t, t_vector_decl_specifier v*/)
+  } c_parameter(c_token t/*, t_vector_decl_specifier v*/)
   {
     token = t;
     vector_decl_specifier = v;
   }
-  void print(/*##const*/ char *tab);
+  void print(const char *tab);
   string get_string(void);
 };
 /*##
@@ -218,8 +217,8 @@ public:
   int is_constructor;
   int is_destructor;
 
-  void parameter_insert(/*c_parameter parameter*/);
-  void print(/*const*/ char *tab);
+  void parameter_insert(c_parameter parameter);
+  void print(const char *tab);
 
   c_declarator()
   {
@@ -230,7 +229,7 @@ public:
     is_constructor = 0;
     is_destructor = 0;
   }
-  c_declarator(/*c_token t, t_vector_decl_specifier v*/)
+  c_declarator(c_token t/*, t_vector_decl_specifier v*/)
   {
     token = t;
     vector_decl_specifier = v;
@@ -275,7 +274,7 @@ public:
   {
 
   }
-  c_class_member(/*## c_token t, t_vector_decl_specifier v*/)/*:c_declarator(t, v)*/
+  c_class_member(c_token t/*, t_vector_decl_specifier v*/)/*:c_declarator(t, v)*/
   {
   }
 };
@@ -300,8 +299,8 @@ private:
   friend class c_generator_original;
 public:
   void clear(void);
-  void print(/*const*/ char *tab);
-  void insert(/*c_class_member member*/void);
+  void print(const char *tab);
+  void insert(c_class_member member);
 //## strange error in next line ...
 //  c_class_member * get(string member);
 };
@@ -326,13 +325,13 @@ private:
   friend class c_generator_original;
 
 public:
-  void insert_base_class(/*c_base_class base_class*/void)
+  void insert_base_class(c_base_class base_class)
   {
     map_base_class[base_class.text] = base_class;
     vector_base_class.push_back(base_class);
   }
 
-  void insert_friend_class(/*c_friend_class friend_class*/ void)
+  void insert_friend_class(c_friend_class friend_class)
   {
     map_friend_class[friend_class.text] = friend_class;
     vector_friend_class.push_back(friend_class);
@@ -358,7 +357,7 @@ public:
     free_declarator = 0;
   }
 
-  c_symbol(/*c_token token_1*/)
+  c_symbol(c_token token_1)
   {
     token = token_1;
     type = 0;
@@ -380,7 +379,7 @@ public:
     free_declarator = 0;
     declarator.clear();
   }
-  void print(/*const*/ char *tab);
+  void print(const char *tab);
 };
 /*
 typedef map < string, c_symbol > t_symbols;
@@ -401,7 +400,7 @@ public:
   void set();
   void unset();
 
-  void insert(/*c_symbol symbol*/);
+  void insert(c_symbol symbol);
   void print(void);
 //##
 //  c_symbol *search_symbol(string str);
