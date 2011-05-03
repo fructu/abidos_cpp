@@ -51,6 +51,11 @@ lexer.o: parser.h
 
 lex_yacc.h: parser.h
 
+generator_class_diagram.cpp: generate_begin_graph.cpp
+
+generate_begin_graph.cpp: python/out_begin_2.gv
+	./generate_begin_graph.pl
+
 test_run: tests_run.pl
 	./tests_run.pl
 

@@ -27,13 +27,14 @@ mv abidos_2011-04-14_15_06_master.bundle /home/hevia/Descargas/
 cd /home/hevia/Descargas/working/abidos
 git pull /home/hevia/Descargas/abidos_2011-04-14_15_06_master.bundle master
 
-
 make clean
 tar -czvf working_$(date '+%F_%H_%M').tar.gz working/
 tar -xzvf working_2011-03-12_16_18.tar.gz
 
-
 git commit -C HEAD -a --amend
+
+dot out/out_test_symbols_table.h.gv -Tpng -o out/out_test_symbols_table.h.png
+dot out/out_test_symbols_table.h.gv -Tsvg -o out/out_test_symbols_table.h.svg
 
 2. A pointer to the project website (if it has one).
 3. Notes on the developer’s build environment and potential portability problems.
@@ -160,4 +161,6 @@ abidos
     int has_colon_colon_after; // A:: ...
 -[v] do c_parser_descent::cv_qualifier()
 -[] do cv_qualifier_seq
+-[v] refactor python output to can do:
+    dot out/out_test_symbols_table.h.gv -Tpng -o out/out_test_symbols_table.h.png
 
