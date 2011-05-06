@@ -322,6 +322,9 @@ public:
   int free_declarator;
   c_declarator declarator;
 
+  int is_typedef;
+  string typedef_points_to;
+
   c_symbol()
   {
     type = 0;
@@ -330,6 +333,8 @@ public:
     members.clear();
 
     free_declarator = 0;
+    is_typedef = 0;
+    typedef_points_to = "";
   }
 
   c_symbol(c_token token_1)
@@ -342,6 +347,9 @@ public:
 
     free_declarator = 0;
     declarator.clear();
+
+    is_typedef = 0;
+    typedef_points_to = "";
   }
 
   ~c_symbol()
@@ -353,6 +361,9 @@ public:
 
     free_declarator = 0;
     declarator.clear();
+
+    is_typedef = 0;
+    typedef_points_to = "";
   }
   void print(const char *tab);
 };

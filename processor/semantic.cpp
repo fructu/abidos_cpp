@@ -252,7 +252,7 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
     }
 }
 /*----------------------------------------------------------------------------*/
-void c_semantic::identifier_typedef(c_token token)
+void c_semantic::identifier_typedef(c_context & context, c_token token)
 {
   printf("## void c_semantic::identifier_typedef(c_token token) token.text[%s]\n\n",token.text.c_str());
 
@@ -269,19 +269,37 @@ void c_semantic::identifier_typedef(c_token token)
 
     typedef vector < c_decl_specifier > t_vector_decl_specifier;
   */
+
+  printf("##  ***    c_semantic::identifier_typedef(c_token token) context.class_name_declaration[%s]\n\n",context.class_name_declaration.c_str());
+  if ( 0 != context.class_name_declaration.size() )
+    {
+      c_symbol symbol(token);
+
+      symbol.is_typedef = 1;
+      symbol.typedef_points_to = context.class_name_declaration;
+      symbol.type = TYPEDEF;
+
+      ts.insert(symbol);
+    }
 }
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
   printf("## c_semantic::identifier(c_context context) token.text[%s]\n",token.text.c_str());
-
-  if ( 0 < vector_decl_specifier.size() )
+  /*##deprectated
+    if ( 0 < vector_decl_specifier.size() )
+      {
+        if ( TYPEDEF == vector_decl_specifier[0].token.id )
+          {
+            identifier_typedef(token);
+            return;
+          }
+      }
+  */
+  if ( 1 == context.is_typedef)
     {
-      if ( TYPEDEF == vector_decl_specifier[0].token.id )
-        {
-          identifier_typedef(token);
-          return;
-        }
+      identifier_typedef(context, token);
+      return;
     }
 
   if (CLASS_SPECIFIER_STATUS_IDENTIFIER ==

@@ -271,10 +271,19 @@ c_class_member *c_class_members::get(string member)
 /*----------------------------------------------------------------------------*/
 void c_symbol::print(const char *tab)
 {
-  printf("%sid[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n",
-         tab, token.id, yytokens[token.id], token.text.c_str(), type,
+  printf(" id[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n",
+         /*tab,*/ token.id, yytokens[token.id], token.text.c_str(), type,
          yytokens[type], class_key, yytokens[class_key]);
+  printf("%s{\n" , tab);
 
+  if ( TYPEDEF == type)
+    {
+      printf("%s  is_typedef[%d] typedef_name[%s]\n"
+             , tab
+             , is_typedef
+             , typedef_points_to.c_str()
+            );
+    }
   // t_map_base_class map_base_class;
 
   t_map_base_class::iterator i_map_base = map_base_class.begin();
@@ -331,6 +340,7 @@ void c_symbol::print(const char *tab)
     }
 
   printf("%s  }\n", tab);
+  printf("%s}\n" , tab);
 }
 
 /*----------------------------------------------------------------------------*/

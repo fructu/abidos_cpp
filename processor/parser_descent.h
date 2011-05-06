@@ -23,6 +23,7 @@
 using namespace std;
 
 #define NO_IDENTIFIER "@IDENTIFIER#"
+#define NO_CLASS_NAME "#NO_CLASS_NAME#"
 
 # define TAB " "
 void trace(string & tab, string s);
@@ -94,6 +95,8 @@ struct c_context
 
   c_declarator declarator;
 
+  int is_typedef;
+
   c_context()
   {
     i_token = 0;
@@ -115,6 +118,8 @@ struct c_context
     param_vector_decl_specifier.clear();
     class_member.clear();
     declarator.clear();
+
+    is_typedef = 0;
   }
   void clear(void)
   {
@@ -138,6 +143,8 @@ struct c_context
 
     class_member.clear();
     declarator.clear();
+
+    is_typedef = 0;
   }
   void restore_but_not_i_token(c_context & context_param)
   {
@@ -156,6 +163,7 @@ struct c_context
     context_param.class_member = class_member;
     context_param.declarator = declarator;
     context_param.declaration = declaration;
+    context_param.is_typedef = is_typedef;
   }
 };
 
