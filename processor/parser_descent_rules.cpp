@@ -534,6 +534,7 @@ int c_parser_descent::friend_specifier(string tab)
 
       token_next(tab);
       context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
+      //## this need a improve to parse thinks like A::B...
       if (CLASS_NAME == token_get())
         {
           semantic.class_name_friend(context, c_token_get());
@@ -561,6 +562,9 @@ int c_parser_descent::typedef_specifier(string tab)
 // friend class c_generator_original;
   if (1 == result)
     {
+      //this should pass to c_symbol and in context = 0;
+      context.is_typedef = 1;
+
       c_decl_specifier decl(c_token_get());
       decl.type_specifier = 1;
 
@@ -572,6 +576,9 @@ int c_parser_descent::typedef_specifier(string tab)
         {
           semantic.push_back_vector_decl_specifier(decl);
         }
+
+      //## testing
+      return 1;
     }
   else
     {
@@ -599,10 +606,11 @@ int c_parser_descent::typedef_specifier(string tab)
         }
 
       token_next(tab);
-      context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
+//      context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
+      //## this need a improve to parse thinks like A::B...
       if (CLASS_NAME == token_get())
         {
-          semantic.class_name_friend(context, c_token_get());
+//          semantic.class_name_friend(context, c_token_get());
           return 1;
         }
       return 1;
@@ -966,10 +974,53 @@ int c_parser_descent::class_specifier(string tab)
 {
   trace(tab, "## class_specifier");
 
+  int was_typedef = 0;
+
+  was_typedef = context.is_typedef;
+  context.is_typedef = 0;
+
+  //maybe will need read class other time
+  c_context_tokens context_tokens_1(context);
+
   if (0 == class_head(tab))
     {
       return 0;
     }
+
+  //we can get this point wihout identifer of class
+
+  if ( 0 == context.class_name_declaration.size() )
+    {
+      if ( 1 == was_typedef )
+        {
+          context = context_tokens_1.restore();
+          if (0 == class_key(tab))
+            {
+              return 0;
+            }
+
+          context.class_specifier_status = CLASS_SPECIFIER_STATUS_IDENTIFIER;
+
+          c_context_tokens context_tokens_2(context);
+          token_next(tab);
+          if ( '{' == token_get())
+            {
+              c_token no_identifier(IDENTIFIER,(char *)NO_CLASS_NAME);
+              semantic.identifier(context, no_identifier);
+            }
+
+
+          // '{' should be in the buffer
+          context = context_tokens_2.restore();
+          context.class_name_declaration = NO_CLASS_NAME;
+        }
+      else
+        {
+          printf("error c_parser_descent::class_specifier() class without name\n");
+          return 0;
+        }
+    }
+
 
   c_context_tokens context_tokens(context);
 
@@ -978,10 +1029,10 @@ int c_parser_descent::class_specifier(string tab)
   token_next(tab);
   if ('{' != token_get())
     {
-
       context = context_tokens.restore();
       return 0;
     }
+
   printf("%s## class_specifier {\n", tab.c_str());
 
   // we need to know what class is processing
@@ -996,9 +1047,28 @@ int c_parser_descent::class_specifier(string tab)
   token_next(tab);
   if ('}' == token_get())
     {
+
       printf("%s## class_specifier }\n", tab.c_str());
+
+      context.is_typedef = was_typedef;
+      if ( 1 == context.is_typedef)
+        {
+          if ( 1 == context.is_typedef )
+            {
+              if ( 1 != identifier(tab))
+                {
+                  context = context_tokens.restore();
+                  return 0;
+                }
+            }
+        }
+
+      context.is_typedef = 0;
+
       return 1;
     }
+
+  context.is_typedef = was_typedef;
 
   context = context_tokens.restore();
   return 0;

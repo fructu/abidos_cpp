@@ -15,8 +15,7 @@ useful commands:
 
 	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
     kate Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO semantic.cpp semantic.h symbols_table.h symbols_table.cpp
-
-	gdb -q -x X abidos
+ -q -x X abidos
     ulimit -c unlimited
 
     valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/mass_clases.cpp
@@ -163,4 +162,6 @@ abidos
 -[] do cv_qualifier_seq
 -[v] refactor python output to can do:
     dot out/out_test_symbols_table.h.gv -Tpng -o out/out_test_symbols_table.h.png
-
+-[v] typedef class A {} t_A;
+-[] reactive test 24.
+-[] change NO_CLASS_NAME for a tag sytem with number increment.
