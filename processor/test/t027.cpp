@@ -1,11 +1,6 @@
 /*
   typedef
 */
-/*
-class A
-{
-};
-*/
 
 typedef class A
 {
@@ -16,25 +11,18 @@ typedef class B
   int long i_B;
 } t_B;
 
-
 typedef class
 {
 } t_C;
 
+int i1;
 
-
-//int i1;
 typedef int long t_int;
-//typedef class A t_A;
+typedef t_int t2_int;
 
-//typedef class A a;
-/*
-typedef class A
+class A2
 {
-} t_A;
+};
 
-typedef class A t_A;
-typedef int t_int;
-*/
-
+typedef class A2 t_A2;
 
