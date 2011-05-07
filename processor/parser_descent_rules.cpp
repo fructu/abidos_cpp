@@ -150,6 +150,40 @@ int c_parser_descent::qualified_id(string tab)
  * Context-dependent identifiers.
  *----------------------------------------------------------------------*/
 /*
+ *typedef_name:
+ *	// identifier
+ *  TYPEDEF_NAME
+ *	;
+*/
+int c_parser_descent::typedef_name(string tab)
+{
+  trace(tab, "## typedef_name");
+
+  c_context_tokens context_tokens(context);
+
+  token_next(tab);
+
+  if (TYPEDEF_NAME == token_get())
+    {
+      c_decl_specifier decl(c_token_get());
+      decl.type_specifier = 1;
+
+      if (1 == context.i_am_in_parameter_declaration)
+        {
+          context.param_vector_decl_specifier.push_back(decl);
+        }
+      else
+        {
+          semantic.push_back_vector_decl_specifier(decl);
+        }
+      return 1;
+    }
+
+  context = context_tokens.restore();
+  return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
  * class_name: CLASS_NAME | template_id ;
  */
 int c_parser_descent::class_name(string tab)
@@ -960,6 +994,11 @@ int c_parser_descent::type_name(string tab)
       return 1;
     }
 
+  if (1 == typedef_name(tab))
+    {
+      return 1;
+    }
+
   //## todo rest
 
   return 0;
@@ -968,6 +1007,11 @@ int c_parser_descent::type_name(string tab)
 /*----------------------------------------------------------------------------*/
 /*
  * class_specifier: class_head '{' member_specification_opt '}' ;
+ *
+ * this rule was expanded to process:
+ *   typedef class {};
+ * and
+ *   typedef class A t_A;
  */
 // ## todo rest of rule
 int c_parser_descent::class_specifier(string tab)
@@ -988,6 +1032,8 @@ int c_parser_descent::class_specifier(string tab)
     }
 
   //we can get this point wihout identifer of class
+  // typedef class A t_A; in this clase
+  // A is not a IDENTIFIER is CLASS_NAME -> enter in next if
 
   if ( 0 == context.class_name_declaration.size() )
     {
@@ -1003,12 +1049,32 @@ int c_parser_descent::class_specifier(string tab)
 
           c_context_tokens context_tokens_2(context);
           token_next(tab);
+          // typedef class {};
           if ( '{' == token_get())
             {
               c_token no_identifier(IDENTIFIER,(char *)NO_CLASS_NAME);
               semantic.identifier(context, no_identifier);
             }
+          else
+            {
+              //typedef class A t_A;
+              if ( CLASS_NAME == token_get() )
+                {
+                  context.class_name_declaration = c_token_get().text;
+                }
 
+              context.is_typedef = was_typedef;
+              if ( 1 == identifier(tab))
+                {
+                  context.is_typedef = 0;
+                  return 1;
+                }
+            }
+          /*
+                    context.is_typedef = 0;
+
+                    return 1;
+          */
 
           // '{' should be in the buffer
           context = context_tokens_2.restore();
@@ -1020,7 +1086,6 @@ int c_parser_descent::class_specifier(string tab)
           return 0;
         }
     }
-
 
   c_context_tokens context_tokens(context);
 
@@ -1053,13 +1118,10 @@ int c_parser_descent::class_specifier(string tab)
       context.is_typedef = was_typedef;
       if ( 1 == context.is_typedef)
         {
-          if ( 1 == context.is_typedef )
+          if ( 1 != identifier(tab))
             {
-              if ( 1 != identifier(tab))
-                {
-                  context = context_tokens.restore();
-                  return 0;
-                }
+              context = context_tokens.restore();
+              return 0;
             }
         }
 
@@ -1758,10 +1820,8 @@ int c_parser_descent::direct_declarator(string tab)
 
           context_good_way.save(context);
           token_next(tab);
-          printf("###** mark_01\n");
           if ('(' == token_get())
             {
-              printf("###** mark_02\n");
               if (1 == parameter_declaration_clause(tab))
                 {
                   printf("### 1 == parameter_declaration_clause(tab)\n");

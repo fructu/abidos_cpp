@@ -270,16 +270,23 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
     typedef vector < c_decl_specifier > t_vector_decl_specifier;
   */
 
-  printf("##  ***    c_semantic::identifier_typedef(c_token token) context.class_name_declaration[%s]\n\n",context.class_name_declaration.c_str());
   if ( 0 != context.class_name_declaration.size() )
     {
       c_symbol symbol(token);
 
       symbol.is_typedef = 1;
       symbol.typedef_points_to = context.class_name_declaration;
-      symbol.type = TYPEDEF;
+      symbol.type = TYPEDEF_NAME;
 
       ts.insert(symbol);
+    }
+
+  if (NO_CLASS_STATUS ==
+      context.class_specifier_status)
+    {
+      c_declarator declarator(token, vector_decl_specifier);
+      declarator.is_typedef = 1;
+      context.declarator = declarator;
     }
 }
 /*----------------------------------------------------------------------------*/
@@ -539,6 +546,26 @@ void c_semantic::declarator_insert(string & tab, c_context & context)
       c_symbol symbol(context.declarator.token);
       symbol.free_declarator = 1;
       symbol.declarator = context.declarator;
+      if ( 1 == context.declarator.is_typedef )
+        {
+          symbol.is_typedef = 1;
+          symbol.type = TYPEDEF_NAME;
+
+          //typedef int t_int;
+          //typedef t_int t2_int;
+          // t2_int should point to t_int
+          // t_int  should point to "" nothing
+          if ( 0 != context.declarator.vector_decl_specifier.size() )
+            {
+              c_symbol * p = ts.search_symbol(context.declarator.vector_decl_specifier[0].token.text);
+
+              if ( 0 != p )
+                {
+                  symbol.typedef_points_to = p->token.text;
+                }
+            }
+        }
+
       ts.insert(symbol);
     }
   else

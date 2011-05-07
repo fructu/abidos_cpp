@@ -220,6 +220,7 @@ private:
   int qualified_id(string tab);
 
   // Context-dependent identifiers.
+  int typedef_name(string tab);
   int class_name(string tab);
 
   // Lexical elements.

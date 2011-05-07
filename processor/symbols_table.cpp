@@ -95,6 +95,11 @@ void c_declarator::print(const char *tab)
 
   printf("%s   ", tab);
 
+  if ( 1 == is_typedef )
+    {
+      printf("TYPEDEF_NAME ");
+    }
+
   for (i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl)
     {
       printf("[%s] ", vector_decl_specifier[i_decl].token.text.c_str());
@@ -133,6 +138,16 @@ void c_declarator::print(const char *tab)
 string c_declarator::get_full_name(void)
 {
   string name = token.text;
+
+  if ( 1 == is_typedef )
+    {
+      // ## typedef int t_int;
+      // ## in this way in ts would be [typedef t_int]
+      // name = "typedef " + token.text;
+      // ## there is this information in
+      //    vector_decl_specifier[0].token.id == TYPEDEF
+      //
+    }
 
   if ( 1 == is_constructor )
     {
@@ -276,9 +291,9 @@ void c_symbol::print(const char *tab)
          yytokens[type], class_key, yytokens[class_key]);
   printf("%s{\n" , tab);
 
-  if ( TYPEDEF == type)
+  if ( TYPEDEF_NAME == type)
     {
-      printf("%s  is_typedef[%d] typedef_name[%s]\n"
+      printf("%s  is_typedef[%d] typedef_points_to[%s]\n"
              , tab
              , is_typedef
              , typedef_points_to.c_str()

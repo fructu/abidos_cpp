@@ -207,6 +207,8 @@ public:
   void parameter_insert(c_parameter parameter);
   void print(const char *tab);
 
+  int is_typedef;
+
   c_declarator()
   {
     is_function = 0;
@@ -215,11 +217,26 @@ public:
     access_specifier = 0;
     is_constructor = 0;
     is_destructor = 0;
+
+    is_typedef = 0;
   }
   c_declarator(c_token t, t_vector_decl_specifier v)
   {
     token = t;
-    vector_decl_specifier = v;
+
+    is_typedef = 0;
+
+    unsigned i_decl = 0;
+    for ( i_decl = 0; i_decl < v.size(); ++i_decl )
+      {
+        if ( TYPEDEF == v[i_decl].token.id )
+          {
+            is_typedef = 1;
+            continue;
+          }
+
+        vector_decl_specifier.push_back(v[i_decl]);
+      }
 
     is_function = 0;
     has_body = 0;
@@ -241,6 +258,8 @@ public:
     is_destructor = 0;
 
     token_definition.clear();
+
+    is_typedef = 0;
   }
   string get_full_name(void);
 };
