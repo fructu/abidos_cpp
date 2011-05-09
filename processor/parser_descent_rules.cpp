@@ -425,6 +425,7 @@ int c_parser_descent::simple_declaration(string tab)
 
   if ( 1 == context.declarator.has_body )
     {
+      printf("\n\n#### mark_02 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str());
       context.declarator.has_body = 0;
       tokens_vector_clear();
       tokens_vector_print();
@@ -432,8 +433,11 @@ int c_parser_descent::simple_declaration(string tab)
     }
   else
     {
+      printf("\n\n#### mark_03 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str());
+      tokens_vector_print();
       if (';' == token_get())
         {
+          printf("\n\n#### mark_04 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str());
           tokens_vector_clear();
           return 1;
         }
@@ -1019,6 +1023,7 @@ int c_parser_descent::class_specifier(string tab)
   trace(tab, "## class_specifier");
 
   int was_typedef = 0;
+  string class_name_previous = context.class_name_declaration;
 
   was_typedef = context.is_typedef;
   context.is_typedef = 0;
@@ -1028,6 +1033,7 @@ int c_parser_descent::class_specifier(string tab)
 
   if (0 == class_head(tab))
     {
+      context.class_name_declaration = class_name_previous;
       return 0;
     }
 
@@ -1042,6 +1048,7 @@ int c_parser_descent::class_specifier(string tab)
           context = context_tokens_1.restore();
           if (0 == class_key(tab))
             {
+              context.class_name_declaration = class_name_previous;
               return 0;
             }
 
@@ -1067,6 +1074,7 @@ int c_parser_descent::class_specifier(string tab)
               if ( 1 == identifier(tab))
                 {
                   context.is_typedef = 0;
+                  context.class_name_declaration = class_name_previous;
                   return 1;
                 }
             }
@@ -1083,6 +1091,7 @@ int c_parser_descent::class_specifier(string tab)
       else
         {
           printf("error c_parser_descent::class_specifier() class without name\n");
+          context.class_name_declaration = class_name_previous;
           return 0;
         }
     }
@@ -1095,6 +1104,7 @@ int c_parser_descent::class_specifier(string tab)
   if ('{' != token_get())
     {
       context = context_tokens.restore();
+      context.class_name_declaration = class_name_previous;
       return 0;
     }
 
@@ -1121,18 +1131,22 @@ int c_parser_descent::class_specifier(string tab)
           if ( 1 != identifier(tab))
             {
               context = context_tokens.restore();
+              context.class_name_declaration = class_name_previous;
               return 0;
             }
         }
 
       context.is_typedef = 0;
 
+      tokens_vector_clear();
+      context.class_name_declaration = class_name_previous;
       return 1;
     }
 
   context.is_typedef = was_typedef;
 
   context = context_tokens.restore();
+  context.class_name_declaration = class_name_previous;
   return 0;
 }
 
@@ -1218,6 +1232,11 @@ int c_parser_descent::member_specification(string tab)
 
   if (0 == member_declaration(tab))
     {
+      //## working to define classes inside classes
+      if ( 1 == simple_declaration(tab) )
+        {
+          return 1;
+        }
       // | access_specifier ':'
       if (0 == access_specifier(tab))
         {
@@ -1264,9 +1283,10 @@ int c_parser_descent::member_declaration(string tab)
 
       if (';' == token_get())
         {
+          tokens_vector_clear();
           return 1;
         }
-
+      tokens_vector_clear();
       return 1;
     }
 
@@ -1282,6 +1302,7 @@ int c_parser_descent::member_declaration(string tab)
 
       if (';' == token_get())
         {
+          tokens_vector_clear();
           return 1;
         }
     }
@@ -1299,6 +1320,7 @@ int c_parser_descent::member_declaration(string tab)
       //SEMICOLON_opt(tab);
       semantic.declarator_insert(tab, context);
       context.i_am_in_member = 0;
+      tokens_vector_clear();
       return 1;
     }
 

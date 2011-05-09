@@ -50,9 +50,16 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     }
   // we only take the name of the class the fist time after CLASS
   // if( 1 == context.class_head)
-  {
-    context.class_name_declaration = token.text;
-  }
+
+  if ( 0 != context.class_name_declaration.size() )
+    {
+      string s = symbol.token.text;
+      symbol.token.text = context.class_name_declaration + "::" + s;
+
+      printf("## mark_01 token.text[%s]\n", token.text.c_str());
+    }
+
+  context.class_name_declaration = symbol.token.text;
 
   ts.insert(symbol);
 }
