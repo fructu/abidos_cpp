@@ -128,7 +128,18 @@ struct c_context
     class_key = 0;
     access_specifier = 0;
 
-    class_name_declaration = "";
+    /*
+     class A{
+      class A_1{
+      };
+      class A_2{
+      };
+     };
+
+     i need the class_name to chain A::A_1 A::A_2
+
+        class_name_declaration = "";
+    */
 
     i_am_in_member = 0;
     member_declaration = "";
