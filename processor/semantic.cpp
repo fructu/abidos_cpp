@@ -55,8 +55,6 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     {
       string s = symbol.token.text;
       symbol.token.text = context.class_name_declaration + "::" + s;
-
-      printf("## mark_01 token.text[%s]\n", token.text.c_str());
     }
 
   context.class_name_declaration = symbol.token.text;

@@ -229,6 +229,7 @@ private:
   int id_expression(string tab);
   int unqualified_id(string tab);
   int qualified_id(string tab);
+  int nested_name_specifier(string tab);
 
   // Context-dependent identifiers.
   int typedef_name(string tab);
