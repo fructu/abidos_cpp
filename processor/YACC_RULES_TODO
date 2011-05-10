@@ -175,10 +175,11 @@ qualified_id:
 	nested_name_specifier TEMPLATE_opt unqualified_id
 	;
 
+//## did
 nested_name_specifier:
 	class_or_namespace_name COLONCOLON nested_name_specifier_opt
 	;
-
+//## did
 class_or_namespace_name:
 	class_name
 	| namespace_name

@@ -141,10 +141,115 @@ int c_parser_descent::unqualified_id(string tab)
 int c_parser_descent::qualified_id(string tab)
 {
   trace(tab, "## qualified_id");
+  tokens_vector_print_from_actual();
 
-  return 0;
+  if (0 == nested_name_specifier(tab))
+    {
+      return 0;
+    }
+
+  //## todo TEMPLATE_opt
+
+  if (0 == unqualified_id(tab))
+    {
+      return 0;
+    }
+
+  return 1;
 }
 
+/*
+nested_name_specifier:
+	class_or_namespace_name COLONCOLON nested_name_specifier_opt
+	;
+
+  class_or_namespace_name : puted code inside this rule
+  nested_name_specifier_opt : puted code inside this rule
+class A
+{
+  class A_1
+  {
+    int A_1_i;
+  };
+};
+
+A::A_1
+in ts there is not [A_1] we need [A::A_1] A_1 would be
+IDENTIFIER
+*/
+
+int c_parser_descent::nested_name_specifier(string tab)
+{
+  trace(tab, "## nested_name_specifier");
+
+  c_context_tokens context_tokens(context);
+
+  int result = 0;
+  string chain = "";
+  while ( 1 )
+    {
+      context_tokens.save(context);
+      token_next(tab);
+      if ( CLASS_NAME != token_get() )
+        {
+          if ( IDENTIFIER == token_get() )
+            {
+              chain = chain + c_token_get().text;
+              c_symbol *p_symbol = ts.search_symbol(yytext);
+              printf("##: mark_00 chain [%s]\n", chain.c_str());
+              if (0 == p_symbol)
+                {
+                  context = context_tokens.restore();
+                  return result;
+                }
+              if (p_symbol->type != CLASS_NAME)
+                {
+                  context = context_tokens.restore();
+                  return result;
+                }
+              printf("##: mark_00 chain [%s] is a class :-)\n", chain.c_str());
+            }
+          else
+            {
+              context = context_tokens.restore();
+              return result;
+            }
+        }
+      else
+        {
+          chain = chain + c_token_get().text;
+        }
+
+      printf("##: mark_01 [%s]\n", c_token_get().text.c_str());
+
+      token_next(tab);
+      if ( COLONCOLON != token_get() )
+        {
+          context = context_tokens.restore();
+          return 0;
+        }
+      if ( 1 == result)
+        {
+          chain = chain + c_token_get().text;
+        }
+      printf("##: mark_02 [%s]\n", c_token_get().text.c_str());
+      printf("##: mark_03 chain [%s]\n", chain.c_str());
+      result = 1;
+    }
+
+  context = context_tokens.restore();
+
+  return result;
+}
+
+/*
+class_or_namespace_name:
+	class_name
+	| namespace_name
+	;
+
+	only used in previous rule -> i inserted the code in the prev.
+*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------
  * Context-dependent identifiers.
@@ -425,7 +530,6 @@ int c_parser_descent::simple_declaration(string tab)
 
   if ( 1 == context.declarator.has_body )
     {
-      printf("\n\n#### mark_02 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str());
       context.declarator.has_body = 0;
       tokens_vector_clear();
       tokens_vector_print();
@@ -433,11 +537,9 @@ int c_parser_descent::simple_declaration(string tab)
     }
   else
     {
-      printf("\n\n#### mark_03 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str());
       tokens_vector_print();
       if (';' == token_get())
         {
-          printf("\n\n#### mark_04 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str());
           tokens_vector_clear();
           return 1;
         }
