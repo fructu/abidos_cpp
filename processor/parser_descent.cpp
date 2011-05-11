@@ -273,7 +273,6 @@ void c_parser_descent::colon_colon_chain_process(c_token & token)
 
       if ( 0 != p_symbol )
         {
-          printf("##: mark_08  colon_colon_chain[%s]\n",colon_colon_chain.c_str());
           if ( 0 != p_symbol->type)
             {
               token.id = p_symbol->type;

@@ -141,12 +141,6 @@ int c_parser_descent::unqualified_id(string tab)
 int c_parser_descent::qualified_id(string tab)
 {
   trace(tab, "## qualified_id");
-  printf("##: mark_7 qualified_id_context\n");
-
-  tokens_vector_print_from_actual();
-//  context = qualified_id_context;
-  tokens_vector_print_from_actual();
-
 
   if (0 == nested_name_specifier(tab))
     {
@@ -189,12 +183,15 @@ int c_parser_descent::nested_name_specifier(string tab)
 {
   trace(tab, "## nested_name_specifier");
 
-  printf("##: mark_-03 class_name_declaration [%s]\n", context.class_name_declaration.c_str());
-
   c_context_tokens context_tokens(context);
 
   int result = 0;
   string chain = "";
+
+  if ( 0 != context.class_name_declaration.size() )
+    {
+      chain = context.class_name_declaration;
+    }
 
   while ( 1 )
     {
@@ -203,12 +200,18 @@ int c_parser_descent::nested_name_specifier(string tab)
       if ( CLASS_NAME != token_get() )
         {
           context = context_tokens.restore();
+          if ( 1 == result)
+            {
+              context.class_name_declaration = chain;
+            }
           return result;
         }
 
+      if ( 0 != chain.size() )
+        {
+          chain = chain + "::";
+        }
       chain = chain + c_token_get().text;
-
-      printf("##: mark_01 [%s]\n", c_token_get().text.c_str());
 
       token_next(tab);
       if ( COLONCOLON != token_get() )
@@ -216,12 +219,7 @@ int c_parser_descent::nested_name_specifier(string tab)
           context = context_tokens.restore();
           return 0;
         }
-      if ( 1 == result)
-        {
-          chain = chain + c_token_get().text;
-        }
-      printf("##: mark_02 [%s]\n", c_token_get().text.c_str());
-      printf("##: mark_03 chain [%s]\n", chain.c_str());
+
       result = 1;
     }
 
@@ -1934,7 +1932,6 @@ int c_parser_descent::direct_declarator(string tab)
   for (;;)
     {
       result = 0;
-
       if (1 == declarator_id(tab))
         {
           result = 1;
@@ -2142,6 +2139,7 @@ int c_parser_descent::declarator_id(string tab)
 int c_parser_descent::parameter_declaration_clause(string tab)
 {
   trace(tab, "## parameter_declaration_clause");
+
   context.i_am_in_parameter_declaration = 1;
   parameter_declaration_list_opt(tab);
 

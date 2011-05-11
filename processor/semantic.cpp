@@ -106,7 +106,12 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
           int is_constructor = 0;
           int is_destructor = 0;
           int is_function = 0;
-
+          /*
+            ##
+              int A::A_2::A_2_1::A_2_1_f(int long p1)
+              here we have token.text A_2_1_f
+              bad to know if is a constructor...
+          */
           if ( context.class_name_declaration == token.text )
             {
               if ( 1 == context.class_member.is_destructor)
@@ -253,7 +258,9 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
       context.i_am_in_member = 1;
       context.member_definition_outside = 1;
       context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
-      context.class_name_declaration = vector_decl_specifier[last].token.text;
+
+// in test_28.cpp this line does not work correctly int A::A_2::A_2_1::A_2_1_f(int long p1)
+//      context.class_name_declaration = vector_decl_specifier[last].token.text;
     }
 }
 /*----------------------------------------------------------------------------*/
