@@ -15,6 +15,21 @@
 #include <stdio.h>
 #include "generator_class_diagram.h"
 #include "lex_yacc.h"
+
+/*----------------------------------------------------------------------------*/
+
+const char * colon_colon_substitution(string source)
+{
+  size_t j;
+  string str = source;
+  for ( ; (j = str.find( "::" )) != string::npos ; )
+    {
+      str.replace( j, 2, "__" );
+    }
+
+  return str.c_str();
+}
+
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::members_url(t_vector_class_member &
     vector_class_member)
@@ -100,8 +115,9 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
     {
       return;
     }
-  fprintf(f_out, "  %s [\n", symbol.token.text.c_str());
-  fprintf(f_out, "    URL=\"%s[%s:%d];", symbol.token.text.c_str(),
+
+  fprintf(f_out, "  %s [\n", colon_colon_substitution(symbol.token.text));
+  fprintf(f_out, "    URL=\"%s[%s:%d];", colon_colon_substitution(symbol.token.text),
           symbol.token.file.c_str(), symbol.token.line);
   fprintf(f_out, "%s[%s:%d];", symbol.token.text.c_str(),
           symbol.token.file.c_str(), symbol.token.line);
