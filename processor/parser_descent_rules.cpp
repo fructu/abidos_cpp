@@ -202,8 +202,8 @@ int c_parser_descent::nested_name_specifier(string tab)
       token_next(tab);
       if ( CLASS_NAME != token_get() )
         {
-              context = context_tokens.restore();
-              return result;
+          context = context_tokens.restore();
+          return result;
         }
 
       chain = chain + c_token_get().text;
