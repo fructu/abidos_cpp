@@ -196,60 +196,17 @@ int c_parser_descent::nested_name_specifier(string tab)
   int result = 0;
   string chain = "";
 
-  /*
-    c_token token;
-    c_decl_specifier dcl(token);
-    dcl = semantic.get_last_decl_specifier();
-    if( 1 == dcl.has_colon_colon_after )
-      {
-        chain = dcl.token.text + "::";
-        printf("##: yupi mark_-02 class_name_declaration [%s]\n", chain.c_str());
-      }
-
-
-    if ( 0 != context.class_name_declaration.size() )
-      {
-        chain = chain + context.class_name_declaration;
-        printf("##: mark_-01 class_name_declaration [%s]\n", chain.c_str());
-      }
-  */
   while ( 1 )
     {
       context_tokens.save(context);
       token_next(tab);
       if ( CLASS_NAME != token_get() )
         {
-          if ( IDENTIFIER == token_get() )
-            {
-              if ( 0 != chain.size() )
-                {
-                  chain = chain + c_token_get().text;
-                }
-              chain = chain + c_token_get().text;
-              c_symbol *p_symbol = ts.search_symbol(yytext);
-              printf("##: mark_00 chain [%s]\n", chain.c_str());
-              if (0 == p_symbol)
-                {
-                  context = context_tokens.restore();
-                  return result;
-                }
-              if (p_symbol->type != CLASS_NAME)
-                {
-                  context = context_tokens.restore();
-                  return result;
-                }
-              printf("##: mark_00 chain [%s] is a class :-)\n", chain.c_str());
-            }
-          else
-            {
               context = context_tokens.restore();
               return result;
-            }
         }
-      else
-        {
-          chain = chain + c_token_get().text;
-        }
+
+      chain = chain + c_token_get().text;
 
       printf("##: mark_01 [%s]\n", c_token_get().text.c_str());
 
@@ -261,7 +218,7 @@ int c_parser_descent::nested_name_specifier(string tab)
         }
       if ( 1 == result)
         {
-//          chain = chain + c_token_get().text;
+          chain = chain + c_token_get().text;
         }
       printf("##: mark_02 [%s]\n", c_token_get().text.c_str());
       printf("##: mark_03 chain [%s]\n", chain.c_str());
