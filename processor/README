@@ -169,7 +169,6 @@ abidos
     t_A ---> class A
 -[v] typedef t_int t2_int in ts t2_int should point to t_int.
 -[v]  define classes inside classes.
--[] parse thinks like this int A::A_2::A_2_1::A_2_1_f(int long p1){ }
+-[v] parse thinks like this int A::A_2::A_2_1::A_2_1_f(int long p1){ }
 -[] refactor code from parser_descent to lexical_buffer
--[] in ts class_name can be A::A_2 fix class_name to do this...
-    and deprecate qualified_id
+-[] in nodos names [out/out_run.py] A::A_2 changes for A__A_2

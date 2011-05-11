@@ -461,7 +461,7 @@ c_semantic::class_name_friend(c_context & context, c_token token)
       exit(1);
     }
 
-  //## todo save friends like acestors
+  //## todo save friends like ancestors
   token.print(" ");
 
   {

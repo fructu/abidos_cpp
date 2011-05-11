@@ -241,6 +241,53 @@ c_token c_parser_descent::c_token_get(void)
 
 /*----------------------------------------------------------------------------*/
 /*
+class A
+{
+  class A1
+  {
+  };
+};
+
+in ts:
+ [A::A1] is class_name
+
+## improve to using namespace
+*/
+void c_parser_descent::colon_colon_chain_process(c_token & token)
+{
+  if ( COLONCOLON == token.id)
+    {
+      if ( 0 != colon_colon_chain.size() )
+        {
+          colon_colon_chain = colon_colon_chain + "::";
+        }
+
+      return;
+    }
+
+  if (IDENTIFIER == token.id)
+    {
+      colon_colon_chain = colon_colon_chain + token.text;
+
+      c_symbol * p_symbol = ts.search_symbol(colon_colon_chain);
+
+      if ( 0 != p_symbol )
+        {
+          printf("##: mark_08  colon_colon_chain[%s]\n",colon_colon_chain.c_str());
+          if ( 0 != p_symbol->type)
+            {
+              token.id = p_symbol->type;
+            }
+
+          return;
+        }
+    }
+
+  colon_colon_chain = "";
+}
+
+/*----------------------------------------------------------------------------*/
+/*
  * void c_parser_descent::token_previous(void) { if( tokens_vector.empty()
  * ) { context.i_token = tokens_vector.begin(); return; }
  *
@@ -299,6 +346,8 @@ void c_parser_descent::token_next(string tab)
 
       t = yylex();
       c_token token(t, yytext);
+
+      colon_colon_chain_process(token);
       /*
        * i tried put this part in lex but did not compile maybe for the
        * link C mode of lexical module
