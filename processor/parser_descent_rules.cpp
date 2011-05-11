@@ -141,7 +141,12 @@ int c_parser_descent::unqualified_id(string tab)
 int c_parser_descent::qualified_id(string tab)
 {
   trace(tab, "## qualified_id");
+  printf("##: mark_7 qualified_id_context\n");
+
   tokens_vector_print_from_actual();
+//  context = qualified_id_context;
+  tokens_vector_print_from_actual();
+
 
   if (0 == nested_name_specifier(tab))
     {
@@ -176,16 +181,38 @@ class A
 A::A_1
 in ts there is not [A_1] we need [A::A_1] A_1 would be
 IDENTIFIER
+
+A has been consumed in this point but :: not
 */
 
 int c_parser_descent::nested_name_specifier(string tab)
 {
   trace(tab, "## nested_name_specifier");
 
+  printf("##: mark_-03 class_name_declaration [%s]\n", context.class_name_declaration.c_str());
+
   c_context_tokens context_tokens(context);
 
   int result = 0;
   string chain = "";
+
+  /*
+    c_token token;
+    c_decl_specifier dcl(token);
+    dcl = semantic.get_last_decl_specifier();
+    if( 1 == dcl.has_colon_colon_after )
+      {
+        chain = dcl.token.text + "::";
+        printf("##: yupi mark_-02 class_name_declaration [%s]\n", chain.c_str());
+      }
+
+
+    if ( 0 != context.class_name_declaration.size() )
+      {
+        chain = chain + context.class_name_declaration;
+        printf("##: mark_-01 class_name_declaration [%s]\n", chain.c_str());
+      }
+  */
   while ( 1 )
     {
       context_tokens.save(context);
@@ -194,6 +221,10 @@ int c_parser_descent::nested_name_specifier(string tab)
         {
           if ( IDENTIFIER == token_get() )
             {
+              if ( 0 != chain.size() )
+                {
+                  chain = chain + c_token_get().text;
+                }
               chain = chain + c_token_get().text;
               c_symbol *p_symbol = ts.search_symbol(yytext);
               printf("##: mark_00 chain [%s]\n", chain.c_str());
@@ -230,7 +261,7 @@ int c_parser_descent::nested_name_specifier(string tab)
         }
       if ( 1 == result)
         {
-          chain = chain + c_token_get().text;
+//          chain = chain + c_token_get().text;
         }
       printf("##: mark_02 [%s]\n", c_token_get().text.c_str());
       printf("##: mark_03 chain [%s]\n", chain.c_str());
@@ -1926,10 +1957,19 @@ int c_parser_descent::declarator(string tab)
  * | direct_declarator '('parameter_declaration_clause ')'
  * cv_qualifier_seq_opt exception_specification_opt | direct_declarator
  * '[' constant_expression_opt ']' ;
+
+
+ to parse this:
+   int A::A_2::A_2_1::A_2_1_f(int long p1)
+ it need to recover the position of A to use in qualified_id
  */
 int c_parser_descent::direct_declarator(string tab)
 {
   trace(tab, "## direct_declarator");
+  tokens_vector_print_from_actual();
+
+//  c_context_tokens qualified_id_context(context);
+//  qualified_id_context = context;
   c_context_tokens context_tokens(context);
   c_context_tokens context_good_way(context);
 
@@ -2116,8 +2156,6 @@ int c_parser_descent::declarator_id(string tab)
 
   //## whe must have a class name before of this
   COLONCOLON_opt(tab);
-
-  tokens_vector_print_from_actual();
 
   if (1 == id_expression(tab))
     {

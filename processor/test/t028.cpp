@@ -52,9 +52,15 @@ int B::B::B::B::f_b(int p1)
 ## this will be funy ... :-)
 */
 //int A::A_2::A_2_1::A_2_1_f(int long p1)
-int A::A_2::A_2_1(int long p1)
+float aqui;
+
+int A::A_2(int long p1)
 {
 };
 
+
+int A::A_2::A_2_1(int long p1)
+{
+};
 
 

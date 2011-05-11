@@ -33,6 +33,21 @@ public:
   {
     vector_decl_specifier.clear();
   }
+  /*
+    c_decl_specifier get_last_decl_specifier(void)
+    {
+      c_token token;
+      c_decl_specifier dcl(token);
+      unsigned len = vector_decl_specifier.size();
+      if( 0 == len )
+        {
+          return dcl;
+        }
+
+      dcl = vector_decl_specifier[len-1];
+      return dcl;
+    }
+  */
 
   void check_coloncolon_member_function(c_context & context, c_token token);
 

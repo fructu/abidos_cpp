@@ -202,6 +202,7 @@ private:
   // unsigned i_token_actual;
   // c_token token_actual;
   c_context context;
+//  c_context qualified_id_context;
 
   t_tokens tokens_vector;
 
@@ -215,6 +216,8 @@ private:
   int token_get(void);
   c_token c_token_get(void);
   // void token_previous(void);
+  string colon_colon_chain;
+  void colon_colon_chain_process(c_token & token);
   void token_next(string tab);
   /*
    * rules from yacc
