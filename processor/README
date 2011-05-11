@@ -175,3 +175,7 @@ abidos
 -[v] in nodos names [out/out_run.py] A::A_2 changes for A__A_2
 -[] change nodos names [out/out_run.py] A::A_2 changes for A__A_2 in compositions/aggreggations
 -[] change nodos names [out/out_run.py] A::A_2 changes for A__A_2 in herences
+-[] in A::A_2::A_2_1::A_2_1_f it should search A_2_1_f in A::A_2::A_2_1
+    ##: mark_x16 context.class_name_declaration [A::A_2::A_2_1]
+    printf("##: mark_x17 context.class_name_declaration [%s]\n", context.class_name_declaration.c_str());
+    i need further work here

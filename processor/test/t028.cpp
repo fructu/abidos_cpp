@@ -56,6 +56,8 @@ int A::A_2::A_2_1(int long p1)
 {
 };
 
+float aqui;
+
 int A::A_2::A_2_1::A_2_1_f(int long p1)
 {
 };
