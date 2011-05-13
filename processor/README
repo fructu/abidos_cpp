@@ -179,3 +179,5 @@ abidos
     ##: mark_x16 context.class_name_declaration [A::A_2::A_2_1]
     printf("##: mark_x17 context.class_name_declaration [%s]\n", context.class_name_declaration.c_str());
     i need further work here
+    
+    maybe i can use semantic::vector_decl_specifier instead string parser_descent::colon_colon_chain;

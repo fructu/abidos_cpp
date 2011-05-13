@@ -187,11 +187,14 @@ int c_parser_descent::nested_name_specifier(string tab)
 
   int result = 0;
   string chain = "";
-
+/*## testing
   if ( 0 != context.class_name_declaration.size() )
     {
       chain = context.class_name_declaration;
     }
+    */
+//  chain = colon_colon_chain;
+  chain = "A";
 
   while ( 1 )
     {
@@ -203,6 +206,7 @@ int c_parser_descent::nested_name_specifier(string tab)
           if ( 1 == result)
             {
               context.class_name_declaration = chain;
+              printf("##: mark_x7 context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
             }
           return result;
         }
