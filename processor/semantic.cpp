@@ -251,6 +251,8 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
       return;
     }
 
+printf("##: mark_x0 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
+
   unsigned last = vector_decl_specifier.size() - 1;
 
   if ( 1 == vector_decl_specifier[last].has_colon_colon_after )
@@ -503,9 +505,12 @@ void c_semantic::member_insert(string & tab, c_context & context)
          ,context.class_member.token.text.c_str()
         );
 
+printf("##: mark_x1 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
+
   c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
   if (p_symbol)
     {
+printf("##: mark_x2 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );    
       if (0 == p_symbol->class_key)
         {
           printf
@@ -516,6 +521,8 @@ void c_semantic::member_insert(string & tab, c_context & context)
       // todo -> put the file where is the definition
       if ( 1 == context.member_definition_outside )
         {
+        
+printf("##: mark_x3 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );          
           c_class_member * p_member = 0;
 
           p_member = p_symbol->members.get(context.class_member.get_full_name());
