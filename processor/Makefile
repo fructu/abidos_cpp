@@ -2,6 +2,7 @@ YACC=yacc
 LEX=lex
 
 OBJS = options.o \
+	trace.o \
 	lexer.o \
 	parser_descent.o \
 	parser_descent_rules.o \
