@@ -72,7 +72,8 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
  */
 {
   printf("## c_semantic::class_member_declarator()\n");
-
+  
+  print_decl_specifier();
 
   printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
 
