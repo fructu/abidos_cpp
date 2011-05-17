@@ -20,6 +20,8 @@
 
 using namespace std;
 
+#define TAB " "
+
 class c_trace_node
 {
 private:
@@ -31,6 +33,17 @@ private:
   string function_name_previous;
   friend class c_generator_trace;
 public:
+  c_trace_node()
+  {
+    order = 0;
+    level = 0;
+
+    function_name = "";
+    function_name_previous = "";
+  }
+
+  string get_tab(void);
+
   void set(string s);
 };
 
@@ -55,5 +68,7 @@ public:
   void add(c_trace_node & node, string s);
 };
 
-extern c_trace_graph trace;
+void c_trace_graph_test(void);
+
+extern c_trace_graph trace_graph;
 #endif

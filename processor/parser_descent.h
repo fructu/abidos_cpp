@@ -25,10 +25,8 @@ using namespace std;
 #define NO_IDENTIFIER "@IDENTIFIER#"
 #define NO_CLASS_NAME "#NO_CLASS_NAME#"
 
-# define TAB " "
-void trace(string & tab, string s);
-
 #include "symbols_table.h"
+#include "trace.h"
 
 typedef vector < c_token > t_tokens;
 
@@ -222,86 +220,86 @@ private:
   /*
    * rules from yacc
    */
-  int error_recover(string tab);
+  int error_recover(c_trace_node trace_node);
 
   // Translation unit.
   // this is the start rule in yacc
   int translation_unit(void);
 
   // Expressions
-  int id_expression(string tab);
-  int unqualified_id(string tab);
-  int qualified_id(string tab);
-  int nested_name_specifier(string tab);
+  int id_expression(c_trace_node trace_node);
+  int unqualified_id(c_trace_node trace_node);
+  int qualified_id(c_trace_node trace_node);
+  int nested_name_specifier(c_trace_node trace_node);
 
   // Context-dependent identifiers.
-  int typedef_name(string tab);
-  int class_name(string tab);
+  int typedef_name(c_trace_node trace_node);
+  int class_name(c_trace_node trace_node);
 
   // Lexical elements.
-  int identifier(string tab);
+  int identifier(c_trace_node trace_node);
 
   // Statements
-  int statement(string tab);
-  int compound_statement(string tab);
-  int statement_seq(string tab);
+  int statement(c_trace_node trace_node);
+  int compound_statement(c_trace_node trace_node);
+  int statement_seq(c_trace_node trace_node);
 
   // declarations
-  int declaration_seq(string tab);
-  int declaration(string tab);
-  int block_declaration(string tab);
-  int simple_declaration(string tab);
-  int decl_specifier_seq(string tab);
-  int decl_specifier(string tab);
-  int storage_class_specifier(string tab);
-  int type_specifier(string tab);
-  int friend_specifier(string tab);
-  int typedef_specifier(string tab);
-  int function_specifier(string tab);
-  int simple_type_specifier(string tab);
-  int ptr_specifier(string tab);    //rule mine
-  int type_name(string tab);
-  int class_specifier(string tab);
-  int class_head(string tab);
-  int class_key(string tab);
-  int member_specification(string tab);
-  int member_declaration(string tab);
-  int member_declarator_list(string tab);
-  int member_declarator(string tab);
+  int declaration_seq(c_trace_node trace_node);
+  int declaration(c_trace_node trace_node);
+  int block_declaration(c_trace_node trace_node);
+  int simple_declaration(c_trace_node trace_node);
+  int decl_specifier_seq(c_trace_node trace_node);
+  int decl_specifier(c_trace_node trace_node);
+  int storage_class_specifier(c_trace_node trace_node);
+  int type_specifier(c_trace_node trace_node);
+  int friend_specifier(c_trace_node trace_node);
+  int typedef_specifier(c_trace_node trace_node);
+  int function_specifier(c_trace_node trace_node);
+  int simple_type_specifier(c_trace_node trace_node);
+  int ptr_specifier(c_trace_node trace_node);    //rule mine
+  int type_name(c_trace_node trace_node);
+  int class_specifier(c_trace_node trace_node);
+  int class_head(c_trace_node trace_node);
+  int class_key(c_trace_node trace_node);
+  int member_specification(c_trace_node trace_node);
+  int member_declaration(c_trace_node trace_node);
+  int member_declarator_list(c_trace_node trace_node);
+  int member_declarator(c_trace_node trace_node);
 
   // Declarators
-  int init_declarator_list(string tab);
-  int init_declarator(string tab);
-  int declarator(string tab);
-  int direct_declarator(string tab);
-  int ptr_operator(string tab);
-  int cv_qualifier_seq(string tab);
-  int cv_qualifier(string tab);
-  int declarator_id(string tab);
-  int parameter_declaration_clause(string tab);
-  int parameter_declaration_list(string tab);
-  int parameter_declaration(string tab);
-  int function_definition(string tab);
-  int function_body(string tab);
+  int init_declarator_list(c_trace_node trace_node);
+  int init_declarator(c_trace_node trace_node);
+  int declarator(c_trace_node trace_node);
+  int direct_declarator(c_trace_node trace_node);
+  int ptr_operator(c_trace_node trace_node);
+  int cv_qualifier_seq(c_trace_node trace_node);
+  int cv_qualifier(c_trace_node trace_node);
+  int declarator_id(c_trace_node trace_node);
+  int parameter_declaration_clause(c_trace_node trace_node);
+  int parameter_declaration_list(c_trace_node trace_node);
+  int parameter_declaration(c_trace_node trace_node);
+  int function_definition(c_trace_node trace_node);
+  int function_body(c_trace_node trace_node);
 
   // Derived classes.
-  int base_clause(string tab);
-  int base_specifier_list(string tab);
-  int base_specifier(string tab);
-  int access_specifier(string tab);
+  int base_clause(c_trace_node trace_node);
+  int base_specifier_list(c_trace_node trace_node);
+  int base_specifier(c_trace_node trace_node);
+  int access_specifier(c_trace_node trace_node);
 
   // Epsilon (optional) definitions.
-  int declaration_seq_opt(string tab);
-  int COLONCOLON_opt(string tab);
-  int statement_seq_opt(string tab);
-  int decl_specifier_seq_opt(string tab);
-  int init_declarator_list_opt(string tab);
-  int identifier_opt(string tab);
-  int parameter_declaration_list_opt(string tab);
-  int ELLIPSIS_opt(string tab);
-  int member_specification_opt(string tab);
-  int base_clause_opt(string tab);
-  int member_declarator_list_opt(string tab);
+  int declaration_seq_opt(c_trace_node trace_node);
+  int COLONCOLON_opt(c_trace_node trace_node);
+  int statement_seq_opt(c_trace_node trace_node);
+  int decl_specifier_seq_opt(c_trace_node trace_node);
+  int init_declarator_list_opt(c_trace_node trace_node);
+  int identifier_opt(c_trace_node trace_node);
+  int parameter_declaration_list_opt(c_trace_node trace_node);
+  int ELLIPSIS_opt(c_trace_node trace_node);
+  int member_specification_opt(c_trace_node trace_node);
+  int base_clause_opt(c_trace_node trace_node);
+  int member_declarator_list_opt(c_trace_node trace_node);
 
 public:
   c_parser_descent();
