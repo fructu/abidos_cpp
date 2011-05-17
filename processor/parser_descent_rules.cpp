@@ -187,12 +187,12 @@ int c_parser_descent::nested_name_specifier(string tab)
 
   int result = 0;
   string chain = "";
-/*## testing
-  if ( 0 != context.class_name_declaration.size() )
-    {
-      chain = context.class_name_declaration;
-    }
-    */
+  /*## testing
+    if ( 0 != context.class_name_declaration.size() )
+      {
+        chain = context.class_name_declaration;
+      }
+      */
 //  chain = colon_colon_chain;
   chain = "A";
 
