@@ -540,7 +540,7 @@ void c_semantic::member_insert(string & tab, c_context & context)
     }
 }
 /*----------------------------------------------------------------------------*/
-void c_semantic::declarator_insert(string & tab, c_context & context)
+void c_semantic::declarator_insert(string tab, c_context & context)
 {
   printf("%s## c_semantic::declarator_insert(c_context context) context.declarator.token[%s]\n"
          , tab.c_str()

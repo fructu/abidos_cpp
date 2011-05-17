@@ -181,3 +181,6 @@ abidos
     i need further work here
     
     maybe i can use semantic::vector_decl_specifier instead string parser_descent::colon_colon_chain;
+-[v] change the trace system trace.*
+-[v] code to generate tree calls of grammar trace.*
+    cat out/trace_t001.cpp.gv | dot -Tpng > out/trace_t001.cpp.gv.png

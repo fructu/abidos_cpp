@@ -19,19 +19,6 @@
 #include "tokens.h"
 #include "generator_class_diagram.h"
 #include "generator_original.h"
-
-void trace(string & tab, string s)
-{
-  if (1 != options.verbose_flag)
-    {
-      return;
-    }
-
-  tab = tab + TAB;
-  unsigned l = tab.size();
-  printf("%s[%2u]%s\n", tab.c_str(), l, s.c_str());
-}
-
 /*----------------------------------------------------------------------------*/
 c_context_tokens::c_context_tokens(c_context context_param)
 {
@@ -454,6 +441,15 @@ void c_parser_descent::yyparse(char *file_name)
       c_generator_original generator_original;
       generator_original.run(file_original);
     }
+
+  if (1 == options.verbose_flag)
+    {
+      char file_original[100];
+      sprintf(file_original, "out/trace_%s.gv", str_temp);
+      c_generator_trace generator_trace_graph;
+      generator_trace_graph.run(file_original);
+    }
+
   ts.unset();
 
   lex_file_end();
