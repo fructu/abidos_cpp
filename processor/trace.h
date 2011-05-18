@@ -31,15 +31,32 @@ private:
 
   string function_name;
   string function_name_previous;
+
   friend class c_generator_trace;
 public:
+  unsigned position;
+
+  string function_token_text_is;
+  string function_token_text_is_not;
+
+  string function_previous_token_text_is;
+  string function_previous_token_text_is_not;
+
   c_trace_node()
   {
     order = 0;
     level = 0;
 
+    position = 0;
+
     function_name = "";
     function_name_previous = "";
+
+    string function_token_text_is = "";
+    string function_token_text_is_not = "";
+
+    string function_previous_token_text_is = "";
+    string function_previous_token_text_is_not = "";
   }
 
   string get_tab(void);
@@ -66,9 +83,12 @@ private:
   friend class c_generator_trace;
 public:
   void add(c_trace_node & node, string s);
+  void token_is_add(string s, unsigned position);
+  void token_is_not_add(string t, string s, unsigned position);
 };
 
 void c_trace_graph_test(void);
 
 extern c_trace_graph trace_graph;
 #endif
+

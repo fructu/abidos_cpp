@@ -40,30 +40,30 @@ public:
 
     printf("## print_decl_specifier()\n");
     printf("## {\n");
-    for( i = 0; i < vector_decl_specifier.size(); ++i)
-    {
-      printf("  %s", vector_decl_specifier[i].token.text.c_str());
-      if( 1 == vector_decl_specifier[i].has_colon_colon_after )
+    for ( i = 0; i < vector_decl_specifier.size(); ++i)
       {
-        printf("::");
+        printf("  %s", vector_decl_specifier[i].token.text.c_str());
+        if ( 1 == vector_decl_specifier[i].has_colon_colon_after )
+          {
+            printf("::");
+          }
       }
-    }
     printf("\n");
-    printf("## }\n");    
+    printf("## }\n");
   }
 
   string get_chain_head(void)
   {
-    if( 0 < vector_decl_specifier.size() )
+    if ( 0 < vector_decl_specifier.size() )
       {
-        if( 1 == vector_decl_specifier[1].has_colon_colon_after )
-        {      
-          return vector_decl_specifier[1].token.text;
-        }
+        if ( 1 == vector_decl_specifier[1].has_colon_colon_after )
+          {
+            return vector_decl_specifier[1].token.text;
+          }
       }
-      
+
     return "";
-  }  
+  }
   /*
     c_decl_specifier get_last_decl_specifier(void)
     {

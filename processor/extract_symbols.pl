@@ -74,8 +74,73 @@ sub p1
   {
     print f_out "  0\n";
     print f_out "};\n";
+
+  }
+
+
+  print f_out "static const char *const yytokens_short[] =\n";
+  print f_out "{\n";
+  
+  $i = 0;
+
+  for( $i = 0; $i < 258; $i++)
+  {
+    if($i < 33 or $i > 126)
+    {
+      print f_out "  \"UNDEFINED\",\n";
+    }
+    else
+    {
+      $c = chr($i);
+      if($c eq "\"")
+      {
+        print f_out "  \"\\\"\",\n";
+      }
+      elsif ($c eq "\\")
+      {
+        print f_out "  \"\\\\\",\n";
+      }
+      else
+      {
+        print f_out "  \"\\\\$c\",\n";
+      }
+    }
+  }
+
+  $yytyytokentype_inside = 0;
+  foreach $l (@raw_data)
+  {
+        chomp($l);
+        $_= $l;
+        if ( $_ =~ /enum yytokentype {/ )
+        {
+          $yytyytokentype_inside = 1;                
+        }
+
+        if ($yytyytokentype_inside == 1)
+        {
+          if ( $_ =~ /}/ )
+          {
+            $yytyytokentype_inside = 2;
+          }
+          else
+          {
+            if ( $_ =~ /=/ )
+            {
+              s/([\S]+) = [\S]+/"$1",/g;
+              print f_out "$_\n";
+            }            
+          }
+        }
+  } 
+
+  if( $yytyytokentype_inside == 2)
+  {
+    print f_out "  0\n";
+    print f_out "};\n";
     print f_out "#endif\n";
   }
+
 
   close(f_in);
   close(f_out);

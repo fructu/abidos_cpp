@@ -212,7 +212,7 @@ private:
 
   void token_print(void);
   int token_get(void);
-  int token_is(int id);
+  int token_is(int id, c_trace_node trace_node);
   c_token c_token_get(void);
   // void token_previous(void);
   string colon_colon_chain;

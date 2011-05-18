@@ -19,6 +19,7 @@
 #include "tokens.h"
 #include "generator_class_diagram.h"
 #include "generator_original.h"
+#include "trace.h"
 /*----------------------------------------------------------------------------*/
 c_context_tokens::c_context_tokens(c_context context_param)
 {
@@ -225,12 +226,19 @@ c_token c_parser_descent::c_token_get(void)
   return tokens_vector[context.i_token];
 }
 /*----------------------------------------------------------------------------*/
-int c_parser_descent::token_is(int id)
+int c_parser_descent::token_is(int id , c_trace_node trace_node)
 {
   int result = 0;
+
   if ( id == token_get())
     {
+      trace_graph.token_is_add(c_token_get().text, trace_node.position);
       result = 1;
+    }
+  else
+    {
+      string s = yytokens_short[id];
+      trace_graph.token_is_not_add( c_token_get().text, s, trace_node.position );
     }
 
   return result;
