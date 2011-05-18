@@ -72,7 +72,9 @@ debug_graph_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
-FILE_TEST=t028.cpp
+#FILE_TEST=t028.cpp
+#FILE_TEST=t017.cpp
+FILE_TEST=t029.cpp
 #FILE_TEST=mass_clases.cpp
 #FILE_TEST=test_symbols_table.h
 execute: $(EXECUTABLE)
@@ -99,4 +101,5 @@ clean:
 	rm -f out/*
 	rm -f test_out/*
 	rm -f *.orig
+
 
