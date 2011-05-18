@@ -122,7 +122,7 @@ int c_parser_descent::unqualified_id(c_trace_node trace_node)
   // | '~' class_name
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
-  if ( token_is('~') )
+  if ( token_is('~', trace_node) )
     {
       context.class_member.is_destructor = 1;
       if (1 == class_name(trace_node))
@@ -200,13 +200,13 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
   printf("## mark_x101 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str() );
 //  chain = "A";
 //chain = context.class_name_declaration;
-  
+
 
   while ( 1 )
     {
       context_tokens.save(context);
       token_next(trace_node.get_tab());
-      if ( ! token_is(CLASS_NAME) )
+      if ( ! token_is(CLASS_NAME, trace_node) )
         {
           context = context_tokens.restore();
           if ( 1 == result)
@@ -225,7 +225,7 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
       chain = chain + c_token_get().text;
 
       token_next(trace_node.get_tab());
-      if ( !token_is(COLONCOLON) )
+      if ( !token_is(COLONCOLON, trace_node) )
         {
           context = context_tokens.restore();
           return 0;
@@ -267,7 +267,7 @@ int c_parser_descent::typedef_name(c_trace_node trace_node)
 
   token_next(trace_node.get_tab());
 
-  if ( token_is(TYPEDEF_NAME) )
+  if ( token_is(TYPEDEF_NAME, trace_node) )
     {
       c_decl_specifier decl(c_token_get());
       decl.type_specifier = 1;
@@ -298,7 +298,7 @@ int c_parser_descent::class_name(c_trace_node trace_node)
 
   token_next(trace_node.get_tab());
 
-  if ( token_is(CLASS_NAME) )
+  if ( token_is(CLASS_NAME, trace_node) )
     {
       // the context must be specified more up in rules tree
       // context.class_specifier_status =
@@ -328,7 +328,7 @@ int c_parser_descent::identifier(c_trace_node trace_node)
 
   token_next(trace_node.get_tab());
 
-  if ( token_is(IDENTIFIER) )
+  if ( token_is(IDENTIFIER, trace_node) )
     {
       semantic.identifier(context, c_token_get());
       return 1;
@@ -371,7 +371,7 @@ int c_parser_descent::compound_statement(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
 
   token_next(trace_node.get_tab());
-  if ( ! token_is('{') )
+  if ( ! token_is('{', trace_node) )
     {
       context = context_tokens.restore();
       return 0;
@@ -386,7 +386,7 @@ int c_parser_descent::compound_statement(c_trace_node trace_node)
     }
 
   token_next(trace_node.get_tab());
-  if ( !token_is('}') )
+  if ( !token_is('}', trace_node) )
     {
       context = context_tokens.restore();
       return 0;
@@ -416,12 +416,12 @@ int c_parser_descent::statement_seq(c_trace_node trace_node)
 
       context_good_way.save(context);
       token_next(trace_node.get_tab());
-      if ( token_is('{') )
+      if ( token_is('{', trace_node) )
         {
           ++n_open_braket;
         }
 
-      if ( token_is('}') )
+      if ( token_is('}', trace_node) )
         {
           if ( 0 == n_open_braket )
             {
@@ -537,7 +537,7 @@ int c_parser_descent::simple_declaration(c_trace_node trace_node)
   else
     {
       tokens_vector_print();
-      if ( token_is(';') )
+      if ( token_is(';', trace_node) )
         {
           tokens_vector_clear();
           return 1;
@@ -628,7 +628,7 @@ int c_parser_descent::friend_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(FRIEND) )
+  if ( token_is(FRIEND, trace_node) )
     {
       result = 1;
     }
@@ -657,7 +657,7 @@ int c_parser_descent::friend_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens_2(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(CLASS) )
+  if ( token_is(CLASS, trace_node) )
     {
       c_decl_specifier decl(c_token_get());
       decl.type_specifier = 1;
@@ -674,7 +674,7 @@ int c_parser_descent::friend_specifier(c_trace_node trace_node)
       token_next(trace_node.get_tab());
       context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
       //## this need a improve to parse thinks like A::B...
-      if ( token_is(CLASS_NAME) )
+      if ( token_is(CLASS_NAME, trace_node) )
         {
           semantic.class_name_friend(context, c_token_get());
           return 1;
@@ -693,7 +693,7 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(TYPEDEF) )
+  if ( token_is(TYPEDEF, trace_node) )
     {
       result = 1;
     }
@@ -728,8 +728,8 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens_2(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(CLASS) ||
-       token_is(STRUCT)
+  if ( token_is(CLASS, trace_node) ||
+       token_is(STRUCT, trace_node)
      )
     {
       c_decl_specifier decl(c_token_get());
@@ -747,7 +747,7 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
       token_next(trace_node.get_tab());
 //      context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
       //## this need a improve to parse thinks like A::B...
-      if ( token_is(CLASS_NAME) )
+      if ( token_is(CLASS_NAME, trace_node) )
         {
 //          semantic.class_name_friend(context, c_token_get());
           return 1;
@@ -776,27 +776,27 @@ int c_parser_descent::storage_class_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(AUTO) )
+  if ( token_is(AUTO, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(REGISTER) )
+  if ( token_is(REGISTER, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(STATIC) )
+  if ( token_is(STATIC, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(EXTERN) )
+  if ( token_is(EXTERN, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(MUTABLE) )
+  if ( token_is(MUTABLE, trace_node) )
     {
       result = 1;
     }
@@ -888,12 +888,12 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
       c_context_tokens context_tokens_0(context);
       //pre-analisys
       token_next(trace_node.get_tab());
-      if ( ! token_is('(') )
+      if ( ! token_is('(', trace_node) )
         {
           result = 1;
         }
 
-      if ( token_is(COLONCOLON) )
+      if ( token_is(COLONCOLON, trace_node) )
         {
           has_colon_colon_after = 1;
 //          context = context_tokens_0.restore();
@@ -907,61 +907,61 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
   if ( 0 == result )
     {
       token_next(trace_node.get_tab());
-//##      
+//##
 //      context.class_name_declaration = class_name;
     }
 
-  if ( token_is(CHAR) )
+  if ( token_is(CHAR, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(WCHAR_T) )
+  if ( token_is(WCHAR_T, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(BOOL) )
+  if ( token_is(BOOL, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(SHORT) )
+  if ( token_is(SHORT, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(INT) )
+  if ( token_is(INT, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(LONG) )
+  if ( token_is(LONG, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(SIGNED) )
+  if ( token_is(SIGNED, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(UNSIGNED) )
+  if ( token_is(UNSIGNED, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(FLOAT) )
+  if ( token_is(FLOAT, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(DOUBLE) )
+  if ( token_is(DOUBLE, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(VOID) )
+  if ( token_is(VOID, trace_node) )
     {
       result = 1;
     }
@@ -1004,17 +1004,17 @@ int c_parser_descent::function_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(INLINE) )
+  if ( token_is(INLINE, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(VIRTUAL) )
+  if ( token_is(VIRTUAL, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(EXPLICIT) )
+  if ( token_is(EXPLICIT, trace_node) )
     {
       result = 1;
     }
@@ -1053,12 +1053,12 @@ int c_parser_descent::ptr_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is('*') )
+  if ( token_is('*', trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is('&') )
+  if ( token_is('&', trace_node) )
     {
       result = 1;
     }
@@ -1159,7 +1159,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
           c_context_tokens context_tokens_2(context);
           token_next(trace_node.get_tab());
           // typedef class {};
-          if ( token_is('{') )
+          if ( token_is('{', trace_node) )
             {
               c_token no_identifier(IDENTIFIER,(char *)NO_CLASS_NAME);
               semantic.identifier(context, no_identifier);
@@ -1167,7 +1167,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
           else
             {
               //typedef class A t_A;
-              if ( token_is(CLASS_NAME) )
+              if ( token_is(CLASS_NAME, trace_node) )
                 {
                   context.class_name_declaration = c_token_get().text;
                 }
@@ -1203,7 +1203,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
   // context.class_specifier = 1;
 
   token_next(trace_node.get_tab());
-  if ( ! token_is('{') )
+  if ( ! token_is('{', trace_node) )
     {
       context = context_tokens.restore();
       context.class_name_declaration = class_name_previous;
@@ -1222,7 +1222,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
   member_specification_opt(trace_node);
 
   token_next(trace_node.get_tab());
-  if ( token_is('}') )
+  if ( token_is('}', trace_node) )
     {
 
       printf("%s## class_specifier }\n", trace_node.get_tab().c_str());
@@ -1294,21 +1294,21 @@ int c_parser_descent::class_key(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(CLASS) )
+  if ( token_is(CLASS, trace_node) )
     {
       context.class_key = CLASS;
       context.access_specifier = PRIVATE;
       return 1;
     }
 
-  if ( token_is(STRUCT) )
+  if ( token_is(STRUCT, trace_node) )
     {
       context.class_key = STRUCT;
       context.access_specifier = PUBLIC;
       return 1;
     }
 
-  if ( token_is(UNION) )
+  if ( token_is(UNION, trace_node) )
     {
       context.class_key = UNION;
       context.access_specifier = PUBLIC;
@@ -1350,7 +1350,7 @@ int c_parser_descent::member_specification(c_trace_node trace_node)
       c_context_tokens context_tokens(context);
       token_next(trace_node.get_tab());
 
-      if ( ! token_is(':') )
+      if ( ! token_is(':', trace_node) )
         {
           context = context_tokens.restore();
           return 0;
@@ -1382,7 +1382,7 @@ int c_parser_descent::member_declaration(c_trace_node trace_node)
     {
       token_next(trace_node.get_tab());
 
-      if ( token_is(';') )
+      if ( token_is(';', trace_node) )
         {
           tokens_vector_clear();
           return 1;
@@ -1401,7 +1401,7 @@ int c_parser_descent::member_declaration(c_trace_node trace_node)
 
       token_next(trace_node.get_tab());
 
-      if ( token_is(';') )
+      if ( token_is(';', trace_node) )
         {
           tokens_vector_clear();
           return 1;
@@ -1453,14 +1453,14 @@ int c_parser_descent::member_declarator_list(c_trace_node trace_node)
       context_good_way.save(context);
       token_next(trace_node.get_tab());
 
-      if ( token_is(';') )
+      if ( token_is(';', trace_node) )
         {
           // yes i restore here to consume ';' more up in the tree
           context = context_good_way.restore();
           return 1;
         }
 
-      if ( ! token_is(',') )
+      if ( ! token_is(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
@@ -1518,7 +1518,7 @@ int c_parser_descent::base_clause(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( ! token_is(':') )
+  if ( ! token_is(':', trace_node) )
     {
       context = context_tokens.restore();
       return 0;
@@ -1553,7 +1553,7 @@ int c_parser_descent::base_specifier_list(c_trace_node trace_node)
     {
       context_tokens.save(context);
       token_next(trace_node.get_tab());
-      if ( ! token_is(',') )
+      if ( ! token_is(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
@@ -1618,19 +1618,19 @@ int c_parser_descent::access_specifier(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(PRIVATE) )
+  if ( token_is(PRIVATE, trace_node) )
     {
       context.access_specifier = PRIVATE;
       return 1;
     }
 
-  if ( token_is(PROTECTED) )
+  if ( token_is(PROTECTED, trace_node) )
     {
       context.access_specifier = PROTECTED;
       return 1;
     }
 
-  if ( token_is(PUBLIC) )
+  if ( token_is(PUBLIC, trace_node) )
     {
       context.access_specifier = PUBLIC;
       return 1;
@@ -1674,7 +1674,7 @@ int c_parser_descent::COLONCOLON_opt(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
 
   token_next(trace_node.get_tab());
-  if ( token_is(COLONCOLON) )
+  if ( token_is(COLONCOLON, trace_node) )
     {
       return 1;
     }
@@ -1752,7 +1752,7 @@ int c_parser_descent::ELLIPSIS_opt(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
 
   token_next(trace_node.get_tab());
-  if ( token_is(ELLIPSIS) )
+  if ( token_is(ELLIPSIS, trace_node) )
     {
       c_decl_specifier decl(c_token_get());
       decl.type_specifier = 1;
@@ -1840,14 +1840,14 @@ int c_parser_descent::init_declarator_list(c_trace_node trace_node)
       context_good_way.save(context);
       token_next(trace_node.get_tab());
 
-      if ( token_is(';') )
+      if ( token_is(';', trace_node) )
         {
           // yes i restore here to consume ';' more up in the tree
           context = context_good_way.restore();
           return 1;
         }
 
-      if ( ! token_is(',') )
+      if ( ! token_is(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
@@ -1951,7 +1951,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
 
           context_good_way.save(context);
           token_next(trace_node.get_tab());
-          if ( token_is('(') )
+          if ( token_is('(', trace_node) )
             {
               if (1 == parameter_declaration_clause(trace_node))
                 {
@@ -1969,7 +1969,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 }
 
               token_next(trace_node.get_tab());
-              if ( ! token_is(')') )
+              if ( ! token_is(')', trace_node) )
                 {
                   context = context_tokens.restore();
                   return 0;
@@ -1978,7 +1978,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
               context_good_way.save(context);
               token_next(trace_node.get_tab());
 
-              if ( token_is(';') )
+              if ( token_is(';', trace_node) )
                 {
                   printf("### yes we are in a function !\n");
                   semantic.declarator_insert(trace_node.get_tab(), context);
@@ -1989,7 +1989,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 }
               // this is posible:
               // int f1(void), f2(void);
-              if ( token_is(',') )
+              if ( token_is(',', trace_node) )
                 {
                   printf("### yes we are in a function !\n");
                   semantic.declarator_insert(trace_node.get_tab(), context);
@@ -2040,12 +2040,12 @@ int c_parser_descent::ptr_operator(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is('*') )
+  if ( token_is('*', trace_node) )
     {
       return 1;
     }
 
-  if ( token_is('&') )
+  if ( token_is('&', trace_node) )
     {
       return 1;
     }
@@ -2081,12 +2081,12 @@ int c_parser_descent::cv_qualifier(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(CONST) )
+  if ( token_is(CONST, trace_node) )
     {
       result = 1;
     }
 
-  if ( token_is(VOLATILE) )
+  if ( token_is(VOLATILE, trace_node) )
     {
       result = 1;
     }
@@ -2163,7 +2163,7 @@ int c_parser_descent::parameter_declaration_clause(c_trace_node trace_node)
   context_good_way.save(context);
   token_next(trace_node.get_tab());
 
-  if ( token_is(')') )
+  if ( token_is(')', trace_node) )
     {
       context = context_good_way.restore();
       return 1;
@@ -2189,7 +2189,7 @@ int c_parser_descent::parameter_declaration_list(c_trace_node trace_node)
       context_good_way.save(context);
       token_next(trace_node.get_tab());
 
-      if ( token_is(')') )
+      if ( token_is(')', trace_node) )
         {
           context = context_good_way.restore();
           return 1;
@@ -2206,13 +2206,13 @@ int c_parser_descent::parameter_declaration_list(c_trace_node trace_node)
       context_good_way.save(context);
       token_next(trace_node.get_tab());
 
-      if ( token_is(')') )
+      if ( token_is(')', trace_node) )
         {
           context = context_good_way.restore();
           return 1;
         }
 
-      if ( !token_is(',') )
+      if ( !token_is(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
@@ -2252,7 +2252,7 @@ int c_parser_descent::parameter_declaration(c_trace_node trace_node)
       return 1;
     }
 
-  if ( token_is(VOID) )
+  if ( token_is(VOID, trace_node) )
     {
       c_token token(IDENTIFIER, (char *) "void");
       semantic.identifier(context, token);
