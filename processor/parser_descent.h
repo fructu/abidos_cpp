@@ -216,6 +216,7 @@ private:
   c_token c_token_get(void);
   // void token_previous(void);
   int is_eof(c_trace_node trace_node);
+  int preanalisys(int id, c_trace_node trace_node);
   string colon_colon_chain;
   void colon_colon_chain_process(c_token & token);
   void token_next(string tab);

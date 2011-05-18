@@ -262,6 +262,25 @@ int c_parser_descent::is_eof(c_trace_node trace_node)
   return 0;
 }
 /*----------------------------------------------------------------------------*/
+int c_parser_descent::preanalisys(int id, c_trace_node trace_node)
+{
+  trace_graph.add(trace_node, "preanalisys");
+
+  c_context_tokens context_tokens(context);
+
+  token_next(trace_node.get_tab());
+
+  if ( token_is(id, trace_node) )
+    {
+      context = context_tokens.restore();
+      return 1;
+    }
+  // ##todo | template_id
+
+  context = context_tokens.restore();
+  return 0;
+}
+/*----------------------------------------------------------------------------*/
 /*
 class A
 {
