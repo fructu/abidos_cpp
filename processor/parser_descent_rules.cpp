@@ -838,7 +838,18 @@ int c_parser_descent::type_specifier(c_trace_node trace_node)
   trace_graph.add(trace_node, "type_specifier");
 
   c_context_tokens context_tokens(context);
+  /*
+    ## the nodes of tree increased -> bad idea
 
+    if( preanalisys( CLASS, trace_node) )
+      {
+      if (1 == class_specifier(trace_node))
+        {
+          context_tokens.restore_but_not_i_token(context);
+          return 1;
+        }
+      }
+  */
   if (1 == simple_type_specifier(trace_node))
     {
       return 1;
@@ -1335,6 +1346,11 @@ int c_parser_descent::class_key(c_trace_node trace_node)
 int c_parser_descent::member_specification(c_trace_node trace_node)
 {
   trace_graph.add(trace_node, "member_specification");
+
+  if ( preanalisys('}', trace_node) )
+    {
+      return 0;
+    }
 
   if (0 == member_declaration(trace_node))
     {
@@ -2156,6 +2172,10 @@ int c_parser_descent::declarator_id(c_trace_node trace_node)
 int c_parser_descent::parameter_declaration_clause(c_trace_node trace_node)
 {
   trace_graph.add(trace_node, "parameter_declaration_clause");
+  if ( preanalisys(')', trace_node) )
+    {
+      return 1;
+    }
 
   context.i_am_in_parameter_declaration = 1;
   parameter_declaration_list_opt(trace_node);
