@@ -244,6 +244,24 @@ int c_parser_descent::token_is(int id , c_trace_node trace_node)
   return result;
 }
 /*----------------------------------------------------------------------------*/
+int c_parser_descent::is_eof(c_trace_node trace_node)
+{
+  trace_graph.add(trace_node, "is_eof");
+
+  c_context_tokens context_tokens(context);
+
+  token_next(trace_node.get_tab());
+
+  if ( token_is(0, trace_node) )
+    {
+      return 1;
+    }
+  // ##todo | template_id
+
+  context = context_tokens.restore();
+  return 0;
+}
+/*----------------------------------------------------------------------------*/
 /*
 class A
 {
