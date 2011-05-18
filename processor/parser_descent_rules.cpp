@@ -468,6 +468,11 @@ int c_parser_descent::declaration(c_trace_node trace_node)
 {
   trace_graph.add(trace_node, "declaration");
 
+  if ( 1 == is_eof(trace_node) )
+    {
+      return 0;
+    }
+
   if (1 == block_declaration(trace_node))
     {
       return 1;
