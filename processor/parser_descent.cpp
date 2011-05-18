@@ -203,7 +203,6 @@ int c_parser_descent::token_get(void)
 
   return tokens_vector[context.i_token].id;
 }
-
 /*----------------------------------------------------------------------------*/
 c_token c_parser_descent::c_token_get(void)
 {
@@ -225,7 +224,17 @@ c_token c_parser_descent::c_token_get(void)
 
   return tokens_vector[context.i_token];
 }
+/*----------------------------------------------------------------------------*/
+int c_parser_descent::token_is(int id)
+{
+  int result = 0;
+  if ( id == token_get())
+    {
+      result = 1;
+    }
 
+  return result;
+}
 /*----------------------------------------------------------------------------*/
 /*
 class A

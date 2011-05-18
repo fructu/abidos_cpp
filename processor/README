@@ -171,16 +171,18 @@ abidos
 -[v]  define classes inside classes.
 -[v] parse thinks like this int A::A_2::A_2_1::A_2_1_f(int long p1){ }
 -[-] refactor code from parser_descent to lexical_buffer
-      for the moment i think is a litle bloat to this
+      for the moment i think is a litle bloat do this
 -[v] in nodos names [out/out_run.py] A::A_2 changes for A__A_2
 -[] change nodos names [out/out_run.py] A::A_2 changes for A__A_2 in compositions/aggreggations
 -[] change nodos names [out/out_run.py] A::A_2 changes for A__A_2 in herences
--[] in A::A_2::A_2_1::A_2_1_f it should search A_2_1_f in A::A_2::A_2_1
+-[v] in A::A_2::A_2_1::A_2_1_f it should search A_2_1_f in A::A_2::A_2_1
     ##: mark_x16 context.class_name_declaration [A::A_2::A_2_1]
     printf("##: mark_x17 context.class_name_declaration [%s]\n", context.class_name_declaration.c_str());
-    i need further work here
-    
+    i need further work here    
     maybe i can use semantic::vector_decl_specifier instead string parser_descent::colon_colon_chain;
+    yes! that is;
 -[v] change the trace system trace.*
 -[v] code to generate tree calls of grammar trace.*
     cat out/trace_t001.cpp.gv | dot -Tpng > out/trace_t001.cpp.gv.png
+
+-[] fix t017 jumping to constructors t029.cpp created to this purpouse.

@@ -547,6 +547,8 @@ void c_semantic::declarator_insert(string tab, c_context & context)
          , tab.c_str()
          , context.declarator.get_full_name().c_str()
         );
+        
+  print_decl_specifier();
 
   if (NO_CLASS_STATUS ==
       context.class_specifier_status)
