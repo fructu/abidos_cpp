@@ -2,12 +2,15 @@
   junping to constructor definition
 */
 
+int n;
+/*
 class A
 {  
-  A();
+  void f(void);
 };
 
-A::A()
+void A::f(void)
 {
 }
+*/
 

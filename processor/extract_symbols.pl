@@ -87,23 +87,29 @@ sub p1
   {
     if($i < 33 or $i > 126)
     {
-      print f_out "  \"UNDEFINED\",\n";
+      print f_out "  \"UNDEFINED\",";
+      print f_out "       /*$i*/\n";
     }
     else
     {
       $c = chr($i);
       if($c eq "\"")
       {
-        print f_out "  \"\\\"\",\n";
+        print f_out "  \"\\\"\",";
       }
       elsif ($c eq "\\")
       {
-        print f_out "  \"\\\\\",\n";
+        print f_out "  \"\\\\\",";
+      }
+      elsif ($c =~ /[ \t\n<>{}\[\]]/)
+      {
+        print f_out "  \"\\\\$c\",";
       }
       else
       {
-        print f_out "  \"\\\\$c\",\n";
+        print f_out "  \"$c\",";
       }
+      print f_out "       /*$i*/\n";
     }
   }
 
@@ -128,7 +134,8 @@ sub p1
             if ( $_ =~ /=/ )
             {
               s/([\S]+) = [\S]+/"$1",/g;
-              print f_out "$_\n";
+              print f_out "$_       /*$i*/\n";
+              $i++;
             }            
           }
         }

@@ -65,6 +65,14 @@ void c_trace_graph::add(c_trace_node & node, string s)
   vector.push_back(node);
 }
 /*----------------------------------------------------------------------------*/
+void put_scaped(string & s)
+{
+  if ( "{" == s || "}" == s || "[" == s || "]" == s )
+    {
+      s = "\\" + s;
+    }
+}
+/*----------------------------------------------------------------------------*/
 void c_trace_graph::token_is_add(string s, unsigned position)
 {
   unsigned len = vector.size();
@@ -77,10 +85,7 @@ void c_trace_graph::token_is_add(string s, unsigned position)
 
   unsigned last = position;
 
-  if ( "{" == s || "}" == s || "[" == s || "]" == s )
-    {
-      s = "\\" + s;
-    }
+  put_scaped(s);
 
   if ( 0 == vector[last].function_token_text_is.size() )
     {
@@ -88,7 +93,7 @@ void c_trace_graph::token_is_add(string s, unsigned position)
     }
   else
     {
-      vector[last].function_token_text_is = vector[last].function_token_text_is + "\\ " + s;
+      vector[last].function_token_text_is = vector[last].function_token_text_is + s;
     }
 }
 /*----------------------------------------------------------------------------*/
@@ -105,18 +110,15 @@ void c_trace_graph::token_is_not_add(string t, string s, unsigned position)
 
   unsigned last = position;
 
-  if ( "{" == s || "}" == s || "[" == s || "]" == s )
-    {
-      s = "\\" + s;
-    }
+  put_scaped(s);
 
   if ( 0 == vector[last].function_token_text_is_not.size() )
     {
-      vector[last].function_token_text_is_not = "\\[\\" + t + "\\]is_not";
+      vector[last].function_token_text_is_not = t + "\\ is_not " + s;
     }
   else
     {
-      vector[last].function_token_text_is_not = vector[last].function_token_text_is_not + "\\ " + s;
+      vector[last].function_token_text_is_not = vector[last].function_token_text_is_not + "\\ "+ s;
     }
 }
 c_trace_graph trace_graph;
