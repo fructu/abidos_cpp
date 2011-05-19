@@ -15,6 +15,7 @@ class A
     class A_2_1
     {
       int A_2_1_i1;
+      A_2_1();
       int A_2_1_f(int long p1);
     };
   };
@@ -37,29 +38,13 @@ class B
 {
 };
 
-B::B::B::B()
-{
-}
-
-B B::B::B::B()
-{
-}
-
-int B::B::B::B(int p1)
-{
-}
-
-int B::B::B::B::f_b(int p1)
-{
-}
-
 float aqui;
 
 int A::A_2(int long p1)
 {
 }
 
-int A::A_2::A_2_1(int long p1)
+A::A_2::A_2_1::A_2_1()
 {
 }
 

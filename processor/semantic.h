@@ -54,7 +54,7 @@ public:
 
   string get_chain_head(void)
   {
-    if ( 0 < vector_decl_specifier.size() )
+    if ( 1 < vector_decl_specifier.size() )
       {
         if ( 1 == vector_decl_specifier[1].has_colon_colon_after )
           {
