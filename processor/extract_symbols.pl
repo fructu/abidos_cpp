@@ -83,7 +83,9 @@ sub p1
   
   $i = 0;
 
-  for( $i = 0; $i < 258; $i++)
+  print f_out "  \"EOF\",";
+
+  for( $i = 1; $i < 258; $i++)
   {
     if($i < 33 or $i > 126)
     {
