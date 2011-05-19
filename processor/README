@@ -18,8 +18,12 @@ useful commands:
  -q -x X abidos
     ulimit -c unlimited
 
-    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/mass_clases.cpp
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/mass_clases.cpp| grep -E "==\d=="
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/test_symbols_table.h| grep -E "==\d=="
+
     ./$(EXECUTABLE)  test/$(FILE_TEST)
+
+cat out/trace_t030.cpp.gv | dot -Tpng > out/trace_t030.cpp.gv.png; eog out/trace_t030.cpp.gv.png
 
 git bundle create abidos_$(date '+%F_%H_%M')_master.bundle master
 mv abidos_2011-04-14_15_06_master.bundle /home/hevia/Descargas/
@@ -191,4 +195,6 @@ abidos
     maybe do if ( token_is_not('(', trace_node) )
 -[v] fix trace.cpp put \\ only in characters what really need it
 -[v] fix t017 jumping to funtions implementation to t029.cpp this purpouse.
--[] fix t017 jumping to constructors t030.cpp created to this purpouse.
+-[v] fix t017 jumping to constructors definition t030.cpp created to this purpouse.
+-[v] fix jumping destructors definition t030.cpp created to this purpouse.
+-[] t028 A::A_2::A_2_1::A_2_1() jumping to this...

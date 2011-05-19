@@ -512,6 +512,7 @@ void c_parser_descent::yyparse(char *file_name)
 
   sprintf(file_gv, "out/out_%s.gv", str_temp);
   c_generator_class_diagram generator;
+
   generator.run(file_gv);
 
   if (1 == options.test_original_flag)

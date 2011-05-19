@@ -438,13 +438,13 @@ void c_semantic::class_name(c_context & context, c_token token)
 
   // maybe is something like this void A::A(){...
   if (
-    CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER ==
+    NO_CLASS_STATUS ==
     context.class_specifier_status)
     {
       check_coloncolon_member_function(context, token);
 
       if (
-        CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER ==
+        CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=
         context.class_specifier_status)
         {
           return;
