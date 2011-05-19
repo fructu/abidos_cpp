@@ -237,8 +237,34 @@ int c_parser_descent::token_is(int id , c_trace_node trace_node)
     }
   else
     {
+//      char s_id[10] = {};
+//      sprintf(s_id,"[%d]",id);
       string s = yytokens_short[id];
+//      s += s_id;
+
       trace_graph.token_is_not_add( c_token_get().text, s, trace_node.position );
+    }
+
+  return result;
+}
+/*----------------------------------------------------------------------------*/
+int c_parser_descent::token_is_not(int id , c_trace_node trace_node)
+{
+  int result = 0;
+
+  if ( id == token_get())
+    {
+      trace_graph.token_is_add(c_token_get().text, trace_node.position);
+    }
+  else
+    {
+//      char s_id[10] = {};
+//      sprintf(s_id,"[%d]",id);
+      string s = yytokens_short[id];
+//      s += s_id;
+
+      trace_graph.token_is_not_add( c_token_get().text, s, trace_node.position );
+      result = 1;
     }
 
   return result;

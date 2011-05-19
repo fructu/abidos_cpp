@@ -206,7 +206,7 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
     {
       context_tokens.save(context);
       token_next(trace_node.get_tab());
-      if ( ! token_is(CLASS_NAME, trace_node) )
+      if ( token_is_not(CLASS_NAME, trace_node) )
         {
           context = context_tokens.restore();
           if ( 1 == result)
@@ -225,7 +225,7 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
       chain = chain + c_token_get().text;
 
       token_next(trace_node.get_tab());
-      if ( !token_is(COLONCOLON, trace_node) )
+      if ( token_is_not(COLONCOLON, trace_node) )
         {
           context = context_tokens.restore();
           return 0;
@@ -371,7 +371,7 @@ int c_parser_descent::compound_statement(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
 
   token_next(trace_node.get_tab());
-  if ( ! token_is('{', trace_node) )
+  if (  token_is_not('{', trace_node) )
     {
       context = context_tokens.restore();
       return 0;
@@ -386,7 +386,7 @@ int c_parser_descent::compound_statement(c_trace_node trace_node)
     }
 
   token_next(trace_node.get_tab());
-  if ( !token_is('}', trace_node) )
+  if ( token_is_not('}', trace_node) )
     {
       context = context_tokens.restore();
       return 0;
@@ -592,6 +592,11 @@ int c_parser_descent::decl_specifier_seq(c_trace_node trace_node)
 int c_parser_descent::decl_specifier(c_trace_node trace_node)
 {
   trace_graph.add(trace_node, "decl_specifier");
+
+  if ( preanalisys( ')', trace_node) )
+    {
+      return 0;
+    }
 
   if (1 == storage_class_specifier(trace_node))
     {
@@ -904,7 +909,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
       c_context_tokens context_tokens_0(context);
       //pre-analisys
       token_next(trace_node.get_tab());
-      if ( ! token_is('(', trace_node) )
+      if ( token_is_not('(', trace_node) )
         {
           result = 1;
         }
@@ -1219,7 +1224,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
   // context.class_specifier = 1;
 
   token_next(trace_node.get_tab());
-  if ( ! token_is('{', trace_node) )
+  if ( token_is_not('{', trace_node) )
     {
       context = context_tokens.restore();
       context.class_name_declaration = class_name_previous;
@@ -1371,7 +1376,7 @@ int c_parser_descent::member_specification(c_trace_node trace_node)
       c_context_tokens context_tokens(context);
       token_next(trace_node.get_tab());
 
-      if ( ! token_is(':', trace_node) )
+      if ( token_is_not(':', trace_node) )
         {
           context = context_tokens.restore();
           return 0;
@@ -1481,7 +1486,7 @@ int c_parser_descent::member_declarator_list(c_trace_node trace_node)
           return 1;
         }
 
-      if ( ! token_is(',', trace_node) )
+      if ( token_is_not(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
@@ -1539,7 +1544,7 @@ int c_parser_descent::base_clause(c_trace_node trace_node)
   c_context_tokens context_tokens(context);
   token_next(trace_node.get_tab());
 
-  if ( ! token_is(':', trace_node) )
+  if ( token_is_not(':', trace_node) )
     {
       context = context_tokens.restore();
       return 0;
@@ -1574,7 +1579,7 @@ int c_parser_descent::base_specifier_list(c_trace_node trace_node)
     {
       context_tokens.save(context);
       token_next(trace_node.get_tab());
-      if ( ! token_is(',', trace_node) )
+      if ( token_is_not(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
@@ -1868,7 +1873,7 @@ int c_parser_descent::init_declarator_list(c_trace_node trace_node)
           return 1;
         }
 
-      if ( ! token_is(',', trace_node) )
+      if ( token_is_not(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
@@ -1990,7 +1995,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 }
 
               token_next(trace_node.get_tab());
-              if ( ! token_is(')', trace_node) )
+              if ( token_is_not(')', trace_node) )
                 {
                   context = context_tokens.restore();
                   return 0;
@@ -2237,7 +2242,7 @@ int c_parser_descent::parameter_declaration_list(c_trace_node trace_node)
           return 1;
         }
 
-      if ( !token_is(',', trace_node) )
+      if ( token_is_not(',', trace_node) )
         {
           context = context_tokens.restore();
           return 1;
