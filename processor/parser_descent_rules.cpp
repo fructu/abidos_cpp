@@ -600,6 +600,11 @@ int c_parser_descent::decl_specifier(c_trace_node trace_node)
 {
   trace_graph.add(trace_node, "decl_specifier");
 
+  if ( preanalisys( ';', trace_node) )
+    {
+      return 0;
+    }
+
   if ( preanalisys( ')', trace_node) )
     {
       return 0;
