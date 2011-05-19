@@ -263,7 +263,11 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
       context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
 
 // in test_28.cpp this line does not work correctly int A::A_2::A_2_1::A_2_1_f(int long p1)
-//      context.class_name_declaration = vector_decl_specifier[last].token.text;
+// ## testing
+      if ( 0 == context.class_name_declaration.size() )
+        {
+          context.class_name_declaration = vector_decl_specifier[last].token.text;
+        }
     }
 }
 /*----------------------------------------------------------------------------*/

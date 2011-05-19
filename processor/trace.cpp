@@ -111,6 +111,7 @@ void c_trace_graph::token_is_not_add(string t, string s, unsigned position)
   unsigned last = position;
 
   put_scaped(s);
+  put_scaped(t);
 
   if ( 0 == vector[last].function_token_text_is_not.size() )
     {
@@ -171,10 +172,19 @@ void c_generator_trace::functions(t_vector_trace_nodes & vector)
                   ,vector[i].function_token_text_is_not.c_str()
                  );
         }
-
+      /*
+      node [shape=box, color=blue]
+      */
       if ( 1 == shape_record )
         {
-          fprintf(f_out, "}\", shape=\"record\"]\n");
+          if ( 0 == vector[i].function_token_text_is.size() )
+            {
+              fprintf(f_out, "}\", shape=\"record\", color=black, style=dotted]\n");
+            }
+          else
+            {
+              fprintf(f_out, "}\", shape=\"record\", color=green]\n");
+            }
         }
       else
         {

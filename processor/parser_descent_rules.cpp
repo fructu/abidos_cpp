@@ -473,9 +473,16 @@ int c_parser_descent::declaration(c_trace_node trace_node)
       return 0;
     }
 
+  c_context_tokens context_tokens(context);
   if (1 == block_declaration(trace_node))
     {
       return 1;
+    }
+  context = context_tokens.restore();
+
+  if ( CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER != context.class_specifier_status )
+    {
+      semantic.clear_decl_specifier();
     }
 
   if (1 == function_definition(trace_node))
@@ -594,6 +601,16 @@ int c_parser_descent::decl_specifier(c_trace_node trace_node)
   trace_graph.add(trace_node, "decl_specifier");
 
   if ( preanalisys( ')', trace_node) )
+    {
+      return 0;
+    }
+
+  if ( preanalisys( COLONCOLON, trace_node) )
+    {
+      return 0;
+    }
+
+  if ( preanalisys( IDENTIFIER, trace_node) )
     {
       return 0;
     }
@@ -1915,6 +1932,10 @@ int c_parser_descent::init_declarator(c_trace_node trace_node)
 int c_parser_descent::declarator(c_trace_node trace_node)
 {
   trace_graph.add(trace_node, "declarator");
+  if ( preanalisys( ')', trace_node) )
+    {
+      return 0;
+    }
 
   if (1 == direct_declarator(trace_node))
     {
@@ -2300,6 +2321,10 @@ int c_parser_descent::parameter_declaration(c_trace_node trace_node)
  * function_definition: decl_specifier_seq_opt declarator
  * ctor_initializer_opt function_body | decl_specifier_seq_opt declarator
  * function_try_block ;
+ *
+ * decl_specifier_seq_opt has been proccessed in:
+ *    declaration->block_declaration->
+ *      ->simple_declaration->decl_specifier_seq_opt
  */
 int c_parser_descent::function_definition(c_trace_node trace_node)
 {

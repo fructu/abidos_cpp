@@ -190,5 +190,5 @@ abidos
 -[v] this is confuse if ( ! token_is('(', trace_node) )
     maybe do if ( token_is_not('(', trace_node) )
 -[v] fix trace.cpp put \\ only in characters what really need it
-
--[] fix t017 jumping to constructors t029.cpp created to this purpouse.
+-[v] fix t017 jumping to funtions implementation to t029.cpp this purpouse.
+-[] fix t017 jumping to constructors t030.cpp created to this purpouse.
