@@ -52,13 +52,21 @@ public:
     printf("## }\n");
   }
 
+  /*
+      in vector_decl_specifier can be
+        void A::
+      or
+        A::
+  */
   string get_chain_head(void)
   {
-    if ( 1 < vector_decl_specifier.size() )
+    int unsigned i = 0;
+
+    for (i = 0;  i < vector_decl_specifier.size(); ++i )
       {
-        if ( 1 == vector_decl_specifier[1].has_colon_colon_after )
+        if ( 1 == vector_decl_specifier[i].has_colon_colon_after )
           {
-            return vector_decl_specifier[1].token.text;
+            return vector_decl_specifier[i].token.text;
           }
       }
 

@@ -310,6 +310,13 @@ int c_parser_descent::class_name(c_trace_node trace_node)
     }
   // ##todo | template_id
 
+  if ( "B" == c_token_get().text)
+    {
+      printf("##: mark_88            context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
+      printf("##: mark_89            colon_colon_chain[%s]\n",colon_colon_chain.c_str());
+
+    }
+
   context = context_tokens.restore();
   return 0;
 }

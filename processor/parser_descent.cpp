@@ -21,6 +21,61 @@
 #include "generator_original.h"
 #include "trace.h"
 /*----------------------------------------------------------------------------*/
+/*
+  class_name = "A::B"
+  text = "B"
+  B is tail
+*/
+int chain_is_tail(string class_name_declaration, char * text)
+{
+  char class_name[100];
+  unsigned len_class_name = class_name_declaration.size();
+  unsigned len_text  = strlen(text);
+
+  if ( 0 == len_text)
+    {
+      return 0;
+    }
+
+  if ( 0 == len_class_name)
+    {
+      return 0;
+    }
+
+  if (len_text > len_class_name)
+    {
+      return 0;
+    }
+
+  sprintf(class_name,"%s", class_name_declaration.c_str());
+
+  unsigned i = len_text - 1;
+  unsigned i_class_name = len_class_name - 1;
+
+  while (1)
+    {
+      if ( ':' == class_name[i_class_name] )
+        {
+          return 1;
+        }
+
+      if ( text[i] != class_name[i_class_name] )
+        {
+          return 0;
+        }
+
+      if ( 0 == i )
+        {
+          return 1;
+        }
+
+      --i;
+      --len_class_name;
+    }
+
+  return 1;
+}
+/*----------------------------------------------------------------------------*/
 c_context_tokens::c_context_tokens(c_context context_param)
 {
   context = context_param;
@@ -429,6 +484,32 @@ void c_parser_descent::token_next(string tab)
                   printf("%s## next_token found symbol [%s]",
                          tab.c_str(), yytext);
                   token.id = p_symbol->type;
+                }
+            }
+          else
+            {
+              /*
+                t031 destructors
+                A::B::~B()
+              */
+              if ( 1 == chain_is_tail(context.class_name_declaration, yytext) )
+                {
+                  printf("##: mark_90 yytext[%s] is tail of[%s]\n",yytext,context.class_name_declaration.c_str());
+                  c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
+                  if (p_symbol)
+                    {
+                      if (p_symbol->type != 0)
+                        {
+                          // return symbol.type;
+                          printf("%s## next_token found symbol [%s]  context.class_name_declaration[%s]",
+                                 tab.c_str(),
+                                 yytext,
+                                 context.class_name_declaration.c_str()
+                                );
+                          token.id = p_symbol->type;
+                        }
+                    }
+
                 }
             }
         }
