@@ -1436,7 +1436,10 @@ int c_parser_descent::member_declaration(c_trace_node trace_node)
 
       if ( token_is(';', trace_node) )
         {
+          int access_bk = context.access_specifier;
           tokens_vector_clear();
+          context.access_specifier = access_bk;
+
           return 1;
         }
     }
