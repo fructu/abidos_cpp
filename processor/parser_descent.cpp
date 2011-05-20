@@ -494,7 +494,6 @@ void c_parser_descent::token_next(string tab)
               */
               if ( 1 == chain_is_tail(context.class_name_declaration, yytext) )
                 {
-                  printf("##: mark_90 yytext[%s] is tail of[%s]\n",yytext,context.class_name_declaration.c_str());
                   c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
                   if (p_symbol)
                     {

@@ -76,7 +76,6 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
   print_decl_specifier();
   printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
   printf("##:           token.text[%s]\n",token.text.c_str());
-  printf("##: mark_x1c      context.class_member.is_destructor[%d] \n",context.class_member.is_destructor );  
 
   printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
 
@@ -115,12 +114,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
   int is_constructor = 0;
   int is_destructor = 0;
   int is_function = 0;
-  /*
-    ##
-      int A::A_2::A_2_1::A_2_1_f(int long p1)
-      here we have token.text A_2_1_f
-      bad to know if is a constructor...
-  */
+
   if ( context.class_name_declaration == token.text ||
        chain_is_tail(context.class_name_declaration, (char *)token.text.c_str() )
     )
@@ -261,8 +255,6 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
       return;
     }
 
-  printf("##: mark_x0 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
-
   unsigned last = vector_decl_specifier.size() - 1;
 
   if ( 1 == vector_decl_specifier[last].has_colon_colon_after )
@@ -271,8 +263,6 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
       context.member_definition_outside = 1;
       context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
 
-// in test_28.cpp this line does not work correctly int A::A_2::A_2_1::A_2_1_f(int long p1)
-// ## testing
       if ( 0 == context.class_name_declaration.size() )
         {
           context.class_name_declaration = vector_decl_specifier[last].token.text;
@@ -519,14 +509,9 @@ void c_semantic::member_insert(string & tab, c_context & context)
          ,context.class_member.token.text.c_str()
         );
 
-  printf("##: mark_x1 context.class_name_declaration[%s] full_name[%s] \n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
-  printf("##: mark_x1b       context.class_member.is_destructor[%d] \n",context.class_member.is_destructor );
-  
-
   c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
   if (p_symbol)
     {
-      printf("##: mark_x2 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
       if (0 == p_symbol->class_key)
         {
           printf
@@ -537,8 +522,6 @@ void c_semantic::member_insert(string & tab, c_context & context)
       // todo -> put the file where is the definition
       if ( 1 == context.member_definition_outside )
         {
-
-          printf("##: mark_x3 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
           c_class_member * p_member = 0;
 
           p_member = p_symbol->members.get(context.class_member.get_full_name());
