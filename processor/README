@@ -199,5 +199,5 @@ abidos
 -[v] fix jumping destructors definition t030.cpp created to this purpouse.
 -[v] t028 A::A_2::A_2_1::A_2_1() jumping to this...
 -[v] t031 A::B::B() jumping to this...
--[] t031 A::B::~B() don't show ~ in class graph
+-[v] t031 A::B::~B() don't show ~ in class graph
 
