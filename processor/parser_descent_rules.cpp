@@ -188,19 +188,8 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
 
   int result = 0;
   string chain = "";
-  /*## testing
-    if ( 0 != context.class_name_declaration.size() )
-      {
-        chain = context.class_name_declaration;
-      }
-      */
-//  chain = colon_colon_chain;
-  chain = semantic.get_chain_head();
-  printf("## mark_x100 colon_colon_chain[%s]\n", colon_colon_chain.c_str() );
-  printf("## mark_x101 context.class_name_declaration[%s]\n", context.class_name_declaration.c_str() );
-//  chain = "A";
-//chain = context.class_name_declaration;
 
+  chain = semantic.get_chain_head();
 
   while ( 1 )
     {
@@ -212,8 +201,6 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
           if ( 1 == result)
             {
               context.class_name_declaration = chain;
-              printf("##: mark_x7 context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
-              printf("##: mark_x7_2 colon_colon_chain[%s]\n", colon_colon_chain.c_str() );
             }
           return result;
         }
@@ -231,8 +218,6 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
           return 0;
         }
 
-      printf("##: mark_x7_3 colon_colon_chain[%s]\n", colon_colon_chain.c_str() );
-      printf("##: mark_x7_4             chain[%s]\n", chain.c_str() );
       result = 1;
     }
 
@@ -309,13 +294,6 @@ int c_parser_descent::class_name(c_trace_node trace_node)
       return 1;
     }
   // ##todo | template_id
-
-  if ( "B" == c_token_get().text)
-    {
-      printf("##: mark_88            context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
-      printf("##: mark_89            colon_colon_chain[%s]\n",colon_colon_chain.c_str());
-
-    }
 
   context = context_tokens.restore();
   return 0;

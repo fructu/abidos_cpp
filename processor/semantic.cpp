@@ -76,6 +76,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
   print_decl_specifier();
   printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
   printf("##:           token.text[%s]\n",token.text.c_str());
+  printf("##: mark_x1c      context.class_member.is_destructor[%d] \n",context.class_member.is_destructor );  
 
   printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
 
@@ -120,7 +121,9 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
       here we have token.text A_2_1_f
       bad to know if is a constructor...
   */
-  if ( context.class_name_declaration == token.text )
+  if ( context.class_name_declaration == token.text ||
+       chain_is_tail(context.class_name_declaration, (char *)token.text.c_str() )
+    )
     {
       if ( 1 == context.class_member.is_destructor)
         {
@@ -516,7 +519,9 @@ void c_semantic::member_insert(string & tab, c_context & context)
          ,context.class_member.token.text.c_str()
         );
 
-  printf("##: mark_x1 context.class_name_declaration[%s] full_name[%s]\n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
+  printf("##: mark_x1 context.class_name_declaration[%s] full_name[%s] \n",context.class_name_declaration.c_str() ,context.class_member.get_full_name().c_str() );
+  printf("##: mark_x1b       context.class_member.is_destructor[%d] \n",context.class_member.is_destructor );
+  
 
   c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
   if (p_symbol)

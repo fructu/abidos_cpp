@@ -28,6 +28,8 @@ using namespace std;
 #include "symbols_table.h"
 #include "trace.h"
 
+int chain_is_tail(string class_name_declaration, char * text);
+
 typedef vector < c_token > t_tokens;
 
 /*
