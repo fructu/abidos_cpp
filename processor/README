@@ -200,4 +200,6 @@ abidos
 -[v] t028 A::A_2::A_2_1::A_2_1() jumping to this...
 -[v] t031 A::B::B() jumping to this...
 -[v] t031 A::B::~B() don't show ~ in class graph
+-[] t032 before public: only the first is public in graph
+    fixed partially when are not functions in class
 

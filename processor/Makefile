@@ -72,12 +72,12 @@ debug_graph_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
-#FILE_TEST=t028.cpp
+#FILE_TEST=t032.cpp
 #FILE_TEST=t017.cpp
 #FILE_TEST=t029.cpp
-FILE_TEST=t031.cpp
+#FILE_TEST=t031.cpp
 #FILE_TEST=mass_clases.cpp
-#FILE_TEST=test_symbols_table.h
+FILE_TEST=test_symbols_table.h
 execute: $(EXECUTABLE)
 	cp xdot2.py out/
 	./$(EXECUTABLE) --verbose --ts_show test/$(FILE_TEST)
