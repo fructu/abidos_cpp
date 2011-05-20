@@ -74,6 +74,8 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
   printf("## c_semantic::class_member_declarator()\n");
 
   print_decl_specifier();
+  printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
+  printf("##:           token.text[%s]\n",token.text.c_str());
 
   printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
 
@@ -84,86 +86,90 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
       ("error c_semantic::class_member_declarator() CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR !=	context.class_specifier_status\n");
       exit(-1);
     }
-  else
+
+  c_symbol *p_symbol =
+    ts.search_symbol(context.class_name_declaration);
+  if (0 == p_symbol )
     {
-      c_symbol *p_symbol =
-        ts.search_symbol(context.class_name_declaration);
-      if (p_symbol)
-        {
-          if (0 == p_symbol->class_key)
-            {
-              printf
-              ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
-              exit(-1);
-            }
+      printf("## c_semantic::class_member_declarator() context.class_name_declaration[%s] not found!\n",context.class_name_declaration.c_str());
+      return;
+    }
 
-          if ( 1 == context.member_definition_outside )
-            {
-              //## maybe is good idea check if it has beed declared and save the file where are his definition
-              printf("## c_semantic::class_member_declarator() this is outside declaration the method must be declared before\n");
+  printf("## c_semantic::class_member_declarator() context.class_name_declaration[%s] founded\n",context.class_name_declaration.c_str());
+
+  if (0 == p_symbol->class_key)
+    {
+      printf
+      ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
+      exit(-1);
+    }
+
+  if ( 1 == context.member_definition_outside )
+    {
+      //## maybe is good idea check if it has beed declared and save the file where are his definition
+      printf("## c_semantic::class_member_declarator() this is outside declaration the method must be declared before\n");
 //              return;
-            }
+    }
 
-          int is_constructor = 0;
-          int is_destructor = 0;
-          int is_function = 0;
-          /*
-            ##
-              int A::A_2::A_2_1::A_2_1_f(int long p1)
-              here we have token.text A_2_1_f
-              bad to know if is a constructor...
-          */
-          if ( context.class_name_declaration == token.text )
-            {
-              if ( 1 == context.class_member.is_destructor)
-                {
-                  is_destructor = 1;
-                  is_function = 1;
-                }
-              else
-                {
-                  is_constructor = 1;
-                  is_function = 1;
-                }
-            }
-
-          c_class_member class_member(token,
-                                      vector_decl_specifier);
-
-          class_member.is_constructor = is_constructor;
-          class_member.is_destructor = is_destructor;
-          class_member.is_function = is_function;
-          // here i get the class_key from the symbol
-          // ## but i think it should be avalible in
-          //    context.access_specifier
-          //    context.class_key
-          // tested with t010.cpp
-          //   the first access_specifier is lost, i must do this:
-
-          if ( 0 == context.access_specifier)
-            {
-              context.class_key = p_symbol->class_key;
-              switch (p_symbol->class_key)
-                {
-                case CLASS:
-                  context.access_specifier = PRIVATE;
-                  break;
-                case STRUCT:
-                  context.access_specifier = PUBLIC;
-                  break;
-                default:
-                  printf
-                  ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
-                  exit(-1);
-                }
-            }
-
-          class_member.access_specifier = context.access_specifier;
-          context.class_member = class_member;
-
-          return;
+  int is_constructor = 0;
+  int is_destructor = 0;
+  int is_function = 0;
+  /*
+    ##
+      int A::A_2::A_2_1::A_2_1_f(int long p1)
+      here we have token.text A_2_1_f
+      bad to know if is a constructor...
+  */
+  if ( context.class_name_declaration == token.text )
+    {
+      if ( 1 == context.class_member.is_destructor)
+        {
+          is_destructor = 1;
+          is_function = 1;
+        }
+      else
+        {
+          is_constructor = 1;
+          is_function = 1;
         }
     }
+
+  c_class_member class_member(token,
+                              vector_decl_specifier);
+
+  class_member.is_constructor = is_constructor;
+  class_member.is_destructor = is_destructor;
+  class_member.is_function = is_function;
+  // here i get the class_key from the symbol
+  // ## but i think it should be avalible in
+  //    context.access_specifier
+  //    context.class_key
+  // tested with t010.cpp
+  //   the first access_specifier is lost, i must do this:
+
+  if ( 0 == context.access_specifier)
+    {
+      context.class_key = p_symbol->class_key;
+      switch (p_symbol->class_key)
+        {
+        case CLASS:
+          context.access_specifier = PRIVATE;
+          break;
+        case STRUCT:
+          context.access_specifier = PUBLIC;
+          break;
+        default:
+          printf
+          ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
+          exit(-1);
+        }
+    }
+
+  class_member.access_specifier = context.access_specifier;
+  context.class_member = class_member;
+
+  return;
+
 }
 /*----------------------------------------------------------------------------*/
 void
