@@ -15,39 +15,37 @@
 #ifndef includes_lex_yacc_h
 #define includes_lex_yacc_h
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #include "parser.h"
 #include <stdio.h>
 
-  extern int yylineno;
-  extern FILE *yyin;
+    extern int yylineno;
+    extern FILE *yyin;
 
-  /*
-   * extern YYSTYPE yylval;
-   */
-  extern char lex_file_name[];
+    /*
+     * extern YYSTYPE yylval;
+     */
+    extern char lex_file_name[];
 
-  int yylex(void);
+    int yylex(void);
 
-  /*
-   * void yyerror (char *s);
-   */
-  /*
-   * int yyparse();
-   */
+    /*
+     * void yyerror (char *s);
+     */
+    /*
+     * int yyparse();
+     */
 
-  extern char *yytext;
+    extern char *yytext;
 
-  int lex_file_init(char *f);
-  void lex_file_end(void);
-  int yylex_destroy(void);
+    int lex_file_init(char *f);
+    void lex_file_end(void);
+    int yylex_destroy(void);
 
-  typedef union
-  {
-    int number;
-    char iden[8000];
-  } YYLVAL;
+    typedef union {
+        int number;
+        char iden[8000];
+    } YYLVAL;
 
 }
 #endif

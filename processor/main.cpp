@@ -23,36 +23,35 @@
 
 void test_01(void)
 {
-  c_parser_descent parser;
+    c_parser_descent parser;
 
-  parser.test_01();
+    parser.test_01();
 }
 
 void process_file(char file_name[])
 {
-  c_parser_descent parser;
+    c_parser_descent parser;
 
-  parser.yyparse(file_name);
-  // in this place there are some important thinks destroyed
-  // like lex_file_name
-  // generator.run((char *)"out.gv");
+    parser.yyparse(file_name);
+    // in this place there are some important thinks destroyed
+    // like lex_file_name
+    // generator.run((char *)"out.gv");
 }
 
 int main(int argc, char *argv[])
 {
-  printf("abidos v0.0.04\n");
-  options.proccess(argc, argv);
+    printf("abidos v0.0.04\n");
+    options.proccess(argc, argv);
 
-  // ts_tests();
+    // ts_tests();
 
-  // test_01();
+    // test_01();
 
-  if (argc < 2)
-    {
-      printf("error file expected\n");
-      exit(1);
+    if (argc < 2) {
+        printf("error file expected\n");
+        exit(1);
     }
 
-  process_file(options.file);
-  return 0;
+    process_file(options.file);
+    return 0;
 }
