@@ -302,7 +302,7 @@ public:
   void print(const char *tab);
   void insert(c_class_member member);
 //## strange error in next line ...
-//  c_class_member * get(string member);
+  c_class_member * get(string member);
 };
 
 class c_symbol

@@ -200,6 +200,8 @@ abidos
 -[v] t028 A::A_2::A_2_1::A_2_1() jumping to this...
 -[v] t031 A::B::B() jumping to this...
 -[v] t031 A::B::~B() don't show ~ in class graph
--[] t032 before public: only the first is public in graph
-    fixed partially when are not functions in class
+-[v] t032 before public: only the first is public in graph
+    fixed partially when are not constructors/destructors with body in class
+    cat out/trace_t032.cpp.gv | dot -Tpng > out/trace_t032.cpp.gv.png; eog out/trace_t032.cpp.gv.png
+-[v] fix error in c_class_member * get(string member);
 
