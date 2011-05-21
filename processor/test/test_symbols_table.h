@@ -301,7 +301,7 @@ public:
   void clear(void);
   void print(const char *tab);
   void insert(c_class_member member);
-//## strange error in next line ...
+//## strange error in next line ... solved :-)
   c_class_member * get(string member);
 };
 
