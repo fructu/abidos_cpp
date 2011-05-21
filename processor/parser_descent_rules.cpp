@@ -527,16 +527,14 @@ int c_parser_descent::simple_declaration(c_trace_node trace_node)
   if ( 1 == context.declarator.has_body )
     {
       context.declarator.has_body = 0;
-      tokens_vector_clear();
-      tokens_vector_print();
+//      tokens_vector_clear();
       return 1;
     }
   else
     {
-      tokens_vector_print();
       if ( token_is(';', trace_node) )
         {
-          tokens_vector_clear();
+//          tokens_vector_clear();
           return 1;
         }
     }
@@ -1417,10 +1415,10 @@ int c_parser_descent::member_declaration(c_trace_node trace_node)
 
       if ( token_is(';', trace_node) )
         {
-          tokens_vector_clear();
+//          tokens_vector_clear();
           return 1;
         }
-      tokens_vector_clear();
+//      tokens_vector_clear();
       return 1;
     }
 
@@ -1457,7 +1455,7 @@ int c_parser_descent::member_declaration(c_trace_node trace_node)
       //SEMICOLON_opt(trace_node);
       semantic.declarator_insert(trace_node.get_tab(), context);
       context.i_am_in_member = 0;
-      tokens_vector_clear();
+//      tokens_vector_clear();
       return 1;
     }
 
