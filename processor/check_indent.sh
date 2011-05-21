@@ -48,7 +48,7 @@ check_beautify_now()
 ########## Main of program begins here ##################3
 #PRGM=/usr/bin/bcpp
 #PRGM=/usr/bin/cb
-PRGM='astyle --style=gnu'
+PRGM='astyle --style=k&r'
 COMPILER=/usr/bin/g++
 TMP_FILE=beautify.tmp
 TMP_CPPFILE=beautify-tmp_cppfile
