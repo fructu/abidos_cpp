@@ -1,7 +1,7 @@
 /*
   private public protected issue
 */
-/*
+
 class A
 {
   private:
@@ -11,13 +11,11 @@ class A
     int public_1;
     int public_2;
 };
-*/
+
 class B
 {
-/*
   private:
     int f1(int i1);
-*/
 
   public:
     B(){};

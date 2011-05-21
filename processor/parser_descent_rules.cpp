@@ -470,12 +470,15 @@ int c_parser_descent::declaration(c_trace_node trace_node)
       semantic.clear_decl_specifier();
     }
 
+  string class_name_bk = context.class_name_declaration;
   if (1 == function_definition(trace_node))
     {
       semantic.declarator_insert(trace_node.get_tab(), context);
+      context.class_name_declaration = class_name_bk;
       return 1;
     }
 
+  context.class_name_declaration = class_name_bk;
   return 0;
 }
 
