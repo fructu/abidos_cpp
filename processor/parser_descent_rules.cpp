@@ -1348,33 +1348,30 @@ int c_parser_descent::member_specification(c_trace_node trace_node)
       return 0;
     }
 
-  if (0 == member_declaration(trace_node))
+  // | access_specifier ':'
+  if (1 == access_specifier(trace_node))
     {
-      //## working to define classes inside classes
-      if ( 1 == simple_declaration(trace_node) )
-        {
-          return 1;
-        }
-      // | access_specifier ':'
-      if (0 == access_specifier(trace_node))
-        {
-          return 0;
-        }
-      // this information
-      // private public protected
-      // -> context.access_specifier
-
       c_context_tokens context_tokens(context);
       token_next(trace_node.get_tab());
 
-      if ( token_is_not(':', trace_node) )
+      if ( token_is(':', trace_node) )
         {
-          context = context_tokens.restore();
-          return 0;
+          return 1;
         }
+      context = context_tokens.restore();
     }
 
-  return 1;
+  if (1 == member_declaration(trace_node))
+    {
+      return 1;
+    }
+  //## working to define classes inside classes
+  if ( 1 == simple_declaration(trace_node) )
+    {
+      return 1;
+    }
+
+  return 0;
 }
 
 /*----------------------------------------------------------------------------*/

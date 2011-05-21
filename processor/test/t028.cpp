@@ -38,6 +38,11 @@ class B
 {
 };
 
+class C
+{
+};
+
+
 float aqui;
 
 int A::A_2(int long p1)
