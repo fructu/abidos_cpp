@@ -204,4 +204,4 @@ abidos
     fixed partially when are not constructors/destructors with body in class
     cat out/trace_t032.cpp.gv | dot -Tpng > out/trace_t032.cpp.gv.png; eog out/trace_t032.cpp.gv.png
 -[v] fix error in c_class_member * get(string member);
-
+-[v] enhand preanalisys -> preanalisys_has_one passing vector to it.
