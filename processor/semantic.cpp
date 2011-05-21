@@ -117,7 +117,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
 
   if ( context.class_name_declaration == token.text ||
        chain_is_tail(context.class_name_declaration, (char *)token.text.c_str() )
-    )
+     )
     {
       if ( 1 == context.class_member.is_destructor)
         {
