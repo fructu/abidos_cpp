@@ -74,7 +74,7 @@ debug_graph_put:
 
 #FILE_TEST=t032.cpp
 #FILE_TEST=t017.cpp
-FILE_TEST=t027.cpp
+FILE_TEST=t011.cpp
 #FILE_TEST=t031.cpp
 #FILE_TEST=mass_clases.cpp
 #FILE_TEST=test_symbols_table.h
