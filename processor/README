@@ -168,7 +168,7 @@ abidos
     dot out/out_test_symbols_table.h.gv -Tpng -o out/out_test_symbols_table.h.png
 -[v] typedef class A {} t_A;
 -[v] reactive test 24.
--[] change NO_CLASS_NAME for a tag sytem with number increment.
+-[v] change NO_CLASS_NAME for a tag sytem with number increment.
 -[] draw typedefs like class with relation with his class type.
     t_A ---> class A
 -[v] typedef t_int t2_int in ts t2_int should point to t_int.
@@ -199,7 +199,7 @@ abidos
 -[v] fix jumping destructors definition t030.cpp created to this purpouse.
 -[v] t028 A::A_2::A_2_1::A_2_1() jumping to this...
 -[v] t031 A::B::B() jumping to this...
--[v] t031 A::B::~B() don't show ~ in class graph
+-[v] t031 A::B::~B() dont show ~ in class graph
 -[v] t032 before public: only the first is public in graph
     fixed partially when are not constructors/destructors with body in class
     cat out/trace_t032.cpp.gv | dot -Tpng > out/trace_t032.cpp.gv.png; eog out/trace_t032.cpp.gv.png
@@ -207,5 +207,5 @@ abidos
 -[v] enhand preanalisys -> preanalisys_has_one passing vector to it.
 -[v] t033 fix before A::A(){} class B{}; is parser as A::B
     cat out/trace_t033.cpp.gv | dot -Tpng > out/trace_t033.cpp.gv.png; eog out/trace_t033.cpp.gv.png
--[] t027 typedef no name class
+-[v] t027 typedef no name class soved with change NO_CLASS_NAME for a tag sytem with number increment.
 
