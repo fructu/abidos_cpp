@@ -108,9 +108,21 @@ c_context_tokens::restore_but_not_i_token(c_context & context_param)
 c_parser_descent::c_parser_descent()
 {
     context.just_reloaded = 1;
+    class_no_name_number = 0;
+    class_no_name = "";
 }
-
 /*----------------------------------------------------------------------------*/
+string c_parser_descent::get_class_no_name(void)
+{
+    char str[100] = {'\0'};
+
+    sprintf(str,"%s%d",NO_CLASS_NAME,class_no_name_number);
+    class_no_name = str;
+
+    return class_no_name;
+}
+/*----------------------------------------------------------------------------*/
+
 c_parser_descent::~c_parser_descent()
 {
 }

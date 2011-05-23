@@ -13,6 +13,7 @@
 
 ------------------------------------------------------------------------------*/
 #include <stdlib.h>
+#include <string.h>
 #include "parser_descent.h"
 #include "tokens.h"
 
@@ -1048,7 +1049,8 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
             token_next(trace_node.get_tab());
             // typedef class {};
             if ( token_is('{', trace_node) ) {
-                c_token no_identifier(IDENTIFIER,(char *)NO_CLASS_NAME);
+                ++class_no_name_number;
+                c_token no_identifier(IDENTIFIER, get_class_no_name().c_str());
                 semantic.identifier(context, no_identifier);
             } else {
                 //typedef class A t_A;
@@ -1071,7 +1073,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
 
             // '{' should be in the buffer
             context = context_tokens_2.restore();
-            context.class_name_declaration = NO_CLASS_NAME;
+            context.class_name_declaration = get_class_no_name().c_str();
         } else {
             printf("error c_parser_descent::class_specifier() class without name\n");
             context.class_name_declaration = class_name_previous;
@@ -1108,7 +1110,13 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
 
         context.is_typedef = was_typedef;
         if ( 1 == context.is_typedef) {
-            if ( 1 != identifier(trace_node)) {
+            if ( 1 == identifier(trace_node)) {
+                char * pch = NULL;
+                pch = strstr((char *)context.class_name_declaration.c_str(),NO_CLASS_NAME);
+                if (NULL != pch) {
+                    ts.change_key(context.class_name_declaration, c_token_get().text);
+                }
+            } else {
                 context = context_tokens.restore();
                 context.class_name_declaration = class_name_previous;
                 return 0;

@@ -23,7 +23,7 @@
 using namespace std;
 
 #define NO_IDENTIFIER "@IDENTIFIER#"
-#define NO_CLASS_NAME "#NO_CLASS_NAME#"
+#define NO_CLASS_NAME "NO_CLASS_NAME#"
 
 #include "symbols_table.h"
 #include "trace.h"
@@ -199,6 +199,12 @@ private:
 
     t_tokens tokens_vector;
 
+    // this is for cases like:
+    //    typedef class{} t_A;
+    int class_no_name_number;
+    string class_no_name;
+    string get_class_no_name(void);
+
     void tokens_vector_print(void);
     void tokens_vector_print_from_actual(void);
 
@@ -313,3 +319,4 @@ public:
 };
 
 #endif
+

@@ -13,14 +13,22 @@ typedef class B
 
 typedef class
 {
-} t_C;
+} t_C1;
+
+typedef class
+{
+} t_C2;
+
+typedef class
+{
+} t_C3;
 
 int i1;
 
 typedef int long t_int;
 typedef t_int t2_int;
 
-class A2
+class A2: private t_C3
 {
 };
 

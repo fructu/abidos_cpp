@@ -383,7 +383,41 @@ void c_symbols_table::insert(c_symbol symbol)
     // c_symbol symbol(token);
     stack[last][symbol.token.text] = symbol;
 }
+/*----------------------------------------------------------------------------*/
+void c_symbols_table::change_key(string key_old, string key_new)
+{
+    long i = stack.size() - 1;
 
+    if (i < 0) {
+        printf
+        ("error c_symbols_table::change_key -> ( last < 0)\n");
+        exit(-1);
+    }
+
+    unsigned last = stack.size() - 1;
+
+    if (i < 0) {
+        printf
+        ("error c_symbols_table::change_key -> ( last < 0)\n");
+        exit(-1);
+    }
+
+    if ( 0 == stack[last].count(key_old) ) {
+        printf
+        ("error c_symbols_table::change_key -> ! stack[last].count(key_old)\n");
+        exit(-1);
+    }
+
+    if ( 0 == key_new.size() ) {
+        printf
+        ("error c_symbols_table::change_key -> 0 == key_new.size()\n");
+        exit(-1);
+    }
+
+    stack[last][key_new] = stack[last][key_old];
+    stack[last].erase(key_old);
+    stack[last][key_new].token.text = key_new;
+}
 /*----------------------------------------------------------------------------*/
 void c_symbols_table::print(void)
 {

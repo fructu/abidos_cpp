@@ -43,7 +43,7 @@ struct c_token {
         line = 0;
     }
 
-    c_token(int t, char *s) {
+    c_token(int t, const char *s) {
         id = t;
         text = s;
 
@@ -374,6 +374,7 @@ public:
     void unset();
 
     void insert(c_symbol symbol);
+    void change_key(string key_old, string key_new);
     void print(void);
 
     c_symbol *search_symbol(string str);
