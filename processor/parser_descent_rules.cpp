@@ -769,7 +769,7 @@ int c_parser_descent::type_specifier(c_trace_node trace_node)
     }
 
     if (1 == class_specifier(trace_node)) {
-        context_tokens.restore_but_not_i_token(context);
+//        context_tokens.restore_but_not_i_token(context);
         return 1;
     }
 
@@ -2128,6 +2128,4 @@ int c_parser_descent::function_body(c_trace_node trace_node)
 
     return compound_statement(trace_node);
 }
-
-
 /*----------------------------------------------------------------------------*/
