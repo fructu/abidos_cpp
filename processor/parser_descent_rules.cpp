@@ -541,7 +541,7 @@ int c_parser_descent::decl_specifier(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "decl_specifier");
 
-    const int vector_id[]={';' , ')', COLONCOLON,IDENTIFIER, -1};
+    const int vector_id[]={';' , ')', COLONCOLON,IDENTIFIER, '~', -1};
     if (preanalisys_has_one(  vector_id,trace_node) ) {
         return 0;
     }

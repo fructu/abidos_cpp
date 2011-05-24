@@ -61,7 +61,7 @@ show includes todo
 -[] refactor code from main.cpp to the previous class.
 -[] move code inside of abidos/preprocessor.
 -[] parser will be invoke from preprocesso
-    mabye the easy way is create a big file preprocesed with gcc
+    maybe the easy way is create a big file preprocesed with gcc
 
 abidos
 -[v] draft first version of types_table.
@@ -208,4 +208,9 @@ abidos
 -[v] t033 fix before A::A(){} class B{}; is parser as A::B
     cat out/trace_t033.cpp.gv | dot -Tpng > out/trace_t033.cpp.gv.png; eog out/trace_t033.cpp.gv.png
 -[v] t027 typedef no name class soved with change NO_CLASS_NAME for a tag sytem with number increment.
-
+-[v] prune decl_specifier '~' ';' t030 241_is_eof -> 227_is_eof
+-[] prune declarator ';'
+    const int vector_id[]={';' , ')', COLONCOLON,IDENTIFIER, '~', -1};
+    if (preanalisys_has_one(  vector_id,trace_node) ) {
+        return 0;
+    }

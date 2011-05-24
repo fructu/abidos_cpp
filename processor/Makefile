@@ -72,10 +72,7 @@ debug_graph_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
-#FILE_TEST=t032.cpp
-#FILE_TEST=t017.cpp
-FILE_TEST=t011.cpp
-#FILE_TEST=t031.cpp
+FILE_TEST=t033.cpp
 #FILE_TEST=mass_clases.cpp
 #FILE_TEST=test_symbols_table.h
 execute: $(EXECUTABLE)
