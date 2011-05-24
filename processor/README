@@ -209,8 +209,4 @@ abidos
     cat out/trace_t033.cpp.gv | dot -Tpng > out/trace_t033.cpp.gv.png; eog out/trace_t033.cpp.gv.png
 -[v] t027 typedef no name class soved with change NO_CLASS_NAME for a tag sytem with number increment.
 -[v] prune decl_specifier '~' ';' t030 241_is_eof -> 227_is_eof
--[] prune declarator ';'
-    const int vector_id[]={';' , ')', COLONCOLON,IDENTIFIER, '~', -1};
-    if (preanalisys_has_one(  vector_id,trace_node) ) {
-        return 0;
-    }
+-[v] prune declarator ';' t030 227_is_eof -> 216_is_eof

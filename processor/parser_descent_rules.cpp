@@ -1737,7 +1737,9 @@ int c_parser_descent::init_declarator(c_trace_node trace_node)
 int c_parser_descent::declarator(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "declarator");
-    if ( preanalisys( ')', trace_node) ) {
+
+    const int vector_id[]={')', ';', -1};
+    if (preanalisys_has_one(  vector_id,trace_node) ) {
         return 0;
     }
 
