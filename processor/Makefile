@@ -100,5 +100,8 @@ clean:
 	rm -f out/*
 	rm -f test_out/*
 	rm -f *.orig
+	rm -f *.pyc
+	rm -f test_out/*.pyc		
+	
 
 

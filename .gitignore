@@ -1,4 +1,5 @@
 *.o
+*.pyc
 processor/abidos
 processor/lexer.c
 processor/nohup.out

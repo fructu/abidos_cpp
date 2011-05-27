@@ -219,7 +219,7 @@ abidos
 -[] do parsing [const]
 -[] do parsing namespace
 -[] do parsing using namespace_name
--[] erase xdot2.pyc from history
+-[v] erase xdot2.pyc from history
     git filter-branch --index-filter 'git update-index --remove xdot2.pyc' 7dffeb6..HEAD
     git push --force --verbose --dry-run
     git push --force
