@@ -116,6 +116,7 @@ clean:
 	rm -f includes_yacc.h
 	rm -f *~
 	rm -f $(EXEC)
+	rm -f *.pyc
 
 execute: $(EXEC)
 #	./$(EXEC) -batch input.txt -follow -print -no-sharp
