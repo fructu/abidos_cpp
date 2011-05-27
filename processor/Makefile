@@ -6,6 +6,7 @@ OBJS = options.o \
 	lexer.o \
 	parser_descent.o \
 	parser_descent_rules.o \
+	parser_descent_preprocessor.cpp \
 	symbols_table.o \
 	semantic.o \
 	generator_class_diagram.o \
@@ -72,7 +73,7 @@ debug_graph_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
-FILE_TEST=t033.cpp
+FILE_TEST=t034.cpp
 #FILE_TEST=mass_clases.cpp
 #FILE_TEST=test_symbols_table.h
 execute: $(EXECUTABLE)

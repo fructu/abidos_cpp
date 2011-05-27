@@ -29,6 +29,10 @@ extern "C" {
 
     int yylex(void);
 
+    int lex_file_init(const char *f);
+    int lex_file_push(const char *f);
+    int lex_file_pop(void);
+
     /*
      * void yyerror (char *s);
      */
@@ -38,7 +42,10 @@ extern "C" {
 
     extern char *yytext;
 
-    int lex_file_init(char *f);
+    int lex_stack_size(void);
+    int lex_file_init(const char *f);
+    int lex_file_push(const char *f);
+    int lex_file_pop(void);
     void lex_file_end(void);
     int yylex_destroy(void);
 

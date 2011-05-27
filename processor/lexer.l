@@ -62,7 +62,8 @@ stringtext				([^"])|(\\.)
 
 "/*"					{ skip_comment(); }
 "//"					{ skip_until_eol(); }
-
+"#"					{ return '#'; }
+"include"	{ return PREPROCESSOR_INCLUDE; }
 "{"					{ return '{'; }
 "<%"					{ return '{'; }
 "}"					{ return '}'; }
@@ -270,22 +271,140 @@ check_identifier(const char *s)
 	return IDENTIFIER;
 }
 
-int lex_file_init(char *f)
-{
-    sprintf(lex_file_name,"%s",f);
 
-//    printf("lex_file_name[%s]\n",lex_file_name);
+#define STACK_FILE_NAME_LEN (1024)
+
+struct s_stack
+{
+  char * name;
+  int lineno;
+};
+
+struct s_stack * stack_file_name[STACK_FILE_NAME_LEN];
+int stack_top = 0;
+
+void stack_file_name_init(void)
+{
+  int i = 0;
+
+  for(i = 0; i < STACK_FILE_NAME_LEN; ++i){
+    stack_file_name[STACK_FILE_NAME_LEN] = NULL;
+  }
+
+  stack_top = 0;
+}
+
+void stack_file_name_push(void)
+{
+  if ( STACK_FILE_NAME_LEN == stack_top )
+  {
+    printf("     error stack_file_name_push overflow[%d]\n", stack_top);
+    exit(-1);
+  }
+
+  stack_file_name[stack_top] =
+    (struct s_stack *) malloc(sizeof(struct s_stack) );
+
+  stack_file_name[stack_top]->name =
+    (char *) malloc(sizeof(char) * (strlen(lex_file_name) + 1));
+
+  stack_file_name[stack_top]->lineno = yylineno;
+  sprintf(stack_file_name[stack_top]->name,"%s",lex_file_name);
+
+  ++stack_top;
+}
+
+void stack_file_name_pop(void)
+{
+  if ( 0 == stack_top )
+  {
+    printf("     error stack_file_name_push downflow[%d]\n", stack_top);
+    exit(-1);
+  }
+
+  --stack_top;
+  yyset_lineno(stack_file_name[stack_top]->lineno);
+  sprintf(lex_file_name,"%s",stack_file_name[stack_top]->name);
+
+  free(stack_file_name[stack_top]->name);
+  stack_file_name[stack_top]->name = NULL;
+  stack_file_name[stack_top]->lineno = 0;
+  free(stack_file_name[stack_top]);
+
+  stack_file_name[stack_top] == NULL;
+  fclose(yyin);
+}
+
+int lex_file_init(const char *f)
+{
+    stack_file_name_init();
+
+    sprintf(lex_file_name,"%s",f);
 
     yyin=fopen(f,"r");
     if( NULL==yyin )
     {
-        printf("     error open [%s]\n",f);
+        printf("     error lex_file_init open [%s]\n",f);
         return 0;
     }
 
     return 1;
 }
 
+int lex_file_push(const char *f)
+{
+    unsigned len = strlen(f);
+    unsigned i = 0;
+
+    if(len < 3){
+      printf("     error lex_file_push file too short [%s]\n",f);
+    }
+
+    //save the actual file name
+    stack_file_name_push();
+    yyset_lineno(1);
+
+    lex_file_name[i] = f[i+1];
+    ++i;
+    while( i < len ){
+      if( '"' == f[i+1]){
+        lex_file_name[i] = '\0';
+        break;
+      }
+
+      lex_file_name[i] = f[i+1];
+      ++i;
+    }
+
+    yyin=fopen(lex_file_name,"r");
+    if( NULL==yyin )
+    {
+        printf("     error lex_file_push open [%s]\n",lex_file_name);
+        return 0;
+    }
+
+    yypush_buffer_state(yy_create_buffer( yyin, YY_BUF_SIZE ));
+
+//    yy_init_globals();
+    return 1;
+}
+
+int lex_file_pop(void)
+{
+  stack_file_name_pop();
+  yypop_buffer_state();
+
+  if ( !YY_CURRENT_BUFFER ){
+    yyterminate();
+  }
+
+  return 1;
+}
+
+int lex_stack_size(void)
+{
+  return stack_top;
+}
 
 void lex_file_end(void)
 {
