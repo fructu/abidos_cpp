@@ -223,6 +223,10 @@ private:
     string colon_colon_chain;
     void colon_colon_chain_process(c_token & token);
     void token_next(string tab);
+
+    // Expressions
+    int preprocessor_include(c_trace_node trace_node);
+
     /*
      * rules from yacc
      */

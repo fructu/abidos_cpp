@@ -323,6 +323,13 @@ int c_parser_descent::is_eof(c_trace_node trace_node)
     token_next(trace_node.get_tab());
 
     if ( token_is(0, trace_node) ) {
+        if (0 == lex_stack_size() ) {
+            return 1;
+        } else {
+            lex_file_pop();
+            //  context = context_tokens.restore();
+            return 0;
+        }
         return 1;
     }
     // ##todo | template_id

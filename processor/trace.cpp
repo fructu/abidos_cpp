@@ -65,9 +65,36 @@ void c_trace_graph::add(c_trace_node & node, string s)
 /*----------------------------------------------------------------------------*/
 void put_scaped(string & s)
 {
-    if ( "{" == s || "}" == s || "[" == s || "]" == s ) {
+    if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s ) {
         s = "\\" + s;
+    } else {//s can be a string
+        char str_in[1024] = {'\0'};
+        char str_out[1024] = {'\0'};
+        int i_in = 0;
+        int i_out = 0;
+        char c=0;
+
+        sprintf(str_in,"%s",s.c_str() );
+        while ( '\0' != str_in[i_in]) {
+            c=str_in[i_in];
+            if ( '{' == c || '}' == c || '[' == c || ']' == c) {
+                str_out[i_out]='\\';
+                ++i_out;
+                str_out[i_out]=str_in[i_in];
+            } else if ('/' == c) {
+                str_out[i_out]='_';
+            } else if ('"' == c) {
+                str_out[i_out]='_';
+            } else {
+                str_out[i_out]=str_in[i_in];
+            }
+            ++i_in;
+            ++i_out;
+        }
+        str_out[i_out]='\0';
+        s=str_out;
     }
+
 }
 /*----------------------------------------------------------------------------*/
 void c_trace_graph::token_is_add(string s, unsigned position)
