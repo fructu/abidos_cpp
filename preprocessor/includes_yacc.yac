@@ -1,0 +1,87 @@
+/*------------------------------------------------------------------------------
+
+	Proyecto			: show_includes
+	Codigo				: includes_yacc.yac
+	Descripcion			: 
+	Version				: 0.1
+	Autor				: F. Manuel Hevia Garcia
+	Fecha creacion		: 30/12/2010
+	Fecha modificacion	: 
+
+	Observaciones :
+
+			
+------------------------------------------------------------------------------*/
+%{
+#include <stdio.h>
+#include <string.h>
+#include "includes_lex_yacc.h"
+#include "includes_semantic.h"
+%}
+%union{
+/*	int		int;*/
+	char	id[20000];
+}
+
+%token '#'
+%token TOKEN_INCLUDE
+%token OTHER_TOKEN
+%token <id> STRING_COMMILLAS
+%token <id> STRING_SHARP
+
+
+%start s
+%%
+/*----------------------------------------------------------------------------*/
+s: no_errors
+	|errors
+	;
+
+errors: error
+	|errors error
+	;
+
+no_errors:
+	prepro_lines
+	;
+
+prepro_lines: 
+	prepro_line
+	|prepro_lines prepro_line
+	;
+/*
+prepro_line: 
+	'#' TOKEN_INCLUDE STRING
+	{
+		includes_semantic.include_process($3);
+	}
+	| '#'
+	;
+*/
+prepro_line: 
+	'#' TOKEN_INCLUDE STRING_COMMILLAS
+	{
+		includes_semantic.include_process($3, (char *)"\"");
+	}
+	|'#' TOKEN_INCLUDE STRING_SHARP
+	{
+		includes_semantic.include_process($3, (char *)"<");
+	}
+	| '#'
+	| STRING_COMMILLAS
+	| STRING_SHARP
+	;
+/*----------------------------------------------------------------------------*/
+%%
+void yyerror(char *p_cadena){
+/*
+	printf(" ERROR SINTACTICO file[%s:%d] -> [%s] yytext[%s]\n"
+			,lex_file_name
+			,yylineno
+			,p_cadena
+			,yytext
+	);
+*/
+}
+/*----------------------------------------------------------------------------*/
+

@@ -1,0 +1,83 @@
+show_includes
+
+http://code.google.com/p/jrfonseca/wiki/XDot
+xdot.py out_1.gv -f fdp
+http://www.graphviz.org/doc/schema/attributes.xml
+
+
+1. A brief description of the project.
+   sudo apt-get install graphviz
+
+2. A pointer to the project website (if it has one).
+3. Notes on the developer’s build environment and potential portability problems.
+4. A roadmap describing important files and subdirectories.
+5. Either build/installation instructions or a pointer to a file containing same (usually INSTALL).
+6. Either a maintainers/credits list or a pointer to a file containing same (usually CREDITS).
+7. Either recent project news or a pointer to a file containing same (usually NEWS).
+8. Project mailing list addresses.
+
+
+manual
+./xdot2.py -f dot out_last.gv
+
+
+todo
+
+http://www.ffnn.nl/pages/articles/media/uml-diagrams-using-graphviz-dot.php
+
+
+subgraph name must begin with cluster...
+
+digraph G {
+        fontname = "Bitstream Vera Sans"
+        fontsize = 8
+
+        node [
+                fontname = "Bitstream Vera Sans"
+                fontsize = 8
+                shape = "record"
+        ]
+
+        edge [
+                fontname = "Bitstream Vera Sans"
+                fontsize = 8
+        ]
+
+        Animal [
+                label = "{Animal|+ name : string\l+ age : int\l|+ die() : void\l}"
+        ]
+}
+
+
+
+xdot.py
+/*
+i cant modificate get_url to slice the node and return a number in the begin of URL
+to indicate what atribute or method show.
+*/
+class Node(Element):
+
+    def __init__(self, x, y, w, h, shapes, url):
+        Element.__init__(self, shapes)
+
+        self.x = x
+        self.y = y
+
+        self.x1 = x - 0.5*w
+        self.y1 = y - 0.5*h
+        self.x2 = x + 0.5*w
+        self.y2 = y + 0.5*h
+
+        self.url = url
+
+    def is_inside(self, x, y):
+        return self.x1 <= x and x <= self.x2 and self.y1 <= y and y <= self.y2
+
+    def get_url(self, x, y):
+        if self.url is None:
+            return None
+        #print (x, y), (self.x1, self.y1), "-", (self.x2, self.y2)
+        if self.is_inside(x, y):
+            return Url(self, self.url)
+        return None
+
