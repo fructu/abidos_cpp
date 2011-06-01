@@ -117,9 +117,12 @@ clean:
 	rm -f *~
 	rm -f $(EXEC)
 	rm -f *.pyc
+	rm -f nohup.out
+	rm -f out_run.py
 
 execute: $(EXEC)
 #	./$(EXEC) -batch input.txt -follow -print -no-sharp
+	ls *.cpp > input.txt
 	./$(EXEC) -batch input.txt -follow -print
 #	./$(EXEC) input.txt -no-sharp -follow
 #	./$(EXEC) input.txt -no-sharp -follow -batch
