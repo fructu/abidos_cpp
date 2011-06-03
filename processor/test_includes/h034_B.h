@@ -1,4 +1,4 @@
-#include "test_includes/h034_FATHER.h"
+#include "h034_FATHER.h"
 class B: public FATHER
 {
   B();

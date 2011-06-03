@@ -11,6 +11,7 @@ OBJS = options.o \
 	semantic.o \
 	generator_class_diagram.o \
 	generator_original.o \
+	ts.o \
 	main.o
 
 CC = g++
@@ -19,9 +20,9 @@ CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 EXECUTABLE=abidos
 
-all: clean make_descent test_run
+all: clean $(EXECUTABLE) test_run
 
-indent_run: clean make_descent
+indent_run: clean $(EXECUTABLE) check_indent.sh indent_run.sh
 	./check_indent.sh
 	./indent_run.sh
 
@@ -31,11 +32,11 @@ indent_run: clean make_descent
 .cpp.o:
 	$(CC) $(CFLAGS) $<
 
-make_descent:  $(OBJS)
-	$(CC) -o $(EXECUTABLE)  $(OBJS)
+ts.o: ../preprocessor/ts.cpp
+	$(CC) $(CFLAGS) ../preprocessor/ts.cpp
 
-tryit: parser.o lexer.o
-	cc -o tryit parser.o lexer.o
+$(EXECUTABLE):  $(OBJS)
+	$(CC) -o $(EXECUTABLE)  $(OBJS)
 
 # extract_symbols.pl tokens.h
 parser.c parser.h: parser.y
@@ -58,7 +59,7 @@ generator_class_diagram.cpp: generate_begin_graph.cpp
 generate_begin_graph.cpp: python/out_begin_2.gv
 	./generate_begin_graph.pl
 
-test_run: tests_run.pl
+test_run: tests_run.pl $(EXECUTABLE)
 	./tests_run.pl
 
 debug_put:
@@ -92,7 +93,7 @@ debug_drop:
 	rm parser_descent_rules.cpp_no_debug
 
 clean:
-	rm -f tryit *.o
+	rm -f *.o
 	rm -f lexer.c parser.c parser.h tokens.h
 	rm -f *~
 	rm -f *.bk
@@ -102,6 +103,4 @@ clean:
 	rm -f *.orig
 	rm -f *.pyc
 	rm -f test_out/*.pyc		
-	
-
 

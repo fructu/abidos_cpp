@@ -318,7 +318,7 @@ void stack_file_name_pop(void)
 {
   if ( 0 == stack_top )
   {
-    printf("     error stack_file_name_push downflow[%d]\n", stack_top);
+    printf("     error stack_file_name_pop downflow[%d]\n", stack_top);
     exit(-1);
   }
 
@@ -356,6 +356,8 @@ int lex_file_push(const char *f)
     unsigned len = strlen(f);
     unsigned i = 0;
 
+      printf("##:    lex_file_push [%s]\n",f);
+
     if(len < 3){
       printf("     error lex_file_push file too short [%s]\n",f);
     }
@@ -364,16 +366,20 @@ int lex_file_push(const char *f)
     stack_file_name_push();
     yyset_lineno(1);
 
-    lex_file_name[i] = f[i+1];
-    ++i;
-    while( i < len ){
-      if( '"' == f[i+1]){
-        lex_file_name[i] = '\0';
-        break;
-      }
-
+    if( f[0] == '"' ){    
       lex_file_name[i] = f[i+1];
       ++i;
+      while( i < len ){
+        if( '"' == f[i+1]){
+          lex_file_name[i] = '\0';
+          break;
+        }
+
+        lex_file_name[i] = f[i+1];
+        ++i;
+      }
+    }else{
+      sprintf(lex_file_name,"%s",f);
     }
 
     yyin=fopen(lex_file_name,"r");

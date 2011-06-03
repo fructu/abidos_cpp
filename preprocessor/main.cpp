@@ -29,10 +29,10 @@ void file_process(char *f)
 		printf("    file_process()[%s]\n",f);
 	}
 
-	ts.file_begin(f);
+	ts_includes.file_begin(f);
 
 	yyparse();
-	ts.file_end();
+	ts_includes.file_end();
 
 	lex_file_end();
 	yylex_destroy();
@@ -339,9 +339,9 @@ int main(int argc, char* argv[])
 			if( 1 == config.print_)
 			{
 			   config.print();
-			   ts.print();
+			   ts_includes.print();
 			}
-		    ts.generate();
+		    ts_includes.generate();
 		}
 	}
 

@@ -18,6 +18,7 @@
 extern "C" {
 #include "parser.h"
 #include <stdio.h>
+#define ID_MAX_LEN (8000)
 
     extern int yylineno;
     extern FILE *yyin;
@@ -51,7 +52,7 @@ extern "C" {
 
     typedef union {
         int number;
-        char iden[8000];
+        char iden[ID_MAX_LEN];
     } YYLVAL;
 
 }

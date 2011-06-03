@@ -109,7 +109,7 @@ class c_cell
 		~c_cell();
 		void init(void);
 		void print(void);
-		void fill(char *f1, char * c_type);
+		void fill(const char *f1, char * c_type);
 		char * full(void);
 		int get_number_dirs(void);
 		void path_resolve(c_cell & cell);
@@ -153,11 +153,12 @@ class c_ts
 		void file_end(void);
 
 		//return path resolved
-		c_cell resolve(char *f, char * c_type);
+		c_cell resolve(const char *f, char * c_type);
 		void file_included(char *f, char * c_type);
 };
 
-extern c_ts ts;
+void str_drop_char(char *p_str, char c);
+extern c_ts ts_includes;
 #endif
 /*----------------------------------------------------------------------------*/
 

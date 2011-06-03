@@ -214,7 +214,7 @@ abidos
     http://www.taekwondo-wiki.com/2008/apidocs/flex-2.5.35.zip/flex_11.html#SEC15
     cat out/trace_t034.cpp.gv | dot -Tpng > out/trace_t034.cpp.gv.png; eog out/trace_t034.cpp.gv.png
     valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/t034.cpp| grep -E "==\d=="
--[] do preprocessor change pwd #include "h/h1.h" h1.h cand have #include "h2" in h directory
+-[v] do preprocessor change pwd #include "h/h1.h" h1.h cand have #include "h2" in h directory
 -[] do parsing templates <>
 -[] do parsing [const]
 -[] do parsing namespace

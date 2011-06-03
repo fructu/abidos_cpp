@@ -13,7 +13,7 @@
 
 ------------------------------------------------------------------------------*/
 #include "ts.h"
-#include "includes_lex_yacc.h"
+//#include "includes_lex_yacc.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,7 +46,7 @@ void c_files_to_process::push(char * file)
 		return;
 	}
 
-	c_cell cell = ts.resolve(file, (char *)"\"");
+	c_cell cell = ts_includes.resolve(file, (char *)"\"");
 
 	files_to_process.push_back(cell.full());
 	all_files[file]=1;
@@ -127,7 +127,7 @@ void c_cell::print(void)
 	printf(" path[%s] name[%s] delimiter[%s]", path.c_str(), name.c_str(), delimiter.c_str() );
 }
 /*----------------------------------------------------------------------------*/
-void c_cell::fill(char *f1, char * c_type)
+void c_cell::fill(const char *f1, char * c_type)
 /*
 	prueba/p2/f.h
 			 ^   ^
@@ -361,7 +361,7 @@ void c_cell::path_resolve(c_cell & cell)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
-c_ts ts;
+c_ts ts_includes;
 /*----------------------------------------------------------------------------*/
 c_ts::c_ts()
 {
@@ -534,7 +534,7 @@ void c_ts::generate(void)
 	fclose(f_out);
 }
 /*----------------------------------------------------------------------------*/
-int file_name_good(char * f)
+int file_name_good(const char * f)
 {
 	int i = 0;
 
@@ -617,7 +617,7 @@ void c_ts::file_begin(char *f)
 	all_files[file.full()]=file;
 }
 /*----------------------------------------------------------------------------*/
-c_cell c_ts::resolve(char *f, char * c_type)
+c_cell c_ts::resolve(const char *f, char * c_type)
 {
 	c_cell cell;
 	cell.init();
@@ -625,7 +625,7 @@ c_cell c_ts::resolve(char *f, char * c_type)
 
 	if( file_name_good(f) != 1  )
 	{
-		printf("    c_ts::file_included()\n");
+		printf("    c_ts::resolve()\n");
 		printf("    {\n");
 		printf("      processing file [%s]\n",file.full());
 		printf("      chars arent all good [%s]\n",f);
@@ -636,13 +636,13 @@ c_cell c_ts::resolve(char *f, char * c_type)
 	if( strcmp(file.get_path(), "./") != 0)
 	{
 		file.path_resolve(cell);
-/*
+
 		printf("   file_included f[%s] resolve with [",f);
 		file.print();
 		printf("] -> [");
 		cell.print();
 		printf("]\n");
-*/
+
 	}
 
 	return cell;

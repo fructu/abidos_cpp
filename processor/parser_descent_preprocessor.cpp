@@ -20,6 +20,8 @@
 #include "generator_class_diagram.h"
 #include "generator_original.h"
 #include "trace.h"
+
+#include "../preprocessor/ts.h"
 /*----------------------------------------------------------------------------*/
 /*
  * preprocessor_include: '#' PREPROCESSOR_INCLUDE STRING
@@ -48,8 +50,23 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
         return 0;
     }
 
-    if (1 != lex_file_push(c_token_get().text.c_str())) {
-        printf("\nERROR:c_parser_descent::preprocessor_include[%s]\n", c_token_get().text.c_str() );
+    c_cell file_actual;
+
+    file_actual.fill(lex_file_name, (char *) "\"");
+
+    char file_without_commillas[ID_MAX_LEN]={'\0'};
+
+    sprintf(file_without_commillas,"%s",c_token_get().text.c_str());
+    str_drop_char(file_without_commillas, '\"');
+
+    c_cell file_included;
+
+    file_included.fill(file_without_commillas, (char *) "\"");
+
+    file_actual.path_resolve(file_included);
+
+    if (1 != lex_file_push( file_included.full() ) ) {
+        printf("\nERROR:c_parser_descent::preprocessor_include[%s]\n", file_included.full() );
         exit(-1);
     }
 

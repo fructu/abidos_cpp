@@ -50,6 +50,6 @@ void c_includes_semantic::include_process(char * f, char * c_type)
 		}		
 	}
 
-	ts.file_included(f, c_type);
+	ts_includes.file_included(f, c_type);
 }
 /*----------------------------------------------------------------------------*/
