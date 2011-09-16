@@ -20,11 +20,14 @@ CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 EXECUTABLE=abidos
 
-all: clean $(EXECUTABLE) test_run
+all: clean check_directories $(EXECUTABLE) test_run
 
 indent_run: clean $(EXECUTABLE) check_indent.sh indent_run.sh
 	./check_indent.sh
 	./indent_run.sh
+
+check_directories: check_directories.pl
+	./check_directories.pl
 
 .c.o:
 	cc -c $<

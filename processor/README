@@ -223,4 +223,7 @@ abidos
     git filter-branch --index-filter 'git update-index --remove xdot2.pyc' 7dffeb6..HEAD
     git push --force --verbose --dry-run
     git push --force
+-[v] in Makefile when does not exists create:
+        mkdir out
+        mkdir test_out
 
