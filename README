@@ -1,0 +1,73 @@
+abidos
+
+Description
+
+  Abidos will be a toolbox to improve navigation and refactoring c++'s code:
+
+  - understanding of the system:
+    abidos generates a set of diagrams (for now class diagrams with relations),
+    you can see:
+      * hierarchy between the class of the soure code
+      * copositions/agregations
+      * friend relations
+      * members of the classes
+
+  - the navigation across the source code of a c++ project.
+    in a class diagram you can click in a member function or in a atribute of a 
+    class and then go to the line of code automatically.
+
+  - in a second phase refactoring code will be avalible, for now i have a very
+    hard work doing the parser of c++.
+
+  For now abidos has been started and be in a very early status of development.
+  
+Parts
+
+  abidos for the moment has 2 parts and it need refactor a great part of their
+  code most of this code were a experiments.
+
+  preprocessor
+  this part of the project have his own Makefile and can generate a graph with
+  the relations betwen the sources of a projects with his #includes
+
+  processor
+  this part of abidos is the core of the c++'s parser, it is a descent parser
+  but i use parts of the code generating by flex and bison (mainly his .h) and
+  the full scanner.
+
+Intructions
+
+  to see abidos working, for now i only tested this in a ubuntu system:
+
+  1) download abidos
+  git clone git@github.com:fructu/abidos.git
+
+  2) testing preprocessor:
+    cd abidos/preprocessor
+    make all
+    make execute
+
+  3) testin processor:
+    cd abidos/processor/
+    make all
+    make execute
+
+thanks
+  
+  I use great pieces of code doing for great people without they my work would be
+  imposible to start
+
+  - c++ grammar with yacc and lex files.
+    http://www.sigala.it/sandro/download.php
+
+  - graphviz a great sw to visualize information in form of graphs and networks
+    http://www.graphviz.org/
+
+  - XDot python code to see the graphs
+    http://code.google.com/p/jrfonseca/wiki/XDot
+
+  - ubuntu
+
+  - git
+
+  - ...
