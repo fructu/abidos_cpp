@@ -227,5 +227,7 @@ abidos
         mkdir out
         mkdir test_out
 -[] pass file out in main parameter parser_descent yyparse()
--[] rename abidos -> abydos in all project
+-[v] rename abidos -> abydos in all project
     find . -name "*" -exec sed -e 's/abidos/abydos/g' {} \;
+    the name of the project is abidos for the moment exists other projects and
+    companies named abydos.
