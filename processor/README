@@ -1,6 +1,6 @@
 1. A brief description of the project.
    sudo apt-get install graphviz
-   dot out_t2.cpp.gv -Tpng -o out_dot.png
+   dot ../out/out_t002.cpp.gv -Tpng -o ../out/out_dot.png
 
    UniversalIndentGUI
    sudo apt-get install universalindentgui
@@ -23,7 +23,7 @@ useful commands:
 
     ./$(EXECUTABLE)  test/$(FILE_TEST)
 
-cat out/trace_t030.cpp.gv | dot -Tpng > out/trace_t030.cpp.gv.png; eog out/trace_t030.cpp.gv.png
+cat ../out/trace_t030.cpp.gv | dot -Tpng > ../out/trace_t030.cpp.gv.png; eog ../out/trace_t030.cpp.gv.png
 
 git bundle create abidos_$(date '+%F_%H_%M')_master.bundle master
 mv abidos_2011-04-14_15_06_master.bundle /home/hevia/Descargas/
@@ -36,8 +36,8 @@ tar -xzvf working_2011-03-12_16_18.tar.gz
 
 git commit -C HEAD -a --amend
 
-dot out/out_test_symbols_table.h.gv -Tpng -o out/out_test_symbols_table.h.png
-dot out/out_test_symbols_table.h.gv -Tsvg -o out/out_test_symbols_table.h.svg
+dot ../out/out_test_symbols_table.h.gv -Tpng -o ../out/out_test_symbols_table.h.png
+dot ../out/out_test_symbols_table.h.gv -Tsvg -o ../out/out_test_symbols_table.h.svg
 
 2. A pointer to the project website (if it has one).
 3. Notes on the developer’s build environment and potential portability problems.

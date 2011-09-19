@@ -590,7 +590,7 @@ void c_parser_descent::yyparse(char *file_name)
 
     if (1 == options.verbose_flag) {
         char file_original[100];
-        sprintf(file_original, "out/trace_%s.gv", str_temp);
+        sprintf(file_original, "../out/trace_%s.gv", str_temp);
         c_generator_trace generator_trace_graph;
         generator_trace_graph.run(file_original);
     }
