@@ -17,7 +17,7 @@ check_beautify_now()
 		exit 1
 	fi
 	\cp  -f ${FNAME} ${TMP_CPPFILE}.cpp
-	${COMPILER} -c ${TMP_CPPFILE}.cpp
+	${COMPILER} -c ${TMP_CPPFILE}.cpp -I../includes
 	if [ ! -f ${TMP_CPPFILE}.o ]; then
 		echo "Fatal Error: Failed to compile ["${FNAME}"]. Aborting now... "
 		exit 1
@@ -27,8 +27,8 @@ check_beautify_now()
 	echo "Running, verifying ["$aa"] on ["${FNAME}"]"
 	echo ${PRGM} ${TMP_CPPFILE}.cpp
 	${PRGM} ${TMP_CPPFILE}.cpp
-	echo ${COMPILER} -c ${TMP_CPPFILE}.cpp
-	${COMPILER} -c ${TMP_CPPFILE}.cpp
+	echo ${COMPILER} -c ${TMP_CPPFILE}.cpp -I../includes
+	${COMPILER} -c ${TMP_CPPFILE}.cpp -I../includes
 	\rm -f $TMP_FILE
 	diff ${TMP_CPPFILE}.o ${TMP_CPPFILE}_orig.o 1> $TMP_FILE 2>> $TMP_FILE
 	result=""
@@ -39,7 +39,7 @@ check_beautify_now()
 		echo "fatal Error Beautifier is not working!!"
 		exit 1
 	fi
-#	${COMPILER} -S ${TMP_CPPFILE}.cpp
+#	${COMPILER} -S ${TMP_CPPFILE}.cpp -I../includes
 #	diff ${TMP_CPPFILE}.s ${TMP_CPPFILE}_orig.s
 # Remove all the temp files....
 	\rm -f ${TMP_FILE}
@@ -61,8 +61,9 @@ for f in $( git ls-files *.cpp ); do
 		echo ""
 done
 
+cd ../includes
 for f in $( git ls-files *.h ); do
 		check_beautify_now ${f}
 		echo ""
 done
-
+cd ../src

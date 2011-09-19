@@ -32,8 +32,9 @@ for f in $( git ls-files *.cpp ); do
 		echo ""
 done
 
+cd ../includes
 for f in $( git ls-files *.h ); do
 		run_beautify_now ${f}
 		echo ""
 done
-
+cd ../src
