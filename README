@@ -13,7 +13,7 @@ Description
       * members of the classes
 
   - the navigation across the source code of a c++ project.
-    in a class diagram you can click in a member function or in a atribute of a 
+    in a class diagram you can click in a member function or in an atribute of a 
     class and then go to the line of code automatically.
 
   - in a second phase refactoring code will be avalible, for now i have a very
@@ -23,8 +23,8 @@ Description
   
 Parts
 
-  abidos for the moment has 2 parts and it need refactor a great part of their
-  code most of this code were a experiments.
+  abidos for the moment has 2 parts and need refactor a great part of their
+  code most of this code were a set of experiments.
 
   preprocessor
   this part of the project have his own Makefile and can generate a graph with
@@ -40,7 +40,7 @@ Intructions
   to see abidos working, for now i only tested this in a ubuntu system:
 
   1) download abidos
-  git clone git@github.com:fructu/abidos.git
+    git clone git@github.com:fructu/abidos.git
 
   2) testing preprocessor:
     cd abidos/preprocessor
