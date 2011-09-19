@@ -4,7 +4,7 @@
 # description:
 #
 #-------------------------------------------
-@directories = ('out', 'test_out');
+@directories = ('../out', '../test_out');
 
 foreach (@directories) {
  	print "  checking existence $_ ...";

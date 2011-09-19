@@ -6,9 +6,9 @@
 #-------------------------------------------
 sub p1
 {
-  open(f_in,"< python/out_begin_2.gv")||die("error open < file");
+  open(f_in,"< ../python/out_begin_2.gv")||die("error open < file");
   @raw_data=<f_in>;
-  open(f_out,"> out/generate_begin_graph.cpp")||die("error open > file");
+  open(f_out,"> ../out/generate_begin_graph.cpp")||die("error open > file");
 
   $method_detected = 0;
   $method_id = "";

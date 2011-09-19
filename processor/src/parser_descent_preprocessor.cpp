@@ -21,7 +21,7 @@
 #include "generator_original.h"
 #include "trace.h"
 
-#include "../preprocessor/ts.h"
+#include "../../preprocessor/ts.h"
 /*----------------------------------------------------------------------------*/
 /*
  * preprocessor_include: '#' PREPROCESSOR_INCLUDE STRING

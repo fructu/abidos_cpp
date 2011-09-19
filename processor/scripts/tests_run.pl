@@ -35,9 +35,9 @@ sub test_run_tokens_consumed
   $f = $_[0];
 
   print "  [$f] ->";
-  system "./abidos --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > test_out/out_$f.txt";
+  system "./abidos --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ../test_out/out_$f.txt";
 
-  $result = is_test_ok("test_out/out_$f.txt");
+  $result = is_test_ok("../test_out/out_$f.txt");
 
   print "  [$f] -> [$result]\n";
   
@@ -58,7 +58,7 @@ sub test_gcc_diff
 
 sub all_tests
 {
-	$tests_dir = "test/";
+	$tests_dir = "../test/";
   $result = "";
   $tests_total = 0;
   $tests_ok    = 0;

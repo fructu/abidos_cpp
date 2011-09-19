@@ -226,4 +226,4 @@ abidos
 -[v] in Makefile when does not exists create:
         mkdir out
         mkdir test_out
-
+-[] pass file out in main parameter parser_descent yyparse()

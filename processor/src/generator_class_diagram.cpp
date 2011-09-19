@@ -263,7 +263,7 @@ void c_generator_class_diagram::run(char *p_file_out)
         return;
     }
 
-#include "out/generate_begin_graph.cpp"
+#include "../out/generate_begin_graph.cpp"
 
     unsigned i_stack = 0;
 

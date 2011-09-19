@@ -573,7 +573,10 @@ void c_parser_descent::yyparse(char *file_name)
     char file_gv[100];
     extract_file_from_path(str_temp, file_name);
 
-    sprintf(file_gv, "out/out_%s.gv", str_temp);
+    /*## todo
+      this should pass in main parameter
+    */
+    sprintf(file_gv, "../out/out_%s.gv", str_temp);
     c_generator_class_diagram generator;
 
     generator.run(file_gv);
