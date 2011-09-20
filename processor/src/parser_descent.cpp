@@ -583,7 +583,7 @@ void c_parser_descent::yyparse(char *file_name)
 
     if (1 == options.test_original_flag) {
         char file_original[100];
-        sprintf(file_original, "out/out_%s", str_temp);
+        sprintf(file_original, "../out/out_%s", str_temp);
         c_generator_original generator_original;
         generator_original.run(file_original);
     }
