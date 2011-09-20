@@ -107,9 +107,9 @@ clean:
 	rm -f *~
 	rm -f *.bk
 	rm -f $(EXECUTABLE)
-	rm -f out/*
-	rm -f test_out/*
+	rm -f ../out/*
+	rm -f ../test_out/*
 	rm -f *.orig
 	rm -f *.pyc
-	rm -f test_out/*.pyc
+	rm -f ../test_out/*.pyc
 

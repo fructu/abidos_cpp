@@ -231,3 +231,5 @@ abidos
     find . -name "*" -exec sed -e 's/abidos/abydos/g' {} \;
     the name of the project is abidos for the moment exists other projects and
     companies named abydos.
+-[] t031 void f(void); in diagram in A::B class appears:
+    unsigned int * void f(void)
