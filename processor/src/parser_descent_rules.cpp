@@ -773,47 +773,12 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
 //      context.class_name_declaration = class_name;
     }
 
-    if ( token_is(CHAR, trace_node) ) {
-        result = 1;
-    }
+    const int vector_id[]={
+      CHAR, WCHAR_T, BOOL, SHORT, INT, LONG
+      , SIGNED, UNSIGNED, FLOAT, DOUBLE, VOID, -1
+    };
 
-    if ( token_is(WCHAR_T, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(BOOL, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(SHORT, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(INT, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(LONG, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(SIGNED, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(UNSIGNED, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(FLOAT, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(DOUBLE, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(VOID, trace_node) ) {
+    if (token_is_one(  vector_id,trace_node) != 0) {
         result = 1;
     }
 
@@ -847,23 +812,14 @@ int c_parser_descent::function_specifier(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "function_specifier");
 
-    int result = 0;
     c_context_tokens context_tokens(context);
     token_next(trace_node.get_tab());
 
-    if ( token_is(INLINE, trace_node) ) {
-        result = 1;
-    }
+    const int vector_id[]={
+      INLINE, VIRTUAL, EXPLICIT, -1
+    };
 
-    if ( token_is(VIRTUAL, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(EXPLICIT, trace_node) ) {
-        result = 1;
-    }
-
-    if (1 == result) {
+    if (token_is_one(  vector_id,trace_node) != 0) {
         semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
@@ -874,26 +830,19 @@ int c_parser_descent::function_specifier(c_trace_node trace_node)
 
 /*
   rule mine
-
 */
-
 int c_parser_descent::ptr_specifier(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "ptr_specifier");
 
-    int result = 0;
     c_context_tokens context_tokens(context);
     token_next(trace_node.get_tab());
 
-    if ( token_is('*', trace_node) ) {
-        result = 1;
-    }
+    const int vector_id[]={
+      '*', '&', -1
+    };
 
-    if ( token_is('&', trace_node) ) {
-        result = 1;
-    }
-
-    if (1 == result) {
+    if (token_is_one(  vector_id,trace_node) != 0) {
         semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
@@ -1267,7 +1216,6 @@ int c_parser_descent::member_declarator_list(c_trace_node trace_node)
         }
     }
 
-
     return 1;
 }
 
@@ -1513,9 +1461,6 @@ int c_parser_descent::identifier_opt(c_trace_node trace_node)
  * ;
  */
 int
-
-
-
 c_parser_descent::parameter_declaration_list_opt(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "parameter_declaration_list_opt");
@@ -1692,7 +1637,7 @@ int c_parser_descent::declarator(c_trace_node trace_node)
  *  | '(' declarator ')'
  *  ;
  *
- * changing a litle the original order to ser clearly the terminals of
+ * changing a litle the original order to set clearly the terminals of
  * the recursion
  *
  * direct_declarator: declarator_id | '(' declarator ')'
@@ -1798,12 +1743,10 @@ int c_parser_descent::ptr_operator(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
     token_next(trace_node.get_tab());
 
-    if ( token_is('*', trace_node) ) {
-        return 1;
-    }
+    const int vector_id[]={ '*', '&', -1 };
 
-    if ( token_is('&', trace_node) ) {
-        return 1;
+    if (token_is_one(  vector_id,trace_node) != 0) {
+      return 1;
     }
 
     //## todo rest ...

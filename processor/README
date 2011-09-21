@@ -233,3 +233,4 @@ abidos
     companies named abydos.
 -[] t031 void f(void); in diagram in A::B class appears:
     unsigned int * void f(void)
+-[v] refactor code to using token_is_one
