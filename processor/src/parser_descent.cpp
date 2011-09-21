@@ -314,6 +314,21 @@ int c_parser_descent::token_is_not(int id , c_trace_node trace_node)
     return result;
 }
 /*----------------------------------------------------------------------------*/
+int c_parser_descent::token_is_one(const int id[], c_trace_node trace_node)
+{
+    c_context_tokens context_tokens(context);
+
+    int i = 0;
+    while ( -1 != id[i]) {
+        if ( token_is(id[i], trace_node) ) {
+          return id[i];
+        }
+        ++i;
+    }
+
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
 int c_parser_descent::is_eof(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "is_eof");

@@ -668,32 +668,11 @@ int c_parser_descent::storage_class_specifier(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "storage_class_specifier");
 
-    int result = 0;
     c_context_tokens context_tokens(context);
     token_next(trace_node.get_tab());
 
-    if ( token_is(AUTO, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(REGISTER, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(STATIC, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(EXTERN, trace_node) ) {
-        result = 1;
-    }
-
-    if ( token_is(MUTABLE, trace_node) ) {
-        result = 1;
-    }
-
-
-    if (1 == result) {
+    const int vector_id[]={AUTO, REGISTER, STATIC, EXTERN, MUTABLE, -1};
+    if (token_is_one(  vector_id,trace_node) != 0) {
         semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }

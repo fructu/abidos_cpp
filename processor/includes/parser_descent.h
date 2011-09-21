@@ -215,6 +215,7 @@ private:
     int token_get(void);
     int token_is(int id, c_trace_node trace_node);
     int token_is_not(int id , c_trace_node trace_node);
+    int token_is_one(const int id[], c_trace_node trace_node);
     c_token c_token_get(void);
     // void token_previous(void);
     int is_eof(c_trace_node trace_node);
