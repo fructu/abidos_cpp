@@ -1,10 +1,12 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # autor:Manuel Hevia
 # description:
 #
 #-------------------------------------------
-@directories = ('../out', '../test_out');
+use strict;
+
+my @directories = ('../out', '../test_out');
 
 foreach (@directories) {
  	print "  checking existence $_ ...";

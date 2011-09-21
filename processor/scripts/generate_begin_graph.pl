@@ -1,18 +1,18 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # autor:Manuel Hevia
 # description:
 #
 #-------------------------------------------
+use strict;
+
 sub p1
 {
   open(f_in,"< ../python/out_begin_2.gv")||die("error open < file");
-  @raw_data=<f_in>;
+  my @raw_data=<f_in>;
   open(f_out,"> ../out/generate_begin_graph.cpp")||die("error open > file");
 
-  $method_detected = 0;
-  $method_id = "";
-  foreach $l (@raw_data)
+  foreach my $l (@raw_data)
   {
     chomp($l);
     $_= $l;

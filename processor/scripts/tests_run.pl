@@ -1,20 +1,23 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # autor:Manuel Hevia
 # description:
 #
 #-------------------------------------------
+use strict;
+
+my $tests_dir = "../test/";
 
 sub is_test_ok
 {
-  $f = $_[0];
+  my $f = $_[0];
 
-  $result = "fail";
+  my $result = "fail";
 
   open(f_in,"< $f")||die("error open < $f");
-  @raw_data=<f_in>;
+  my @raw_data=<f_in>;
 
-  foreach $l (@raw_data)
+  foreach my $l (@raw_data)
   {
     chomp($l);
     $_= $l;
@@ -32,12 +35,12 @@ sub is_test_ok
 
 sub test_run_tokens_consumed
 {
-  $f = $_[0];
+  my $f = $_[0];
 
   print "  [$f] ->";
   system "./abidos --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ../test_out/out_$f.txt";
 
-  $result = is_test_ok("../test_out/out_$f.txt");
+  my $result = is_test_ok("../test_out/out_$f.txt");
 
   print "  [$f] -> [$result]\n";
   
@@ -48,27 +51,27 @@ sub test_run_tokens_consumed
 
 sub test_gcc_diff
 {
-  $f = $_[0];
+  my $f = $_[0];
   
   print "#  [$f] ->";
   
-  @args = ("test/g++", "-s", "$f");
+  my @args = ("test/g++", "-s", "$f");
   system(@args) == 0 or die "system @args failed: $?";
 }   
 
 sub all_tests
 {
-	$tests_dir = "../test/";
-  $result = "";
-  $tests_total = 0;
-  $tests_ok    = 0;
+#	$tests_dir = "../test/";
+  my $result = "";
+  my $tests_total = 0;
+  my $tests_ok    = 0;
 	opendir(IMD, $tests_dir) || die("Cannot open directory");
-	@tests_files= readdir(IMD);
+	my @tests_files= readdir(IMD);
 	closedir(IMD);
 
-	@tests_files_sorted = sort(@tests_files);
+	my @tests_files_sorted = sort(@tests_files);
 
-	foreach $f (@tests_files_sorted)
+	foreach my $f (@tests_files_sorted)
 	{
 		unless ( ($f eq ".") || ($f eq "..") )
 		{
@@ -95,8 +98,8 @@ sub all_tests
 }
 
 print "abidos runing suit tests [v0.0.01]\n";
-$result = 0;
+my $result_total = 0;
 print "{\n";
-$result = all_tests;
+$result_total = all_tests;
 print "}\n";
-exit($result);
+exit($result_total);

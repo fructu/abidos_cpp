@@ -1,18 +1,20 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # autor:Manuel Hevia
 # description: 
 #
 #-------------------------------------------
+use strict;
+
 sub p1
 {
   open(f_in,"< parser_descent_rules.cpp")||die("error open < file");
-  @raw_data=<f_in>;
+  my @raw_data=<f_in>;
   open(f_out,"> parser_descent_rules.cpp_debug")||die("error open > file");
 
-  $method_detected = 0;
-  $method_id = "";
-  foreach $l (@raw_data)
+  my $method_detected = 0;
+  my $method_id = "";
+  foreach my $l (@raw_data)
   {
         chomp($l);
         $_= $l;

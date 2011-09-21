@@ -1,15 +1,17 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # autor:Manuel Hevia
 # description: transform de ouput rspec of
 #    selenium-id to rsel
 #
 #-------------------------------------------
+use strict;
+
 sub p1
 {
   
   open(f_in,"< parser.c")||die("error open < file");
-  @raw_data=<f_in>;
+  my @raw_data=<f_in>;
   open(f_out,"> tokens.h")||die("error open > file");
 
   print f_out "#ifndef tokens_h\n";
@@ -17,7 +19,7 @@ sub p1
   print f_out "static const char *const yytokens[] =\n";
   print f_out "{\n";
   
-  $i = 0;
+  my $i = 0;
 
   for( $i = 0; $i < 258; $i++)
   {
@@ -27,7 +29,8 @@ sub p1
     }
     else
     {
-      $c = chr($i);
+      my $c = chr($i);
+
       if($c eq "\"")
       {
         print f_out "  \"$i->\\\"\",\n";
@@ -43,8 +46,8 @@ sub p1
     }
   }
 
-  $yytyytokentype_inside = 0;
-  foreach $l (@raw_data)
+  my $yytyytokentype_inside = 0;
+  foreach my $l (@raw_data)
   {
         chomp($l);
         $_= $l;
@@ -94,7 +97,7 @@ sub p1
     }
     else
     {
-      $c = chr($i);
+      my $c = chr($i);
       if($c eq "\"")
       {
         print f_out "  \"\\\"\",";
@@ -116,7 +119,7 @@ sub p1
   }
 
   $yytyytokentype_inside = 0;
-  foreach $l (@raw_data)
+  foreach my $l (@raw_data)
   {
         chomp($l);
         $_= $l;
