@@ -18,8 +18,8 @@ useful commands:
  -q -x X abidos
     ulimit -c unlimited
 
-    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/mass_clases.cpp| grep -E "==\d=="
-    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/test_symbols_table.h| grep -E "==\d=="
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose ../test/mass_clases.cpp| grep -E "==\d=="
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose ../test/test_symbols_table.h| grep -E "==\d=="
 
     ./$(EXECUTABLE)  test/$(FILE_TEST)
 
@@ -213,7 +213,7 @@ abidos
 -[v] do preprocessor
     http://www.taekwondo-wiki.com/2008/apidocs/flex-2.5.35.zip/flex_11.html#SEC15
     cat out/trace_t034.cpp.gv | dot -Tpng > out/trace_t034.cpp.gv.png; eog out/trace_t034.cpp.gv.png
-    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose test/t034.cpp| grep -E "==\d=="
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose ../test/t034.cpp| grep -E "==\d=="
 -[v] do preprocessor change pwd #include "h/h1.h" h1.h cand have #include "h2" in h directory
 -[] do parsing templates <>
 -[] do parsing [const]
@@ -231,6 +231,6 @@ abidos
     find . -name "*" -exec sed -e 's/abidos/abydos/g' {} \;
     the name of the project is abidos for the moment exists other projects and
     companies named abydos.
--[] t031 void f(void); in diagram in A::B class appears:
-    unsigned int * void f(void)
--[v] refactor code to using token_is_one
+-[v] t031 void f(void); in diagram in A::B class appears:
+    unsigned int * void f(void) fixed (see test/t031_01.cpp)
+-[v] refactor code using token_is_one

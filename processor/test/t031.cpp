@@ -16,7 +16,7 @@ class A
       C();
       ~C(); 
       unsigned int * c(int i1, unsigned int long i2, float double f2);
-    }
+    };
 
     void f(void);
   };
