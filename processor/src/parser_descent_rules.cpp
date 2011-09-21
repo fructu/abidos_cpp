@@ -236,14 +236,7 @@ int c_parser_descent::typedef_name(c_trace_node trace_node)
     token_next(trace_node.get_tab());
 
     if ( token_is(TYPEDEF_NAME, trace_node) ) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
+        semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
 
@@ -590,14 +583,7 @@ int c_parser_descent::friend_specifier(c_trace_node trace_node)
 
 // friend class c_generator_original;
     if (1 == result) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
+        semantic.push_decl_specifier(c_token_get(), context);
     } else {
         context = context_tokens.restore();
         return 0;
@@ -607,14 +593,7 @@ int c_parser_descent::friend_specifier(c_trace_node trace_node)
     token_next(trace_node.get_tab());
 
     if ( token_is(CLASS, trace_node) ) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
+        semantic.push_decl_specifier(c_token_get(), context);
 
         token_next(trace_node.get_tab());
         context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
@@ -644,17 +623,9 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
 // friend class c_generator_original;
     if (1 == result) {
         //this should pass to c_symbol and in context = 0;
+        semantic.push_decl_specifier(c_token_get(), context);
+
         context.is_typedef = 1;
-
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
-
         //## testing
         return 1;
     } else {
@@ -668,14 +639,7 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
     if ( token_is(CLASS, trace_node) ||
             token_is(STRUCT, trace_node)
        ) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
+        semantic.push_decl_specifier(c_token_get(), context);
 
         token_next(trace_node.get_tab());
 //      context.class_specifier_status = CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR;
@@ -730,15 +694,7 @@ int c_parser_descent::storage_class_specifier(c_trace_node trace_node)
 
 
     if (1 == result) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
-
+        semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
 
@@ -929,15 +885,7 @@ int c_parser_descent::function_specifier(c_trace_node trace_node)
     }
 
     if (1 == result) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
-
+        semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
 
@@ -967,15 +915,7 @@ int c_parser_descent::ptr_specifier(c_trace_node trace_node)
     }
 
     if (1 == result) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
-
+        semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
 
@@ -1927,15 +1867,7 @@ int c_parser_descent::cv_qualifier(c_trace_node trace_node)
     }
 
     if (1 == result) {
-        c_decl_specifier decl(c_token_get());
-        decl.type_specifier = 1;
-
-        if (1 == context.i_am_in_parameter_declaration) {
-            context.param_vector_decl_specifier.push_back(decl);
-        } else {
-            semantic.push_back_vector_decl_specifier(decl);
-        }
-
+        semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
 

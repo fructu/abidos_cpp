@@ -24,6 +24,17 @@ private:
     t_vector_decl_specifier vector_decl_specifier;
 
 public:
+    void push_decl_specifier(c_token token, c_context &context) {
+        c_decl_specifier decl(token);
+        decl.type_specifier = 1;
+
+        if (1 == context.i_am_in_parameter_declaration) {
+            context.param_vector_decl_specifier.push_back(decl);
+        } else {
+            push_back_vector_decl_specifier(decl);
+        }
+    }
+
     void push_back_vector_decl_specifier(c_decl_specifier decl) {
         vector_decl_specifier.push_back(decl);
     }
