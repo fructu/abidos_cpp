@@ -44,8 +44,33 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
         return 0;
     }
 
+/*
+  a include may be:
+    #include "file.h"
+  or
+    #include <iostream>
+  the problem is STRING has " inside
+*/
     token_next(trace_node.get_tab());
     if ( token_is_not(STRING, trace_node) ) {
+        if ( token_is_not('<', trace_node) ) {
+          context = context_tokens.restore();
+          return 0;
+        }
+
+        token_next(trace_node.get_tab());
+        while( token_is_not('>', trace_node) ) {
+          //## todo acumulate string with the file
+          token_next(trace_node.get_tab());
+          if ( 1 == is_eof(trace_node) ) {
+            return 0;
+          }
+        }
+
+        if ( token_is('>', trace_node) ) {
+          return 1;
+        }
+
         context = context_tokens.restore();
         return 0;
     }

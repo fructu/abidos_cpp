@@ -216,8 +216,10 @@ abidos
     valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose ../test/t034.cpp| grep -E "==\d=="
 -[v] do preprocessor change pwd #include "h/h1.h" h1.h cand have #include "h2" in h directory
 -[] do parsing templates <>
+    look this example http://www.cplusplus.com/doc/tutorial/templates/
 -[] do parsing [const]
 -[] do parsing namespace
+    look this example http://www.cplusplus.com/doc/tutorial/namespaces/
 -[] do parsing using namespace_name
 -[v] erase xdot2.pyc from history
     git filter-branch --index-filter 'git update-index --remove xdot2.pyc' 7dffeb6..HEAD
@@ -234,3 +236,5 @@ abidos
 -[v] t031 void f(void); in diagram in A::B class appears:
     unsigned int * void f(void) fixed (see test/t031_01.cpp)
 -[v] refactor code using token_is_one
+-[v] fixed now preprocesor lines like #include <file> does not break the parser.
+
