@@ -58,6 +58,8 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
           return 0;
         }
 
+//        c_context_tokens context_tokens_good_way(context);
+
         token_next(trace_node.get_tab());
         while( token_is_not('>', trace_node) ) {
           //## todo acumulate string with the file

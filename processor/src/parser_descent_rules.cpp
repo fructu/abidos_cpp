@@ -419,6 +419,10 @@ int c_parser_descent::declaration(c_trace_node trace_node)
         return 0;
     }
 
+    if (1 == template_declaration(trace_node)) {
+        return 1;
+    }
+
     c_context_tokens context_tokens(context);
     if (1 == block_declaration(trace_node)) {
         return 1;
@@ -1368,6 +1372,125 @@ int c_parser_descent::access_specifier(c_trace_node trace_node)
 
     context = context_tokens.restore();
 
+    return 0;
+}
+
+/*----------------------------------------------------------------------
+ * Templates.
+ *----------------------------------------------------------------------*/
+/*
+ template_declaration:
+	EXPORT_opt TEMPLATE '<' template_parameter_list '>' declaration
+	;
+*/
+int c_parser_descent::template_declaration(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_declaration");
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    tokens_vector_print_from_actual();
+    if ( token_is_not(TEMPLATE, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    context.i_am_in_template_declaration = 1;
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('<', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    if( 0 == template_parameter_list(trace_node) )
+    {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is('>', trace_node) ) {
+        context.i_am_in_template_declaration = 0;
+        return 1;
+    }
+
+    //## todo declaration
+
+    context = context_tokens.restore();
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+template_parameter_list:
+	template_parameter
+	| template_parameter_list ',' template_parameter
+	;
+*/
+int c_parser_descent::template_parameter_list(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_parameter_list");
+
+    c_context_tokens context_tokens(context);
+
+    if( 1 == template_parameter(trace_node) )
+    {
+        return 1;
+    }
+
+    //## todo rest
+
+    context = context_tokens.restore();
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+template_parameter:
+	type_parameter
+	| parameter_declaration
+	;
+*/
+int c_parser_descent::template_parameter(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_parameter");
+    c_context_tokens context_tokens(context);
+
+
+    if( 1 == type_parameter(trace_node) )
+    {
+        return 1;
+    }
+
+    //## todo rest
+
+    context = context_tokens.restore();
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+type_parameter:
+	CLASS identifier_opt
+	| CLASS identifier_opt '=' type_id
+	| TYPENAME identifier_opt
+	| TYPENAME identifier_opt '=' type_id
+	| TEMPLATE '<' template_parameter_list '>' CLASS identifier_opt
+	| TEMPLATE '<' template_parameter_list '>' CLASS identifier_opt '=' template_name
+	;
+*/
+int c_parser_descent::type_parameter(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "type_parameter");
+    c_context_tokens context_tokens(context);
+
+    //## todo rest
+    token_next(trace_node.get_tab());
+    if ( token_is(CLASS, trace_node) ) {
+        identifier_opt(trace_node);
+        return 1;
+    }
+
+    context = context_tokens.restore();
     return 0;
 }
 

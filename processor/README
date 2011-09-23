@@ -217,6 +217,7 @@ abidos
 -[v] do preprocessor change pwd #include "h/h1.h" h1.h cand have #include "h2" in h directory
 -[] do parsing templates <>
     look this example http://www.cplusplus.com/doc/tutorial/templates/
+    cat ../out/trace_t035.cpp.gv | dot -Tpng > ../out/trace_t035.cpp.gv.png; eog ../out/trace_t035.cpp.gv.png
 -[] do parsing [const]
 -[] do parsing namespace
     look this example http://www.cplusplus.com/doc/tutorial/namespaces/

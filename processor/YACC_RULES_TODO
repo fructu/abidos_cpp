@@ -926,21 +926,24 @@ operator:
 /*----------------------------------------------------------------------
  * Templates.
  *----------------------------------------------------------------------*/
-
+//## did
 template_declaration:
 	EXPORT_opt TEMPLATE '<' template_parameter_list '>' declaration
 	;
 
+//## did
 template_parameter_list:
 	template_parameter
 	| template_parameter_list ',' template_parameter
 	;
 
+//## did
 template_parameter:
 	type_parameter
 	| parameter_declaration
 	;
 
+//## did
 type_parameter:
 	CLASS identifier_opt
 	| CLASS identifier_opt '=' type_id

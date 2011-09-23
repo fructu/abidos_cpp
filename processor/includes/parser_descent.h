@@ -94,6 +94,8 @@ struct c_context {
 
     int is_typedef;
 
+    int i_am_in_template_declaration;
+
     c_context() {
         i_token = 0;
         class_specifier_status = NO_CLASS_STATUS;
@@ -116,6 +118,8 @@ struct c_context {
         declarator.clear();
 
         is_typedef = 0;
+
+        i_am_in_template_declaration = 0;
     }
     void clear(void) {
         i_token = 0;
@@ -151,6 +155,8 @@ struct c_context {
         declarator.clear();
 
         is_typedef = 0;
+
+        i_am_in_template_declaration = 0;
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -169,6 +175,8 @@ struct c_context {
         context_param.declarator = declarator;
         context_param.declaration = declaration;
         context_param.is_typedef = is_typedef;
+        context_param.i_am_in_template_declaration =
+          i_am_in_template_declaration;
     }
 };
 
@@ -298,6 +306,12 @@ private:
     int base_specifier_list(c_trace_node trace_node);
     int base_specifier(c_trace_node trace_node);
     int access_specifier(c_trace_node trace_node);
+
+    // Templates.
+    int template_declaration(c_trace_node trace_node);
+    int template_parameter_list(c_trace_node trace_node);
+    int template_parameter(c_trace_node trace_node);
+    int type_parameter(c_trace_node trace_node);
 
     // Epsilon (optional) definitions.
     int declaration_seq_opt(c_trace_node trace_node);
