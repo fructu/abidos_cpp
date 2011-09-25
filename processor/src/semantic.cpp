@@ -295,6 +295,15 @@ void c_semantic::identifier(c_context & context, c_token token)
             }
         }
     */
+    if( 1 == context.i_am_in_template_declaration )
+    {
+        if( 1 == context.declaring_generic_type )
+        {
+            printf("####   mark_07[%s]\n", token.text.c_str());
+            return;
+        }
+    }
+
     if ( 1 == context.is_typedef) {
         identifier_typedef(context, token);
         return;
