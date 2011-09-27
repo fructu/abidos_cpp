@@ -100,6 +100,7 @@ struct c_context {
 */
     int i_am_in_template_declaration; // we are in template declaration
     int declaring_generic_type; //we are in indetifier declaration
+    c_token template_parameter_type; //we are in indetifier declaration
 
     c_context() {
         i_token = 0;
@@ -126,6 +127,7 @@ struct c_context {
 
         i_am_in_template_declaration = 0;
         declaring_generic_type = 0;
+        template_parameter_type.clear();
     }
     void clear(void) {
         i_token = 0;
@@ -164,6 +166,7 @@ struct c_context {
 
         i_am_in_template_declaration = 0;
         declaring_generic_type = 0;
+        template_parameter_type.clear();
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -186,6 +189,7 @@ struct c_context {
           i_am_in_template_declaration;
         context_param.declaring_generic_type =
           declaring_generic_type;
+        context_param.template_parameter_type.save(template_parameter_type);
     }
 };
 

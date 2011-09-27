@@ -239,3 +239,13 @@ abidos
 -[v] refactor code using token_is_one
 -[v] fixed now preprocesor lines like #include <file> does not break the parser.
 
+-[] do documentacion:
+      http://linux.die.net/man/7/groff_ms
+      http://www.gsp.com/cgi-bin/man.cgi?section=7&topic=groff_ms#4
+  -[] main classes of project
+  -[] why .y in the project
+  -[] how the parser works
+  -[] structures of ts
+  -[] how class f(int i, float b) is saved in ts
+  -[] how class A::B is saves in ts
+

@@ -1489,7 +1489,10 @@ int c_parser_descent::type_parameter(c_trace_node trace_node)
     //## todo rest
     token_next(trace_node.get_tab());
     if ( token_is(CLASS, trace_node) ) {
+        context.template_parameter_type = c_token_get();
+
         context.declaring_generic_type = 1;
+
         identifier_opt(trace_node);
         context.declaring_generic_type = 0;
         return 1;

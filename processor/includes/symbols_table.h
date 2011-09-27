@@ -59,6 +59,14 @@ struct c_token {
         line = 0;
     }
 
+    void save(c_token & token) {
+        id = token.id;
+        text = token.text;
+
+        file = token.file;
+        line = token.line;
+    }
+
     void print(const char *tab) {
         printf("%sc_ctoken::print id[%d]->[%s] text[%s] file[%s] line[%d]\n"
                ,tab
@@ -360,7 +368,28 @@ public:
 
 typedef map < string, c_symbol > t_symbols;
 typedef vector < t_symbols > stack_symbols;
+/*----------------------------------------------------------------------------*/
+/*
+  templates
+*/
+struct c_template_parameter {
+    t_vector_decl_specifier vector_decl_specifier;
 
+    c_token token;
+
+    c_template_parameter() {
+
+    } c_template_parameter(c_token t, t_vector_decl_specifier v) {
+        token = t;
+        vector_decl_specifier = v;
+    }
+    void print(const char *tab);
+    string get_string(void);
+};
+
+typedef vector < c_template_parameter > t_vector_template_parameter;
+typedef map < string, c_template_parameter > t_map_template_parameter;
+/*----------------------------------------------------------------------------*/
 class c_symbols_table
 {
 private:

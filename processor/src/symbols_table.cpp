@@ -63,6 +63,55 @@ string c_parameter::get_string(void)
 
     return str;
 }
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+void
+c_template_parameter::print(const char *tab)
+{
+    unsigned i_decl = 0;
+    for (i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl) {
+        printf(" [%s]", vector_decl_specifier[i_decl].token.text.c_str());
+    }
+
+    printf(" [%s]", token.text.c_str());
+}
+
+/*----------------------------------------------------------------------------*/
+string c_template_parameter::get_string(void)
+{
+    string str = "";
+    unsigned i_decl = 0;
+    int have_text = 1;
+    for (i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl) {
+        str = str + vector_decl_specifier[i_decl].token.text;
+        if ((i_decl + 1) < vector_decl_specifier.size()) {
+            str = str + " ";
+        }
+
+        switch (vector_decl_specifier[i_decl].token.id) {
+        /*
+        case VOID:
+            have_text = 0;
+            break;
+        case ELLIPSIS:
+            have_text = 0;
+            break;
+        */
+        default:
+            have_text = 1;
+        }
+    }
+
+    if (1 == have_text) {
+        // if parameter dont have name i puted @IDENTIFIER#
+        if (NO_IDENTIFIER != token.text) {
+            str = str + " " + token.text;
+        }
+    }
+
+    return str;
+}
 
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
