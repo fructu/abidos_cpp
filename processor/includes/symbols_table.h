@@ -371,10 +371,19 @@ typedef vector < t_symbols > stack_symbols;
 /*----------------------------------------------------------------------------*/
 /*
   templates
+  ej:
+    template <class T, int N>
+    
+    t_vector_template_parameter[0]
+      vector_decl_specifier = [class]
+      token = T
+
+    t_vector_template_parameter[1]
+      vector_decl_specifier = [int]
+      token = N
 */
 struct c_template_parameter {
     t_vector_decl_specifier vector_decl_specifier;
-
     c_token token;
 
     c_template_parameter() {
@@ -383,6 +392,19 @@ struct c_template_parameter {
         token = t;
         vector_decl_specifier = v;
     }
+
+    void clear(void)
+    {
+      vector_decl_specifier.clear();
+      token.clear();
+    }
+
+    void save(c_template_parameter & template_parameter)
+    {
+      vector_decl_specifier = template_parameter.vector_decl_specifier;
+      token.save(template_parameter.token);
+    }
+
     void print(const char *tab);
     string get_string(void);
 };

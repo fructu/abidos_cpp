@@ -22,6 +22,19 @@ class c_semantic
 {
 private:
     t_vector_decl_specifier vector_decl_specifier;
+/*
+  templates
+template <class myType>
+myType GetMax (myType a, myType b) {
+ return (a>b?a:b);
+}
+  1) this vector is to store myType in the line template <class myType>
+  
+  2) in de declaration of GetMax myType will be search in this vector
+*/    
+//    t_vector_template_parameter vector_template_parameter;
+//    t_map_template_parameter map_template_parameter;
+//### this functionality is in context object
 
 public:
     void push_decl_specifier(c_token token, c_context &context) {
@@ -57,7 +70,6 @@ public:
         printf("\n");
         printf("## }\n");
     }
-
     /*
         in vector_decl_specifier can be
           void A::
@@ -75,6 +87,7 @@ public:
 
         return "";
     }
+
     /*
       c_decl_specifier get_last_decl_specifier(void)
       {

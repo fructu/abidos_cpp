@@ -8,6 +8,9 @@
 //using namespace std;
 
 template < class T >
+void f(int i)
+{
+}
 
 /*
 T GetMax (T a, T b) {

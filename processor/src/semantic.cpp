@@ -300,6 +300,16 @@ void c_semantic::identifier(c_context & context, c_token token)
         if( 1 == context.declaring_template_type )
         {
             printf("####   mark_07[%s]\n", token.text.c_str());
+            context.template_parameter.token = token;
+
+            context.vector_template_parameter.push_back(context.template_parameter);
+            context.map_template_parameter[token.text] = context.template_parameter;
+
+            //parameter has been processed
+            context.template_parameter.clear();
+// this print for now is only for templates debug
+//            context.print();
+
             return;
         }
     }

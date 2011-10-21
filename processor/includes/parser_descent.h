@@ -95,12 +95,34 @@ struct c_context {
     int is_typedef;
 
 /*
-  template <class identifier> function_declaration;
-  template <typename identifier> function_declaration
+  template <class identifier>       //i_am_in_template_declaration =1
+  function_declaration;             //i_am_in_template_declaration =2
+
+  template <typename identifier> 
+  function_declaration;
 */
+    //useful in i_am_in_template_declaration = 1
     int i_am_in_template_declaration; // we are in template declaration
     int declaring_template_type; //we are in indetifier declaration
-    c_token template_parameter_type; //we are in indetifier declaration
+    c_template_parameter template_parameter; //we are in indetifier declaration
+    
+    //useful in i_am_in_template_declaration = 2
+    t_vector_template_parameter vector_template_parameter; 
+    t_map_template_parameter map_template_parameter;
+    
+    void print(void)
+    // this is for debug 
+    {
+      printf("context{\n");
+      unsigned i = 0;
+      printf(" template <");
+      for( i = 0; i < vector_template_parameter.size(); ++i)
+      {
+        vector_template_parameter[i].print("");
+      }
+      printf(">\n");
+      printf("}\n");
+    }
 
     c_context() {
         i_token = 0;
@@ -127,7 +149,9 @@ struct c_context {
 
         i_am_in_template_declaration = 0;
         declaring_template_type = 0;
-        template_parameter_type.clear();
+        template_parameter.clear();
+        vector_template_parameter.clear();
+        map_template_parameter.clear();
     }
     void clear(void) {
         i_token = 0;
@@ -166,7 +190,9 @@ struct c_context {
 
         i_am_in_template_declaration = 0;
         declaring_template_type = 0;
-        template_parameter_type.clear();
+        template_parameter.clear();
+        vector_template_parameter.clear();
+        map_template_parameter.clear();        
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -185,11 +211,14 @@ struct c_context {
         context_param.declarator = declarator;
         context_param.declaration = declaration;
         context_param.is_typedef = is_typedef;
+
         context_param.i_am_in_template_declaration =
           i_am_in_template_declaration;
         context_param.declaring_template_type =
           declaring_template_type;
-        context_param.template_parameter_type.save(template_parameter_type);
+        context_param.template_parameter.save(template_parameter);
+        context_param.vector_template_parameter = vector_template_parameter;
+        context_param.map_template_parameter = map_template_parameter;
     }
 };
 

@@ -1411,13 +1411,16 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
     }
 
     token_next(trace_node.get_tab());
-    if ( token_is('>', trace_node) ) {
+    if ( token_is_not('>', trace_node) ) {
         context.i_am_in_template_declaration = 0;
         return 1;
     }
 
+    context.i_am_in_template_declaration = 2;
+
     if( 1 == declaration(trace_node) )
     {
+        context.i_am_in_template_declaration = 0;
         return 1;
     }
 
@@ -1489,7 +1492,8 @@ int c_parser_descent::type_parameter(c_trace_node trace_node)
     //## todo rest
     token_next(trace_node.get_tab());
     if ( token_is(CLASS, trace_node) ) {
-        context.template_parameter_type = c_token_get();
+        c_decl_specifier decl(c_token_get());
+        context.template_parameter.vector_decl_specifier.push_back(decl);
 
         context.declaring_template_type = 1;
 
