@@ -146,7 +146,11 @@ void c_declarator::print(const char *tab)
     }
 
     if (1 == is_function) {
-        printf("[%s]", token.text.c_str());
+        if (1 == is_template) {
+          printf("[%s]<>", token.text.c_str());
+        } else {
+          printf("[%s]", token.text.c_str());
+        }
 
         if (vector_parameter.size() == 0) {
             printf("()\n");
@@ -197,7 +201,11 @@ string c_declarator::get_full_name(void)
             return name;
         }
 
-        name = name + "(";
+        if(1 == is_template){
+          name = name + "<" + ">" + "(";
+        }else{
+          name = name + "(";
+        }
         unsigned i_parameter = 0;
         for (i_parameter = 0; i_parameter < vector_parameter.size();
                 ++i_parameter) {
@@ -418,7 +426,7 @@ void c_symbols_table::insert(c_symbol symbol)
 
     if (i < 0) {
         printf
-        ("error void c_symbols_table::unset(c_token token) -> ( last < 0)\n");
+        ("error void c_symbols_table::insert(c_token token) -> ( last < 0)\n");
         exit(-1);
     }
 

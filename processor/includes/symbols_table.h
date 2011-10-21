@@ -199,6 +199,7 @@ public:
     void print(const char *tab);
 
     int is_typedef;
+    int is_template;
 
     c_declarator() {
         is_function = 0;
@@ -209,6 +210,7 @@ public:
         is_destructor = 0;
 
         is_typedef = 0;
+        is_template = 0;
     }
     c_declarator(c_token t, t_vector_decl_specifier v) {
         token = t;
@@ -231,6 +233,7 @@ public:
         access_specifier = 0;
         is_constructor = 0;
         is_destructor = 0;
+        is_template = 0;
     }
     void clear(void) {
         map_parameter.clear();
@@ -246,6 +249,7 @@ public:
         token_definition.clear();
 
         is_typedef = 0;
+        is_template = 0;
     }
     string get_full_name(void);
 };

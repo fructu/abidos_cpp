@@ -217,6 +217,16 @@ c_semantic::free_declarator(c_context & context, c_token token)
 
     c_declarator declarator(token, vector_decl_specifier);
     context.declarator = declarator;
+/*
+  template <class myType>
+  myType GetMax (myType a, myType b) {
+    return (a>b?a:b);
+  }
+  we are in GetMax line ...
+*/
+    if( 2 == context.i_am_in_template_declaration ) {
+      context.declarator.is_template = 1;
+    }
 }
 /*----------------------------------------------------------------------------*/
 /*
