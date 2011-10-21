@@ -99,7 +99,7 @@ struct c_context {
   template <typename identifier> function_declaration
 */
     int i_am_in_template_declaration; // we are in template declaration
-    int declaring_generic_type; //we are in indetifier declaration
+    int declaring_template_type; //we are in indetifier declaration
     c_token template_parameter_type; //we are in indetifier declaration
 
     c_context() {
@@ -126,7 +126,7 @@ struct c_context {
         is_typedef = 0;
 
         i_am_in_template_declaration = 0;
-        declaring_generic_type = 0;
+        declaring_template_type = 0;
         template_parameter_type.clear();
     }
     void clear(void) {
@@ -165,7 +165,7 @@ struct c_context {
         is_typedef = 0;
 
         i_am_in_template_declaration = 0;
-        declaring_generic_type = 0;
+        declaring_template_type = 0;
         template_parameter_type.clear();
     }
     void restore_but_not_i_token(c_context & context_param) {
@@ -187,8 +187,8 @@ struct c_context {
         context_param.is_typedef = is_typedef;
         context_param.i_am_in_template_declaration =
           i_am_in_template_declaration;
-        context_param.declaring_generic_type =
-          declaring_generic_type;
+        context_param.declaring_template_type =
+          declaring_template_type;
         context_param.template_parameter_type.save(template_parameter_type);
     }
 };

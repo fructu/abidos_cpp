@@ -1491,10 +1491,10 @@ int c_parser_descent::type_parameter(c_trace_node trace_node)
     if ( token_is(CLASS, trace_node) ) {
         context.template_parameter_type = c_token_get();
 
-        context.declaring_generic_type = 1;
+        context.declaring_template_type = 1;
 
         identifier_opt(trace_node);
-        context.declaring_generic_type = 0;
+        context.declaring_template_type = 0;
         return 1;
     }
 
