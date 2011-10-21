@@ -238,6 +238,12 @@ abidos
     unsigned int * void f(void) fixed (see test/t031_01.cpp)
 -[v] refactor code using token_is_one
 -[v] fixed now preprocesor lines like #include <file> does not break the parser.
+-[] in rules with for(;;) investigate
+    for (;;) {
+      ...
+     if ( token_is_not(',', trace_node) ) {
+        return 0 or 1;
+      ...
 
 -[] do documentacion:
       http://linux.die.net/man/7/groff_ms

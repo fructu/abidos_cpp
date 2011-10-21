@@ -308,7 +308,7 @@ void c_semantic::identifier(c_context & context, c_token token)
             //parameter has been processed
             context.template_parameter.clear();
 // this print for now is only for templates debug
-//            context.print();
+            context.print();
 
             return;
         }

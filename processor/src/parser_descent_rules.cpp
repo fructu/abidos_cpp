@@ -1439,13 +1439,33 @@ int c_parser_descent::template_parameter_list(c_trace_node trace_node)
     trace_graph.add(trace_node, "template_parameter_list");
 
     c_context_tokens context_tokens(context);
+    c_context_tokens context_good_way(context);
 
-    if( 1 == template_parameter(trace_node) )
+    if( 0 == template_parameter(trace_node) )
     {
-        return 1;
+        return 0;
     }
 
-    //## todo rest
+    for (;;) {
+        context_good_way.save(context);
+        token_next(trace_node.get_tab());
+
+        if ( token_is('>', trace_node) ) {
+            // yes i restore here to consume '>' more up in the tree
+            context = context_good_way.restore();
+            return 1;
+        }
+
+        if ( token_is_not(',', trace_node) ) {
+            context = context_tokens.restore();
+            return 0;
+        }
+
+        if (0 == template_parameter(trace_node)) {
+            context = context_tokens.restore();
+            return 0;
+        }
+    }
 
     context = context_tokens.restore();
     return 0;
