@@ -516,7 +516,13 @@ void c_parser_descent::token_next(string tab)
                             token.id = p_symbol->type;
                         }
                     }
-
+                }else{
+                  //check if is template type ej template <class T> --> T
+                  if( 2 == context.i_am_in_template_declaration ) {
+                    if( context.map_template_parameter.count(token.text) > 0){
+                      token.id = TEMPLATE_TYPE;
+                    }
+                  }
                 }
             }
         }

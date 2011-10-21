@@ -54,6 +54,7 @@ static void yyerror(char *s);
 %token THROW TRUE TRY TYPEDEF TYPEID TYPENAME UNION UNSIGNED USING VIRTUAL
 %token VOID VOLATILE WCHAR_T WHILE
 %token PREPROCESSOR_INCLUDE
+%token TEMPLATE_TYPE
 
 %start translation_unit
 

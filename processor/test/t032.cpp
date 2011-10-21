@@ -18,7 +18,7 @@ class B
     int f1(int i1);
 
   public:
-    B(){};
+    B(){}
     ~B();
 };
 

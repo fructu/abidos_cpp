@@ -7,10 +7,16 @@
 
 //using namespace std;
 
-template < class T1>
-void f(int i)
+template < class T>
+void f(T t1)
 {
 }
+
+/*
+T f(T i)
+{
+}
+*/
 /*
 template < class T1, class T2, class T3, class T4>
 void f2(int i)

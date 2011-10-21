@@ -479,10 +479,19 @@ int c_parser_descent::simple_declaration(c_trace_node trace_node)
     if ( CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER != context.class_specifier_status ) {
         semantic.clear_decl_specifier();
     }
-
+    
     decl_specifier_seq_opt(trace_node);	// long int a = 0; this is 'long
     // int'
     init_declarator_list_opt(trace_node);	// long int a = 0; this is 'a = 0'
+
+/*//### i think decls no is optional is a must
+    if( 0 == decl_specifier_seq_opt(trace_node))
+    {
+      return 0;
+    }
+
+    init_declarator_list_opt(trace_node);
+*/    
 
     c_context_tokens context_tokens(context);
 
@@ -777,12 +786,18 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
 //      context.class_name_declaration = class_name;
     }
 
+    if( 2 == context.i_am_in_template_declaration ) {
+        if ( token_is(TEMPLATE_TYPE, trace_node) ) {
+          result = 1;
+        }
+    }
+
     const int vector_id[]={
       CHAR, WCHAR_T, BOOL, SHORT, INT, LONG
       , SIGNED, UNSIGNED, FLOAT, DOUBLE, VOID, -1
     };
 
-    if (token_is_one(  vector_id,trace_node) != 0) {
+    if (token_is_one(vector_id,trace_node) != 0) {
         result = 1;
     }
 
