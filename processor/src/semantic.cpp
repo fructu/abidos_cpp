@@ -50,6 +50,7 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     if ( 0 != context.class_name_declaration.size() ) {
         string s = symbol.token.text;
         symbol.token.text = context.class_name_declaration + "::" + s;
+        symbol.text = symbol.token.text;
     }
 
     context.class_name_declaration = symbol.token.text;
@@ -558,6 +559,11 @@ void c_semantic::declarator_insert(string tab, c_context & context)
                     symbol.typedef_points_to = p->token.text;
                 }
             }
+        }
+
+        // void f(int p1) -> his name will be "f(int)"
+        if( 1 == context.declarator.is_function ) {
+          symbol.text = context.declarator.get_full_name();
         }
 
         ts.insert(symbol);

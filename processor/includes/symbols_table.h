@@ -319,7 +319,8 @@ public:
         map_friend_class[friend_class.text] = friend_class;
         vector_friend_class.push_back(friend_class);
     }
-
+    // int f(int 1); --> in text "f(int)" in token.text="f";
+    string text;
     c_token token;
     int type;
     int class_key;
@@ -334,6 +335,7 @@ public:
     string typedef_points_to;
 
     c_symbol() {
+        text = "";
         type = 0;
         class_key = 0;
         map_base_class.clear();
@@ -345,6 +347,7 @@ public:
     }
 
     c_symbol(c_token token_1) {
+        text = token_1.text;
         token = token_1;
         type = 0;
         class_key = 0;
@@ -359,6 +362,7 @@ public:
     }
 
     ~c_symbol() {
+        text = "";
         type = 0;
         class_key = 0;
         map_base_class.clear();

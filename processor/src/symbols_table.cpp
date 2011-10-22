@@ -440,7 +440,7 @@ void c_symbols_table::insert(c_symbol symbol)
         exit(-1);
     }
     // c_symbol symbol(token);
-    stack[last][symbol.token.text] = symbol;
+    stack[last][symbol.text] = symbol;
 }
 /*----------------------------------------------------------------------------*/
 void c_symbols_table::change_key(string key_old, string key_new)

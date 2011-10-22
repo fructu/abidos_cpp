@@ -134,7 +134,7 @@ abidos
 -[v] parse definitions of destructors outside of classes
 -[v] semantic for definitons of functions members outside of clasess.
 -[v] save the file and line for the previous point.
--[] do get_full_name only with types of params 
+-[v] do get_full_name only with types of params 
     inside class A
         void f(int);
     outside class
