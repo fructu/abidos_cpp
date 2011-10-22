@@ -134,7 +134,7 @@ abidos
 -[v] parse definitions of destructors outside of classes
 -[v] semantic for definitons of functions members outside of clasess.
 -[v] save the file and line for the previous point.
--[] do get_full_name only with types of params 
+-[v] do get_full_name only with types of params 
     inside class A
         void f(int);
     outside class
@@ -219,7 +219,7 @@ abidos
     look this example http://www.cplusplus.com/doc/tutorial/templates/
     cat ../out/trace_t035.cpp.gv | dot -Tpng > ../out/trace_t035.cpp.gv.png; eog ../out/trace_t035.cpp.gv.png
     - [] when store of the function in ts add <CLASS_1,CLASS_2>
-    - [] good moment to prune idenfiers in the mangled names of functions
+    - [v] good moment to prune idenfiers in the mangled names of functions
        out_t012.cpp
         [PRIVATE]: [int] [unsigned] first[fa1(double float p1)]->[fa1]
         first[fa1(double float p1)]->[fa1]
