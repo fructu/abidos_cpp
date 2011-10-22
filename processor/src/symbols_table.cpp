@@ -32,7 +32,7 @@ c_parameter::print(const char *tab)
 }
 
 /*----------------------------------------------------------------------------*/
-string c_parameter::get_string(void)
+string c_parameter::get_string(t_out_identifier sw_out_identifier)
 {
     string str = "";
     unsigned i_decl = 0;
@@ -57,7 +57,9 @@ string c_parameter::get_string(void)
     if (1 == have_text) {
         // if parameter dont have name i puted @IDENTIFIER#
         if (NO_IDENTIFIER != token.text) {
+          if(OUT_IDENTIFIER_YES == sw_out_identifier){
             str = str + " " + token.text;
+          }
         }
     }
 
@@ -209,7 +211,7 @@ string c_declarator::get_full_name(void)
         unsigned i_parameter = 0;
         for (i_parameter = 0; i_parameter < vector_parameter.size();
                 ++i_parameter) {
-            name = name + vector_parameter[i_parameter].get_string();
+            name = name + vector_parameter[i_parameter].get_string(OUT_IDENTIFIER_NO);
             if ((i_parameter + 1) < vector_parameter.size()) {
                 name = name + ",";
             }

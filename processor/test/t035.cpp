@@ -7,10 +7,22 @@
 
 //using namespace std;
 
+void f1(int i1);
+
+class A
+{
+  fa(int pa1, int pa2);
+};
+
+/*
+void f2(float f1);
+
+
 template < class T>
 void f(T t1)
 {
 }
+*/
 
 /*
 T f(T i)

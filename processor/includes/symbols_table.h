@@ -154,7 +154,10 @@ struct c_decl_specifier {
 };
 
 typedef vector < c_decl_specifier > t_vector_decl_specifier;
-
+enum t_out_identifier{
+  OUT_IDENTIFIER_NO,
+  OUT_IDENTIFIER_YES
+};
 struct c_parameter {
     t_vector_decl_specifier vector_decl_specifier;
 
@@ -167,7 +170,7 @@ struct c_parameter {
         vector_decl_specifier = v;
     }
     void print(const char *tab);
-    string get_string(void);
+    string get_string(t_out_identifier sw_out_identifier);
 };
 
 typedef vector < c_parameter > t_vector_parameter;
