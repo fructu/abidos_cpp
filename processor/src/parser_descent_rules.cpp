@@ -1881,9 +1881,10 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
             } else {
                 // ## todo | direct_declarator '[' constant_expression_opt
                 // ']'
-
                 if (1 != context.class_member.is_function) {
+                  if ( 1 != context.declarator.is_function) {
                     semantic.declarator_insert(trace_node.get_tab(), context);
+                  }
                 }
             }
         }

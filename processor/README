@@ -225,7 +225,11 @@ abidos
         first[fa1(double float p1)]->[fa1]
        must be
         first[fa1(double float)]->[fa1]
-
+    -[v] parse typename is like class in parameters declaration of templates
+-[v] free functions void f( int i1, float f2); have 2 entries in ts
+    first[f(int)]...
+    first[f(int,float)]...
+    fixed
 -[] do parsing [const]
 -[] do parsing namespace
     look this example http://www.cplusplus.com/doc/tutorial/namespaces/
