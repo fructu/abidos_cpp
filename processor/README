@@ -256,7 +256,11 @@ abidos
      if ( token_is_not(',', trace_node) ) {
         return 0 or 1;
       ...
-
+-[] fix t013.cpp in the output:
+    ...
+    [void] [fa1]( [void] [void])
+    ...
+    sould be [void] [fa1]( [void] ) 
 -[] do documentacion:
       http://linux.die.net/man/7/groff_ms
       http://www.gsp.com/cgi-bin/man.cgi?section=7&topic=groff_ms#4
@@ -267,3 +271,6 @@ abidos
   -[] how class f(int i, float b) is saved in ts
   -[] how class A::B is saves in ts
 
+-[v] fixed problem in generating tree trace with < and > symbols
+  _7_template_parameter_list[label="{_7_template_parameter_list|[\> is 62->>]\l}", shape="record", color=green]
+  _20_storage_class_specifier[label="{_20_storage_class_specifier|[template\ is_not AUTO\ REGISTER\ STATIC\ EXTERN\ MUTABLE]}", shape="record", color=black, style=dotted]

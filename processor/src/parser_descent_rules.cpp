@@ -716,6 +716,13 @@ int c_parser_descent::type_specifier(c_trace_node trace_node)
           }
         }
     */
+
+    if( 2 == context.i_am_in_template_declaration ) {
+        if ( token_is(TEMPLATE_TYPE, trace_node) ) {
+          return 1;
+        }
+    }
+    
     if (1 == simple_type_specifier(trace_node)) {
         return 1;
     }

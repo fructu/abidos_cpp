@@ -65,7 +65,11 @@ void c_trace_graph::add(c_trace_node & node, string s)
 /*----------------------------------------------------------------------------*/
 void put_scaped(string & s)
 {
-    if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s ) {
+    if ( "<" == s ){
+        s = " LT";
+    } else if (">" == s) {
+        s = " GT";
+    } else if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s ) {
         s = "\\" + s;
     } else {//s can be a string
         char str_in[1024] = {'\0'};
@@ -97,7 +101,7 @@ void put_scaped(string & s)
 
 }
 /*----------------------------------------------------------------------------*/
-void c_trace_graph::token_is_add(string s, unsigned position)
+void c_trace_graph::token_is_add(string s, string s_id, unsigned position)
 {
     unsigned len = vector.size();
 
@@ -109,6 +113,8 @@ void c_trace_graph::token_is_add(string s, unsigned position)
     unsigned last = position;
 
     put_scaped(s);
+
+    s = s + " is " + s_id;
 
     if ( 0 == vector[last].function_token_text_is.size() ) {
         vector[last].function_token_text_is = s;
@@ -172,13 +178,13 @@ void c_generator_trace::functions(t_vector_trace_nodes & vector)
         }
 
         if ( 0 < vector[i].function_token_text_is.size() ) {
-            fprintf(f_out, "|token_is\\[%s\\]\\l"
+            fprintf(f_out, "|[%s]\\l"
                     ,vector[i].function_token_text_is.c_str()
                    );
         }
 
         if ( 0 < vector[i].function_token_text_is_not.size() ) {
-            fprintf(f_out, "|\\[%s\\]"
+            fprintf(f_out, "|[%s]"
                     ,vector[i].function_token_text_is_not.c_str()
                    );
         }

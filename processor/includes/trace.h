@@ -82,7 +82,7 @@ private:
     friend class c_generator_trace;
 public:
     void add(c_trace_node & node, string s);
-    void token_is_add(string s, unsigned position);
+    void token_is_add(string s, string s_id, unsigned position);
     void token_is_not_add(string t, string s, unsigned position);
 };
 

@@ -69,9 +69,9 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
 {
     printf("## c_semantic::class_member_declarator()\n");
 
-    print_decl_specifier();
     printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
     printf("##:           token.text[%s]\n",token.text.c_str());
+    printf("##:           context.i_am_in_template_declaration[%d]\n",context.i_am_in_template_declaration);    
 
     printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
 
@@ -525,8 +525,6 @@ void c_semantic::declarator_insert(string tab, c_context & context)
            , tab.c_str()
            , context.declarator.get_full_name().c_str()
           );
-
-    print_decl_specifier();
 
     if (NO_CLASS_STATUS ==
             context.class_specifier_status) {

@@ -163,6 +163,8 @@ void c_parser_descent::tokens_vector_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_print_from_actual(void)
 {
+  printf("##### c_parser_descent::tokens_vector_print_from_actual context.i_token[%d]\n",context.i_token);
+  return;
     t_tokens::iterator i_token = tokens_vector.begin() + context.i_token;
 
     printf("tokens_vector_print_from_actual\n");
@@ -281,7 +283,10 @@ int c_parser_descent::token_is(int id , c_trace_node trace_node)
     int result = 0;
 
     if ( id == token_get()) {
-        trace_graph.token_is_add(c_token_get().text, trace_node.position);
+//        trace_graph.token_is_add(c_token_get().text, trace_node.position);
+        string s_id = yytokens[id];
+        string s = c_token_get().text;
+        trace_graph.token_is_add(s, s_id, trace_node.position);        
         result = 1;
     } else {
 //      char s_id[10] = {};
@@ -300,7 +305,9 @@ int c_parser_descent::token_is_not(int id , c_trace_node trace_node)
     int result = 0;
 
     if ( id == token_get()) {
-        trace_graph.token_is_add(c_token_get().text, trace_node.position);
+        string s_id = yytokens[id];
+        string s = c_token_get().text;
+        trace_graph.token_is_add(s,s_id, trace_node.position);
     } else {
 //      char s_id[10] = {};
 //      sprintf(s_id,"[%d]",id);
@@ -518,8 +525,11 @@ void c_parser_descent::token_next(string tab)
                     }
                 }else{
                   //check if is template type ej template <class T> --> T
+printf("####0 mark_02\n");fflush(stdout);                  
                   if( 2 == context.i_am_in_template_declaration ) {
+printf("####1 mark_02\n");fflush(stdout);
                     if( context.map_template_parameter.count(token.text) > 0){
+printf("####2 mark_02\n");fflush(stdout);                    
                       token.id = TEMPLATE_TYPE;
                     }
                   }

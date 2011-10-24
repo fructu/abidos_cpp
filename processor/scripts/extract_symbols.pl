@@ -39,6 +39,14 @@ sub p1
       {
         print f_out "  \"$i->\\\\\",\n";
       }
+      elsif ($c eq ">")
+      {
+        print f_out "  \" GT \",\n";
+      }
+      elsif ($c eq "<")
+      {
+        print f_out "  \" LT \",\n";
+      }
       else
       {
         print f_out "  \"$i->$c\",\n";
