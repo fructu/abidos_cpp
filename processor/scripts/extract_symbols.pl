@@ -47,6 +47,26 @@ sub p1
       {
         print f_out "  \" LT \",\n";
       }
+      elsif ($c eq ";")
+      {
+        print f_out "  \" \; \",\n";
+      }
+      elsif ($c eq "(")
+      {
+        print f_out "  \" \( \",\n";
+      }
+      elsif ($c eq ")")
+      {
+        print f_out "  \" \) \",\n";
+      }
+      elsif ($c eq "{")
+      {
+        print f_out "  \" OPEN_BRACKET \",\n";
+      }
+      elsif ($c eq "}")
+      {
+        print f_out "  \" CLOSE_BRACKET \",\n";
+      }
       else
       {
         print f_out "  \"$i->$c\",\n";

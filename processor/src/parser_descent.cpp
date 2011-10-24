@@ -525,11 +525,8 @@ void c_parser_descent::token_next(string tab)
                     }
                 }else{
                   //check if is template type ej template <class T> --> T
-printf("####0 mark_02\n");fflush(stdout);                  
                   if( 2 == context.i_am_in_template_declaration ) {
-printf("####1 mark_02\n");fflush(stdout);
                     if( context.map_template_parameter.count(token.text) > 0){
-printf("####2 mark_02\n");fflush(stdout);                    
                       token.id = TEMPLATE_TYPE;
                     }
                   }

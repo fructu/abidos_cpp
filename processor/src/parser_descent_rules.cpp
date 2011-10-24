@@ -716,12 +716,6 @@ int c_parser_descent::type_specifier(c_trace_node trace_node)
           }
         }
     */
-
-    if( 2 == context.i_am_in_template_declaration ) {
-        if ( token_is(TEMPLATE_TYPE, trace_node) ) {
-          return 1;
-        }
-    }
     
     if (1 == simple_type_specifier(trace_node)) {
         return 1;
@@ -932,7 +926,6 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
     //we can get this point wihout identifer of class
     // typedef class A t_A; in this clase
     // A is not a IDENTIFIER is CLASS_NAME -> enter in next if
-
     if ( 0 == context.class_name_declaration.size() ) {
         if ( 1 == was_typedef ) {
             context = context_tokens_1.restore();
@@ -978,9 +971,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
             return 0;
         }
     }
-
     c_context_tokens context_tokens(context);
-
     // context.class_specifier = 1;
 
     token_next(trace_node.get_tab());
@@ -993,9 +984,21 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
     printf("%s## class_specifier {\n", trace_node.get_tab().c_str());
 
     // we need to know what class is processing
+/*
+  ### todo
+    saving this part of context should be in another object
+    and be a composition of context -> c_template_context
+*/
     string class_name = context.class_name_declaration;
+    int i_am_in_template_declaration = context.i_am_in_template_declaration;
+    t_vector_template_parameter vector_template_parameter = context.vector_template_parameter; 
+    t_map_template_parameter map_template_parameter = context.map_template_parameter;
+
     tokens_vector_clear();
     context.class_name_declaration = class_name;
+    context.i_am_in_template_declaration = i_am_in_template_declaration;
+    context.vector_template_parameter = vector_template_parameter;
+    context.map_template_parameter = map_template_parameter;
 
     context_tokens.save(context);
 
@@ -1110,6 +1113,8 @@ int c_parser_descent::member_specification(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "member_specification");
 
+
+printf("#### mark_9 context.i_am_in_template_declaration[%d]\n",context.i_am_in_template_declaration);
     if ( preanalisys('}', trace_node) ) {
         return 0;
     }

@@ -69,6 +69,12 @@ void put_scaped(string & s)
         s = " LT";
     } else if (">" == s) {
         s = " GT";
+    } else if ("{" == s) {
+        s = " OPEN_BRACKET";
+    } else if ("}" == s) {
+        s = " CLOSE_BRACKET";
+    } else if ("\\" == s) {
+        s = " BACKSLASH";
     } else if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s ) {
         s = "\\" + s;
     } else {//s can be a string
@@ -82,9 +88,12 @@ void put_scaped(string & s)
         while ( '\0' != str_in[i_in]) {
             c=str_in[i_in];
             if ( '{' == c || '}' == c || '[' == c || ']' == c) {
+            /*
                 str_out[i_out]='\\';
                 ++i_out;
                 str_out[i_out]=str_in[i_in];
+            */
+                str_out[i_out]='_';
             } else if ('/' == c) {
                 str_out[i_out]='_';
             } else if ('"' == c) {
