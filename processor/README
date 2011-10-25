@@ -219,6 +219,18 @@ abidos
     look this example http://www.cplusplus.com/doc/tutorial/templates/
     cat ../out/trace_t035.cpp.gv | dot -Tpng > ../out/trace_t035.cpp.gv.png; eog ../out/trace_t035.cpp.gv.png
     - [] when store of the function in ts add <CLASS_1,CLASS_2>
+        this code is valid in c++:
+        template <class T>
+        void f(T t)
+        {
+          ;
+        }
+
+        template <class T, class T2>
+        void f(T t, T2 t2)
+        {
+          ;
+        }    
     - [v] when store class t036.cpp
           ...
           template <class T, class T2, typename T3>
@@ -227,6 +239,18 @@ abidos
         in ts will be:
           first[A<typename,typename,typename>] id[258]->[IDENTIFIER] text[A] type[265]->[CLASS_NAME] class_key[300]->[CLASS]
 
+        this does not necesary this is not allowed in C++:
+          template <class T>
+          class A{
+            T a;
+          };
+
+          template <class T, class T2>
+          class A{
+            T a;
+          };
+        then in ts:
+          first[A] id[258]->[IDENTIFIER] text[A] ...
     - [v] good moment to prune idenfiers in the mangled names of functions
        out_t012.cpp
         [PRIVATE]: [int] [unsigned] first[fa1(double float p1)]->[fa1]

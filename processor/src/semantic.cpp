@@ -51,7 +51,9 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
       symbol.is_template = 1;
       symbol.vector_template_parameter = context.vector_template_parameter;
       symbol.map_template_parameter = context.map_template_parameter;
-      symbol.process_token_text();
+
+      // in C++ template classes must have different identifiers
+      //symbol.process_token_text();
     }
 
     if ( 0 != context.class_name_declaration.size() ) {

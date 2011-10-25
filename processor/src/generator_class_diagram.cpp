@@ -131,7 +131,7 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
     members_url(symbol.members.vector_class_member);
     fprintf(f_out, "\",\n");
     if( 1 == symbol.is_template) {
-      fprintf(f_out, "    label=\"{ %s|", sharps_substitution( symbol.text ) );
+      fprintf(f_out, "    label=\"{ \\<%s\\>|", symbol.token.text.c_str());
     }else{
       fprintf(f_out, "    label=\"{ %s|", symbol.token.text.c_str());
     }
