@@ -113,8 +113,11 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
             symbol.token.file.c_str(), symbol.token.line);
     members_url(symbol.members.vector_class_member);
     fprintf(f_out, "\",\n");
-
-    fprintf(f_out, "    label=\"{%s|", symbol.token.text.c_str());
+    if( 1 == symbol.is_template) {
+      fprintf(f_out, "    label=\"{ \\<%s\\>|", symbol.token.text.c_str());
+    }else{
+      fprintf(f_out, "    label=\"{ %s|", symbol.token.text.c_str());
+    }
     members_label(symbol.members.vector_class_member);
     fprintf(f_out, "}\"\n");
     fprintf(f_out, "  ]\n");

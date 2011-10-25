@@ -334,6 +334,10 @@ public:
     int is_typedef;
     string typedef_points_to;
 
+    //### todo it will need save the parameters of template here
+    //###   it will bee good moment to do a objets to composite here
+    int is_template;
+
     c_symbol() {
         text = "";
         type = 0;
@@ -344,6 +348,8 @@ public:
         free_declarator = 0;
         is_typedef = 0;
         typedef_points_to = "";
+
+        is_template = 0;
     }
 
     c_symbol(c_token token_1) {
@@ -359,6 +365,8 @@ public:
 
         is_typedef = 0;
         typedef_points_to = "";
+
+        is_template = 0;
     }
 
     ~c_symbol() {
@@ -373,6 +381,8 @@ public:
 
         is_typedef = 0;
         typedef_points_to = "";
+
+        is_template = 0;
     }
     void print(const char *tab);
 };

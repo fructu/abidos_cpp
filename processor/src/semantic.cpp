@@ -47,6 +47,10 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     // we only take the name of the class the fist time after CLASS
     // if( 1 == context.class_head)
 
+    if( 2 == context.i_am_in_template_declaration ) {
+      symbol.is_template = 1;
+    }
+
     if ( 0 != context.class_name_declaration.size() ) {
         string s = symbol.token.text;
         symbol.token.text = context.class_name_declaration + "::" + s;
