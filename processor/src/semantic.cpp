@@ -570,6 +570,12 @@ void c_semantic::declarator_insert(string tab, c_context & context)
         // void f(int p1) -> his name will be "f(int)"
         if( 1 == context.declarator.is_function ) {
           symbol.text = context.declarator.get_full_name();
+          if( 2 == context.i_am_in_template_declaration ) {
+            symbol.is_template = 1;
+            symbol.vector_template_parameter = context.vector_template_parameter;
+            symbol.map_template_parameter = context.map_template_parameter;
+            symbol.process_token_text();
+          }
         }
 
         ts.insert(symbol);

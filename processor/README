@@ -218,7 +218,7 @@ abidos
 -[] do parsing templates <>
     look this example http://www.cplusplus.com/doc/tutorial/templates/
     cat ../out/trace_t035.cpp.gv | dot -Tpng > ../out/trace_t035.cpp.gv.png; eog ../out/trace_t035.cpp.gv.png
-    - [] when store of the function in ts add <CLASS_1,CLASS_2>
+    - [v] when store of the function in ts add <typename,typename> t035.cpp
         this code is valid in c++:
         template <class T>
         void f(T t)
@@ -230,7 +230,13 @@ abidos
         void f(T t, T2 t2)
         {
           ;
-        }    
+        }
+        in ts:
+          ...
+          first[f<typename>] id[258]->[IDENTIFIER] text[f]
+          ...
+          first[f<typename,typename>] id[258]->[IDENTIFIER] text[f]
+          ...
     - [v] when store class t036.cpp
           ...
           template <class T, class T2, typename T3>
