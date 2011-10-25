@@ -17,7 +17,25 @@
 #include "lex_yacc.h"
 
 /*----------------------------------------------------------------------------*/
+const char * sharps_substitution(string source)
+{
+    size_t j;
 
+    string str = "";
+    
+    for( j = 0; j < source.size(); ++j ) {
+      if( '<' == source[j] ){
+        str += "\\<";
+      } else if( '>' == source[j] ) {
+        str += "\\>";      
+      } else {
+        str += source[j];
+      }
+    }
+
+    return str.c_str();
+}
+/*----------------------------------------------------------------------------*/
 const char * colon_colon_substitution(string source)
 {
     size_t j;
@@ -28,7 +46,6 @@ const char * colon_colon_substitution(string source)
 
     return str.c_str();
 }
-
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::members_url(t_vector_class_member &
         vector_class_member)
@@ -114,7 +131,7 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
     members_url(symbol.members.vector_class_member);
     fprintf(f_out, "\",\n");
     if( 1 == symbol.is_template) {
-      fprintf(f_out, "    label=\"{ \\<%s\\>|", symbol.token.text.c_str());
+      fprintf(f_out, "    label=\"{ %s|", sharps_substitution( symbol.text ) );
     }else{
       fprintf(f_out, "    label=\"{ %s|", symbol.token.text.c_str());
     }

@@ -2,7 +2,7 @@
   template testing
 */
 
-template <class T>
+template <class T, class T2, typename T3>
 class A {
       T t;
  public:

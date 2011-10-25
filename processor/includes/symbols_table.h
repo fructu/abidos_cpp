@@ -296,99 +296,6 @@ public:
     void insert(c_class_member member);
     c_class_member *get(string member);
 };
-
-class c_symbol
-{
-private:
-    t_map_base_class map_base_class;
-    t_vector_base_class vector_base_class;
-
-    t_map_friend_class map_friend_class;
-    t_vector_friend_class vector_friend_class;
-
-    friend class c_generator_class_diagram;
-    friend class c_generator_original;
-
-public:
-    void insert_base_class(c_base_class base_class) {
-        map_base_class[base_class.text] = base_class;
-        vector_base_class.push_back(base_class);
-    }
-
-    void insert_friend_class(c_friend_class friend_class) {
-        map_friend_class[friend_class.text] = friend_class;
-        vector_friend_class.push_back(friend_class);
-    }
-    // int f(int 1); --> in text "f(int)" in token.text="f";
-    string text;
-    c_token token;
-    int type;
-    int class_key;
-
-    // t_map_class_member map_class_member;
-    c_class_members members;
-
-    int free_declarator;
-    c_declarator declarator;
-
-    int is_typedef;
-    string typedef_points_to;
-
-    //### todo it will need save the parameters of template here
-    //###   it will bee good moment to do a objets to composite here
-    int is_template;
-
-    c_symbol() {
-        text = "";
-        type = 0;
-        class_key = 0;
-        map_base_class.clear();
-        members.clear();
-
-        free_declarator = 0;
-        is_typedef = 0;
-        typedef_points_to = "";
-
-        is_template = 0;
-    }
-
-    c_symbol(c_token token_1) {
-        text = token_1.text;
-        token = token_1;
-        type = 0;
-        class_key = 0;
-        map_base_class.clear();
-        members.clear();
-
-        free_declarator = 0;
-        declarator.clear();
-
-        is_typedef = 0;
-        typedef_points_to = "";
-
-        is_template = 0;
-    }
-
-    ~c_symbol() {
-        text = "";
-        type = 0;
-        class_key = 0;
-        map_base_class.clear();
-        members.clear();
-
-        free_declarator = 0;
-        declarator.clear();
-
-        is_typedef = 0;
-        typedef_points_to = "";
-
-        is_template = 0;
-    }
-    void print(const char *tab);
-};
-
-typedef map < string, c_symbol > t_symbols;
-typedef vector < t_symbols > stack_symbols;
 /*----------------------------------------------------------------------------*/
 /*
   templates
@@ -432,6 +339,108 @@ struct c_template_parameter {
 
 typedef vector < c_template_parameter > t_vector_template_parameter;
 typedef map < string, c_template_parameter > t_map_template_parameter;
+
+class c_symbol
+{
+private:
+    t_map_base_class map_base_class;
+    t_vector_base_class vector_base_class;
+
+    t_map_friend_class map_friend_class;
+    t_vector_friend_class vector_friend_class;
+
+    friend class c_generator_class_diagram;
+    friend class c_generator_original;
+
+public:
+    void insert_base_class(c_base_class base_class) {
+        map_base_class[base_class.text] = base_class;
+        vector_base_class.push_back(base_class);
+    }
+
+    void insert_friend_class(c_friend_class friend_class) {
+        map_friend_class[friend_class.text] = friend_class;
+        vector_friend_class.push_back(friend_class);
+    }
+    // int f(int 1); --> in text "f(int)" in token.text="f";
+    string text;
+    c_token token;
+    int type;
+    int class_key;
+
+    // t_map_class_member map_class_member;
+    c_class_members members;
+
+    int free_declarator;
+    c_declarator declarator;
+
+    int is_typedef;
+    string typedef_points_to;
+
+    //### todo it will need save the parameters of template here
+    //###   it will bee good moment to do a objets to composite here
+    int is_template;
+    t_vector_template_parameter vector_template_parameter;
+    t_map_template_parameter map_template_parameter;
+
+    c_symbol() {
+        text = "";
+        type = 0;
+        class_key = 0;
+        map_base_class.clear();
+        members.clear();
+
+        free_declarator = 0;
+        is_typedef = 0;
+        typedef_points_to = "";
+
+        is_template = 0;
+        vector_template_parameter.clear();
+        map_template_parameter.clear();
+    }
+
+    c_symbol(c_token token_1) {
+        text = token_1.text;
+        token = token_1;
+        type = 0;
+        class_key = 0;
+        map_base_class.clear();
+        members.clear();
+
+        free_declarator = 0;
+        declarator.clear();
+
+        is_typedef = 0;
+        typedef_points_to = "";
+
+        is_template = 0;
+        vector_template_parameter.clear();
+        map_template_parameter.clear();        
+    }
+
+    ~c_symbol() {
+        text = "";
+        type = 0;
+        class_key = 0;
+        map_base_class.clear();
+        members.clear();
+
+        free_declarator = 0;
+        declarator.clear();
+
+        is_typedef = 0;
+        typedef_points_to = "";
+
+        is_template = 0;
+        vector_template_parameter.clear();
+        map_template_parameter.clear();        
+    }
+    void process_token_text();
+    void print(const char *tab);
+};
+
+typedef map < string, c_symbol > t_symbols;
+typedef vector < t_symbols > stack_symbols;
 /*----------------------------------------------------------------------------*/
 class c_symbols_table
 {

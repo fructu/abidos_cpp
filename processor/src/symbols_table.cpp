@@ -313,6 +313,36 @@ c_class_member *c_class_members::get(string member)
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
+/*
+  when a class is a template the name will be diferent
+*/
+void c_symbol::process_token_text()
+{
+  if( 1 != is_template )
+  {
+    return;
+  }
+
+  unsigned i = 0;
+  string s = token.text + "<";
+
+  for(i = 0; i < vector_template_parameter.size(); ++i) {
+      //### todo maybe vector_decl_specifier[] have more than 1 :-S ???
+    c_token token = vector_template_parameter[i].vector_decl_specifier[0].token;
+
+    if( CLASS == token.id ){
+      s += "typename";
+    }else{
+      s += token.text;
+    }
+    if( (i + 1)  < vector_template_parameter.size() ){
+      s += ",";
+    }
+  }
+  s += ">";
+  text = s;
+}
+
 void c_symbol::print(const char *tab)
 {
     printf(" id[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n",
