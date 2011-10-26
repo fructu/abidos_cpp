@@ -62,10 +62,21 @@ sub p1
       elsif ($c eq "{")
       {
         print f_out "  \" OPEN_BRACKET \",\n";
+#        print f_out "  \" \\{ \",\n";
       }
       elsif ($c eq "}")
       {
         print f_out "  \" CLOSE_BRACKET \",\n";
+      }
+      elsif ($c eq ",")
+      {
+        print f_out '  " , "';
+        print f_out " ,\n";
+      }
+      elsif ($c eq ":")
+      {
+        print f_out '  " : "';
+        print f_out " ,\n";
       }
       else
       {

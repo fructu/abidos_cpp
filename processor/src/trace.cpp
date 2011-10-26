@@ -66,16 +66,20 @@ void c_trace_graph::add(c_trace_node & node, string s)
 void put_scaped(string & s)
 {
     if ( "<" == s ){
-        s = " LT";
+//        s = " LT";
+        s = " \\<";
     } else if (">" == s) {
-        s = " GT";
+//        s = " GT";
+        s = " \\>";
     } else if ("{" == s) {
-        s = " OPEN_BRACKET";
+//        s = " OPEN_BRACKET";
+        s = " \\{ ";
     } else if ("}" == s) {
-        s = " CLOSE_BRACKET";
+//        s = " CLOSE_BRACKET";
+        s = " \\} ";
     } else if ("\\" == s) {
         s = " BACKSLASH";
-    } else if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s ) {
+    } else if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s || "," == s|| ":" == s) {
         s = "\\" + s;
     } else {//s can be a string
         char str_in[1024] = {'\0'};

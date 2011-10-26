@@ -10,3 +10,7 @@ class A {
       {
       }
 };
+
+template <class T1, int N>
+class A2 {
+};

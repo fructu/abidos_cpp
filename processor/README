@@ -265,6 +265,8 @@ abidos
         first[fa1(double float)]->[fa1]
     -[v] parse typename is like class in parameters declaration of templates
     -[v] generate diagrams puting classes templates surronded by < >
+    -[v] in templates parse int... <class T1, int N>
+      cat out/trace_t036.cpp.gv | dot -Tpng > out/trace_t036.cpp.gv.png; eog out/trace_t036.cpp.gv.png
 -[v] free functions void f( int i1, float f2); have 2 entries in ts
     first[f(int)]...
     first[f(int,float)]...
@@ -313,3 +315,4 @@ abidos
 -[v] fixed problem in generating tree trace with < and > symbols
   _7_template_parameter_list[label="{_7_template_parameter_list|[\> is 62->>]\l}", shape="record", color=green]
   _20_storage_class_specifier[label="{_20_storage_class_specifier|[template\ is_not AUTO\ REGISTER\ STATIC\ EXTERN\ MUTABLE]}", shape="record", color=black, style=dotted]
+

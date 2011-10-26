@@ -1538,7 +1538,7 @@ int c_parser_descent::type_parameter(c_trace_node trace_node)
 
     //## todo rest
     token_next(trace_node.get_tab());
-    const int vector_id[]={CLASS, TYPENAME, -1};
+    const int vector_id[]={CLASS, TYPENAME, INT, -1};
     if (token_is_one(  vector_id,trace_node) != 0) {
         c_decl_specifier decl(c_token_get());
         context.template_parameter.vector_decl_specifier.push_back(decl);
