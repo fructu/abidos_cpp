@@ -503,7 +503,14 @@ void c_parser_descent::token_next(string tab)
                     // return symbol.type;
                     printf("%s## next_token found symbol [%s]",
                            tab.c_str(), yytext);
-                    token.id = p_symbol->type;
+                    if( 1 == p_symbol->is_template ) {
+printf("#### mark_02a token.id = TEMPLATE_TYPE;\n");                    
+                      token.id = TEMPLATE_NAME;
+                      context.map_template_parameter = p_symbol->map_template_parameter;
+                      context.vector_template_parameter = p_symbol->vector_template_parameter;                      
+                    } else {
+                      token.id = p_symbol->type;
+                    }
                 }
             } else {
                 /*
@@ -520,7 +527,15 @@ void c_parser_descent::token_next(string tab)
                                    yytext,
                                    context.class_name_declaration.c_str()
                                   );
-                            token.id = p_symbol->type;
+
+                            if( 1 == p_symbol->is_template ) {
+printf("#### mark_02b token.id = TEMPLATE_TYPE;\n");                            
+                              token.id = TEMPLATE_NAME;
+                              context.map_template_parameter = p_symbol->map_template_parameter;
+                              context.vector_template_parameter = p_symbol->vector_template_parameter;
+                            } else {
+                              token.id = p_symbol->type;
+                            }                            
                         }
                     }
                 }else{

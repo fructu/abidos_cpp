@@ -122,7 +122,12 @@ int c_parser_descent::unqualified_id(c_trace_node trace_node)
         context.class_member.is_destructor = 0;
     }
     context = context_tokens.restore();
-
+//### todo test this:
+/*
+    if (1 == template_id(trace_node)) {
+        return 1;
+    }
+*/
     return 0;
 }
 
@@ -264,13 +269,37 @@ int c_parser_descent::class_name(c_trace_node trace_node)
         semantic.class_name(context, c_token_get());
         return 1;
     }
-    // ##todo | template_id
+/*## todo test this
+    if ( 1 == template_id(trace_node) ) {
+        return 1;
+    }
+*/
+    context = context_tokens.restore();
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+template_name:
+	// identifier 
+	TEMPLATE_NAME
+*/
+int c_parser_descent::template_name(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_name");
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+printf ("### mark_03a [%s]\n", c_token_get().text.c_str());
+    if ( token_is(TEMPLATE_NAME, trace_node) ) {
+printf ("### mark_03b [%s]\n", c_token_get().text.c_str());    
+//### todo
+//        semantic.template_name(context, c_token_get());    
+        return 1;
+    }
 
     context = context_tokens.restore();
     return 0;
 }
-
-
 /*----------------------------------------------------------------------
  * Lexical elements.
  *----------------------------------------------------------------------*/
@@ -716,6 +745,16 @@ int c_parser_descent::type_specifier(c_trace_node trace_node)
           }
         }
     */
+/* ###
+  this rule in theory should be in others parts but for now
+  is working t036.cpp
+
+  one of this parts is this
+    elaborated_type_specifier 
+*/
+    if (1 == template_id(trace_node)) {
+        return 1;
+    }
     
     if (1 == simple_type_specifier(trace_node)) {
         return 1;
@@ -1113,8 +1152,6 @@ int c_parser_descent::member_specification(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "member_specification");
 
-
-printf("#### mark_9 context.i_am_in_template_declaration[%d]\n",context.i_am_in_template_declaration);
     if ( preanalisys('}', trace_node) ) {
         return 0;
     }
@@ -1439,8 +1476,9 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
     if ( token_is_not('>', trace_node) ) {
+        context = context_tokens.restore();    
         context.i_am_in_template_declaration = 0;
-        return 1;
+        return 0;
     }
 
     context.i_am_in_template_declaration = 2;
@@ -1553,7 +1591,115 @@ int c_parser_descent::type_parameter(c_trace_node trace_node)
     context = context_tokens.restore();
     return 0;
 }
+/*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+/*
+template_id:
+	template_name '<' template_argument_list '>'
+	;
+*/
+int c_parser_descent::template_id(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_id");
 
+    if( 0 == template_name(trace_node) ) {
+      return 0;
+    }
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('<', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    if( 0 == template_argument_list(trace_node) )
+    {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('>', trace_node) ) {
+        context = context_tokens.restore();    
+        return 0;
+    }
+
+    return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+template_argument_list:
+	template_argument
+	| template_argument_list ',' template_argument
+	;
+*/
+int c_parser_descent::template_argument_list(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_argument_list");
+    c_context_tokens context_tokens(context);
+    c_context_tokens context_good_way(context);
+
+    if( 0 == template_argument(trace_node) )
+    {
+        return 0;
+    }
+
+    for (;;) {
+        context_good_way.save(context);
+        token_next(trace_node.get_tab());
+
+        if ( token_is('>', trace_node) ) {
+            // yes i restore here to consume '>' more up in the tree
+            context = context_good_way.restore();
+            return 1;
+        }
+
+        if ( token_is_not(',', trace_node) ) {
+            context = context_tokens.restore();
+            return 0;
+        }
+
+        if (0 == template_argument(trace_node)) {
+            context = context_tokens.restore();
+            return 0;
+        }
+    }
+
+    context = context_tokens.restore();
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+template_argument:
+	assignment_expression
+	| type_id
+	| template_name
+	;
+*/
+int c_parser_descent::template_argument(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_argument");
+
+    context.template_instantation = 1;
+
+    //### todo search types in context.map_template_parameter
+    //### todo type_id
+    //### drop type_specifier
+/*    
+    if (1 == type_id(trace_node)) {
+        return 1;
+    }
+*/
+    if (1 == type_specifier(trace_node)) {
+        return 1;
+    }
+
+    context.template_instantation = 0;
+
+    return 0;
+}
 /*----------------------------------------------------------------------
  * Epsilon (optional) definitions.
  *----------------------------------------------------------------------*/
@@ -1898,6 +2044,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                     semantic.declarator_insert(trace_node.get_tab(), context);
                   }
                 }
+//                return 1;
             }
         }
 

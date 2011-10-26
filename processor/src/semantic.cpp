@@ -496,10 +496,17 @@ void c_semantic::member_insert(string & tab, c_context & context)
  * class A { int f1(int p1); };
  */
 {
+    if( context.class_member.token.text.size() <= 0){
+        printf("%s##error c_semantic::member_insert(c_context context) member empty\n"
+           ,tab.c_str()
+          );
+      return;
+    }
+
     printf("%s## c_semantic::member_insert(c_context context)[%s]\n"
            ,tab.c_str()
            ,context.class_member.token.text.c_str()
-          );
+          );    
 
     c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
     if (p_symbol) {

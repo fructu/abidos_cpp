@@ -106,9 +106,12 @@ struct c_context {
     int declaring_template_type; //we are in indetifier declaration
     c_template_parameter template_parameter; //we are in indetifier declaration
     
-    //useful in i_am_in_template_declaration = 2
+    //useful in i_am_in_template_declaration = 2 and in template_instantation
     t_vector_template_parameter vector_template_parameter; 
     t_map_template_parameter map_template_parameter;
+    
+    
+    int template_instantation;
     
     void print(void)
     // this is for debug 
@@ -152,6 +155,8 @@ struct c_context {
         template_parameter.clear();
         vector_template_parameter.clear();
         map_template_parameter.clear();
+
+        template_instantation = 0;        
     }
     void clear(void) {
         i_token = 0;
@@ -192,7 +197,9 @@ struct c_context {
         declaring_template_type = 0;
         template_parameter.clear();
         vector_template_parameter.clear();
-        map_template_parameter.clear();        
+        map_template_parameter.clear();
+
+        template_instantation = 0;        
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -219,6 +226,7 @@ struct c_context {
         context_param.template_parameter.save(template_parameter);
         context_param.vector_template_parameter = vector_template_parameter;
         context_param.map_template_parameter = map_template_parameter;
+        context_param.template_instantation = template_instantation;
     }
 };
 
@@ -296,6 +304,7 @@ private:
     // Context-dependent identifiers.
     int typedef_name(c_trace_node trace_node);
     int class_name(c_trace_node trace_node);
+    int template_name(c_trace_node trace_node);
 
     // Lexical elements.
     int identifier(c_trace_node trace_node);
@@ -354,6 +363,9 @@ private:
     int template_parameter_list(c_trace_node trace_node);
     int template_parameter(c_trace_node trace_node);
     int type_parameter(c_trace_node trace_node);
+    int template_id(c_trace_node trace_node);    
+    int template_argument_list(c_trace_node trace_node);
+    int template_argument(c_trace_node trace_node);
 
     // Epsilon (optional) definitions.
     int declaration_seq_opt(c_trace_node trace_node);

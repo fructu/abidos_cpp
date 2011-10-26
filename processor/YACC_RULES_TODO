@@ -93,6 +93,7 @@ enum_name:
 	ENUM_NAME
 	;
 
+//##did
 template_name:
 	/* identifier */
 	TEMPLATE_NAME
@@ -952,7 +953,7 @@ type_parameter:
 	| TEMPLATE '<' template_parameter_list '>' CLASS identifier_opt
 	| TEMPLATE '<' template_parameter_list '>' CLASS identifier_opt '=' template_name
 	;
-
+//## did
 template_id:
 	template_name '<' template_argument_list '>'
 	;
@@ -963,11 +964,12 @@ template_name:
 	;
 */
 
+//## did
 template_argument_list:
 	template_argument
 	| template_argument_list ',' template_argument
 	;
-
+//## did
 template_argument:
 	assignment_expression
 	| type_id

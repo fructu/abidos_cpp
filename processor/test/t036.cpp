@@ -14,3 +14,11 @@ class A {
 template <class T1, int N>
 class A2 {
 };
+
+template <class T>
+class A3 {
+};
+
+class B {
+  A3<int> a3;// template instantation
+};

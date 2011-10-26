@@ -215,7 +215,7 @@ abidos
     cat out/trace_t034.cpp.gv | dot -Tpng > out/trace_t034.cpp.gv.png; eog out/trace_t034.cpp.gv.png
     valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose ../test/t034.cpp| grep -E "==\d=="
 -[v] do preprocessor change pwd #include "h/h1.h" h1.h cand have #include "h2" in h directory
--[] do parsing templates <>
+-[v] do parsing templates <>
     look this example http://www.cplusplus.com/doc/tutorial/templates/
     cat ../out/trace_t035.cpp.gv | dot -Tpng > ../out/trace_t035.cpp.gv.png; eog ../out/trace_t035.cpp.gv.png
     - [v] when store of the function in ts add <typename,typename> t035.cpp
@@ -267,6 +267,8 @@ abidos
     -[v] generate diagrams puting classes templates surronded by < >
     -[v] in templates parse int... <class T1, int N>
       cat out/trace_t036.cpp.gv | dot -Tpng > out/trace_t036.cpp.gv.png; eog out/trace_t036.cpp.gv.png
+-[v] do parsing instantation of templates
+    for the moment is parse in type_specifier -> template_id
 -[v] free functions void f( int i1, float f2); have 2 entries in ts
     first[f(int)]...
     first[f(int,float)]...
