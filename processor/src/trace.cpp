@@ -65,7 +65,7 @@ void c_trace_graph::add(c_trace_node & node, string s)
 /*----------------------------------------------------------------------------*/
 void put_scaped(string & s)
 {
-    if ( "<" == s ){
+    if ( "<" == s ) {
 //        s = " LT";
         s = " \\<";
     } else if (">" == s) {
@@ -92,11 +92,11 @@ void put_scaped(string & s)
         while ( '\0' != str_in[i_in]) {
             c=str_in[i_in];
             if ( '{' == c || '}' == c || '[' == c || ']' == c) {
-            /*
-                str_out[i_out]='\\';
-                ++i_out;
-                str_out[i_out]=str_in[i_in];
-            */
+                /*
+                    str_out[i_out]='\\';
+                    ++i_out;
+                    str_out[i_out]=str_in[i_in];
+                */
                 str_out[i_out]='_';
             } else if ('/' == c) {
                 str_out[i_out]='_';

@@ -154,9 +154,9 @@ struct c_decl_specifier {
 };
 
 typedef vector < c_decl_specifier > t_vector_decl_specifier;
-enum t_out_identifier{
-  OUT_IDENTIFIER_NO,
-  OUT_IDENTIFIER_YES
+enum t_out_identifier {
+    OUT_IDENTIFIER_NO,
+    OUT_IDENTIFIER_YES
 };
 struct c_parameter {
     t_vector_decl_specifier vector_decl_specifier;
@@ -301,7 +301,7 @@ public:
   templates
   ej:
     template <class T, int N>
-    
+
     t_vector_template_parameter[0]
       vector_decl_specifier = [class]
       token = T
@@ -321,16 +321,14 @@ struct c_template_parameter {
         vector_decl_specifier = v;
     }
 
-    void clear(void)
-    {
-      vector_decl_specifier.clear();
-      token.clear();
+    void clear(void) {
+        vector_decl_specifier.clear();
+        token.clear();
     }
 
-    void save(c_template_parameter & template_parameter)
-    {
-      vector_decl_specifier = template_parameter.vector_decl_specifier;
-      token.save(template_parameter.token);
+    void save(c_template_parameter & template_parameter) {
+        vector_decl_specifier = template_parameter.vector_decl_specifier;
+        token.save(template_parameter.token);
     }
 
     void print(const char *tab);
@@ -339,6 +337,43 @@ struct c_template_parameter {
 
 typedef vector < c_template_parameter > t_vector_template_parameter;
 typedef map < string, c_template_parameter > t_map_template_parameter;
+/*
+template <class T>
+class A3 {
+};
+
+class B {
+  A3<int> a3;// template instantation
+}
+
+  symbol.name = a3
+  symbol.is_template_instantation = 1;
+  symbol.vector_template_argument[0]
+    c_token.text = T
+    vector_decl_specifier = int
+*/
+struct c_template_argument {
+    t_vector_decl_specifier vector_decl_specifier;
+    c_token token;
+
+    c_template_argument() {
+    }
+    c_template_argument(c_token t, t_vector_decl_specifier v) {
+        token = t;
+        vector_decl_specifier = v;
+    }
+    void clear(void) {
+        token.clear();
+        vector_decl_specifier.clear();
+    }
+    void save( c_template_argument &  template_argument) {
+        token.save(template_argument.token);
+        vector_decl_specifier = template_argument.vector_decl_specifier;
+    }
+};
+
+typedef vector <c_template_argument> t_vector_template_argument;
+typedef map <string, c_template_argument> t_map_template_argument;
 
 class c_symbol
 {
@@ -383,6 +418,10 @@ public:
     t_vector_template_parameter vector_template_parameter;
     t_map_template_parameter map_template_parameter;
 
+    int is_template_instantation;
+    t_vector_template_argument vector_template_argument;
+    t_map_template_argument map_template_argument;
+
     c_symbol() {
         text = "";
         type = 0;
@@ -397,6 +436,10 @@ public:
         is_template = 0;
         vector_template_parameter.clear();
         map_template_parameter.clear();
+
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
     }
 
     c_symbol(c_token token_1) {
@@ -415,7 +458,11 @@ public:
 
         is_template = 0;
         vector_template_parameter.clear();
-        map_template_parameter.clear();        
+        map_template_parameter.clear();
+
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
     }
 
     ~c_symbol() {
@@ -433,7 +480,11 @@ public:
 
         is_template = 0;
         vector_template_parameter.clear();
-        map_template_parameter.clear();        
+        map_template_parameter.clear();
+
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
     }
     void process_token_text();
     void print(const char *tab);

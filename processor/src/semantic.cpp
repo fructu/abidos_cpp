@@ -47,13 +47,13 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     // we only take the name of the class the fist time after CLASS
     // if( 1 == context.class_head)
 
-    if( 2 == context.i_am_in_template_declaration ) {
-      symbol.is_template = 1;
-      symbol.vector_template_parameter = context.vector_template_parameter;
-      symbol.map_template_parameter = context.map_template_parameter;
+    if ( 2 == context.i_am_in_template_declaration ) {
+        symbol.is_template = 1;
+        symbol.vector_template_parameter = context.vector_template_parameter;
+        symbol.map_template_parameter = context.map_template_parameter;
 
-      // in C++ template classes must have different identifiers
-      //symbol.process_token_text();
+        // in C++ template classes must have different identifiers
+        //symbol.process_token_text();
     }
 
     if ( 0 != context.class_name_declaration.size() ) {
@@ -80,7 +80,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
 
     printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
     printf("##:           token.text[%s]\n",token.text.c_str());
-    printf("##:           context.i_am_in_template_declaration[%d]\n",context.i_am_in_template_declaration);    
+    printf("##:           context.i_am_in_template_declaration[%d]\n",context.i_am_in_template_declaration);
 
     printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
 
@@ -227,15 +227,15 @@ c_semantic::free_declarator(c_context & context, c_token token)
 
     c_declarator declarator(token, vector_decl_specifier);
     context.declarator = declarator;
-/*
-  template <class myType>
-  myType GetMax (myType a, myType b) {
-    return (a>b?a:b);
-  }
-  we are in GetMax line ...
-*/
-    if( 2 == context.i_am_in_template_declaration ) {
-      context.declarator.is_template = 1;
+    /*
+      template <class myType>
+      myType GetMax (myType a, myType b) {
+        return (a>b?a:b);
+      }
+      we are in GetMax line ...
+    */
+    if ( 2 == context.i_am_in_template_declaration ) {
+        context.declarator.is_template = 1;
     }
 }
 /*----------------------------------------------------------------------------*/
@@ -315,10 +315,8 @@ void c_semantic::identifier(c_context & context, c_token token)
             }
         }
     */
-    if( 1 == context.i_am_in_template_declaration )
-    {
-        if( 1 == context.declaring_template_type )
-        {
+    if ( 1 == context.i_am_in_template_declaration ) {
+        if ( 1 == context.declaring_template_type ) {
             context.template_parameter.token = token;
 
             context.vector_template_parameter.push_back(context.template_parameter);
@@ -496,17 +494,17 @@ void c_semantic::member_insert(string & tab, c_context & context)
  * class A { int f1(int p1); };
  */
 {
-    if( context.class_member.token.text.size() <= 0){
+    if ( context.class_member.token.text.size() <= 0) {
         printf("%s##error c_semantic::member_insert(c_context context) member empty\n"
-           ,tab.c_str()
-          );
-      return;
+               ,tab.c_str()
+              );
+        return;
     }
 
     printf("%s## c_semantic::member_insert(c_context context)[%s]\n"
            ,tab.c_str()
            ,context.class_member.token.text.c_str()
-          );    
+          );
 
     c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
     if (p_symbol) {
@@ -575,14 +573,14 @@ void c_semantic::declarator_insert(string tab, c_context & context)
         }
 
         // void f(int p1) -> his name will be "f(int)"
-        if( 1 == context.declarator.is_function ) {
-          symbol.text = context.declarator.get_full_name();
-          if( 2 == context.i_am_in_template_declaration ) {
-            symbol.is_template = 1;
-            symbol.vector_template_parameter = context.vector_template_parameter;
-            symbol.map_template_parameter = context.map_template_parameter;
-            symbol.process_token_text();
-          }
+        if ( 1 == context.declarator.is_function ) {
+            symbol.text = context.declarator.get_full_name();
+            if ( 2 == context.i_am_in_template_declaration ) {
+                symbol.is_template = 1;
+                symbol.vector_template_parameter = context.vector_template_parameter;
+                symbol.map_template_parameter = context.map_template_parameter;
+                symbol.process_token_text();
+            }
         }
 
         ts.insert(symbol);

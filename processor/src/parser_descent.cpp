@@ -163,8 +163,8 @@ void c_parser_descent::tokens_vector_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_print_from_actual(void)
 {
-  printf("##### c_parser_descent::tokens_vector_print_from_actual context.i_token[%d]\n",context.i_token);
-  return;
+    printf("##### c_parser_descent::tokens_vector_print_from_actual context.i_token[%d]\n",context.i_token);
+    return;
     t_tokens::iterator i_token = tokens_vector.begin() + context.i_token;
 
     printf("tokens_vector_print_from_actual\n");
@@ -286,7 +286,7 @@ int c_parser_descent::token_is(int id , c_trace_node trace_node)
 //        trace_graph.token_is_add(c_token_get().text, trace_node.position);
         string s_id = yytokens[id];
         string s = c_token_get().text;
-        trace_graph.token_is_add(s, s_id, trace_node.position);        
+        trace_graph.token_is_add(s, s_id, trace_node.position);
         result = 1;
     } else {
 //      char s_id[10] = {};
@@ -328,7 +328,7 @@ int c_parser_descent::token_is_one(const int id[], c_trace_node trace_node)
     int i = 0;
     while ( -1 != id[i]) {
         if ( token_is(id[i], trace_node) ) {
-          return id[i];
+            return id[i];
         }
         ++i;
     }
@@ -453,6 +453,7 @@ void c_parser_descent::token_next(string tab)
     int get_from_lex = 0;
 
     printf("%s## token_next", tab.c_str());
+    printf("\n#### mark_99a context.is_template_instantation[%d] size[%d] \n", context.is_template_instantation, context.vector_template_parameter.size());
 
     if (!((0 <= context.i_token)
             && (context.i_token < tokens_vector.size()))) {
@@ -503,13 +504,10 @@ void c_parser_descent::token_next(string tab)
                     // return symbol.type;
                     printf("%s## next_token found symbol [%s]",
                            tab.c_str(), yytext);
-                    if( 1 == p_symbol->is_template ) {
-printf("#### mark_02a token.id = TEMPLATE_TYPE;\n");                    
-                      token.id = TEMPLATE_NAME;
-                      context.map_template_parameter = p_symbol->map_template_parameter;
-                      context.vector_template_parameter = p_symbol->vector_template_parameter;                      
+                    if ( 1 == p_symbol->is_template ) {
+                        token.id = TEMPLATE_NAME;
                     } else {
-                      token.id = p_symbol->type;
+                        token.id = p_symbol->type;
                     }
                 }
             } else {
@@ -527,24 +525,20 @@ printf("#### mark_02a token.id = TEMPLATE_TYPE;\n");
                                    yytext,
                                    context.class_name_declaration.c_str()
                                   );
-
-                            if( 1 == p_symbol->is_template ) {
-printf("#### mark_02b token.id = TEMPLATE_TYPE;\n");                            
-                              token.id = TEMPLATE_NAME;
-                              context.map_template_parameter = p_symbol->map_template_parameter;
-                              context.vector_template_parameter = p_symbol->vector_template_parameter;
+                            if ( 1 == p_symbol->is_template ) {
+                                token.id = TEMPLATE_NAME;
                             } else {
-                              token.id = p_symbol->type;
-                            }                            
+                                token.id = p_symbol->type;
+                            }
                         }
                     }
-                }else{
-                  //check if is template type ej template <class T> --> T
-                  if( 2 == context.i_am_in_template_declaration ) {
-                    if( context.map_template_parameter.count(token.text) > 0){
-                      token.id = TEMPLATE_TYPE;
+                } else {
+                    //check if is template type ej template <class T> --> T
+                    if ( 2 == context.i_am_in_template_declaration ) {
+                        if ( context.map_template_parameter.count(token.text) > 0) {
+                            token.id = TEMPLATE_TYPE;
+                        }
                     }
-                  }
                 }
             }
         }

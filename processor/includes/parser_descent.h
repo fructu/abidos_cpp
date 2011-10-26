@@ -94,37 +94,38 @@ struct c_context {
 
     int is_typedef;
 
-/*
-  template <class identifier>       //i_am_in_template_declaration =1
-  function_declaration;             //i_am_in_template_declaration =2
+    /*
+      template <class identifier>       //i_am_in_template_declaration =1
+      function_declaration;             //i_am_in_template_declaration =2
 
-  template <typename identifier> 
-  function_declaration;
-*/
+      template <typename identifier>
+      function_declaration;
+    */
     //useful in i_am_in_template_declaration = 1
     int i_am_in_template_declaration; // we are in template declaration
     int declaring_template_type; //we are in indetifier declaration
     c_template_parameter template_parameter; //we are in indetifier declaration
-    
+
     //useful in i_am_in_template_declaration = 2 and in template_instantation
-    t_vector_template_parameter vector_template_parameter; 
+    t_vector_template_parameter vector_template_parameter;
     t_map_template_parameter map_template_parameter;
-    
-    
-    int template_instantation;
-    
+
+//    int template_instantation;
+    int is_template_instantation;
+    t_vector_template_argument vector_template_argument;
+    t_map_template_argument map_template_argument;
+
     void print(void)
-    // this is for debug 
+    // this is for debug
     {
-      printf("context{\n");
-      unsigned i = 0;
-      printf(" template <");
-      for( i = 0; i < vector_template_parameter.size(); ++i)
-      {
-        vector_template_parameter[i].print("");
-      }
-      printf(">\n");
-      printf("}\n");
+        printf("context{\n");
+        unsigned i = 0;
+        printf(" template <");
+        for ( i = 0; i < vector_template_parameter.size(); ++i) {
+            vector_template_parameter[i].print("");
+        }
+        printf(">\n");
+        printf("}\n");
     }
 
     c_context() {
@@ -156,7 +157,9 @@ struct c_context {
         vector_template_parameter.clear();
         map_template_parameter.clear();
 
-        template_instantation = 0;        
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
     }
     void clear(void) {
         i_token = 0;
@@ -199,7 +202,9 @@ struct c_context {
         vector_template_parameter.clear();
         map_template_parameter.clear();
 
-        template_instantation = 0;        
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -220,13 +225,16 @@ struct c_context {
         context_param.is_typedef = is_typedef;
 
         context_param.i_am_in_template_declaration =
-          i_am_in_template_declaration;
+            i_am_in_template_declaration;
         context_param.declaring_template_type =
-          declaring_template_type;
+            declaring_template_type;
         context_param.template_parameter.save(template_parameter);
         context_param.vector_template_parameter = vector_template_parameter;
         context_param.map_template_parameter = map_template_parameter;
-        context_param.template_instantation = template_instantation;
+
+        context_param.is_template_instantation = is_template_instantation;
+        context_param.vector_template_argument = vector_template_argument;
+        context_param.map_template_argument = map_template_argument;
     }
 };
 
@@ -363,7 +371,7 @@ private:
     int template_parameter_list(c_trace_node trace_node);
     int template_parameter(c_trace_node trace_node);
     int type_parameter(c_trace_node trace_node);
-    int template_id(c_trace_node trace_node);    
+    int template_id(c_trace_node trace_node);
     int template_argument_list(c_trace_node trace_node);
     int template_argument(c_trace_node trace_node);
 

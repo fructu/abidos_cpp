@@ -123,11 +123,11 @@ int c_parser_descent::unqualified_id(c_trace_node trace_node)
     }
     context = context_tokens.restore();
 //### todo test this:
-/*
-    if (1 == template_id(trace_node)) {
-        return 1;
-    }
-*/
+    /*
+        if (1 == template_id(trace_node)) {
+            return 1;
+        }
+    */
     return 0;
 }
 
@@ -269,18 +269,18 @@ int c_parser_descent::class_name(c_trace_node trace_node)
         semantic.class_name(context, c_token_get());
         return 1;
     }
-/*## todo test this
-    if ( 1 == template_id(trace_node) ) {
-        return 1;
-    }
-*/
+    /*## todo test this
+        if ( 1 == template_id(trace_node) ) {
+            return 1;
+        }
+    */
     context = context_tokens.restore();
     return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*
 template_name:
-	// identifier 
+	// identifier
 	TEMPLATE_NAME
 */
 int c_parser_descent::template_name(c_trace_node trace_node)
@@ -289,11 +289,13 @@ int c_parser_descent::template_name(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
 
     token_next(trace_node.get_tab());
-printf ("### mark_03a [%s]\n", c_token_get().text.c_str());
     if ( token_is(TEMPLATE_NAME, trace_node) ) {
-printf ("### mark_03b [%s]\n", c_token_get().text.c_str());    
-//### todo
-//        semantic.template_name(context, c_token_get());    
+        printf("#### mark_44\n");
+        token_print();
+        semantic.class_name(context, c_token_get());
+
+        c_decl_specifier decl(c_token_get());
+        semantic.push_back_vector_decl_specifier(decl);
         return 1;
     }
 
@@ -508,19 +510,19 @@ int c_parser_descent::simple_declaration(c_trace_node trace_node)
     if ( CLASS_SPECIFIER_STATUS_MEMBER_SPECIFIER != context.class_specifier_status ) {
         semantic.clear_decl_specifier();
     }
-    
+
     decl_specifier_seq_opt(trace_node);	// long int a = 0; this is 'long
     // int'
     init_declarator_list_opt(trace_node);	// long int a = 0; this is 'a = 0'
 
-/*//### i think decls no is optional is a must
-    if( 0 == decl_specifier_seq_opt(trace_node))
-    {
-      return 0;
-    }
+    /*//### i think decls no is optional is a must
+        if( 0 == decl_specifier_seq_opt(trace_node))
+        {
+          return 0;
+        }
 
-    init_declarator_list_opt(trace_node);
-*/    
+        init_declarator_list_opt(trace_node);
+    */
 
     c_context_tokens context_tokens(context);
 
@@ -745,17 +747,18 @@ int c_parser_descent::type_specifier(c_trace_node trace_node)
           }
         }
     */
-/* ###
-  this rule in theory should be in others parts but for now
-  is working t036.cpp
+    /* ###
+      this rule in theory should be in others parts but for now
+      is working t036.cpp
 
-  one of this parts is this
-    elaborated_type_specifier 
-*/
-    if (1 == template_id(trace_node)) {
-        return 1;
-    }
-    
+      one of this parts is this
+        elaborated_type_specifier
+    */
+    /* ### last drop
+        if (1 == template_id(trace_node)) {
+            return 1;
+        }
+    */
     if (1 == simple_type_specifier(trace_node)) {
         return 1;
     }
@@ -820,21 +823,25 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
 
     }
 
+    if (1 == template_id(trace_node)) {
+        result = 1;
+    }
+
     if ( 0 == result ) {
         token_next(trace_node.get_tab());
 //##
 //      context.class_name_declaration = class_name;
     }
 
-    if( 2 == context.i_am_in_template_declaration ) {
+    if ( 2 == context.i_am_in_template_declaration ) {
         if ( token_is(TEMPLATE_TYPE, trace_node) ) {
-          result = 1;
+            result = 1;
         }
     }
 
     const int vector_id[]={
-      CHAR, WCHAR_T, BOOL, SHORT, INT, LONG
-      , SIGNED, UNSIGNED, FLOAT, DOUBLE, VOID, -1
+        CHAR, WCHAR_T, BOOL, SHORT, INT, LONG
+        , SIGNED, UNSIGNED, FLOAT, DOUBLE, VOID, -1
     };
 
     if (token_is_one(vector_id,trace_node) != 0) {
@@ -848,6 +855,17 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
 
         if (1 == context.i_am_in_parameter_declaration) {
             context.param_vector_decl_specifier.push_back(decl);
+        } else if (1 == context.is_template_instantation) {
+            printf("\n#### mark_88a\n");
+            //### todo maybe mov this code to semantic ???
+            c_template_argument argument;
+            size_t i = context.vector_template_parameter.size();
+            if ( i > 0) {
+                printf("\n#### mark_88b\n");
+                argument.token = context.vector_template_parameter[i-1].token;
+                argument.vector_decl_specifier.push_back(decl);
+                context.vector_template_argument.push_back(argument);
+            }
         } else {
             semantic.push_back_vector_decl_specifier(decl);
         }
@@ -875,7 +893,7 @@ int c_parser_descent::function_specifier(c_trace_node trace_node)
     token_next(trace_node.get_tab());
 
     const int vector_id[]={
-      INLINE, VIRTUAL, EXPLICIT, -1
+        INLINE, VIRTUAL, EXPLICIT, -1
     };
 
     if (token_is_one(  vector_id,trace_node) != 0) {
@@ -898,7 +916,7 @@ int c_parser_descent::ptr_specifier(c_trace_node trace_node)
     token_next(trace_node.get_tab());
 
     const int vector_id[]={
-      '*', '&', -1
+        '*', '&', -1
     };
 
     if (token_is_one(  vector_id,trace_node) != 0) {
@@ -1023,21 +1041,29 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
     printf("%s## class_specifier {\n", trace_node.get_tab().c_str());
 
     // we need to know what class is processing
-/*
-  ### todo
-    saving this part of context should be in another object
-    and be a composition of context -> c_template_context
-*/
+    /*
+      ### todo
+        saving this part of context should be in another object
+        and be a composition of context -> c_template_context
+    */
     string class_name = context.class_name_declaration;
     int i_am_in_template_declaration = context.i_am_in_template_declaration;
-    t_vector_template_parameter vector_template_parameter = context.vector_template_parameter; 
+    t_vector_template_parameter vector_template_parameter = context.vector_template_parameter;
     t_map_template_parameter map_template_parameter = context.map_template_parameter;
+
+    int is_template_instantation = context.is_template_instantation;
+    t_vector_template_argument vector_template_argument = context.vector_template_argument;
+    t_map_template_argument map_template_argument = context.map_template_argument;
 
     tokens_vector_clear();
     context.class_name_declaration = class_name;
     context.i_am_in_template_declaration = i_am_in_template_declaration;
     context.vector_template_parameter = vector_template_parameter;
     context.map_template_parameter = map_template_parameter;
+
+    context.is_template_instantation = is_template_instantation;
+    context.vector_template_argument = vector_template_argument;
+    context.map_template_argument = map_template_argument;
 
     context_tokens.save(context);
 
@@ -1468,23 +1494,21 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
         return 0;
     }
 
-    if( 0 == template_parameter_list(trace_node) )
-    {
+    if ( 0 == template_parameter_list(trace_node) ) {
         context = context_tokens.restore();
         return 0;
     }
 
     token_next(trace_node.get_tab());
     if ( token_is_not('>', trace_node) ) {
-        context = context_tokens.restore();    
+        context = context_tokens.restore();
         context.i_am_in_template_declaration = 0;
         return 0;
     }
 
     context.i_am_in_template_declaration = 2;
 
-    if( 1 == declaration(trace_node) )
-    {
+    if ( 1 == declaration(trace_node) ) {
         context.i_am_in_template_declaration = 0;
         return 1;
     }
@@ -1506,8 +1530,7 @@ int c_parser_descent::template_parameter_list(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
     c_context_tokens context_good_way(context);
 
-    if( 0 == template_parameter(trace_node) )
-    {
+    if ( 0 == template_parameter(trace_node) ) {
         return 0;
     }
 
@@ -1548,8 +1571,7 @@ int c_parser_descent::template_parameter(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
 
 
-    if( 1 == type_parameter(trace_node) )
-    {
+    if ( 1 == type_parameter(trace_node) ) {
         return 1;
     }
 
@@ -1602,11 +1624,27 @@ int c_parser_descent::template_id(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "template_id");
 
-    if( 0 == template_name(trace_node) ) {
-      return 0;
+    if ( 0 == template_name(trace_node) ) {
+        return 0;
     }
 
     c_context_tokens context_tokens(context);
+
+    context.is_template_instantation = 1;
+    c_symbol *p_symbol = ts.search_symbol(yytext);
+    if (p_symbol) {
+        if (p_symbol->type != 0) {
+            // return symbol.type;
+            printf("## next_token found symbol [%s]",
+                   yytext);
+            if ( 1 == p_symbol->is_template ) {
+                printf("\n#### mark_99b token.id = TEMPLATE_NAME; text[%s] size[%d] [%s]\n", p_symbol->token.text.c_str(),p_symbol->vector_template_parameter.size(),p_symbol->vector_template_parameter[0].token.text.c_str());
+                context.is_template_instantation = 1;
+                context.map_template_parameter = p_symbol->map_template_parameter;
+                context.vector_template_parameter = p_symbol->vector_template_parameter;
+            }
+        }
+    }
 
     token_next(trace_node.get_tab());
     if ( token_is_not('<', trace_node) ) {
@@ -1614,18 +1652,21 @@ int c_parser_descent::template_id(c_trace_node trace_node)
         return 0;
     }
 
-    if( 0 == template_argument_list(trace_node) )
-    {
+    if ( 0 == template_argument_list(trace_node) ) {
         context = context_tokens.restore();
         return 0;
     }
 
     token_next(trace_node.get_tab());
     if ( token_is_not('>', trace_node) ) {
-        context = context_tokens.restore();    
+        context = context_tokens.restore();
         return 0;
     }
-
+    /*#### maybe mv this to semantic
+                          context.is_template_instantation = 0;
+                          context.map_template_parameter.clear();
+                          context.vector_template_parameter.clear();
+    */
     return 1;
 }
 /*----------------------------------------------------------------------------*/
@@ -1641,8 +1682,7 @@ int c_parser_descent::template_argument_list(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
     c_context_tokens context_good_way(context);
 
-    if( 0 == template_argument(trace_node) )
-    {
+    if ( 0 == template_argument(trace_node) ) {
         return 0;
     }
 
@@ -1682,21 +1722,21 @@ int c_parser_descent::template_argument(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "template_argument");
 
-    context.template_instantation = 1;
+    context.is_template_instantation = 1;
 
     //### todo search types in context.map_template_parameter
     //### todo type_id
     //### drop type_specifier
-/*    
-    if (1 == type_id(trace_node)) {
-        return 1;
-    }
-*/
+    /*
+        if (1 == type_id(trace_node)) {
+            return 1;
+        }
+    */
     if (1 == type_specifier(trace_node)) {
         return 1;
     }
 
-    context.template_instantation = 0;
+    context.is_template_instantation = 0;
 
     return 0;
 }
@@ -2040,9 +2080,9 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 // ## todo | direct_declarator '[' constant_expression_opt
                 // ']'
                 if (1 != context.class_member.is_function) {
-                  if ( 1 != context.declarator.is_function) {
-                    semantic.declarator_insert(trace_node.get_tab(), context);
-                  }
+                    if ( 1 != context.declarator.is_function) {
+                        semantic.declarator_insert(trace_node.get_tab(), context);
+                    }
                 }
 //                return 1;
             }
@@ -2077,7 +2117,7 @@ int c_parser_descent::ptr_operator(c_trace_node trace_node)
     const int vector_id[]={ '*', '&', -1 };
 
     if (token_is_one(  vector_id,trace_node) != 0) {
-      return 1;
+        return 1;
     }
 
     //## todo rest ...

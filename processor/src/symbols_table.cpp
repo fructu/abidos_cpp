@@ -57,9 +57,9 @@ string c_parameter::get_string(t_out_identifier sw_out_identifier)
     if (1 == have_text) {
         // if parameter dont have name i puted @IDENTIFIER#
         if (NO_IDENTIFIER != token.text) {
-          if(OUT_IDENTIFIER_YES == sw_out_identifier){
-            str = str + " " + token.text;
-          }
+            if (OUT_IDENTIFIER_YES == sw_out_identifier) {
+                str = str + " " + token.text;
+            }
         }
     }
 
@@ -92,14 +92,14 @@ string c_template_parameter::get_string(void)
         }
 
         switch (vector_decl_specifier[i_decl].token.id) {
-        /*
-        case VOID:
-            have_text = 0;
-            break;
-        case ELLIPSIS:
-            have_text = 0;
-            break;
-        */
+            /*
+            case VOID:
+                have_text = 0;
+                break;
+            case ELLIPSIS:
+                have_text = 0;
+                break;
+            */
         default:
             have_text = 1;
         }
@@ -149,9 +149,9 @@ void c_declarator::print(const char *tab)
 
     if (1 == is_function) {
         if (1 == is_template) {
-          printf("[%s]<>", token.text.c_str());
+            printf("[%s]<>", token.text.c_str());
         } else {
-          printf("[%s]", token.text.c_str());
+            printf("[%s]", token.text.c_str());
         }
 
         if (vector_parameter.size() == 0) {
@@ -203,10 +203,10 @@ string c_declarator::get_full_name(void)
             return name;
         }
 
-        if(1 == is_template){
-          name = name + "<" + ">" + "(";
-        }else{
-          name = name + "(";
+        if (1 == is_template) {
+            name = name + "<" + ">" + "(";
+        } else {
+            name = name + "(";
         }
         unsigned i_parameter = 0;
         for (i_parameter = 0; i_parameter < vector_parameter.size();
@@ -318,29 +318,28 @@ c_class_member *c_class_members::get(string member)
 */
 void c_symbol::process_token_text()
 {
-  if( 1 != is_template )
-  {
-    return;
-  }
-
-  unsigned i = 0;
-  string s = token.text + "<";
-
-  for(i = 0; i < vector_template_parameter.size(); ++i) {
-      //### todo maybe vector_decl_specifier[] have more than 1 :-S ???
-    c_token token = vector_template_parameter[i].vector_decl_specifier[0].token;
-
-    if( CLASS == token.id ){
-      s += "typename";
-    }else{
-      s += token.text;
+    if ( 1 != is_template ) {
+        return;
     }
-    if( (i + 1)  < vector_template_parameter.size() ){
-      s += ",";
+
+    unsigned i = 0;
+    string s = token.text + "<";
+
+    for (i = 0; i < vector_template_parameter.size(); ++i) {
+        //### todo maybe vector_decl_specifier[] have more than 1 :-S ???
+        c_token token = vector_template_parameter[i].vector_decl_specifier[0].token;
+
+        if ( CLASS == token.id ) {
+            s += "typename";
+        } else {
+            s += token.text;
+        }
+        if ( (i + 1)  < vector_template_parameter.size() ) {
+            s += ",";
+        }
     }
-  }
-  s += ">";
-  text = s;
+    s += ">";
+    text = s;
 }
 
 void c_symbol::print(const char *tab)
