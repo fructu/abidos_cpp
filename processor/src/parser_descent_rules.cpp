@@ -856,16 +856,17 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
         if (1 == context.i_am_in_parameter_declaration) {
             context.param_vector_decl_specifier.push_back(decl);
         } else if (1 == context.is_template_instantation) {
-            printf("\n#### mark_88a\n");
-            //### todo maybe mov this code to semantic ???
-            c_template_argument argument;
-            size_t i = context.vector_template_parameter.size();
-            if ( i > 0) {
-                printf("\n#### mark_88b\n");
-                argument.token = context.vector_template_parameter[i-1].token;
-                argument.vector_decl_specifier.push_back(decl);
-                context.vector_template_argument.push_back(argument);
-            }
+           //### todo this if is weird
+           if ( token_is_not('>', trace_node) ) {
+              //### todo maybe mov this code to semantic ???
+              c_template_argument argument;
+              // yes we need the next parameter to fill vector_argument
+              size_t i = context.vector_template_argument.size();
+
+              argument.token = context.vector_template_parameter[i].token;
+              argument.vector_decl_specifier.push_back(decl);
+              context.vector_template_argument.push_back(argument);
+           }
         } else {
             semantic.push_back_vector_decl_specifier(decl);
         }

@@ -146,9 +146,26 @@ void c_declarator::print(const char *tab)
     for (i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl) {
         printf("[%s] ", vector_decl_specifier[i_decl].token.text.c_str());
     }
-        if( 1 == is_template_instantation ){
-          printf(" ###c_declaratorTEMPLATE INSTANTATION ###");
-        }    
+
+    if( 1 == is_template_instantation ){
+      size_t i = 0;
+      printf("<");
+      for( i == 0; i < vector_template_argument.size(); ++i) {
+        c_template_argument a = vector_template_argument[i];
+        printf("%s is",a.token.text.c_str());
+
+        size_t j = 0;
+        for( j == 0; j < a.vector_decl_specifier.size(); ++j) {
+          c_decl_specifier decl = a.vector_decl_specifier[j];
+          printf(" %s",decl.token.text.c_str());
+        }
+
+        if( (i + 1) < vector_template_argument.size()) {
+          printf(",");
+        }
+      }
+      printf(">");
+    }
 
     if (1 == is_function) {
         if (1 == is_template) {

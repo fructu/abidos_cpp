@@ -274,11 +274,19 @@ abidos
     save in symbol the argumens of the template;
     A3<int> a3;
     -[v] continue saving template arguments in ts.
-    -[] print the arguments of templates in 
+    -[v] print the arguments of templates in 
           void c_declarator::print(const char *tab)
         and
           void c_class_members::print(const char *tab)
           instead of TEMPLATE INSTANTATION
+      vector_class_member [2]
+      {
+       ...
+       [A3] <T is int,T2 is float>[a3]
+      }
+    -[] save typedef A3<int,double> t_A3; in ts and print it
+    -[] typedef A3<int,double> t_A3;
+    -[] parsing constants/numbers A_2<int,1> a2; ant print it
 -[v] free functions void f( int i1, float f2); have 2 entries in ts
     first[f(int)]...
     first[f(int,float)]...
