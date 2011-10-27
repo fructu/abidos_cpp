@@ -241,7 +241,8 @@ int c_parser_descent::typedef_name(c_trace_node trace_node)
     token_next(trace_node.get_tab());
 
     if ( token_is(TYPEDEF_NAME, trace_node) ) {
-        semantic.push_decl_specifier(c_token_get(), context);
+//#### deprecated tu avoid duplicated decls when decl is typedef
+//        semantic.push_decl_specifier(c_token_get(), context);
         return 1;
     }
 
@@ -868,7 +869,9 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
               context.vector_template_argument.push_back(argument);
            }
         } else {
-            semantic.push_back_vector_decl_specifier(decl);
+//### todo here the duplication of typedef
+printf("####: mark_700 decl[%s]\n",decl.token.text.c_str());
+          semantic.push_back_vector_decl_specifier(decl);
         }
 
         return 1;

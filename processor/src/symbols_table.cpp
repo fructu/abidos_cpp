@@ -385,6 +385,10 @@ void c_symbol::print(const char *tab)
                , typedef_points_to.c_str()
               );
     }
+    if( 1 == is_template_instantation ) {
+        printf("%s   TEMPLATE_INSTANTATION\n",tab);
+    }
+
     // t_map_base_class map_base_class;
 
     t_map_base_class::iterator i_map_base = map_base_class.begin();

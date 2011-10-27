@@ -297,6 +297,12 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
         symbol.typedef_points_to = context.class_name_declaration;
         symbol.type = TYPEDEF_NAME;
 
+        if( 1 == context.is_template_instantation ) {
+          symbol.is_template_instantation = context.is_template_instantation;
+          symbol.vector_template_argument = context.vector_template_argument;
+          symbol.map_template_argument    = context.map_template_argument;
+        }
+
         ts.insert(symbol);
     }
 
@@ -304,6 +310,12 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
             context.class_specifier_status) {
         c_declarator declarator(token, vector_decl_specifier);
         declarator.is_typedef = 1;
+
+        if( 1 == context.is_template_instantation ) {
+          declarator.is_template_instantation = context.is_template_instantation;
+          declarator.vector_template_argument = context.vector_template_argument;
+          declarator.map_template_argument    = context.map_template_argument;
+        }
         context.declarator = declarator;
     }
 }
@@ -587,6 +599,12 @@ void c_semantic::declarator_insert(string tab, c_context & context)
                 symbol.map_template_parameter = context.map_template_parameter;
                 symbol.process_token_text();
             }
+        }
+
+        if( 1 == context.is_template_instantation ) {
+          symbol.is_template_instantation = context.is_template_instantation;
+          symbol.vector_template_argument = context.vector_template_argument;
+          symbol.map_template_argument    = context.map_template_argument;
         }
 
         ts.insert(symbol);
