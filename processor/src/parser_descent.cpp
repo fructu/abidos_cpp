@@ -453,7 +453,6 @@ void c_parser_descent::token_next(string tab)
     int get_from_lex = 0;
 
     printf("%s## token_next", tab.c_str());
-    printf("\n#### mark_99a context.is_template_instantation[%d] size[%d] \n", context.is_template_instantation, context.vector_template_parameter.size());
 
     if (!((0 <= context.i_token)
             && (context.i_token < tokens_vector.size()))) {

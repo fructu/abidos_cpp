@@ -16,6 +16,7 @@ class A2 {
 };
 
 class A_2{
+  A2<int,1> a2;
 };
 
 template <class T, typename T2>
@@ -25,12 +26,11 @@ class A3 {
 typedef A3<int,double> t_A3;
 typedef int T_int;
 class B {
-//  A_2<int,1> a2;
+  A2<int,3> a2;
   A3<int,float> a3;// template instantation
   t_A3 a3_2;
   T_int i;
 };
-
 
 typedef int T_int;
 typedef int T2_int;

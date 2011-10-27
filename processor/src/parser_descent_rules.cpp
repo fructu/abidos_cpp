@@ -291,7 +291,6 @@ int c_parser_descent::template_name(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
     if ( token_is(TEMPLATE_NAME, trace_node) ) {
-        printf("#### mark_44\n");
         token_print();
         semantic.class_name(context, c_token_get());
 
@@ -849,6 +848,20 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
         result = 1;
     }
 
+    /*### todo fix workarround {
+      template <class T1, int N> -> argument N can bee a number
+      it must be improve to get other thins like defines
+      ###{
+    */
+    if (0 == result) {
+      if (1 == context.is_template_instantation) {
+           if ( token_is(INTEGER, trace_node) ) {
+            result = 1;
+           }
+      }
+    }
+    //###}
+
     if (1 == result) {
         c_decl_specifier decl(c_token_get());
         decl.type_specifier = 1;
@@ -869,8 +882,6 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
               context.vector_template_argument.push_back(argument);
            }
         } else {
-//### todo here the duplication of typedef
-printf("####: mark_700 decl[%s]\n",decl.token.text.c_str());
           semantic.push_back_vector_decl_specifier(decl);
         }
 
@@ -1642,7 +1653,6 @@ int c_parser_descent::template_id(c_trace_node trace_node)
             printf("## next_token found symbol [%s]",
                    yytext);
             if ( 1 == p_symbol->is_template ) {
-                printf("\n#### mark_99b token.id = TEMPLATE_NAME; text[%s] size[%d] [%s]\n", p_symbol->token.text.c_str(),p_symbol->vector_template_parameter.size(),p_symbol->vector_template_parameter[0].token.text.c_str());
                 context.is_template_instantation = 1;
                 context.map_template_parameter = p_symbol->map_template_parameter;
                 context.vector_template_parameter = p_symbol->vector_template_parameter;
