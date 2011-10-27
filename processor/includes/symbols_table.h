@@ -176,126 +176,6 @@ struct c_parameter {
 typedef vector < c_parameter > t_vector_parameter;
 typedef map < string, c_parameter > t_map_parameter;
 
-class c_declarator
-{
-protected:
-    t_map_parameter map_parameter;
-    t_vector_parameter vector_parameter;
-public:
-
-    //class A{ void a1(void);};
-    c_token token;
-
-    //void A::a1(void){...}
-    c_token token_definition;
-
-    t_vector_decl_specifier vector_decl_specifier;
-
-    int is_function;
-    int has_body;
-
-    int access_specifier;
-    int is_constructor;
-    int is_destructor;
-
-    void parameter_insert(c_parameter parameter);
-    void print(const char *tab);
-
-    int is_typedef;
-    int is_template;
-
-    c_declarator() {
-        is_function = 0;
-        has_body = 0;
-
-        access_specifier = 0;
-        is_constructor = 0;
-        is_destructor = 0;
-
-        is_typedef = 0;
-        is_template = 0;
-    }
-    c_declarator(c_token t, t_vector_decl_specifier v) {
-        token = t;
-
-        is_typedef = 0;
-
-        unsigned i_decl = 0;
-        for ( i_decl = 0; i_decl < v.size(); ++i_decl ) {
-            if ( TYPEDEF == v[i_decl].token.id ) {
-                is_typedef = 1;
-                continue;
-            }
-
-            vector_decl_specifier.push_back(v[i_decl]);
-        }
-
-        is_function = 0;
-        has_body = 0;
-
-        access_specifier = 0;
-        is_constructor = 0;
-        is_destructor = 0;
-        is_template = 0;
-    }
-    void clear(void) {
-        map_parameter.clear();
-        vector_parameter.clear();
-        token.clear();
-        is_function = 0;
-        has_body = 0;
-
-        access_specifier = 0;
-        is_constructor = 0;
-        is_destructor = 0;
-
-        token_definition.clear();
-
-        is_typedef = 0;
-        is_template = 0;
-    }
-    string get_full_name(void);
-};
-
-
-/*
- * class A { long int a; }
- *
- * c_class_member has 'long int a' inside
- *
- * if is a function member can have parameters
- */
-
-class c_class_member: public c_declarator
-{
-public:
-    c_class_member() {
-
-    }
-    c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v) {
-    }
-};
-
-typedef map < string, c_class_member > t_map_class_member;
-typedef vector < c_class_member * >t_vector_class_member;
-
-/*
- * i store members in map to have fast access i store members in vector to
- * haver the original order
- */
-class c_class_members
-{
-private:
-    t_map_class_member map_class_member;
-    t_vector_class_member vector_class_member;
-    friend class c_generator_class_diagram;
-    friend class c_generator_original;
-public:
-    void clear(void);
-    void print(const char *tab);
-    void insert(c_class_member member);
-    c_class_member *get(string member);
-};
 /*----------------------------------------------------------------------------*/
 /*
   templates
@@ -374,6 +254,144 @@ struct c_template_argument {
 
 typedef vector <c_template_argument> t_vector_template_argument;
 typedef map <string, c_template_argument> t_map_template_argument;
+
+class c_declarator
+{
+protected:
+    t_map_parameter map_parameter;
+    t_vector_parameter vector_parameter;
+public:
+
+    //class A{ void a1(void);};
+    c_token token;
+
+    //void A::a1(void){...}
+    c_token token_definition;
+
+    t_vector_decl_specifier vector_decl_specifier;
+
+    int is_function;
+    int has_body;
+
+    int access_specifier;
+    int is_constructor;
+    int is_destructor;
+
+    void parameter_insert(c_parameter parameter);
+    void print(const char *tab);
+
+    int is_typedef;
+    int is_template;
+
+    int is_template_instantation;
+    t_vector_template_argument vector_template_argument;
+    t_map_template_argument map_template_argument;
+
+    c_declarator() {
+        is_function = 0;
+        has_body = 0;
+
+        access_specifier = 0;
+        is_constructor = 0;
+        is_destructor = 0;
+
+        is_typedef = 0;
+        is_template = 0;
+
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
+
+    }
+    c_declarator(c_token t, t_vector_decl_specifier v) {
+        token = t;
+
+        is_typedef = 0;
+
+        unsigned i_decl = 0;
+        for ( i_decl = 0; i_decl < v.size(); ++i_decl ) {
+            if ( TYPEDEF == v[i_decl].token.id ) {
+                is_typedef = 1;
+                continue;
+            }
+
+            vector_decl_specifier.push_back(v[i_decl]);
+        }
+
+        is_function = 0;
+        has_body = 0;
+
+        access_specifier = 0;
+        is_constructor = 0;
+        is_destructor = 0;
+        is_template = 0;
+
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
+    }
+    void clear(void) {
+        map_parameter.clear();
+        vector_parameter.clear();
+        token.clear();
+        is_function = 0;
+        has_body = 0;
+
+        access_specifier = 0;
+        is_constructor = 0;
+        is_destructor = 0;
+
+        token_definition.clear();
+
+        is_typedef = 0;
+        is_template = 0;
+
+        is_template_instantation = 0;
+        vector_template_argument.clear();
+        map_template_argument.clear();
+    }
+    string get_full_name(void);
+};
+
+
+/*
+ * class A { long int a; }
+ *
+ * c_class_member has 'long int a' inside
+ *
+ * if is a function member can have parameters
+ */
+
+class c_class_member: public c_declarator
+{
+public:
+    c_class_member() {
+
+    }
+    c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v) {
+    }
+};
+
+typedef map < string, c_class_member > t_map_class_member;
+typedef vector < c_class_member * >t_vector_class_member;
+
+/*
+ * i store members in map to have fast access i store members in vector to
+ * haver the original order
+ */
+class c_class_members
+{
+private:
+    t_map_class_member map_class_member;
+    t_vector_class_member vector_class_member;
+    friend class c_generator_class_diagram;
+    friend class c_generator_original;
+public:
+    void clear(void);
+    void print(const char *tab);
+    void insert(c_class_member member);
+    c_class_member *get(string member);
+};
 
 class c_symbol
 {

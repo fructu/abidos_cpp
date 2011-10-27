@@ -156,6 +156,14 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
             exit(-1);
         }
     }
+/*### puted this in member_insert    
+*/
+        if( 1 == context.is_template_instantation ) {
+printf("###### mark_100b context.class_member.is_template_instantation\n");
+          class_member.is_template_instantation = context.is_template_instantation;
+          class_member.vector_template_argument = context.vector_template_argument;
+          class_member.map_template_argument    = context.map_template_argument;
+        }
 
     class_member.access_specifier = context.access_specifier;
     context.class_member = class_member;
@@ -527,7 +535,14 @@ void c_semantic::member_insert(string & tab, c_context & context)
             p_member->token_definition = context.class_member.token;
             return;
         }
-
+/*
+        if( 1 == context.is_template_instantation ) {
+printf("###### mark_200c context.class_member.is_template_instantation\n");
+          context.class_member.is_template_instantation = context.is_template_instantation;
+          context.class_member.vector_template_argument = context.vector_template_argument;
+          context.class_member.map_template_argument    = context.map_template_argument;
+        }
+*/        
         p_symbol->members.insert(context.class_member);
     }
 }

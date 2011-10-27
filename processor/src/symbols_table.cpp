@@ -146,6 +146,9 @@ void c_declarator::print(const char *tab)
     for (i_decl = 0; i_decl < vector_decl_specifier.size(); ++i_decl) {
         printf("[%s] ", vector_decl_specifier[i_decl].token.text.c_str());
     }
+        if( 1 == is_template_instantation ){
+          printf(" ###c_declaratorTEMPLATE INSTANTATION ###");
+        }    
 
     if (1 == is_function) {
         if (1 == is_template) {
@@ -273,6 +276,10 @@ void c_class_members::print(const char *tab)
                    vector_decl_specifier[i_decl].token.text.c_str());
         }
 
+        if( 1 == ((*i_map_member).second).is_template_instantation ){
+          printf(" TEMPLATE INSTANTATION ");
+        }
+
         printf("first[%s]->[%s]\n"
                //, yytokens[((*i_map_member).second).access_specifier]
                , ((*i_map_member).first).c_str()
@@ -287,7 +294,12 @@ void c_class_members::insert(c_class_member member)
         printf("error c_class_members::insert() 0 == member.token.text.size()\n");
         exit(-1);
     }
-
+/*
+ printf("#### mark_300a member[%s] -> NOT is_template_instantation\n",member.get_full_name().c_str() );
+if( 1 == member.is_template_instantation ) {
+  printf("#### mark_300b member[%s] -> is_template_instantation\n",member.get_full_name().c_str() );
+}
+*/
     map_class_member[member.get_full_name()] = member;
     vector_class_member.push_back(&map_class_member
                                   [member.get_full_name()]);

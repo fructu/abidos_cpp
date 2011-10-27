@@ -273,7 +273,12 @@ abidos
     t036.cpp [PRIVATE]: [int] first[a3]->[a3] [int] should be A3
     save in symbol the argumens of the template;
     A3<int> a3;
-    -[] continue saving template arguments in ts.
+    -[v] continue saving template arguments in ts.
+    -[] print the arguments of templates in 
+          void c_declarator::print(const char *tab)
+        and
+          void c_class_members::print(const char *tab)
+          instead of TEMPLATE INSTANTATION
 -[v] free functions void f( int i1, float f2); have 2 entries in ts
     first[f(int)]...
     first[f(int,float)]...
