@@ -269,6 +269,8 @@ abidos
       cat out/trace_t036.cpp.gv | dot -Tpng > out/trace_t036.cpp.gv.png; eog out/trace_t036.cpp.gv.png
 -[v] do parsing instantation of templates
     for the moment is parse in type_specifier -> template_id
+    cat ../out/trace_t037.cpp.gv | dot -Tpng > ../out/trace_t037.cpp.gv.png; eog ../out/trace_t037.cpp.gv.png
+
 -[v] save in ts instantation of templates
     t036.cpp [PRIVATE]: [int] first[a3]->[a3] [int] should be A3
     save in symbol the argumens of the template;

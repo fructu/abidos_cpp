@@ -18,6 +18,17 @@
 #include <stdlib.h>
 /*----------------------------------------------------------------------------*/
 void
+c_semantic::namespace_declarator(c_context & context, c_token token)
+{
+    c_symbol symbol(token);
+    printf("## c_semantic::namespace_declarator(c_context context)\n");
+
+    symbol.type = NAMESPACE_NAME;
+
+    ts.insert(symbol);    
+}
+/*----------------------------------------------------------------------------*/
+void
 c_semantic::class_specifier_identifier(c_context & context, c_token token)
 {
     c_symbol symbol(token);
@@ -56,11 +67,18 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
         //symbol.process_token_text();
     }
 
-    if ( 0 != context.class_name_declaration.size() ) {
+    if ( 0 != context.class_name_declaration.size() ) {   
         string s = symbol.token.text;
         symbol.token.text = context.class_name_declaration + "::" + s;
         symbol.text = symbol.token.text;
+    } else {
+        if(0 != context.namespace_name_declaration.size() ) {
+            string s = symbol.token.text;
+            symbol.token.text = context.namespace_name_declaration + "::" + symbol.text;
+            symbol.text = symbol.token.text;
+        }
     }
+
 
     context.class_name_declaration = symbol.token.text;
 
@@ -342,8 +360,6 @@ void c_semantic::identifier(c_context & context, c_token token)
 
             //parameter has been processed
             context.template_parameter.clear();
-// this print for now is only for templates debug
-            context.print();
 
             return;
         }
@@ -389,6 +405,10 @@ void c_semantic::identifier(c_context & context, c_token token)
         }
 
         if (0 == context.i_am_in_member) {
+            if(context.namespace_name_declaration.size() > 0) {
+              token.text = context.namespace_name_declaration + "::" + token.text;
+            }
+
             free_declarator(context, token);
             context.declaration =  token.text;
         }

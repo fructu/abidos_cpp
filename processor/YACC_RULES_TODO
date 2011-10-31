@@ -529,7 +529,7 @@ simple_type_specifier:
 	| VOID
 	;
 
-//##
+//## did
 type_name:
 	class_name
 	| enum_name
@@ -578,16 +578,17 @@ original_namespace_name:
 	;
 */
 
+//## did
 namespace_definition:
 	named_namespace_definition
 	| unnamed_namespace_definition
 	;
-
+//## did
 named_namespace_definition:
 	original_namespace_definition
 	| extension_namespace_definition
 	;
-
+//## did
 original_namespace_definition:
 	NAMESPACE identifier '{' namespace_body '}'
 	;
@@ -600,6 +601,7 @@ unnamed_namespace_definition:
 	NAMESPACE '{' namespace_body '}'
 	;
 
+//## did
 namespace_body:
 	declaration_seq_opt
 	;

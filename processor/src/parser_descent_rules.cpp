@@ -187,7 +187,10 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
     while ( 1 ) {
         context_tokens.save(context);
         token_next(trace_node.get_tab());
-        if ( token_is_not(CLASS_NAME, trace_node) ) {
+
+        const int vector_id[]={ CLASS_NAME, NAMESPACE_NAME, -1};
+
+        if (token_is_one(vector_id,trace_node) == 0) {
             context = context_tokens.restore();
             if ( 1 == result) {
                 context.class_name_declaration = chain;
@@ -472,6 +475,10 @@ int c_parser_descent::declaration(c_trace_node trace_node)
     }
 
     if (1 == preprocessor_include(trace_node)) {
+        return 1;
+    }
+
+    if (1 == namespace_definition(trace_node)) {
         return 1;
     }
 
@@ -966,7 +973,106 @@ int c_parser_descent::type_name(c_trace_node trace_node)
 
     return 0;
 }
+/*----------------------------------------------------------------------------*/
+/*
+namespace_definition:
+	named_namespace_definition
+	| unnamed_namespace_definition
+	;
+*/
+int c_parser_descent::namespace_definition(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "namespace_definition");
 
+    if (1 == named_namespace_definition(trace_node)) {
+        return 1;
+    }
+
+    //## todo rest
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+named_namespace_definition:
+	original_namespace_definition
+	| extension_namespace_definition
+	;
+*/
+int c_parser_descent::named_namespace_definition(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "named_namespace_definition");
+
+    if (1 == original_namespace_definition(trace_node)) {
+        return 1;
+    }
+
+    //## todo rest
+    return 0;
+}
+/*
+original_namespace_definition:
+	NAMESPACE identifier '{' namespace_body '}'
+	;
+*/	
+int c_parser_descent::original_namespace_definition(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "original_namespace_definition");
+    c_context_tokens context_tokens(context);
+    
+    token_next(trace_node.get_tab());
+    if ( token_is_not(NAMESPACE, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(IDENTIFIER, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    context.namespace_name_declaration = c_token_get().text;
+
+    c_token token_namespace(c_token_get());
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('{', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    if (0 == namespace_body(trace_node)) {
+        context = context_tokens.restore();    
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('}', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    semantic.namespace_declarator(context, token_namespace);
+    context.namespace_name_declaration = "";
+
+    return 1;
+}
+/*
+namespace_body:
+	declaration_seq_opt
+	;
+*/
+int c_parser_descent::namespace_body(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "namespace_body");
+
+    if (1 == declaration_seq_opt(trace_node)) {
+        return 1;
+    }
+
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 /*
  * class_specifier: class_head '{' member_specification_opt '}' ;

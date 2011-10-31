@@ -115,6 +115,7 @@ public:
     void free_declarator(c_context & context, c_token token);
     void member_insert(string & tab, c_context & context);
 
+    void namespace_declarator(c_context & context, c_token token);
     void declarator_insert(string tab, c_context & context);
 
     void class_name(c_context & context, c_token token);

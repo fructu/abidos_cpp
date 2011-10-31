@@ -115,6 +115,8 @@ struct c_context {
     t_vector_template_argument vector_template_argument;
     t_map_template_argument map_template_argument;
 
+    string namespace_name_declaration;	// class
+
     void print(void)
     // this is for debug
     {
@@ -160,6 +162,8 @@ struct c_context {
         is_template_instantation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
+
+        namespace_name_declaration = "";
     }
     void clear(void) {
         i_token = 0;
@@ -205,6 +209,8 @@ struct c_context {
         is_template_instantation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
+
+//        namespace_name_declaration = "";
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -235,6 +241,8 @@ struct c_context {
         context_param.is_template_instantation = is_template_instantation;
         context_param.vector_template_argument = vector_template_argument;
         context_param.map_template_argument = map_template_argument;
+
+        context_param.namespace_name_declaration = namespace_name_declaration;
     }
 };
 
@@ -282,6 +290,7 @@ private:
     int token_is(int id, c_trace_node trace_node);
     int token_is_not(int id , c_trace_node trace_node);
     int token_is_one(const int id[], c_trace_node trace_node);
+    int token_is_none(const int id[], c_trace_node trace_node);    
     c_token c_token_get(void);
     // void token_previous(void);
     int is_eof(c_trace_node trace_node);
@@ -337,6 +346,10 @@ private:
     int simple_type_specifier(c_trace_node trace_node);
     int ptr_specifier(c_trace_node trace_node);    //rule mine
     int type_name(c_trace_node trace_node);
+    int named_namespace_definition(c_trace_node trace_node);
+    int original_namespace_definition(c_trace_node trace_node);
+    int namespace_definition(c_trace_node trace_node);
+    int namespace_body(c_trace_node trace_node);
     int class_specifier(c_trace_node trace_node);
     int class_head(c_trace_node trace_node);
     int class_key(c_trace_node trace_node);
