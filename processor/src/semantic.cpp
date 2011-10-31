@@ -57,12 +57,12 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
         //symbol.process_token_text();
     }
 
-    if ( 0 != context.class_name_declaration.size() ) {   
+    if ( 0 != context.class_name_declaration.size() ) {
         string s = symbol.token.text;
         symbol.token.text = context.class_name_declaration + "::" + s;
         symbol.text = symbol.token.text;
     } else {
-        if(0 != context.namespace_name_declaration.size() ) {
+        if (0 != context.namespace_name_declaration.size() ) {
             string s = symbol.token.text;
             symbol.token.text = context.namespace_name_declaration + "::" + symbol.text;
             symbol.text = symbol.token.text;
@@ -158,6 +158,9 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
         case STRUCT:
             context.access_specifier = PUBLIC;
             break;
+        case NAMESPACE:
+            context.access_specifier = PUBLIC;
+            break;
         default:
             printf
             ("error c_semantic::class_member_declarator()  0 == p_symbol->class_key )\n\n");
@@ -165,10 +168,10 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
         }
     }
 
-    if( 1 == context.is_template_instantation ) {
-          class_member.is_template_instantation = context.is_template_instantation;
-          class_member.vector_template_argument = context.vector_template_argument;
-          class_member.map_template_argument    = context.map_template_argument;
+    if ( 1 == context.is_template_instantation ) {
+        class_member.is_template_instantation = context.is_template_instantation;
+        class_member.vector_template_argument = context.vector_template_argument;
+        class_member.map_template_argument    = context.map_template_argument;
     }
 
     class_member.access_specifier = context.access_specifier;
@@ -284,25 +287,25 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
     }
 
     /*
-      if the chains begin with template the program did not enter 
+      if the chains begin with template the program did not enter
       in the previous if
     */
     c_symbol *p_symbol_class =
         ts.search_symbol(context.class_name_declaration);
 
     if (0 != p_symbol_class ) {
-    /*
-            c_class_member * p_member = 0;
+        /*
+                c_class_member * p_member = 0;
 
-            p_member = p_symbol_class->members.get(context.class_member.get_full_name());
+                p_member = p_symbol_class->members.get(context.class_member.get_full_name());
 
-            if ( 0 == p_member ) {
-                return;
-            }
-    */
+                if ( 0 == p_member ) {
+                    return;
+                }
+        */
         context.i_am_in_member = 1;
         context.member_definition_outside = 1;
-        context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;            
+        context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
     }
 }
 /*----------------------------------------------------------------------------*/
@@ -331,10 +334,10 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
         symbol.typedef_points_to = context.class_name_declaration;
         symbol.type = TYPEDEF_NAME;
 
-        if( 1 == context.is_template_instantation ) {
-          symbol.is_template_instantation = context.is_template_instantation;
-          symbol.vector_template_argument = context.vector_template_argument;
-          symbol.map_template_argument    = context.map_template_argument;
+        if ( 1 == context.is_template_instantation ) {
+            symbol.is_template_instantation = context.is_template_instantation;
+            symbol.vector_template_argument = context.vector_template_argument;
+            symbol.map_template_argument    = context.map_template_argument;
         }
 
         ts.insert(symbol);
@@ -345,10 +348,10 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
         c_declarator declarator(token, vector_decl_specifier);
         declarator.is_typedef = 1;
 
-        if( 1 == context.is_template_instantation ) {
-          declarator.is_template_instantation = context.is_template_instantation;
-          declarator.vector_template_argument = context.vector_template_argument;
-          declarator.map_template_argument    = context.map_template_argument;
+        if ( 1 == context.is_template_instantation ) {
+            declarator.is_template_instantation = context.is_template_instantation;
+            declarator.vector_template_argument = context.vector_template_argument;
+            declarator.map_template_argument    = context.map_template_argument;
         }
         context.declarator = declarator;
     }
@@ -421,8 +424,8 @@ void c_semantic::identifier(c_context & context, c_token token)
         }
 
         if (0 == context.i_am_in_member) {
-            if(context.namespace_name_declaration.size() > 0) {
-              token.text = context.namespace_name_declaration + "::" + token.text;
+            if (context.namespace_name_declaration.size() > 0) {
+                token.text = context.namespace_name_declaration + "::" + token.text;
             }
 
             free_declarator(context, token);
@@ -536,7 +539,6 @@ c_semantic::class_name_friend(c_context & context, c_token token)
         }
     }
 
-
     return;
 }
 
@@ -637,10 +639,10 @@ void c_semantic::declarator_insert(string tab, c_context & context)
             }
         }
 
-        if( 1 == context.is_template_instantation ) {
-          symbol.is_template_instantation = context.is_template_instantation;
-          symbol.vector_template_argument = context.vector_template_argument;
-          symbol.map_template_argument    = context.map_template_argument;
+        if ( 1 == context.is_template_instantation ) {
+            symbol.is_template_instantation = context.is_template_instantation;
+            symbol.vector_template_argument = context.vector_template_argument;
+            symbol.map_template_argument    = context.map_template_argument;
         }
 
         ts.insert(symbol);
@@ -653,8 +655,11 @@ void
 c_semantic::namespace_declarator(c_context & context, c_token token)
 {
     c_symbol symbol(token);
-    printf("## c_semantic::namespace_declarator(c_context context)\n");
+    printf("## c_semantic::namespace_declarator(c_context context) token[%s]\n"
+           ,token.text.c_str());
 
+    // yes a namespace will be parse like a class sometimes...
+    symbol.class_key = NAMESPACE;
     symbol.type = NAMESPACE_NAME;
 
     ts.insert(symbol);

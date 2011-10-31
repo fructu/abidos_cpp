@@ -454,6 +454,7 @@ void c_parser_descent::token_next(string tab)
 
     printf("%s## token_next", tab.c_str());
 
+
     if (!((0 <= context.i_token)
             && (context.i_token < tokens_vector.size()))) {
         printf
@@ -497,6 +498,8 @@ void c_parser_descent::token_next(string tab)
          * link C mode of lexical module
          */
         if (IDENTIFIER == t) {
+
+
             c_symbol *p_symbol = ts.search_symbol(yytext);
             if (p_symbol) {
                 if (p_symbol->type != 0) {
@@ -537,9 +540,24 @@ void c_parser_descent::token_next(string tab)
                         if ( context.map_template_parameter.count(token.text) > 0) {
                             token.id = TEMPLATE_TYPE;
                         }
+                    } else {
+                        // declarations of members functions outside of his class
+                        // but inside of the namespace
+                        if ( 0 == context.class_name_declaration.size() ) {
+                            if ( 0 != context.namespace_name_declaration.size() ) {
+                                string s = context.namespace_name_declaration + "::" + yytext;
+                                c_symbol *p_symbol = ts.search_symbol(s.c_str());
+                                if (p_symbol) {
+                                    token.text = p_symbol->text;
+                                    token.id = p_symbol->type;
+                                }
+                            }
+                        }
+
                     }
                 }
             }
+
         }
 
         tokens_vector.push_back(token);

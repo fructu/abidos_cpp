@@ -4,20 +4,27 @@
 namespace n1
 {
   int i;
-
   void f(int p1);
 
   class A
   {
     int i;
     void f(int p1);
-    
+    void f2(void);
     class A_1
     {
       int i;
       void f(int p1);
-    };    
+    };
   };
+
+  void A::f2(void)
+  {
+  }
+}
+
+void n1::f(int p1)
+{
 }
 
 void n1::A::f(int p1)

@@ -812,9 +812,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
       but not constructors (this must be consumed in declarator:)
         A();
     */
-printf("#######: mark_99a\n");    
     if (1 == type_name(trace_node)) {
-printf("#######: mark_99b\n");
         c_context_tokens context_tokens_0(context);
         //pre-analisys
         token_next(trace_node.get_tab());
@@ -830,11 +828,9 @@ printf("#######: mark_99b\n");
 
         context = context_tokens_0.restore();
     } else {
-printf("#######: mark_99c\n");
-      if( 1 == nested_name_specifier(trace_node) ){
-printf("#######: mark_99d\n");      
-        has_colon_colon_after = 1;
-      }
+        if ( 1 == nested_name_specifier(trace_node) ) {
+            has_colon_colon_after = 1;
+        }
     }
 
     if (1 == template_id(trace_node)) {
@@ -868,16 +864,15 @@ printf("#######: mark_99d\n");
       ###{
     */
     if (0 == result) {
-      if (1 == context.is_template_instantation) {
-           if ( token_is(INTEGER, trace_node) ) {
-            result = 1;
-           }
-      }
+        if (1 == context.is_template_instantation) {
+            if ( token_is(INTEGER, trace_node) ) {
+                result = 1;
+            }
+        }
     }
     //###}
 
     if (1 == result) {
-printf("######: mark_88 has_colon_colon_after[%d]\n", has_colon_colon_after);
         c_decl_specifier decl(c_token_get());
         decl.type_specifier = 1;
         decl.has_colon_colon_after = has_colon_colon_after;
@@ -885,19 +880,19 @@ printf("######: mark_88 has_colon_colon_after[%d]\n", has_colon_colon_after);
         if (1 == context.i_am_in_parameter_declaration) {
             context.param_vector_decl_specifier.push_back(decl);
         } else if (1 == context.is_template_instantation) {
-           //### todo this if is weird
-           if ( token_is_not('>', trace_node) ) {
-              //### todo maybe mov this code to semantic ???
-              c_template_argument argument;
-              // yes we need the next parameter to fill vector_argument
-              size_t i = context.vector_template_argument.size();
+            //### todo this if is weird
+            if ( token_is_not('>', trace_node) ) {
+                //### todo maybe mov this code to semantic ???
+                c_template_argument argument;
+                // yes we need the next parameter to fill vector_argument
+                size_t i = context.vector_template_argument.size();
 
-              argument.token = context.vector_template_parameter[i].token;
-              argument.vector_decl_specifier.push_back(decl);
-              context.vector_template_argument.push_back(argument);
-           }
+                argument.token = context.vector_template_parameter[i].token;
+                argument.vector_decl_specifier.push_back(decl);
+                context.vector_template_argument.push_back(argument);
+            }
         } else {
-          semantic.push_back_vector_decl_specifier(decl);
+            semantic.push_back_vector_decl_specifier(decl);
         }
 
         return 1;
@@ -1021,12 +1016,12 @@ int c_parser_descent::named_namespace_definition(c_trace_node trace_node)
 original_namespace_definition:
 	NAMESPACE identifier '{' namespace_body '}'
 	;
-*/	
+*/
 int c_parser_descent::original_namespace_definition(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "original_namespace_definition");
     c_context_tokens context_tokens(context);
-    
+
     token_next(trace_node.get_tab());
     if ( token_is_not(NAMESPACE, trace_node) ) {
         context = context_tokens.restore();
@@ -1050,7 +1045,7 @@ int c_parser_descent::original_namespace_definition(c_trace_node trace_node)
     }
 
     if (0 == namespace_body(trace_node)) {
-        context = context_tokens.restore();    
+        context = context_tokens.restore();
         return 0;
     }
 
