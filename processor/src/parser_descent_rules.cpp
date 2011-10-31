@@ -812,7 +812,9 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
       but not constructors (this must be consumed in declarator:)
         A();
     */
+printf("#######: mark_99a\n");    
     if (1 == type_name(trace_node)) {
+printf("#######: mark_99b\n");
         c_context_tokens context_tokens_0(context);
         //pre-analisys
         token_next(trace_node.get_tab());
@@ -827,7 +829,12 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
         }
 
         context = context_tokens_0.restore();
-
+    } else {
+printf("#######: mark_99c\n");
+      if( 1 == nested_name_specifier(trace_node) ){
+printf("#######: mark_99d\n");      
+        has_colon_colon_after = 1;
+      }
     }
 
     if (1 == template_id(trace_node)) {
@@ -870,6 +877,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
     //###}
 
     if (1 == result) {
+printf("######: mark_88 has_colon_colon_after[%d]\n", has_colon_colon_after);
         c_decl_specifier decl(c_token_get());
         decl.type_specifier = 1;
         decl.has_colon_colon_after = has_colon_colon_after;

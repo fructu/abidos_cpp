@@ -16,17 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-/*----------------------------------------------------------------------------*/
-void
-c_semantic::namespace_declarator(c_context & context, c_token token)
-{
-    c_symbol symbol(token);
-    printf("## c_semantic::namespace_declarator(c_context context)\n");
 
-    symbol.type = NAMESPACE_NAME;
-
-    ts.insert(symbol);    
-}
 /*----------------------------------------------------------------------------*/
 void
 c_semantic::class_specifier_identifier(c_context & context, c_token token)
@@ -270,7 +260,8 @@ c_semantic::free_declarator(c_context & context, c_token token)
 */
 void c_semantic::check_coloncolon_member_function(c_context & context, c_token token)
 {
-    printf("## c_semantic::check_coloncolon_member_function(c_context context) token.text[%s]\n\n",token.text.c_str());
+    printf("## c_semantic::check_coloncolon_member_function(c_context context) token.text[%s]\n",token.text.c_str());
+    printf("##                                            context.class_name_declaration.[%s]\n\n",context.class_name_declaration.c_str());
 
     if ( 0 == vector_decl_specifier.size() ) {
         printf("## c_semantic::check_coloncolon_member_function(c_context context) 0 == vector_decl_specifier.size()\n");
@@ -280,6 +271,7 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
     unsigned last = vector_decl_specifier.size() - 1;
 
     if ( 1 == vector_decl_specifier[last].has_colon_colon_after ) {
+
         context.i_am_in_member = 1;
         context.member_definition_outside = 1;
         context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;
@@ -287,6 +279,30 @@ void c_semantic::check_coloncolon_member_function(c_context & context, c_token t
         if ( 0 == context.class_name_declaration.size() ) {
             context.class_name_declaration = vector_decl_specifier[last].token.text;
         }
+
+        return;
+    }
+
+    /*
+      if the chains begin with template the program did not enter 
+      in the previous if
+    */
+    c_symbol *p_symbol_class =
+        ts.search_symbol(context.class_name_declaration);
+
+    if (0 != p_symbol_class ) {
+    /*
+            c_class_member * p_member = 0;
+
+            p_member = p_symbol_class->members.get(context.class_member.get_full_name());
+
+            if ( 0 == p_member ) {
+                return;
+            }
+    */
+        context.i_am_in_member = 1;
+        context.member_definition_outside = 1;
+        context.class_specifier_status = CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR;            
     }
 }
 /*----------------------------------------------------------------------------*/
@@ -631,6 +647,17 @@ void c_semantic::declarator_insert(string tab, c_context & context)
     } else {
         member_insert(tab, context);
     }
+}
+/*----------------------------------------------------------------------------*/
+void
+c_semantic::namespace_declarator(c_context & context, c_token token)
+{
+    c_symbol symbol(token);
+    printf("## c_semantic::namespace_declarator(c_context context)\n");
+
+    symbol.type = NAMESPACE_NAME;
+
+    ts.insert(symbol);
 }
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;
