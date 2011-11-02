@@ -305,7 +305,10 @@ abidos
 -[] do parsing [const]
 -[v] do parsing namespace
     look this example http://www.cplusplus.com/doc/tutorial/namespaces/
--[] do parsing using namespace_name
+-[v] do parsing using namespace_name NAMESPACE_NAME
+-[] add to context the info parsing in using namespace NAMESPACE_NAME;
+    vector<string> t_vector_using_namespace;
+    map<string,string> t_map_using_namespace;
 -[v] erase xdot2.pyc from history
     git filter-branch --index-filter 'git update-index --remove xdot2.pyc' 7dffeb6..HEAD
     git push --force --verbose --dry-run

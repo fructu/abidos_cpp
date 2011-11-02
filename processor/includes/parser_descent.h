@@ -351,6 +351,7 @@ private:
     int original_namespace_definition(c_trace_node trace_node);
     int namespace_definition(c_trace_node trace_node);
     int namespace_body(c_trace_node trace_node);
+    int using_directive(c_trace_node trace_node);
     int class_specifier(c_trace_node trace_node);
     int class_head(c_trace_node trace_node);
     int class_key(c_trace_node trace_node);

@@ -501,6 +501,9 @@ int c_parser_descent::block_declaration(c_trace_node trace_node)
     }
     // tokens_vector_reload();
 
+    if (1 == using_directive(trace_node)) {
+        return 1;
+    }
 
     return 0;
 }
@@ -1074,6 +1077,42 @@ int c_parser_descent::namespace_body(c_trace_node trace_node)
     }
 
     return 0;
+}
+/*
+using_directive:
+	USING NAMESPACE COLONCOLON_opt nested_name_specifier_opt namespace_name ';'
+	;
+*/
+int c_parser_descent::using_directive(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "using_directive");
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(USING, trace_node) ) {
+      context = context_tokens.restore();
+      return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(NAMESPACE, trace_node) ) {
+      context = context_tokens.restore();
+      return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(NAMESPACE_NAME, trace_node) ) {
+      context = context_tokens.restore();
+      return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is(';', trace_node) ) {
+        return 1;
+    }
+
+    context = context_tokens.restore();
+    return 1;
 }
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/

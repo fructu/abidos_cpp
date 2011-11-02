@@ -625,6 +625,7 @@ using_declaration:
 	| USING COLONCOLON unqualified_id ';'
 	;
 
+//## did
 using_directive:
 	USING NAMESPACE COLONCOLON_opt nested_name_specifier_opt namespace_name ';'
 	;
