@@ -15,7 +15,8 @@
 /*
 #ifndef symbols_table_h
 #define symbols_table_h
-
+*/
+/*
 #include <string>
 #include <map>
 #include <vector>

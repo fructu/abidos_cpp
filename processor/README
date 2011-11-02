@@ -349,4 +349,7 @@ abidos
 -[v] fixed problem in generating tree trace with < and > symbols
   _7_template_parameter_list[label="{_7_template_parameter_list|[\> is 62->>]\l}", shape="record", color=green]
   _20_storage_class_specifier[label="{_20_storage_class_specifier|[template\ is_not AUTO\ REGISTER\ STATIC\ EXTERN\ MUTABLE]}", shape="record", color=black, style=dotted]
+-[] fix in simple_type_specifier: put first template_id
+    if not type_name eats template_name or maybe std::vector must be TEMPLATE_NAME and not CLASS_NAME
+  cat out/trace_t038.cpp.gv | dot -Tpng > out/trace_t038.cpp.gv.png; eog out/trace_t038.cpp.gv.png
 

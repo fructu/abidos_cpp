@@ -688,11 +688,14 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
     }
 
     c_context_tokens context_tokens_2(context);
+/*    
     token_next(trace_node.get_tab());
 
     if ( token_is(CLASS, trace_node) ||
             token_is(STRUCT, trace_node)
        ) {
+*/
+    if( 1 == simple_type_specifier(trace_node) ){
         semantic.push_decl_specifier(c_token_get(), context);
 
         token_next(trace_node.get_tab());

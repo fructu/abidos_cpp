@@ -3,7 +3,7 @@
 */
 namespace n1
 {
-  int i;
+  int i1;
   void f(int p1);
 
   class A
