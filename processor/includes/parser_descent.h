@@ -299,6 +299,7 @@ private:
     string colon_colon_chain;
     void colon_colon_chain_process(c_token & token);
     void token_next(string tab);
+    void check_identifier(string tab, c_token &token);
 
     // Expressions
     int preprocessor_include(c_trace_node trace_node);

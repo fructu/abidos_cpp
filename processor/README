@@ -303,7 +303,7 @@ abidos
     first[f(int,float)]...
     fixed
 -[] do parsing [const]
--[] do parsing namespace
+-[v] do parsing namespace
     look this example http://www.cplusplus.com/doc/tutorial/namespaces/
 -[] do parsing using namespace_name
 -[v] erase xdot2.pyc from history

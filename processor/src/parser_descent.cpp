@@ -498,66 +498,7 @@ void c_parser_descent::token_next(string tab)
          * link C mode of lexical module
          */
         if (IDENTIFIER == t) {
-
-
-            c_symbol *p_symbol = ts.search_symbol(yytext);
-            if (p_symbol) {
-                if (p_symbol->type != 0) {
-                    // return symbol.type;
-                    printf("%s## next_token found symbol [%s]",
-                           tab.c_str(), yytext);
-                    if ( 1 == p_symbol->is_template ) {
-                        token.id = TEMPLATE_NAME;
-                    } else {
-                        token.id = p_symbol->type;
-                    }
-                }
-            } else {
-                /*
-                  t031 destructors
-                  A::B::~B()
-                */
-                if ( 1 == chain_is_tail(context.class_name_declaration, yytext) ) {
-                    c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
-                    if (p_symbol) {
-                        if (p_symbol->type != 0) {
-                            // return symbol.type;
-                            printf("%s## next_token found symbol [%s]  context.class_name_declaration[%s]",
-                                   tab.c_str(),
-                                   yytext,
-                                   context.class_name_declaration.c_str()
-                                  );
-                            if ( 1 == p_symbol->is_template ) {
-                                token.id = TEMPLATE_NAME;
-                            } else {
-                                token.id = p_symbol->type;
-                            }
-                        }
-                    }
-                } else {
-                    //check if is template type ej template <class T> --> T
-                    if ( 2 == context.i_am_in_template_declaration ) {
-                        if ( context.map_template_parameter.count(token.text) > 0) {
-                            token.id = TEMPLATE_TYPE;
-                        }
-                    } else {
-                        // declarations of members functions outside of his class
-                        // but inside of the namespace
-                        if ( 0 == context.class_name_declaration.size() ) {
-                            if ( 0 != context.namespace_name_declaration.size() ) {
-                                string s = context.namespace_name_declaration + "::" + yytext;
-                                c_symbol *p_symbol = ts.search_symbol(s.c_str());
-                                if (p_symbol) {
-                                    token.text = p_symbol->text;
-                                    token.id = p_symbol->type;
-                                }
-                            }
-                        }
-
-                    }
-                }
-            }
-
+            check_identifier(tab, token);
         }
 
         tokens_vector.push_back(token);
@@ -572,7 +513,73 @@ void c_parser_descent::token_next(string tab)
     printf("error c_parser_descent::token_next(void)\n");
     exit(-1);
 }
-
+/*----------------------------------------------------------------------------*/
+/*
+  we look if identifier is other thing:
+    - a class
+    - template_name
+    - namespace
+*/
+void c_parser_descent::check_identifier(string tab, c_token &token)
+{
+    c_symbol *p_symbol = ts.search_symbol(yytext);
+    if (p_symbol) {
+        if (p_symbol->type != 0) {
+            // return symbol.type;
+            printf("%s## next_token found symbol [%s]",
+                   tab.c_str(), yytext);
+            if ( 1 == p_symbol->is_template ) {
+                token.id = TEMPLATE_NAME;
+            } else {
+                token.id = p_symbol->type;
+            }
+        }
+        return;
+    }
+    /*
+      t031 destructors
+      A::B::~B()
+    */
+    if ( 1 == chain_is_tail(context.class_name_declaration, yytext) ) {
+        c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
+        if (p_symbol) {
+            if (p_symbol->type != 0) {
+                // return symbol.type;
+                printf("%s## next_token found symbol [%s]  context.class_name_declaration[%s]",
+                       tab.c_str(),
+                       yytext,
+                       context.class_name_declaration.c_str()
+                      );
+                if ( 1 == p_symbol->is_template ) {
+                    token.id = TEMPLATE_NAME;
+                } else {
+                    token.id = p_symbol->type;
+                }
+            }
+        }
+        return;
+    }
+    //check if is template type ej template <class T> --> T
+    if ( 2 == context.i_am_in_template_declaration ) {
+        if ( context.map_template_parameter.count(token.text) > 0) {
+            token.id = TEMPLATE_TYPE;
+        }
+        return;
+    }
+    // declarations of members functions outside of his class
+    // but inside of the namespace
+    if ( 0 == context.class_name_declaration.size() ) {
+        if ( 0 != context.namespace_name_declaration.size() ) {
+            string s = context.namespace_name_declaration + "::" + yytext;
+            c_symbol *p_symbol = ts.search_symbol(s.c_str());
+            if (p_symbol) {
+                token.text = p_symbol->text;
+                token.id = p_symbol->type;
+            }
+        }
+        return;
+    }
+}
 /*----------------------------------------------------------------------------*/
 void extract_file_from_path(char *file, char *path)
 {
