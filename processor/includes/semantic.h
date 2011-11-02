@@ -18,6 +18,9 @@
 #include "parser_descent.h"
 #include "symbols_table.h"
 
+typedef vector<string> t_vector_using_namespace;
+typedef map<string, string> t_map_using_namespace;
+
 class c_semantic
 {
 private:
@@ -35,7 +38,6 @@ private:
 //    t_vector_template_parameter vector_template_parameter;
 //    t_map_template_parameter map_template_parameter;
 //### this functionality is in context object
-
 public:
     void push_decl_specifier(c_token token, c_context &context) {
         c_decl_specifier decl(token);
@@ -103,6 +105,15 @@ public:
         return dcl;
       }
     */
+
+    t_vector_using_namespace vector_using_namespace;
+    t_map_using_namespace    map_using_namespace;
+
+    void push_using_namespace(string s)
+    {
+      vector_using_namespace.push_back(s);
+      map_using_namespace[s] = s;
+    }
 
     void check_coloncolon_member_function(c_context & context, c_token token);
 

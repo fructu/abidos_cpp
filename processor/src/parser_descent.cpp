@@ -20,6 +20,7 @@
 #include "generator_class_diagram.h"
 #include "generator_original.h"
 #include "trace.h"
+#include "semantic.h"
 /*----------------------------------------------------------------------------*/
 /*
   class_name = "A::B"
@@ -578,6 +579,22 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
             }
         }
         return;
+    }
+
+    // chek the using namespaces
+    if( semantic.vector_using_namespace.size() > 0 ) {
+        int unsigned i = 0;
+
+        for (i = 0;  i < semantic.vector_using_namespace.size(); ++i ) {
+            string s = semantic.vector_using_namespace[i] + "::" + yytext;
+            c_symbol *p_symbol = ts.search_symbol(s.c_str());
+            if (p_symbol) {
+                token.text = p_symbol->text;
+                token.id = p_symbol->type;
+
+                return;
+            }
+        }
     }
 }
 /*----------------------------------------------------------------------------*/

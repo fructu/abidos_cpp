@@ -1106,6 +1106,8 @@ int c_parser_descent::using_directive(c_trace_node trace_node)
       return 0;
     }
 
+    semantic.push_using_namespace(c_token_get().text);
+
     token_next(trace_node.get_tab());
     if ( token_is(';', trace_node) ) {
         return 1;
