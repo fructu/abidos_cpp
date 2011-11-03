@@ -424,12 +424,15 @@ void c_parser_descent::colon_colon_chain_process(c_token & token)
 
     if (IDENTIFIER == token.id) {
         colon_colon_chain = colon_colon_chain + token.text;
-
         c_symbol * p_symbol = ts.search_symbol(colon_colon_chain);
 
         if ( 0 != p_symbol ) {
             if ( 0 != p_symbol->type) {
-                token.id = p_symbol->type;
+                if ( 1 == p_symbol->is_template ) {
+                  token.id = TEMPLATE_NAME;
+                } else {
+                  token.id = p_symbol->type;
+                }
             }
 
             return;

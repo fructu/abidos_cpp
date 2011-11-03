@@ -188,7 +188,7 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
         context_tokens.save(context);
         token_next(trace_node.get_tab());
 
-        const int vector_id[]={ CLASS_NAME, NAMESPACE_NAME, -1};
+        const int vector_id[]={ CLASS_NAME, NAMESPACE_NAME, TEMPLATE_NAME, -1};
 
         if (token_is_one(vector_id,trace_node) == 0) {
             context = context_tokens.restore();
