@@ -580,7 +580,13 @@ printf("########:: check_identifier_4\n");
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
                 token.text = p_symbol->text;
-                token.id = p_symbol->type;
+//                token.id = p_symbol->type;
+
+                if ( 1 == p_symbol->is_template ) {
+                  token.id = TEMPLATE_NAME;
+                } else {
+                  token.id = p_symbol->type;
+                }
             }
             return;            
         }
@@ -595,8 +601,13 @@ printf("########:: check_identifier_5\n");
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
                 token.text = p_symbol->text;
-                token.id = p_symbol->type;
+//                token.id = p_symbol->type;
 
+                if ( 1 == p_symbol->is_template ) {
+                  token.id = TEMPLATE_NAME;
+                } else {
+                  token.id = p_symbol->type;
+                }
                 return;
             }
         }
@@ -608,7 +619,13 @@ printf("########:: check_identifier_6\n");
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
                 token.text = p_symbol->text;
-                token.id = p_symbol->type;
+//                token.id = p_symbol->type;
+
+                if ( 1 == p_symbol->is_template ) {
+                  token.id = TEMPLATE_NAME;
+                } else {
+                  token.id = p_symbol->type;
+                }
             }
         }
         return;

@@ -20,18 +20,28 @@ class B
   A a;
 }
 */
+
 namespace std
 {
-
+/*
   class string
   {
   };
-
+*/
   template <class T>
   class vector {
   };
-  
-  typedef vector < int > t_vector_int;  
+/*
+  class V
+  {
+    vector<int> o_vector;
+  };
+*/
 }
 
+//typedef std::vector<float> t_vector_float;
+//typedef std::vector<int> t_vector_int;
+
+using namespace std;
+typedef vector<int> t_vector_int;
 
