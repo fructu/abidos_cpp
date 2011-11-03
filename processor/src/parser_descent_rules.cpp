@@ -893,9 +893,13 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
                 // yes we need the next parameter to fill vector_argument
                 size_t i = context.vector_template_argument.size();
 
-                argument.token = context.vector_template_parameter[i].token;
-                argument.vector_decl_specifier.push_back(decl);
-                context.vector_template_argument.push_back(argument);
+                if( i <= context.vector_template_parameter.size() ) {
+                  argument.token = context.vector_template_parameter[i].token;
+                  argument.vector_decl_specifier.push_back(decl);
+                  context.vector_template_argument.push_back(argument);
+                } else {
+                  printf("#### [fix] [todo] error c_parser_descent::simple_type_specifier maybe this is because the context.vector_template_parameter is not reset\n");
+                }
             }
         } else {
             semantic.push_back_vector_decl_specifier(decl);

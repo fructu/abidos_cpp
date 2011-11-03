@@ -360,7 +360,7 @@ abidos
 -[v] fix in t038.cpp
   //## the next line does not work
   //typedef std::vector<float> t_vector_float;
--[] fix in t038.cpp
+-[v] fix in t038.cpp
   //2 names equal -> crash
   using namespace std;
   typedef vector<string> t_vector_string;

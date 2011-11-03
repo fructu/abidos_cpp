@@ -497,6 +497,13 @@ void c_symbols_table::insert(c_symbol symbol)
         exit(-1);
     }
     // c_symbol symbol(token);
+    if( 0 != search_symbol(symbol.text) ) {
+        printf
+        ("error c_symbols_table::insert(%s) symbol exists yet\n"
+        , symbol.text.c_str());
+        return;
+    }
+
     stack[last][symbol.text] = symbol;
 }
 /*----------------------------------------------------------------------------*/
