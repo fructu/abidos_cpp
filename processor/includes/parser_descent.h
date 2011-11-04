@@ -369,6 +369,10 @@ private:
     int cv_qualifier_seq(c_trace_node trace_node);
     int cv_qualifier(c_trace_node trace_node);
     int declarator_id(c_trace_node trace_node);
+    int type_id(c_trace_node trace_node);
+    int type_specifier_seq(c_trace_node trace_node);
+    int abstract_declarator(c_trace_node trace_node);
+
     int parameter_declaration_clause(c_trace_node trace_node);
     int parameter_declaration_list(c_trace_node trace_node);
     int parameter_declaration(c_trace_node trace_node);

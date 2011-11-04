@@ -687,14 +687,14 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
     }
 
     c_context_tokens context_tokens_2(context);
-/*    
-    token_next(trace_node.get_tab());
+    /*
+        token_next(trace_node.get_tab());
 
-    if ( token_is(CLASS, trace_node) ||
-            token_is(STRUCT, trace_node)
-       ) {
-*/
-    if( 1 == simple_type_specifier(trace_node) ){
+        if ( token_is(CLASS, trace_node) ||
+                token_is(STRUCT, trace_node)
+           ) {
+    */
+    if ( 1 == simple_type_specifier(trace_node) ) {
         semantic.push_decl_specifier(c_token_get(), context);
 
         token_next(trace_node.get_tab());
@@ -887,19 +887,37 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
         } else if (1 == context.is_template_instantation) {
             //### todo this if is weird
             if ( token_is_not('>', trace_node) ) {
+                /*
+                    //### todo maybe mov this code to semantic ???
+                    c_template_argument argument;
+                    // yes we need the next parameter to fill vector_argument
+                    size_t i = context.vector_template_argument.size();
+
+                    if (context.vector_template_parameter.size() > 0 ) {
+                      if (i < context.vector_template_parameter.size() ) {
+                        argument.token = context.vector_template_parameter[i].token;
+                        argument.vector_decl_specifier.push_back(decl);
+                        context.vector_template_argument.push_back(argument);
+                     }
+                    }
+                    */
+                //### todo this if is weird
                 //### todo maybe mov this code to semantic ???
                 c_template_argument argument;
+
                 // yes we need the next parameter to fill vector_argument
                 size_t i = context.vector_template_argument.size();
 
-                if (context.vector_template_parameter.size() > 0 ) {
-                  if (i < context.vector_template_parameter.size() ) {
-                    argument.token = context.vector_template_parameter[i].token;
+                if ( 0 < i ) {
+                    argument = context.vector_template_argument[i - 1];
+                    context.vector_template_argument.pop_back();
+
+//                if (context.vector_template_parameter.size() > 0 ) {
+//                  if (i < context.vector_template_parameter.size() ) {
+//                    argument.token = context.vector_template_parameter[i].token;
                     argument.vector_decl_specifier.push_back(decl);
                     context.vector_template_argument.push_back(argument);
-                 }
-                } else {
-                  printf("#### [fix] [todo] error c_parser_descent::simple_type_specifier maybe this is because the context.vector_template_parameter is not reset\n");
+//                 }
                 }
             }
         } else {
@@ -956,7 +974,31 @@ int c_parser_descent::ptr_specifier(c_trace_node trace_node)
     };
 
     if (token_is_one(  vector_id,trace_node) != 0) {
-        semantic.push_decl_specifier(c_token_get(), context);
+
+        if (1 == context.is_template_instantation) {
+            c_decl_specifier decl(c_token_get());
+            //### todo this if is weird
+            //### todo maybe mov this code to semantic ???
+            c_template_argument argument;
+
+            // yes we need the next parameter to fill vector_argument
+            size_t i = context.vector_template_argument.size();
+
+            if ( 0 < i ) {
+                argument = context.vector_template_argument[i - 1];
+                context.vector_template_argument.pop_back();
+
+//                if (context.vector_template_parameter.size() > 0 ) {
+//                  if (i < context.vector_template_parameter.size() ) {
+//                    argument.token = context.vector_template_parameter[i].token;
+                argument.vector_decl_specifier.push_back(decl);
+                context.vector_template_argument.push_back(argument);
+//                 }
+            }
+
+        } else {
+            semantic.push_decl_specifier(c_token_get(), context);
+        }
         return 1;
     }
 
@@ -1098,20 +1140,20 @@ int c_parser_descent::using_directive(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
     if ( token_is_not(USING, trace_node) ) {
-      context = context_tokens.restore();
-      return 0;
+        context = context_tokens.restore();
+        return 0;
     }
 
     token_next(trace_node.get_tab());
     if ( token_is_not(NAMESPACE, trace_node) ) {
-      context = context_tokens.restore();
-      return 0;
+        context = context_tokens.restore();
+        return 0;
     }
 
     token_next(trace_node.get_tab());
     if ( token_is_not(NAMESPACE_NAME, trace_node) ) {
-      context = context_tokens.restore();
-      return 0;
+        context = context_tokens.restore();
+        return 0;
     }
 
     semantic.push_using_namespace(c_token_get().text);
@@ -1806,12 +1848,12 @@ int c_parser_descent::template_id(c_trace_node trace_node)
     context.is_template_instantation = 1;
 
     c_symbol *p_symbol = ts.search_symbol(c_token_get().text.c_str());
-    if(0 == p_symbol) {
-      if( colon_colon_chain.size() > 0){
-        p_symbol = ts.search_symbol(c_token_get().text.c_str());
-      }
+    if (0 == p_symbol) {
+        if ( colon_colon_chain.size() > 0) {
+            p_symbol = ts.search_symbol(c_token_get().text.c_str());
+        }
     }
-    
+
     if (p_symbol) {
         if (p_symbol->type != 0) {
             // return symbol.type;
@@ -1904,14 +1946,20 @@ int c_parser_descent::template_argument(c_trace_node trace_node)
     context.is_template_instantation = 1;
 
     //### todo search types in context.map_template_parameter
-    //### todo type_id
-    //### drop type_specifier
-    /*
-        if (1 == type_id(trace_node)) {
-            return 1;
+
+    //### todo maybe mov this code to semantic ???
+    c_template_argument argument;
+    // yes we need the next parameter to fill vector_argument
+    size_t i = context.vector_template_argument.size();
+
+    if (context.vector_template_parameter.size() > 0 ) {
+        if (i < context.vector_template_parameter.size() ) {
+            argument.token = context.vector_template_parameter[i].token;
+            context.vector_template_argument.push_back(argument);
         }
-    */
-    if (1 == type_specifier(trace_node)) {
+    }
+
+    if (1 == type_id(trace_node)) {
         return 1;
     }
 
@@ -2372,7 +2420,75 @@ int c_parser_descent::declarator_id(c_trace_node trace_node)
 
     return 0;
 }
+/*----------------------------------------------------------------------------*/
+/*
+type_id:
+	type_specifier_seq abstract_declarator_opt
+	;
+*/
+int c_parser_descent::type_id(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "type_id");
 
+    if ( 0 == type_specifier_seq(trace_node) ) {
+        return 0;
+    };
+
+    if ( 1 == abstract_declarator(trace_node) ) {
+    }
+
+    //## todo abstract_declarator_opt()
+    return 1;
+}
+/*
+type_specifier_seq:
+	type_specifier type_specifier_seq_opt
+	;
+*/
+int c_parser_descent::type_specifier_seq(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "type_specifier_seq");
+
+    int result = 0;
+    c_context_tokens context_tokens(context);
+
+    while (1 == type_specifier(trace_node)) {
+        result = 1;
+    }
+
+    if (0 == result) {
+        context = context_tokens.restore();
+    }
+
+    return result;
+}
+/*
+abstract_declarator:
+	ptr_operator abstract_declarator_opt
+	| direct_abstract_declarator
+	;
+*/
+int c_parser_descent::abstract_declarator(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "abstract_declarator");
+
+    int result = 0;
+
+    //## for now i reuse this in future put ptr_operator
+    /*
+    if ( 1 == ptr_specifier(trace_node)) {
+        return 1;
+    }
+    */
+    //## i want to allowed things like int **
+
+    while ( 1 == ptr_specifier(trace_node)) {
+        result = 1;
+    }
+
+    //## todo rest
+    return result;
+}
 /*----------------------------------------------------------------------------*/
 /*
  * parameter_declaration_clause: parameter_declaration_list_opt

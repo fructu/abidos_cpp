@@ -160,8 +160,8 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
         fprintf(f_out, "  /*%s->%s*/", symbol.token.text.c_str(),
                 ((*i_map_base).second).text.c_str());
 
-        string s1 = colon_colon_substitution(((*i_map_base).second).text.c_str());
-        string s2 = colon_colon_substitution(symbol.token.text.c_str());
+        string s1 = colon_colon_substitution(((*i_map_base).second).text);
+        string s2 = colon_colon_substitution(symbol.token.text);
 
         fprintf(f_out, "  %s->%s [dir = \"back\", color = \"black\", arrowtail = \"empty\"];\n"
                 ,s1.c_str()
@@ -243,8 +243,8 @@ void c_generator_class_diagram::members_compositions_aggregations(
                 , class_name.c_str()
                );
 
-        string s1 = colon_colon_substitution(symbol.token.text.c_str());
-        string s2 = colon_colon_substitution(class_name.c_str());
+        string s1 = colon_colon_substitution(symbol.token.text);
+        string s2 = colon_colon_substitution(class_name);
 
         if ( 0 == is_ptr ) {
             fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"diamond\"];\n"

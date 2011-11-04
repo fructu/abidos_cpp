@@ -57,7 +57,29 @@ namespace C
 }
 
 typedef C::v<int, float, double> t_vector;
-typedef C::m<char, int, float> t_map;
+typedef C::m<char, int, float *> t_map;
 
-//typedef vector < long int > t_vector_class_member;
+typedef vector < long int > t_vector_class_member;
+
+
+namespace PP
+{
+  template <class T1, class T2>
+  class P {
+  };
+
+  class Q {
+    P<double int &, float *> p1;
+    P<long int, double float> p2;
+  };
+}
+
+typedef PP::P<int * * * & &, float> p5;
+
+
+  template <class T1, class T2>
+  class Z {
+  };
+
+  typedef Z<int long *, float double & *> z6;
 

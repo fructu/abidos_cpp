@@ -429,10 +429,10 @@ void c_parser_descent::colon_colon_chain_process(c_token & token)
         if ( 0 != p_symbol ) {
             if ( 0 != p_symbol->type) {
                 if ( 1 == p_symbol->is_template ) {
-                  token.text = colon_colon_chain;
-                  token.id = TEMPLATE_NAME;
+                    token.text = colon_colon_chain;
+                    token.id = TEMPLATE_NAME;
                 } else {
-                  token.id = p_symbol->type;
+                    token.id = p_symbol->type;
                 }
             }
 
@@ -527,8 +527,8 @@ void c_parser_descent::token_next(string tab)
 void c_parser_descent::check_identifier(string tab, c_token &token)
 {
     c_symbol *p_symbol = ts.search_symbol(yytext);
-    
-printf("########:: check_identifier_1 token[%s]\n",token.text.c_str());
+
+    printf("########:: check_identifier_1 token[%s]\n",token.text.c_str());
     if (p_symbol) {
         if (p_symbol->type != 0) {
             // return symbol.type;
@@ -542,7 +542,7 @@ printf("########:: check_identifier_1 token[%s]\n",token.text.c_str());
         }
         return;
     }
-printf("########:: check_identifier_2\n");    
+    printf("########:: check_identifier_2\n");
     /*
       t031 destructors
       A::B::~B()
@@ -566,7 +566,7 @@ printf("########:: check_identifier_2\n");
         }
         return;
     }
-printf("########:: check_identifier_3\n"); 
+    printf("########:: check_identifier_3\n");
     //check if is template type ej template <class T> --> T
     if ( 2 == context.i_am_in_template_declaration ) {
         if ( context.map_template_parameter.count(token.text) > 0) {
@@ -574,9 +574,9 @@ printf("########:: check_identifier_3\n");
         }
         return;
     }
-printf("########:: check_identifier_4\n");
+    printf("########:: check_identifier_4\n");
     // declarations of members functions outside of his class
-    // but inside of the namespace    
+    // but inside of the namespace
     if ( 0 == context.class_name_declaration.size() ) {
         if ( 0 != context.namespace_name_declaration.size() ) {
             string s = context.namespace_name_declaration + "::" + yytext;
@@ -586,17 +586,17 @@ printf("########:: check_identifier_4\n");
 //                token.id = p_symbol->type;
 
                 if ( 1 == p_symbol->is_template ) {
-                  token.id = TEMPLATE_NAME;
+                    token.id = TEMPLATE_NAME;
                 } else {
-                  token.id = p_symbol->type;
+                    token.id = p_symbol->type;
                 }
             }
-            return;            
+            return;
         }
     }
-printf("########:: check_identifier_5\n");
+    printf("########:: check_identifier_5\n");
     // chek the using namespaces
-    if( semantic.vector_using_namespace.size() > 0 ) {
+    if ( semantic.vector_using_namespace.size() > 0 ) {
         int unsigned i = 0;
 
         for (i = 0;  i < semantic.vector_using_namespace.size(); ++i ) {
@@ -607,29 +607,29 @@ printf("########:: check_identifier_5\n");
 //                token.id = p_symbol->type;
 
                 if ( 1 == p_symbol->is_template ) {
-                  token.id = TEMPLATE_NAME;
+                    token.id = TEMPLATE_NAME;
                 } else {
-                  token.id = p_symbol->type;
+                    token.id = p_symbol->type;
                 }
                 return;
             }
         }
     }
-printf("########:: check_identifier_6\n");
+    printf("########:: check_identifier_6\n");
     if ( 0 != context.class_name_declaration.size() ) {
         if ( 0 != context.namespace_name_declaration.size() ) {
             string s = context.namespace_name_declaration + "::" + yytext;
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
-printf("########:: check_identifier_6b\n");            
+                printf("########:: check_identifier_6b\n");
 //                token.text = p_symbol->text;
-                  token.text = s;
+                token.text = s;
 //                token.id = p_symbol->type;
 
                 if ( 1 == p_symbol->is_template ) {
-                  token.id = TEMPLATE_NAME;
+                    token.id = TEMPLATE_NAME;
                 } else {
-                  token.id = p_symbol->type;
+                    token.id = p_symbol->type;
                 }
             }
         }

@@ -272,8 +272,7 @@ public:
 };
 
 typedef map < string, c_class_member > t_map_class_member;
-//## that * i must improve that
-//typedef vector < c_class_member * > t_vector_class_member;
+typedef vector < c_class_member * > t_vector_class_member;
 
 /*
  * i store members in map to have fast access i store members in vector to
@@ -284,9 +283,8 @@ class c_class_members
 private:
 
   t_map_class_member map_class_member;
-//##
-//  t_vector_class_member vector_class_member;
-  c_class_member vector_class_member;
+
+  t_vector_class_member vector_class_member;
 
   friend class c_generator_class_diagram;
   friend class c_generator_original;
@@ -377,7 +375,6 @@ class c_symbols_table
 private:
   stack_symbols stack;
 
-  c_symbol stack;
   friend class c_generator_class_diagram;
   friend class c_generator_original;
 public:

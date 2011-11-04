@@ -684,15 +684,15 @@ declarator_id:
 	COLONCOLON_opt id_expression
 	| COLONCOLON_opt nested_name_specifier_opt type_name
 	;
-
+//##did
 type_id:
 	type_specifier_seq abstract_declarator_opt
 	;
-
+//##did
 type_specifier_seq:
 	type_specifier type_specifier_seq_opt
 	;
-
+//##did
 abstract_declarator:
 	ptr_operator abstract_declarator_opt
 	| direct_abstract_declarator
