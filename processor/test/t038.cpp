@@ -59,3 +59,5 @@ namespace C
 typedef C::v<int, float, double> t_vector;
 typedef C::m<char, int, float> t_map;
 
+//typedef vector < long int > t_vector_class_member;
+

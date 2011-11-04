@@ -169,7 +169,6 @@ struct c_parameter
 {
   t_vector_decl_specifier vector_decl_specifier;
 
-  c_decl_specifier vector_decl_specifier;
   c_token token;
 
   c_parameter()
@@ -193,8 +192,6 @@ protected:
   t_map_parameter map_parameter;
   t_vector_parameter vector_parameter;
 
-  c_parameter map_parameter;
-  c_parameter vector_parameter;
 public:
 
   //class A{ void a1(void);};
@@ -204,8 +201,6 @@ public:
   c_token token_definition;
 
   t_vector_decl_specifier vector_decl_specifier;
-
-  c_decl_specifier vector_decl_specifier;
 
   int is_function;
   int has_body;
@@ -291,9 +286,8 @@ private:
   t_map_class_member map_class_member;
 //##
 //  t_vector_class_member vector_class_member;
-
-  c_class_member map_class_member;
   c_class_member vector_class_member;
+
   friend class c_generator_class_diagram;
   friend class c_generator_original;
 public:
@@ -311,14 +305,8 @@ private:
   t_map_base_class map_base_class;
   t_vector_base_class vector_base_class;
 
-  c_base_class map_base_class;
-  c_base_class vector_base_class;
-
   t_map_friend_class map_friend_class;
   t_vector_friend_class vector_friend_class;
-
-  c_friend_class map_friend_class;
-  c_friend_class vector_friend_class;
 
   friend class c_generator_class_diagram;
   friend class c_generator_original;
