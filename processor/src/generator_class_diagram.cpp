@@ -240,15 +240,18 @@ void c_generator_class_diagram::members_compositions_aggregations(
                 , class_name.c_str()
                );
 
+        string s1 = colon_colon_substitution(symbol.token.text.c_str());
+        string s2 = colon_colon_substitution(class_name.c_str());
+
         if ( 0 == is_ptr ) {
             fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"diamond\"];\n"
-                    , symbol.token.text.c_str()
-                    , class_name.c_str()
+                    , s1.c_str()
+                    , s2.c_str()
                    );
         } else {
             fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"odiamond\"];\n"
-                    , symbol.token.text.c_str()
-                    , class_name.c_str()
+                    , s1.c_str()
+                    , s2.c_str()
                    );
         }
 

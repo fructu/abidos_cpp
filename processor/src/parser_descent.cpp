@@ -429,6 +429,7 @@ void c_parser_descent::colon_colon_chain_process(c_token & token)
         if ( 0 != p_symbol ) {
             if ( 0 != p_symbol->type) {
                 if ( 1 == p_symbol->is_template ) {
+                  token.text = colon_colon_chain;
                   token.id = TEMPLATE_NAME;
                 } else {
                   token.id = p_symbol->type;
@@ -457,7 +458,6 @@ void c_parser_descent::token_next(string tab)
     int get_from_lex = 0;
 
     printf("%s## token_next", tab.c_str());
-    printf("#### mark_01: context.namespace_name_declaration[%s]\n", context.namespace_name_declaration.c_str() );
 
     if (!((0 <= context.i_token)
             && (context.i_token < tokens_vector.size()))) {
@@ -621,7 +621,9 @@ printf("########:: check_identifier_6\n");
             string s = context.namespace_name_declaration + "::" + yytext;
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
-                token.text = p_symbol->text;
+printf("########:: check_identifier_6b\n");            
+//                token.text = p_symbol->text;
+                  token.text = s;
 //                token.id = p_symbol->type;
 
                 if ( 1 == p_symbol->is_template ) {

@@ -376,7 +376,6 @@ void c_semantic::identifier(c_context & context, c_token token)
 
             context.vector_template_parameter.push_back(context.template_parameter);
             context.map_template_parameter[token.text] = context.template_parameter;
-
             //parameter has been processed
             context.template_parameter.clear();
 

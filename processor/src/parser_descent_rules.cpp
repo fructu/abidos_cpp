@@ -296,7 +296,6 @@ int c_parser_descent::template_name(c_trace_node trace_node)
     if ( token_is(TEMPLATE_NAME, trace_node) ) {
         token_print();
         semantic.class_name(context, c_token_get());
-
         c_decl_specifier decl(c_token_get());
         semantic.push_back_vector_decl_specifier(decl);
         return 1;
@@ -893,10 +892,12 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
                 // yes we need the next parameter to fill vector_argument
                 size_t i = context.vector_template_argument.size();
 
-                if( i <= context.vector_template_parameter.size() ) {
-                  argument.token = context.vector_template_parameter[i].token;
-                  argument.vector_decl_specifier.push_back(decl);
-                  context.vector_template_argument.push_back(argument);
+                if (context.vector_template_parameter.size() > 0 ) {
+                  if (i < context.vector_template_parameter.size() ) {
+                    argument.token = context.vector_template_parameter[i].token;
+                    argument.vector_decl_specifier.push_back(decl);
+                    context.vector_template_argument.push_back(argument);
+                 }
                 } else {
                   printf("#### [fix] [todo] error c_parser_descent::simple_type_specifier maybe this is because the context.vector_template_parameter is not reset\n");
                 }
@@ -1803,7 +1804,14 @@ int c_parser_descent::template_id(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
 
     context.is_template_instantation = 1;
-    c_symbol *p_symbol = ts.search_symbol(yytext);
+
+    c_symbol *p_symbol = ts.search_symbol(c_token_get().text.c_str());
+    if(0 == p_symbol) {
+      if( colon_colon_chain.size() > 0){
+        p_symbol = ts.search_symbol(c_token_get().text.c_str());
+      }
+    }
+    
     if (p_symbol) {
         if (p_symbol->type != 0) {
             // return symbol.type;
