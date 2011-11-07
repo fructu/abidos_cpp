@@ -1755,6 +1755,67 @@ int c_parser_descent::access_specifier(c_trace_node trace_node)
 
     return 0;
 }
+/*----------------------------------------------------------------------
+ * Special member functions.
+ *----------------------------------------------------------------------*/
+/*
+ctor_initializer:
+	':' mem_initializer_list
+	;
+*/
+int c_parser_descent::ctor_initializer(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "ctor_initializer");
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(':', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    if ( 0 == mem_initializer_list(trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    return 1;
+}
+/*
+mem_initializer_list:
+	mem_initializer
+	| mem_initializer ',' mem_initializer_list
+	;
+
+[!]	this rule is only when it have function_body behind
+	 decl_specifier_seq_opt declarator ctor_initializer_opt function_body
+*/
+int c_parser_descent::mem_initializer_list(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "mem_initializer_list_dummy");
+
+    c_context_tokens context_good_way(context);
+
+    while ( token_get() != 0) {
+        //## dummy
+        context_good_way.save(context);
+        token_next(trace_node.get_tab());
+
+        const int vector_id[]={ '{', ';', -1};
+        if (token_is_one(vector_id,trace_node) != 0) {
+            context = context_good_way.restore();
+            return 1;
+        }
+    }
+
+    return 1;
+}
+/*
+mem_initializer:
+	mem_initializer_id '(' expression_list_opt ')'
+	;
+*/
+//## todo
 
 /*----------------------------------------------------------------------
  * Templates.
@@ -2202,6 +2263,18 @@ int c_parser_descent::ELLIPSIS_opt(c_trace_node trace_node)
     return 0;
 }
 
+/*
+ctor_initializer_opt:
+	// epsilon
+	| ctor_initializer
+	;
+*/
+int c_parser_descent::ctor_initializer_opt(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "ctor_initializer_opt");
+
+    return ctor_initializer(trace_node);
+}
 /*----------------------------------------------------------------------------*/
 /*
  * member_specification_opt: epsilon | member_specification ;
@@ -2744,7 +2817,7 @@ int c_parser_descent::function_definition(c_trace_node trace_node)
         return 0;
     }
 
-    //## ctor_initializer_opt
+    ctor_initializer_opt(trace_node);
 
     if (0 == function_body(trace_node)) {
         return 0;

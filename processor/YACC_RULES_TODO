@@ -855,16 +855,16 @@ conversion_type_id:
 conversion_declarator:
 	ptr_operator conversion_declarator_opt
 	;
-
+//## did
 ctor_initializer:
 	':' mem_initializer_list
 	;
-
+//## did
 mem_initializer_list:
 	mem_initializer
 	| mem_initializer ',' mem_initializer_list
 	;
-
+//## did
 mem_initializer:
 	mem_initializer_id '(' expression_list_opt ')'
 	;

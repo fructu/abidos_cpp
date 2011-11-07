@@ -395,6 +395,10 @@ private:
     int base_specifier(c_trace_node trace_node);
     int access_specifier(c_trace_node trace_node);
 
+    // Special member functions.
+    int ctor_initializer(c_trace_node trace_node);
+    int mem_initializer_list(c_trace_node trace_node);
+
     // Templates.
     int template_declaration(c_trace_node trace_node);
     int template_parameter_list(c_trace_node trace_node);
@@ -414,6 +418,7 @@ private:
     int enumerator_list_opt(c_trace_node trace_node);
     int parameter_declaration_list_opt(c_trace_node trace_node);
     int ELLIPSIS_opt(c_trace_node trace_node);
+    int ctor_initializer_opt(c_trace_node trace_node);
     int member_specification_opt(c_trace_node trace_node);
     int base_clause_opt(c_trace_node trace_node);
     int member_declarator_list_opt(c_trace_node trace_node);

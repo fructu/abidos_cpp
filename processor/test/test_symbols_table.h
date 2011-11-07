@@ -370,8 +370,7 @@ public:
     c_class_member() {
 
     }//## todo
-    c_class_member(c_token t, t_vector_decl_specifier v)/*
-:c_declarator(t, v)*/ {
+    c_class_member(c_token t, t_vector_decl_specifier v):c_declarator(t, v) {
     }
 };
 

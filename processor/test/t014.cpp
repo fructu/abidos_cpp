@@ -1,6 +1,7 @@
 /*
   constructor
 */
+
 class A
 {
   A();
@@ -16,3 +17,21 @@ class B
   }
 };
 
+class C
+{
+  C(int i);
+};
+
+class D: C
+{
+//
+  D(int f):C(f){}
+// this is not in grammar
+//  D(int f):C(f);
+};
+
+/*
+D:D(int f)
+{
+}
+*/

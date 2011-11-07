@@ -376,4 +376,5 @@ abidos
 -[] parse enum full mode.
 -[v] declare enum inside namespaces.
 -[] declare enum inside classes.
-
+-[v] parsing dummy ctor_initializer.
+-[] parsing full ctor_initializer.

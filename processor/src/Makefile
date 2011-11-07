@@ -85,6 +85,7 @@ debug_graph_put:
 #FILE_TEST=mass_clases.cpp
 FILE_TEST=test_symbols_table.h
 #FILE_TEST=t038.cpp
+#FILE_TEST=t014.cpp
 execute: $(EXECUTABLE)
 	cp ../python/xdot2.py ../out/
 	./$(EXECUTABLE) --verbose --ts_show ../test/$(FILE_TEST)
