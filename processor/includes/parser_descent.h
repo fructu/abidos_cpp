@@ -117,6 +117,8 @@ struct c_context {
 
     string namespace_name_declaration;	// class
 
+    int is_enum_declaration;
+
     void print(void)
     // this is for debug
     {
@@ -164,6 +166,8 @@ struct c_context {
         map_template_argument.clear();
 
         namespace_name_declaration = "";
+
+        is_enum_declaration = 0;
     }
     void clear(void) {
         i_token = 0;
@@ -211,6 +215,8 @@ struct c_context {
         map_template_argument.clear();
 
 //        namespace_name_declaration = "";
+
+        is_enum_declaration = 0;
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -243,6 +249,8 @@ struct c_context {
         context_param.map_template_argument = map_template_argument;
 
         context_param.namespace_name_declaration = namespace_name_declaration;
+
+        context_param.is_enum_declaration = is_enum_declaration;
     }
 };
 
@@ -322,6 +330,7 @@ private:
     // Context-dependent identifiers.
     int typedef_name(c_trace_node trace_node);
     int class_name(c_trace_node trace_node);
+    int enum_name(c_trace_node trace_node);
     int template_name(c_trace_node trace_node);
 
     // Lexical elements.
@@ -347,6 +356,7 @@ private:
     int simple_type_specifier(c_trace_node trace_node);
     int ptr_specifier(c_trace_node trace_node);    //rule mine
     int type_name(c_trace_node trace_node);
+    int enum_specifier(c_trace_node trace_node);
     int named_namespace_definition(c_trace_node trace_node);
     int original_namespace_definition(c_trace_node trace_node);
     int namespace_definition(c_trace_node trace_node);
@@ -401,6 +411,7 @@ private:
     int decl_specifier_seq_opt(c_trace_node trace_node);
     int init_declarator_list_opt(c_trace_node trace_node);
     int identifier_opt(c_trace_node trace_node);
+    int enumerator_list_opt(c_trace_node trace_node);
     int parameter_declaration_list_opt(c_trace_node trace_node);
     int ELLIPSIS_opt(c_trace_node trace_node);
     int member_specification_opt(c_trace_node trace_node);

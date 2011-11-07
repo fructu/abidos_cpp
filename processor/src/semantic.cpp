@@ -356,6 +356,31 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
         context.declarator = declarator;
     }
 }
+
+/*----------------------------------------------------------------------------*/
+void c_semantic::identifier_enum(c_context & context, c_token token)
+{
+    printf("## void c_semantic::identifier_enum(c_token token) token.text[%s]\n\n",token.text.c_str());
+
+    c_symbol symbol(token);
+
+    symbol.type = ENUM_NAME;
+
+    if ( 0 != context.class_name_declaration.size() ) {
+        string s = symbol.token.text;
+        symbol.token.text = context.class_name_declaration + "::" + s;
+        symbol.text = symbol.token.text;
+    } else {
+        if (0 != context.namespace_name_declaration.size() ) {
+            string s = symbol.token.text;
+            symbol.token.text = context.namespace_name_declaration + "::" + symbol.text;
+            symbol.text = symbol.token.text;
+        }
+    }
+
+    ts.insert(symbol);
+}
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 void c_semantic::identifier(c_context & context, c_token token)
 {
@@ -385,6 +410,11 @@ void c_semantic::identifier(c_context & context, c_token token)
 
     if ( 1 == context.is_typedef) {
         identifier_typedef(context, token);
+        return;
+    }
+
+    if ( 1 == context.is_enum_declaration) {
+        identifier_enum(context, token);
         return;
     }
 

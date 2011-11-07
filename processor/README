@@ -369,3 +369,11 @@ abidos
 -[v] genarate diagram with typedefs of classes
 -[v] genarate diagram with aggretaions/compositions in typedef of templates.
 -[] do the same than previous point to templates inside of classes.
+-[] do options to the previous points (sometimes is too verbose).
+-[v] parse enum with dummy rule.
+  cat out/trace_t039.cpp.gv | dot -Tpng > out/trace_t039.cpp.gv.png; eog out/trace_t039.cpp.gv.png
+-[v] save enum_name in ts.
+-[] parse enum full mode.
+-[v] declare enum inside namespaces.
+-[] declare enum inside classes.
+

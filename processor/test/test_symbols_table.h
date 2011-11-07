@@ -156,17 +156,10 @@ struct c_decl_specifier {
 };
 
 typedef vector < c_decl_specifier > t_vector_decl_specifier;
-//## todo
-/*
 enum t_out_identifier {
     OUT_IDENTIFIER_NO,
     OUT_IDENTIFIER_YES
 };
-*/
-struct t_out_identifier {};
-struct OUT_IDENTIFIER_NO{};
-struct OUT_IDENTIFIER_YES{};
-
 struct c_parameter {
     t_vector_decl_specifier vector_decl_specifier;
 

@@ -283,6 +283,30 @@ int c_parser_descent::class_name(c_trace_node trace_node)
 }
 /*----------------------------------------------------------------------------*/
 /*
+enum_name:
+   //identifier
+	ENUM_NAME
+	;
+*/
+int c_parser_descent::enum_name(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "enum_name");
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+
+    if ( token_is(ENUM_NAME, trace_node) ) {
+// ### maybe ...
+//        semantic.enum_name(context, c_token_get());
+        return 1;
+    }
+
+    context = context_tokens.restore();
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
 template_name:
 	// identifier
 	TEMPLATE_NAME
@@ -388,7 +412,7 @@ statement_seq:
 */
 int c_parser_descent::statement_seq(c_trace_node trace_node)
 {
-    trace_graph.add(trace_node, "statement_seq");
+    trace_graph.add(trace_node, "statement_seq_dummy");
 
     int n_open_braket = 0;
 
@@ -784,6 +808,10 @@ int c_parser_descent::type_specifier(c_trace_node trace_node)
         return 1;
     }
 
+    if (1 == enum_specifier(trace_node)) {
+        return 1;
+    }
+
     context = context_tokens.restore();
 
     return 0;
@@ -1021,13 +1049,61 @@ int c_parser_descent::type_name(c_trace_node trace_node)
         return 1;
     }
 
+    if (1 == enum_name(trace_node)) {
+        return 1;
+    }
+
     if (1 == typedef_name(trace_node)) {
         return 1;
     }
 
-    //## todo rest
-
     return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+enum_specifier:
+	ENUM identifier_opt '{' enumerator_list_opt '}'
+	;
+*/
+int c_parser_descent::enum_specifier(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "enum_specifier");
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(ENUM, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    context.is_enum_declaration = 1;
+
+    if (1 == identifier_opt(trace_node)) {
+//      ts.identifier_enum(c_token_get());
+    }
+
+    token_next(trace_node.get_tab());
+    if (  token_is_not('{', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    context.is_enum_declaration = 2;
+
+    if ( 0 == enumerator_list_opt(trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('}', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    context.is_enum_declaration = 0;
+
+    return 1;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -2050,6 +2126,41 @@ int c_parser_descent::identifier_opt(c_trace_node trace_node)
     trace_graph.add(trace_node, "identifier_opt");
 
     return identifier(trace_node);
+}
+
+/*
+enumerator_list_opt:
+	 epsilon
+	| enumerator_list
+	;
+*/
+//dummy similar to statement_seq
+int c_parser_descent::enumerator_list_opt(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "enumerator_list_opt_dummy");
+
+    int n_open_braket = 0;
+
+    c_context_tokens context_good_way(context);
+
+    while ( token_get() != 0) {
+        //## dummy
+        context_good_way.save(context);
+        token_next(trace_node.get_tab());
+        if ( token_is('{', trace_node) ) {
+            ++n_open_braket;
+        }
+
+        if ( token_is('}', trace_node) ) {
+            if ( 0 == n_open_braket ) {
+                context = context_good_way.restore();
+                return 1;
+            }
+            --n_open_braket;
+        }
+    }
+
+    return 1;
 }
 
 /*

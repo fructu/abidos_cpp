@@ -548,7 +548,7 @@ enum_name:
 	identifier
 	;
 */
-
+//## did
 enum_specifier:
 	ENUM identifier_opt '{' enumerator_list_opt '}'
 	;
@@ -1100,7 +1100,7 @@ identifier_opt:
 	/* epsilon */
 	| identifier
 	;
-
+// ##did
 enumerator_list_opt:
 	/* epsilon */
 	| enumerator_list
