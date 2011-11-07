@@ -23,7 +23,8 @@ private:
     FILE * f_out;
     void members_url(t_vector_class_member & vector_class_member);
     void members_label(t_vector_class_member & vector_class_member);
-    void classes(c_symbol & symbol);
+    //classes structs typedefs ...
+    void nodes(c_symbol & symbol);
     void inheritance(c_symbol & symbol);
     void friends(c_symbol & symbol);
 
@@ -32,6 +33,7 @@ private:
         t_vector_class_member & vector_class_member
     );
     void compositions_aggregations(c_symbol & symbol);
+    void typedef_points_to(c_symbol & symbol);
 public:
     void run(char *p_file_out);
 };

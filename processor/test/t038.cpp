@@ -79,6 +79,7 @@ typedef PP::P<int * * * & &, float> p5;
 
   template <class T1, class T2>
   class Z {
+    t_vector_string s;
   };
 
   typedef Z<int long *, float double & *> z6;

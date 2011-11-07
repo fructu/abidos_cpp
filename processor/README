@@ -366,4 +366,4 @@ abidos
   typedef vector<string> t_vector_string;
   typedef vector<string> t_vector_string;
 -[v] fixed parsing typedef Z<int long *, float double & *> z6;
--[] genarate diagram with typedefs of clases
+-[v] genarate diagram with typedefs of classes

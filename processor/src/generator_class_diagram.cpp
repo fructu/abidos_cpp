@@ -111,15 +111,20 @@ void c_generator_class_diagram::members_label(t_vector_class_member &
 
 /*----------------------------------------------------------------------------*/
 /*
+ * this put the declarations of the diagram's nodes:
+ *    classes, structs, typedef
+ *
  * A [ URL="A;a1;age;die", label = "{A|+ a1 : string\l+ age : int\l|+
  * die() : void\l}" ]
  */
-void c_generator_class_diagram::classes(c_symbol & symbol)
+void c_generator_class_diagram::nodes(c_symbol & symbol)
 {
     fprintf(f_out, "/* c_generator_class_diagram::classes() */\n");
     // first[B] id[258]->[IDENTIFIER] text[B] type[265]->[CLASS_NAME]
     // class_key[300]->[CLASS]
-    if (CLASS_NAME != symbol.type) {
+    if (CLASS_NAME != symbol.type &&
+            TYPEDEF_NAME != symbol.type
+       ) {
         return;
     }
 
@@ -138,7 +143,6 @@ void c_generator_class_diagram::classes(c_symbol & symbol)
     members_label(symbol.members.vector_class_member);
     fprintf(f_out, "}\"\n");
     fprintf(f_out, "  ]\n");
-
 }
 
 /*----------------------------------------------------------------------------*/
@@ -176,7 +180,9 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
 void c_generator_class_diagram::friends(c_symbol & symbol)
 {
     fprintf(f_out, "/* c_generator_class_diagram::friends() */\n");
-    if (CLASS_NAME != symbol.type) {
+    if (CLASS_NAME != symbol.type &&
+            TYPEDEF_NAME != symbol.type
+       ) {
         return;
     }
 
@@ -227,7 +233,9 @@ void c_generator_class_diagram::members_compositions_aggregations(
                 }
             }
 
-            if ( CLASS_NAME != p_decl_specifier->token.id ) {
+            if ( CLASS_NAME != p_decl_specifier->token.id &&
+                    TYPEDEF_NAME != p_decl_specifier->token.id
+               ) {
                 continue;
             }
 
@@ -261,7 +269,6 @@ void c_generator_class_diagram::members_compositions_aggregations(
         class_name = "";
     }
 }
-
 /*----------------------------------------------------------------------------*/
 
 void c_generator_class_diagram::compositions_aggregations(c_symbol & symbol)
@@ -273,7 +280,36 @@ void c_generator_class_diagram::compositions_aggregations(c_symbol & symbol)
 
     members_compositions_aggregations(symbol, symbol.members.vector_class_member);
 }
+/*----------------------------------------------------------------------------*/
+/*
+  this is to draw relations between typedefs and his types.
+  class A{};
 
+  typedef A t_A;
+*/
+void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
+{
+    if (TYPEDEF_NAME != symbol.type) {
+        return;
+    }
+    fprintf(f_out, "/* typedef_points_to[%s] */\n", symbol.typedef_points_to.c_str());
+
+    string s1 = colon_colon_substitution(symbol.token.text);
+    string s2 = colon_colon_substitution(symbol.typedef_points_to);
+
+    fprintf(f_out, "  /*%s->%s*/", s2.c_str(),
+            s1.c_str());
+    /*
+            fprintf(f_out, "  %s->%s [\"back\", color = \"gray\", arrowtail = \"open\"];\n"
+                    ,s1.c_str()
+                    ,s2.c_str() );
+    */
+
+    fprintf(f_out, "  %s->%s [color = \"gray\", arrowtail = \"\"];\n"
+            ,s1.c_str()
+            ,s2.c_str() );
+
+}
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::run(char *p_file_out)
 {
@@ -299,7 +335,7 @@ void c_generator_class_diagram::run(char *p_file_out)
         printf("  stack level[%d]\n", i_stack);
         for (i_map = ts.stack[i_stack].begin();
                 i_map != ts.stack[i_stack].end(); ++i_map) {
-            classes((*i_map).second);
+            nodes((*i_map).second);
         }
     }
 
@@ -310,6 +346,7 @@ void c_generator_class_diagram::run(char *p_file_out)
             inheritance((*i_map).second);
             friends((*i_map).second);
             compositions_aggregations((*i_map).second);
+            typedef_points_to((*i_map).second);
         }
     }
 
