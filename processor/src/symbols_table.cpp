@@ -433,7 +433,6 @@ void c_symbol::print(const char *tab)
     if ( 1 == free_declarator ) {
         declarator.print(tab);
     }
-
     printf("%s  }\n", tab);
     printf("%s}\n" , tab);
 }

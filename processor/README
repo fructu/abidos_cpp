@@ -367,3 +367,5 @@ abidos
   typedef vector<string> t_vector_string;
 -[v] fixed parsing typedef Z<int long *, float double & *> z6;
 -[v] genarate diagram with typedefs of classes
+-[v] genarate diagram with aggretaions/compositions in typedef of templates.
+-[] do the same than previous point to templates inside of classes.

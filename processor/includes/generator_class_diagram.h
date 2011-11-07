@@ -33,6 +33,8 @@ private:
         t_vector_class_member & vector_class_member
     );
     void compositions_aggregations(c_symbol & symbol);
+    void typedef_members_compositions_aggregations(c_symbol & symbol);
+    void typedef_label(c_symbol & symbol);
     void typedef_points_to(c_symbol & symbol);
 public:
     void run(char *p_file_out);

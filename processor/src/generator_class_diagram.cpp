@@ -108,6 +108,91 @@ void c_generator_class_diagram::members_label(t_vector_class_member &
         fprintf(f_out, "\\l");
     }
 }
+/*----------------------------------------------------------------------------*/
+void c_generator_class_diagram::typedef_label(c_symbol & symbol)
+{
+    size_t i = 0;
+    fprintf(f_out, "\\<");
+    for ( i = 0; i < symbol.vector_template_argument.size(); ++i) {
+        c_template_argument a = symbol.vector_template_argument[i];
+
+        size_t j = 0;
+        for ( j = 0; j < a.vector_decl_specifier.size(); ++j) {
+            c_decl_specifier decl = a.vector_decl_specifier[j];
+            fprintf(f_out, " %s",decl.token.text.c_str());
+        }
+
+        if ( (i + 1) < symbol.vector_template_argument.size()) {
+            fprintf(f_out, ",");
+        }
+    }
+    fprintf(f_out, "\\>");
+    fprintf(f_out, "\\l");
+
+}
+/*----------------------------------------------------------------------------*/
+/*
+  this generate relations to things like this:
+    typedef map < string, c_symbol > t_symbols;
+
+  ## todo maybe this is too verbose in some cases -> put parameter line
+*/
+void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symbol & symbol)
+{
+    if (TYPEDEF_NAME != symbol.type) {
+        return;
+    }
+    if ( 1 != symbol.free_declarator ) {
+        return;
+    }
+    size_t i = 0;
+    for ( i = 0; i < symbol.vector_template_argument.size(); ++i) {
+        c_template_argument a = symbol.vector_template_argument[i];
+
+        size_t j = 0;
+        for ( j = 0; j < a.vector_decl_specifier.size(); ++j) {
+            c_decl_specifier decl = a.vector_decl_specifier[j];
+//                fprintf(f_out, " %s",decl.token.text.c_str());
+            if ( 0 == ts.search_symbol(decl.token.text) ) {
+                continue;
+            }
+
+            int is_ptr = 0;
+            if ( j + 1 < a.vector_decl_specifier.size() ) {
+                if (
+                    ('*' == a.vector_decl_specifier[j+1].token.id) ||
+                    ('&' == a.vector_decl_specifier[j+1].token.id)
+                ) {
+                    is_ptr = 1;
+                }
+            }
+
+            string s1 = colon_colon_substitution(symbol.token.text);
+            string s2 = colon_colon_substitution(decl.token.text);
+
+            fprintf(f_out, "  /*%s->%s*/", s1.c_str(),
+                    s2.c_str());
+            /*
+                    fprintf(f_out, "  %s->%s [dir = \"back\", color = \"black\", arrowtail = \"empty\"];\n"
+                            ,s1.c_str()
+                            ,s2.c_str() );
+                        }
+                        */
+            if ( 0 == is_ptr ) {
+                fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"diamond\"];\n"
+                        , s1.c_str()
+                        , s2.c_str()
+                       );
+            } else {
+                fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"odiamond\"];\n"
+                        , s1.c_str()
+                        , s2.c_str()
+                       );
+            }
+        }
+    }
+}
+
 
 /*----------------------------------------------------------------------------*/
 /*
@@ -141,6 +226,13 @@ void c_generator_class_diagram::nodes(c_symbol & symbol)
         fprintf(f_out, "    label=\"{ %s|", symbol.token.text.c_str());
     }
     members_label(symbol.members.vector_class_member);
+
+    if (TYPEDEF_NAME == symbol.type) {
+        if ( 1 == symbol.free_declarator ) {
+            typedef_label(symbol);
+        }
+    }
+
     fprintf(f_out, "}\"\n");
     fprintf(f_out, "  ]\n");
 }
@@ -308,7 +400,6 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
     fprintf(f_out, "  %s->%s [color = \"gray\", arrowtail = \"\"];\n"
             ,s1.c_str()
             ,s2.c_str() );
-
 }
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::run(char *p_file_out)
@@ -347,6 +438,7 @@ void c_generator_class_diagram::run(char *p_file_out)
             friends((*i_map).second);
             compositions_aggregations((*i_map).second);
             typedef_points_to((*i_map).second);
+            typedef_members_compositions_aggregations((*i_map).second);
         }
     }
 
