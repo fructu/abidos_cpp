@@ -636,6 +636,24 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         return;
     }
 
+    printf("########:: check_identifier_7\n");
+    //preprocessor hack
+    if ( 1 == context.prefix_sharp ) {
+        string s = "#";
+        s = s + yytext;
+        printf("########:: check_identifier_7a [%s]\n",s.c_str());
+        c_symbol *p_symbol = ts.search_symbol(s.c_str());
+        if (p_symbol) {
+            printf("########:: check_identifier_7b\n");
+            token.text = p_symbol->text;
+//                token.text = s;
+//                token.id = p_symbol->type;
+
+
+            token.id = PREPROCESSOR_DEFINITION;
+        }
+    }
+
 }
 /*----------------------------------------------------------------------------*/
 void extract_file_from_path(char *file, char *path)

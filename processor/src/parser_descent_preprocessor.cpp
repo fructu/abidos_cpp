@@ -22,7 +22,7 @@
 #include "trace.h"
 
 #include "../../preprocessor/ts.h"
-
+/*----------------------------------------------------------------------------*/
 int c_parser_descent::preprocessor(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "preprocessor");
@@ -35,11 +35,20 @@ int c_parser_descent::preprocessor(c_trace_node trace_node)
         return 1;
     }
 
+    if (1 == preprocessor_ifndef(trace_node)) {
+        return 1;
+    }
+
+    if (1 == preprocessor_endif(trace_node)) {
+        return 1;
+    }
+
     return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*
  * preprocessor_include: '#' IDENTIFER STRING
+ *  ;
  *
  * THIS IS BAD IDEA -> preprocessor_include: '#' PREPROCESSOR_INCLUDE STRING
  * we can write this:
@@ -58,17 +67,17 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
     }
 
     token_next(trace_node.get_tab());
-/*
-  //IDENTIFIER is bad idea:
-  //  class include {};
-  //  #include <h>
+    /*
+      //IDENTIFIER is bad idea:
+      //  class include {};
+      //  #include <h>
 
-    if ( token_is_not(IDENTIFIER, trace_node) ) {
-        context = context_tokens.restore();
-        return 0;
-    }
-*/
-    if( "include" != c_token_get().text ) {
+        if ( token_is_not(IDENTIFIER, trace_node) ) {
+            context = context_tokens.restore();
+            return 0;
+        }
+    */
+    if ( "include" != c_token_get().text ) {
         context = context_tokens.restore();
         return 0;
     }
@@ -93,7 +102,10 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
         while ( token_is_not('>', trace_node) ) {
             //## todo acumulate string with the file
             token_next(trace_node.get_tab());
-            if ( 1 == is_eof(trace_node) ) {
+            /*            if ( 1 == is_eof(trace_node) ) {
+                            return 0;
+                        }*/
+            if ( token_is(0, trace_node) ) {
                 return 0;
             }
         }
@@ -130,6 +142,9 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
 }
 /*----------------------------------------------------------------------------*/
 /*
+ * preprocessor_define: '#'define <id>
+ *  ;
+ *
   preprocessor variables can be have the same identifier than other
   classes variables ...
 */
@@ -146,13 +161,13 @@ int c_parser_descent::preprocessor_define(c_trace_node trace_node)
     }
 
     token_next(trace_node.get_tab());
-    if( "define" != c_token_get().text ) {
+    if ( "define" != c_token_get().text ) {
         context = context_tokens.restore();
         return 0;
     }
 
     token_next(trace_node.get_tab());
-    if( "" == c_token_get().text ) {
+    if ( "" == c_token_get().text ) {
         context = context_tokens.restore();
         return 0;
     }
@@ -166,4 +181,83 @@ int c_parser_descent::preprocessor_define(c_trace_node trace_node)
     return 1;
 }
 /*----------------------------------------------------------------------------*/
+/*
+  preprocessor_ifndef: #ifndef lines #endif
+    ;
+  lines: lines #define|other
+    ;
+*/
+int c_parser_descent::preprocessor_ifndef(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "preprocessor_ifndef");
 
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('#', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    context.prefix_sharp = 1;
+
+    token_next(trace_node.get_tab());
+    if ( "ifndef" != c_token_get().text ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is(PREPROCESSOR_DEFINITION, trace_node) ) {
+        context.prefix_sharp = 0;
+        // we must eat all tokens until #endif
+        while ( 1 ) {
+            token_next(trace_node.get_tab());
+            if ( token_is(0, trace_node) ) {
+                return 0;
+            }
+
+            if ( token_is_not('#', trace_node) ) {
+                continue;
+            }
+
+            token_next(trace_node.get_tab());
+            if ( "endif" == c_token_get().text ) {
+                return 1;
+            }
+        }
+    } else {
+        //we dont eat ...
+        context.prefix_sharp = 0;
+        return 1;
+    }
+
+    context = context_tokens.restore();
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+/*
+  preprocessor_endif: #endif
+    ;
+*/
+int c_parser_descent::preprocessor_endif(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "preprocessor_endif");
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('#', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( "endif" != c_token_get().text ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    return 1;
+}
+/*----------------------------------------------------------------------------*/

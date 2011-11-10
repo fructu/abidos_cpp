@@ -378,11 +378,13 @@ abidos
 -[] declare enum inside classes.
 -[v] parsing dummy ctor_initializer.
 -[] parsing full ctor_initializer.
--[] parsing #ifndef
--[] parsing #endif
+-[v] parsing #ifndef
+-[v] saving  #ifndef <ID> int ts
+-[v] parsing #endif
 -[v] parsing #define id
     this is necesary for things like this
     #ifndef parser_descent_h
     #define parser_descent_h
     cat out/trace_t040.cpp.gv | dot -Tpng > out/trace_t040.cpp.gv.png; eog out/trace_t040.cpp.gv.png
+    -[] pass other tokens until '\n'
 -[] parsing #define id full

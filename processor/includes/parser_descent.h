@@ -119,6 +119,9 @@ struct c_context {
 
     int is_enum_declaration;
 
+    //in preprocessor we must search in ts "#.."
+    int prefix_sharp;
+
     void print(void)
     // this is for debug
     {
@@ -168,6 +171,8 @@ struct c_context {
         namespace_name_declaration = "";
 
         is_enum_declaration = 0;
+
+        prefix_sharp = 0;
     }
     void clear(void) {
         i_token = 0;
@@ -217,6 +222,8 @@ struct c_context {
 //        namespace_name_declaration = "";
 
         is_enum_declaration = 0;
+
+//        prefix_sharp = 0;
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -251,6 +258,8 @@ struct c_context {
         context_param.namespace_name_declaration = namespace_name_declaration;
 
         context_param.is_enum_declaration = is_enum_declaration;
+
+        context_param.prefix_sharp = prefix_sharp;
     }
 };
 
@@ -313,6 +322,8 @@ private:
     int preprocessor(c_trace_node trace_node);
     int preprocessor_include(c_trace_node trace_node);
     int preprocessor_define(c_trace_node trace_node);
+    int preprocessor_ifndef(c_trace_node trace_node);
+    int preprocessor_endif(c_trace_node trace_node);
 
     /*
      * rules from yacc

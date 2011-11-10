@@ -1,10 +1,15 @@
 /*
   testing preprocessor
 */
-
-class include {};
-
+#ifndef d
 #define d
-#include <h>
+class esta_si{};
+#endif
 
+#ifndef d
+//this would dont appears in ts
+class esta_no{};
+#endif
+
+class esta_tambien{};
 

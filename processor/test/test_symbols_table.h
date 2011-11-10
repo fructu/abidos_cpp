@@ -12,7 +12,7 @@
 
 
 ------------------------------------------------------------------------------*/
-/*
+
 #ifndef symbols_table_h
 #define symbols_table_h
 
@@ -20,7 +20,7 @@
 #include <map>
 #include <vector>
 #include <stdio.h>
-
+/*
 #include "tokens.h"
 #include "lex_yacc.h"
 */
@@ -534,5 +534,5 @@ public:
 
 extern c_symbols_table ts;
 
-//#endif
+#endif
 
