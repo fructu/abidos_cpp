@@ -63,7 +63,6 @@ stringtext				([^"])|(\\.)
 "/*"					{ skip_comment(); }
 "//"					{ skip_until_eol(); }
 "#"					{ return '#'; }
-"include"	{ return PREPROCESSOR_INCLUDE; }
 "{"					{ return '{'; }
 "<%"					{ return '{'; }
 "}"					{ return '}'; }

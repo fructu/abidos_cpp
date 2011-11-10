@@ -15,7 +15,7 @@
 #ifndef parser_descent_h
 #define parser_descent_h
 
-#include "lex_yacc.h"
+#   include "lex_yacc.h"
 
 #include <string>
 #include <vector>
@@ -309,8 +309,10 @@ private:
     void token_next(string tab);
     void check_identifier(string tab, c_token &token);
 
-    // Expressions
+    // preprocesssor
+    int preprocessor(c_trace_node trace_node);
     int preprocessor_include(c_trace_node trace_node);
+    int preprocessor_define(c_trace_node trace_node);
 
     /*
      * rules from yacc

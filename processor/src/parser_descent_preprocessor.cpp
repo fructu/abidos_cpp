@@ -22,9 +22,28 @@
 #include "trace.h"
 
 #include "../../preprocessor/ts.h"
+
+int c_parser_descent::preprocessor(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "preprocessor");
+
+    if (1 == preprocessor_define(trace_node)) {
+        return 1;
+    }
+
+    if (1 == preprocessor_include(trace_node)) {
+        return 1;
+    }
+
+    return 0;
+}
 /*----------------------------------------------------------------------------*/
 /*
- * preprocessor_include: '#' PREPROCESSOR_INCLUDE STRING
+ * preprocessor_include: '#' IDENTIFER STRING
+ *
+ * THIS IS BAD IDEA -> preprocessor_include: '#' PREPROCESSOR_INCLUDE STRING
+ * we can write this:
+ *    class include {};
  */
 int c_parser_descent::preprocessor_include(c_trace_node trace_node)
 {
@@ -39,7 +58,17 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
     }
 
     token_next(trace_node.get_tab());
-    if ( token_is_not(PREPROCESSOR_INCLUDE, trace_node) ) {
+/*
+  //IDENTIFIER is bad idea:
+  //  class include {};
+  //  #include <h>
+
+    if ( token_is_not(IDENTIFIER, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+*/
+    if( "include" != c_token_get().text ) {
         context = context_tokens.restore();
         return 0;
     }
@@ -96,6 +125,43 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
         printf("\nERROR:c_parser_descent::preprocessor_include[%s]\n", file_included.full() );
         exit(-1);
     }
+
+    return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+  preprocessor variables can be have the same identifier than other
+  classes variables ...
+*/
+int c_parser_descent::preprocessor_define(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "preprocessor_define");
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('#', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if( "define" != c_token_get().text ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if( "" == c_token_get().text ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    c_token token = c_token_get();
+    c_symbol symbol(token);
+    symbol.type = PREPROCESSOR_DEFINITION;
+    symbol.text = "#" + symbol.token.text;
+    ts.insert(symbol);
 
     return 1;
 }

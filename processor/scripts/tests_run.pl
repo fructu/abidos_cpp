@@ -37,14 +37,16 @@ sub test_run_tokens_consumed
 {
   my $f = $_[0];
 
-  print "  [$f] ->";
+  print " [$f]->";
   system "./abidos --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ../test_out/out_$f.txt";
 
   my $result = is_test_ok("../test_out/out_$f.txt");
 
-  print "  [$f] -> [$result]\n";
-  
-#  print "./abidos --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > test_out/out_$f.txt\n";
+  if( $result eq "ok" ) {
+    print " [$result]";
+  } else {
+    print " [$result] <--##\n";
+  }
 
   return $result;
 }
@@ -53,7 +55,7 @@ sub test_gcc_diff
 {
   my $f = $_[0];
   
-  print "#  [$f] ->";
+  print "# [$f]->";
   
   my @args = ("test/g++", "-s", "$f");
   system(@args) == 0 or die "system @args failed: $?";
@@ -65,6 +67,8 @@ sub all_tests
   my $result = "";
   my $tests_total = 0;
   my $tests_ok    = 0;
+  
+  my $columns = 0;
 	opendir(IMD, $tests_dir) || die("Cannot open directory");
 	my @tests_files= readdir(IMD);
 	closedir(IMD);
@@ -81,6 +85,17 @@ sub all_tests
         $tests_ok++;
       }
       $tests_total++;
+      if(length($f) < 10) {
+        if($columns < 5) {
+          ++$columns;
+        } else {
+          $columns = 0;
+          print "\n";
+        }
+      } else {
+        $columns = 0;
+        print "\n";
+      }
 #			test_gcc_diff($f);
 		}
 	}

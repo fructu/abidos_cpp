@@ -83,7 +83,7 @@ debug_graph_put:
 
 #FILE_TEST=t031.cpp
 #FILE_TEST=mass_clases.cpp
-FILE_TEST=test_symbols_table.h
+FILE_TEST=test_symbols_table.cpp
 #FILE_TEST=t038.cpp
 #FILE_TEST=t014.cpp
 execute: $(EXECUTABLE)
