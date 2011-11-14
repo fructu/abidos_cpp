@@ -1623,6 +1623,10 @@ int c_parser_descent::member_declarator(c_trace_node trace_node)
         }
     }
 
+    //### maybe is worth do constant_initializer_opt who knows...
+    if (1 == initializer(trace_node)) {
+    }
+
     context.i_am_in_member = 0;
     context.member_declaration = "";
     // ## todo rest of | ...
@@ -2369,8 +2373,11 @@ int c_parser_descent::init_declarator(c_trace_node trace_node)
     trace_graph.add(trace_node, "init_declarator");
 
     if (1 == declarator(trace_node)) {
+        //### maybe is worth do constant_initializer_opt who knows...
         // if( 1 == initializer_opt(trace_node) ) //## todo
-        {
+        if ( 1 == initializer(trace_node) ) {
+            return 1;
+        } else {
             return 1;
         }
     }
@@ -2853,5 +2860,51 @@ int c_parser_descent::function_body(c_trace_node trace_node)
     trace_graph.add(trace_node, "function_body");
 
     return compound_statement(trace_node);
+}
+/*----------------------------------------------------------------------------*/
+/*
+initializer:
+	'=' initializer_clause
+	| '(' expression_list ')'
+	;
+*/
+int c_parser_descent::initializer(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "initializer_dummy");
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+
+    if ( token_is_not('=', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    c_context_tokens context_good_way(context);
+    token_next(trace_node.get_tab());
+    while ( token_is_not(';', trace_node) ) {
+        //eof ?
+        if ( token_is(0, trace_node) ) {
+            return 1;
+        }
+
+        if ( token_is(',', trace_node) ) {
+            context = context_good_way.restore();
+            return 1;
+        }
+
+        if ( token_is(')', trace_node) ) {
+            context = context_good_way.restore();
+            return 1;
+        }
+
+        //## dummy
+        context_good_way.save(context);
+        token_next(trace_node.get_tab());
+    }
+    //i must restore ';'
+    context = context_good_way.restore();
+    return 1;
 }
 /*----------------------------------------------------------------------------*/

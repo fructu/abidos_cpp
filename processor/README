@@ -394,6 +394,6 @@ abidos
 -[-] fixing void calls(t_vector_trace_nodes & vector);
   the problem is vector have have the same text than the std::vector ...
   i workarround for the moment... :-)
--[] parsing trace.cpp fix this
+-[v] parsing trace.cpp fix this
     int c_trace_node::order_static = 0;
 -[] lex in trace.cpp have several errors with characters ' \ ...

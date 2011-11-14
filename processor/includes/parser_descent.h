@@ -402,6 +402,7 @@ private:
     int parameter_declaration(c_trace_node trace_node);
     int function_definition(c_trace_node trace_node);
     int function_body(c_trace_node trace_node);
+    int initializer(c_trace_node trace_node);
 
     // Derived classes.
     int base_clause(c_trace_node trace_node);
@@ -449,4 +450,5 @@ public:
 };
 
 #endif
+
 
