@@ -20,6 +20,7 @@
 #include "generator_class_diagram.h"
 #include "generator_original.h"
 #include "trace.h"
+#include "lex_yacc.h"
 
 #include "../../preprocessor/ts.h"
 /*----------------------------------------------------------------------------*/
@@ -40,6 +41,10 @@ int c_parser_descent::preprocessor(c_trace_node trace_node)
     }
 
     if (1 == preprocessor_endif(trace_node)) {
+        return 1;
+    }
+
+    if (1 == preprocessor_other_dummy(trace_node)) {
         return 1;
     }
 
@@ -178,6 +183,13 @@ int c_parser_descent::preprocessor_define(c_trace_node trace_node)
     symbol.text = "#" + symbol.token.text;
     ts.insert(symbol);
 
+    /*
+      lex must eat the rest of the line
+      #define D 1
+      ## todo: for the moment 1 is not parsing...
+    */
+    skip_until_eol();
+
     return 1;
 }
 /*----------------------------------------------------------------------------*/
@@ -199,7 +211,7 @@ int c_parser_descent::preprocessor_ifndef(c_trace_node trace_node)
         return 0;
     }
 
-    context.prefix_sharp = 1;
+    context.prefix_sharp = 1; //in ts should have the prefix '#'
 
     token_next(trace_node.get_tab());
     if ( "ifndef" != c_token_get().text ) {
@@ -257,6 +269,27 @@ int c_parser_descent::preprocessor_endif(c_trace_node trace_node)
         context = context_tokens.restore();
         return 0;
     }
+
+    return 1;
+}
+/*----------------------------------------------------------------------------*/
+/*
+  preprocessor_other_dummy: #<ANYTHING>
+    ;
+*/
+int c_parser_descent::preprocessor_other_dummy(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "preprocessor_other_dummy");
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('#', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    skip_until_eol();
 
     return 1;
 }

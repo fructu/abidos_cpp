@@ -55,6 +55,12 @@ extern "C" {
         char iden[ID_MAX_LEN];
     } YYLVAL;
 
+    /*
+      lex must eat the rest of the line
+      #define D 1
+      ## todo: for the moment 1 is not parsing...
+    */
+    void skip_until_eol(void);
 }
 #endif
 #endif

@@ -13,13 +13,15 @@
 
 ------------------------------------------------------------------------------*/
 
-/*
-#include "symbols_table.h"
-#include "parser_descent.h"
+
+//#include "symbols_table.h"
+//#include "parser_descent.h"
+
 #include "parser.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-*/
+
 #include "test_symbols_table.h"
 /*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/

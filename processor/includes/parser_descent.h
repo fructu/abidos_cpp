@@ -324,6 +324,7 @@ private:
     int preprocessor_define(c_trace_node trace_node);
     int preprocessor_ifndef(c_trace_node trace_node);
     int preprocessor_endif(c_trace_node trace_node);
+    int preprocessor_other_dummy(c_trace_node trace_node);
 
     /*
      * rules from yacc

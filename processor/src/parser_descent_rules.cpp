@@ -2490,7 +2490,23 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
             } else {
                 // ## todo | direct_declarator '[' constant_expression_opt
                 // ']'
-                if (1 != context.class_member.is_function) {
+                if ( token_is('[', trace_node) ) {
+                    int n_open_braket = 0;
+                    while ( token_get() != 0) {
+                        context_good_way.save(context);
+                        token_next(trace_node.get_tab());
+                        if ( token_is('[', trace_node) ) {
+                            ++n_open_braket;
+                        }
+
+                        if ( token_is(']', trace_node) ) {
+                            if ( 0 == n_open_braket ) {
+                                return 1;
+                            }
+                            --n_open_braket;
+                        }
+                    }
+                } else if (1 != context.class_member.is_function) {
                     if ( 1 != context.declarator.is_function) {
                         semantic.declarator_insert(trace_node.get_tab(), context);
                     }

@@ -41,7 +41,7 @@
 //static int yywrap(void);
 char lex_file_name[LONG_STR];
 
-static void skip_until_eol(void);
+//static void skip_until_eol(void);
 static void skip_comment(void);
 static int check_identifier(const char *);
 %}
@@ -240,7 +240,7 @@ skip_comment(void)
 /*
  * See the previous comment for an explanation.
  */
-static void
+void
 skip_until_eol(void)
 {
 	int c;

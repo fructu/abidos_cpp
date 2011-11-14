@@ -381,10 +381,14 @@ abidos
 -[v] parsing #ifndef
 -[v] saving  #ifndef <ID> int ts
 -[v] parsing #endif
+-[] maybe check the number of #endif is paired with his #ifndef
 -[v] parsing #define id
     this is necesary for things like this
     #ifndef parser_descent_h
     #define parser_descent_h
     cat out/trace_t040.cpp.gv | dot -Tpng > out/trace_t040.cpp.gv.png; eog out/trace_t040.cpp.gv.png
     -[] pass other tokens until '\n'
+-[v] dummy parsing #define VIRTUAL 351
 -[] parsing #define id full
+-[v] parsing declarator table[dummy]
+
