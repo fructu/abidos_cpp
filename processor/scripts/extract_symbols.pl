@@ -83,6 +83,16 @@ sub p1
         print f_out '  " ~ "';
         print f_out " ,\n";
       }
+      elsif ($c eq "&")
+      {
+        print f_out '  " & "';
+        print f_out " ,\n";
+      }
+      elsif ($c eq "*")
+      {
+        print f_out '  " * "';
+        print f_out " ,\n";
+      }
       elsif ($c eq "#")
       {
         print f_out '  " # "';

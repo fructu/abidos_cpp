@@ -99,7 +99,7 @@ sub all_tests
 #			test_gcc_diff($f);
 		}
 	}
-  print "  -----------------------------------\n";
+  print "\n  -----------------------------------\n";
   print "  tests ok $tests_ok/$tests_total\n";
   print "  -----------------------------------\n";
   if( $tests_ok == $tests_total )

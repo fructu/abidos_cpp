@@ -16,7 +16,8 @@
 #include "trace.h"
 #include "options.h"
 /*----------------------------------------------------------------------------*/
-int c_trace_node::order_static = 0;
+//##
+//int c_trace_node::order_static = 0;
 /*----------------------------------------------------------------------------*/
 string c_trace_node::get_tab(void)
 {
@@ -80,7 +81,8 @@ void put_scaped(string & s)
     } else if ("\\" == s) {
         s = " BACKSLASH";
     } else if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s || "," == s|| ":" == s) {
-        s = "\\" + s;
+// #### ???
+
     } else {//s can be a string
         char str_in[1024] = {'\0'};
         char str_out[1024] = {'\0'};
@@ -100,15 +102,15 @@ void put_scaped(string & s)
                 str_out[i_out]='_';
             } else if ('/' == c) {
                 str_out[i_out]='_';
-            } else if ('"' == c) {
-                str_out[i_out]='_';
+
+
             } else {
                 str_out[i_out]=str_in[i_in];
             }
             ++i_in;
             ++i_out;
         }
-        str_out[i_out]='\0';
+
         s=str_out;
     }
 
@@ -119,7 +121,7 @@ void c_trace_graph::token_is_add(string s, string s_id, unsigned position)
     unsigned len = vector_nodes.size();
 
     if ( 0 == len) {
-        printf(" error void c_trace_graph::token_is_add(string s) ( 0 == len)\n");
+
         return;
     }
 
@@ -142,7 +144,7 @@ void c_trace_graph::token_is_not_add(string t, string s, unsigned position)
 
 
     if ( 0 == len) {
-        printf(" error void c_trace_graph::token_is_not_add(string s) ( 0 == len)\n");
+
         return;
     }
 
@@ -152,9 +154,9 @@ void c_trace_graph::token_is_not_add(string t, string s, unsigned position)
     put_scaped(t);
 
     if ( 0 == vector_nodes[last].function_token_text_is_not.size() ) {
-        vector_nodes[last].function_token_text_is_not = t + "\\ is_not " + s;
+
     } else {
-        vector_nodes[last].function_token_text_is_not = vector_nodes[last].function_token_text_is_not + "\\ "+ s;
+
     }
 }
 c_trace_graph trace_graph;

@@ -14,7 +14,7 @@
 ------------------------------------------------------------------------------*/
 #ifndef trace_h
 #define trace_h
-
+#include "../test_includes/std.h"
 #include <string>
 #include <vector>
 
