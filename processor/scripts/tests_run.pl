@@ -6,6 +6,7 @@
 #-------------------------------------------
 use strict;
 
+#my $tests_dir = "../test_real/";
 my $tests_dir = "../test/";
 
 sub is_test_ok

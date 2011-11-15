@@ -287,6 +287,13 @@ enum_name:
    //identifier
 	ENUM_NAME
 	;
+
+  i modified this rule to parsing this:
+  enum t_e{};
+
+	class A{
+    enum t_e e;
+	};
 */
 int c_parser_descent::enum_name(c_trace_node trace_node)
 {
@@ -295,6 +302,10 @@ int c_parser_descent::enum_name(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
 
     token_next(trace_node.get_tab());
+
+    if ( token_is(ENUM, trace_node) ) {
+        token_next(trace_node.get_tab());
+    }
 
     if ( token_is(ENUM_NAME, trace_node) ) {
 // ### maybe ...

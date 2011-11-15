@@ -401,4 +401,5 @@ abidos
 -[v] get the string formation from elsa http://scottmcpeak.com/elkhound/sources/elsa/cc.lex
 -[] parsing enum in enum t_class_specifier_status class_specifier_status;
     t_class_specifier_status must be a enum type
-
+-[] 
+    working/abidos/processor/src$ ln -s ../../preprocessor/ts.h preprocessor_ts.h
