@@ -87,7 +87,7 @@ class_name:
 	CLASS_NAME
 	| template_id
 	;
-
+//##did
 enum_name:
 	/* identifier */
 	ENUM_NAME

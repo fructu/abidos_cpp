@@ -61,6 +61,13 @@ extern "C" {
       ## todo: for the moment 1 is not parsing...
     */
     void skip_until_eol(void);
+    /*
+      designed to pass this things
+       #define hi \
+          bye
+    */
+    void skip_until_eol_preprocessor(void);
+    void get_string_between_sharps(char * str);
 }
 #endif
 #endif

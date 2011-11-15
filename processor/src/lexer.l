@@ -233,10 +233,6 @@ ESCAPE        ({BACKSL}{ANY})
   return STRING;
 }
 
-
-
-"\"" {get_string(); return STRING;}
-
 . {
   fprintf(stderr, "lexx errro line[%d]: unexpected character [%c]\n", yylineno, yytext[0]);
   fprintf(stdout, "lexx errro line[%d]: unexpected character [%c]\n", yylineno, yytext[0]);
@@ -317,6 +313,23 @@ skip_until_eol(void)
 		;
 }
 
+void
+skip_until_eol_preprocessor(void)
+{
+	int c;
+	while ((c = input()) != EOF && c != '\n')
+	{
+    // the funny '\n' can be for this lands...
+	  if( '\'' == c ) {
+      while ((c = input()) != EOF && c != '\'');
+	  }
+
+	  if( '\\' == c ) {
+      skip_until_eol();
+	  }
+  }
+}
+
 static int
 check_identifier(const char *s)
 {
@@ -338,6 +351,18 @@ check_identifier(const char *s)
 	return IDENTIFIER;
 }
 
+void get_string_between_sharps(char * str)
+{
+	int c;
+	int n = 0;
+
+	while ((c = input()) != EOF && c != '>'){
+	  str[n] = c;
+	  n++;
+	}
+
+  str[n] = '\0';
+}
 
 #define STACK_FILE_NAME_LEN (1024)
 
@@ -483,3 +508,4 @@ void lex_file_end(void)
 {
     fclose(yyin);
 }
+

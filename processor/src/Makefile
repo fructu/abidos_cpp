@@ -87,7 +87,8 @@ debug_graph_put:
 #FILE_TEST=t038.cpp
 #FILE_TEST=t014.cpp
 #FILE_TEST=trace.cpp
-FILE_TEST=parser_descent_rules.cpp
+#FILE_TEST=parser_descent_rules.cpp
+FILE_TEST=parser_descent.h
 execute: $(EXECUTABLE)
 	cp ../python/xdot2.py ../out/
 	./$(EXECUTABLE) --verbose --ts_show ../test/$(FILE_TEST)

@@ -22,7 +22,75 @@
 #include "trace.h"
 #include "lex_yacc.h"
 
-#include "../../preprocessor/ts.h"
+#include "preprocessor_ts.h"
+#include <sys/param.h>
+/*----------------------------------------------------------------------------*/
+void c_parser_descent::push_file(const char * f)
+{
+    char path[MAXPATHLEN];
+    char path2[MAXPATHLEN];
+
+    getcwd(path, MAXPATHLEN);
+    getcwd(path2, MAXPATHLEN);
+    printf("####pwd -> %s\n", path);
+
+    c_cell file_actual;
+    c_cell file_lex;
+
+    sprintf(path2,"%s/",path);
+    file_actual.fill(path2, (char *) "\"");
+    printf("####file_actual   -> %s\n", file_actual.full());
+
+    printf("####f -> %s\n", f);
+    printf("####lex_file_name -> %s\n", lex_file_name);
+
+    file_lex.fill(lex_file_name, (char *) "\"");
+    printf("####file_lex 1 -> %s\n", file_lex.full());
+    if (lex_file_name[0] != '/') {
+        file_actual.path_resolve(file_lex);
+    }
+    printf("####file_lex 2 -> %s\n", file_lex.full());
+//    file_actual.fill(lex_file_name, (char *) "\"");
+
+    char file_without_commillas[ID_MAX_LEN]={'\0'};
+
+    sprintf(file_without_commillas,"%s",f);
+    str_drop_char(file_without_commillas, '\"');
+
+    c_cell file_included;
+    file_included.fill(file_without_commillas, (char *) "\"");
+
+//    file_actual.path_resolve(file_included);
+//    file_actual.path_resolve(file_included);
+
+    printf("####file_lex -> %s\n", file_lex.full());
+    printf("####file_included a -> %s\n", file_included.full());
+    file_lex.path_resolve(file_included);
+    printf("####file_included b -> %s\n", file_included.full());
+
+    if (1 != lex_file_push( file_included.full() ) ) {
+//      if (1 != lex_file_push( file_without_commillas ) ) {
+        printf("\nERROR:c_parser_descent::preprocessor_include[%s]\n"
+               , file_included.full());
+        exit(-1);
+//      }
+    }
+}
+/*----------------------------------------------------------------------------*/
+void c_parser_descent::push_sharp_file(const char * f)
+{
+    if (strcmp("vector", f) == 0) {
+        push_file("../test_includes/std.h");
+    } else if (strcmp("map", f) == 0) {
+        push_file("../test_includes/std.h");
+    } else if (strcmp("string", f) == 0) {
+        push_file("../test_includes/std.h");
+    } else if (strcmp("stdio.h", f) == 0) {
+        push_file("../test_includes/stdio.h");
+    } else if (strcmp("inttypes.h", f) == 0) {
+        push_file("../test_includes/inttypes.h");
+    }
+}
 /*----------------------------------------------------------------------------*/
 int c_parser_descent::preprocessor(c_trace_node trace_node)
 {
@@ -101,47 +169,14 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
             return 0;
         }
 
-//        c_context_tokens context_tokens_good_way(context);
-
-        token_next(trace_node.get_tab());
-        while ( token_is_not('>', trace_node) ) {
-            //## todo acumulate string with the file
-            token_next(trace_node.get_tab());
-            /*            if ( 1 == is_eof(trace_node) ) {
-                            return 0;
-                        }*/
-            if ( token_is(0, trace_node) ) {
-                return 0;
-            }
-        }
-
-        if ( token_is('>', trace_node) ) {
-            return 1;
-        }
-
-        context = context_tokens.restore();
-        return 0;
+        char f[1024];
+        get_string_between_sharps(f);
+        printf("####:: mark_7 f [%s]\n",f);
+        push_sharp_file(f);
+        return 1;
     }
 
-    c_cell file_actual;
-
-    file_actual.fill(lex_file_name, (char *) "\"");
-
-    char file_without_commillas[ID_MAX_LEN]={'\0'};
-
-    sprintf(file_without_commillas,"%s",c_token_get().text.c_str());
-    str_drop_char(file_without_commillas, '\"');
-
-    c_cell file_included;
-
-    file_included.fill(file_without_commillas, (char *) "\"");
-
-    file_actual.path_resolve(file_included);
-
-    if (1 != lex_file_push( file_included.full() ) ) {
-        printf("\nERROR:c_parser_descent::preprocessor_include[%s]\n", file_included.full() );
-        exit(-1);
-    }
+    push_file(c_token_get().text.c_str());
 
     return 1;
 }
@@ -188,7 +223,7 @@ int c_parser_descent::preprocessor_define(c_trace_node trace_node)
       #define D 1
       ## todo: for the moment 1 is not parsing...
     */
-    skip_until_eol();
+    skip_until_eol_preprocessor();
 
     return 1;
 }
@@ -289,7 +324,7 @@ int c_parser_descent::preprocessor_other_dummy(c_trace_node trace_node)
         return 0;
     }
 
-    skip_until_eol();
+    skip_until_eol_preprocessor();
 
     return 1;
 }

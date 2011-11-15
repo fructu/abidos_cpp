@@ -19,3 +19,4 @@ class c_trace_node
 private:
     static int order_static;
 };
+

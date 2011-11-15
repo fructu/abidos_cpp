@@ -2,10 +2,10 @@
   this is a fake of the std library
   very useful to testing abidos
 */
+#include <stdio.h>
+
 #ifndef _std_h
 #define _std_h
-
-struct FILE {};
 
 namespace std
 {

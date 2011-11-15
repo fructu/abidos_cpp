@@ -319,6 +319,8 @@ private:
     void check_identifier(string tab, c_token &token);
 
     // preprocesssor
+    void push_file(const char * f);
+    void push_sharp_file(const char * f);
     int preprocessor(c_trace_node trace_node);
     int preprocessor_include(c_trace_node trace_node);
     int preprocessor_define(c_trace_node trace_node);
