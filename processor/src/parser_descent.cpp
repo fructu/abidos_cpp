@@ -457,7 +457,7 @@ void c_parser_descent::token_next(string tab)
     int t = 0;
     int get_from_lex = 0;
 
-    printf("%s## token_next", tab.c_str());
+    printf("%s## token_next file[%s]", tab.c_str(), lex_file_name);
 
     if (!((0 <= context.i_token)
             && (context.i_token < tokens_vector.size()))) {

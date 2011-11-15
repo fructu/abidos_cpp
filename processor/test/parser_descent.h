@@ -15,43 +15,28 @@
 #ifndef parser_descent_h
 #define parser_descent_h
 
-#include "lex_yacc.h"
-//###{
-namespace std
-{
-  class string
-  {
-  };
-
-  template <class T>
-  class vector {
-  };
-
-  class V
-  {
-    vector<int> o_vector;
-  };
-}
-//###}
+//#   include "lex_yacc.h"
 
 #include <string>
 #include <vector>
 
+#include "../test_includes/std.h"
 using namespace std;
 
 #define NO_IDENTIFIER "@IDENTIFIER#"
 #define NO_CLASS_NAME "NO_CLASS_NAME#"
-/*
-#include "test_symbols_table.h"
 
+#include "test_symbols_table.h"
 #include "trace.h"
-*/
-/*
+
 int chain_is_tail(string class_name_declaration, char * text);
 
 typedef vector < c_token > t_tokens;
 
-
+/*
+ * tokens_vector =[CLASS A { } ;] when we are parsing A context will have
+ * class_key == CLASS to know what is a
+ */
 enum t_class_specifier_status {
     NO_CLASS_STATUS = 0,
     CLASS_SPECIFIER_STATUS_IDENTIFIER,
@@ -60,7 +45,8 @@ enum t_class_specifier_status {
     CLASS_SPECIFIER_STATUS_MEMBER_DECLARATOR,
     CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR
 };
-
+/*
+### todo parse this...
 static const char *const table_parser_status[] = {
     "NO_CLASS_STATUS",
     "CLASS_SPECIFIER_STATUS_IDENTIFIER",
@@ -70,10 +56,23 @@ static const char *const table_parser_status[] = {
     "CLASS_SPECIFIER_STATUS_FRIEND_DECLARATOR",
     0
 };
-
+*/
+/*
+ * if you adde more members pls actualize restore_but_not_i_token()
+ */
 struct c_context {
     unsigned i_token;
-    enum t_class_specifier_status class_specifier_status;	// the
+//###    
+//    enum t_class_specifier_status class_specifier_status;	// the
+//droped enum
+    t_class_specifier_status class_specifier_status;	// the
+    // semantic
+    // will
+    // know is
+    // inside
+    // a
+    // class/struct/union
+    // declaration
 
     int class_key;		// the rule when CLASS STRUCT UNION are
     // set
@@ -100,6 +99,14 @@ struct c_context {
 
     int is_typedef;
 
+    /*
+      template <class identifier>       //i_am_in_template_declaration =1
+      function_declaration;             //i_am_in_template_declaration =2
+
+      template <typename identifier>
+      function_declaration;
+    */
+    //useful in i_am_in_template_declaration = 1
     int i_am_in_template_declaration; // we are in template declaration
     int declaring_template_type; //we are in indetifier declaration
     c_template_parameter template_parameter; //we are in indetifier declaration
@@ -178,6 +185,19 @@ struct c_context {
         class_key = 0;
         access_specifier = 0;
 
+        /*
+         class A{
+          class A_1{
+          };
+          class A_2{
+          };
+         };
+
+         i need the class_name to chain A::A_1 A::A_2
+
+            class_name_declaration = "";
+        */
+
         i_am_in_member = 0;
         member_declaration = "";
         member_definition_outside = 0;
@@ -248,6 +268,10 @@ struct c_context {
     }
 };
 
+/*
+ * this class save the context and restore it to support parsers'
+ * backtraking
+ */
 struct c_context_tokens {
     // index of tokens
     // unsigned i_token;
@@ -307,6 +331,9 @@ private:
     int preprocessor_endif(c_trace_node trace_node);
     int preprocessor_other_dummy(c_trace_node trace_node);
 
+    /*
+     * rules from yacc
+     */
     int error_recover(c_trace_node trace_node);
 
     // Translation unit.
@@ -380,6 +407,7 @@ private:
     int parameter_declaration(c_trace_node trace_node);
     int function_definition(c_trace_node trace_node);
     int function_body(c_trace_node trace_node);
+    int initializer(c_trace_node trace_node);
 
     // Derived classes.
     int base_clause(c_trace_node trace_node);
@@ -420,9 +448,12 @@ public:
     ~c_parser_descent();
     void yyparse(char *file_name);
 
-
+    /*
+     * tests
+     */
     int test_01(void);
 };
-*/
+
 #endif
+
 

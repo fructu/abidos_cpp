@@ -44,6 +44,8 @@ char lex_file_name[LONG_STR];
 //static void skip_until_eol(void);
 static void skip_comment(void);
 static int check_identifier(const char *);
+// i chosed the elsa string works better than this
+//void get_string(void);
 %}
 
 intsuffix				([uU][lL]?)|([lL][uU]?)
@@ -52,6 +54,28 @@ exppart					[eE][-+]?[0-9]+
 floatsuffix				[fFlL]
 chartext				([^'])|(\\.)
 stringtext				([^"])|(\\.)
+/*
+  from elsa
+  http://scottmcpeak.com/elkhound/sources/elsa/cc.lex
+  {
+*/
+
+/* newline */
+NL            "\n"
+/* anything but newline */
+NOTNL         .
+/* any of 256 source characters */
+ANY           ({NOTNL}|{NL})
+/* backslash */
+BACKSL        "\\"
+QUOTE         [\"]
+/* normal string character: any but quote, newline, or backslash */
+STRCHAR       [^\"\n\\]
+/* (start of) an escape sequence */
+ESCAPE        ({BACKSL}{ANY})
+/*
+}
+*/
 
 %option noyywrap
 %option yylineno
@@ -204,13 +228,28 @@ stringtext				([^"])|(\\.)
 "'"{chartext}*"'"			{ return CHARACTER; }
 "L'"{chartext}*"'"			{ return CHARACTER; }
 
-"\""{stringtext}*"\""			{ return STRING; }
-"L\""{stringtext}*"\""			{ return STRING; }
+  /* string literal from elsa*/
+"L"?{QUOTE}({STRCHAR}|{ESCAPE})*{QUOTE} {
+  return STRING;
+}
 
-. { fprintf(stderr, "lexx errro line[%d]: unexpected character [%c]\n", yylineno, yytext[0]); }
+
+
+"\"" {get_string(); return STRING;}
+
+. {
+  fprintf(stderr, "lexx errro line[%d]: unexpected character [%c]\n", yylineno, yytext[0]);
+  fprintf(stdout, "lexx errro line[%d]: unexpected character [%c]\n", yylineno, yytext[0]);
+  return yytext[0];
+}
 
 %%
+/*
 
+#### just in sustitution get_string...
+"\""{stringtext}*"\""			{ return STRING; }
+"L\""{stringtext}*"\""			{ return STRING; }
+*/
 /*
 static int
 yywrap(void)
@@ -236,7 +275,36 @@ skip_comment(void)
 		c2 = input();
 	}
 }
+/*
+void get_string(void)
+{
+	int c1, c2;
+	int n = 0;
+  yytext[n] = '"';
 
+	c1 = input();
+	c2 = input();
+
+  ++n;
+  yytext[n] = c1;
+
+	while (c2 != EOF && !(c1 == '\\' && c2 == '"')) {
+	  ++n;
+	  yytext[n] = c2;
+		c1 = c2;
+		printf("####: mark_77a[%c]\n",c1);
+		c2 = input();
+	}
+
+  ++n;
+	yytext[n] = '"';
+
+  ++n;
+	yytext[n] = '\0';
+
+  printf("####: mark_77b[%s]\n",yytext);
+}
+*/
 /*
  * See the previous comment for an explanation.
  */

@@ -1,6 +1,7 @@
 /*
   testing preprocessor
 */
+
 #ifndef d
 #define d
 class esta_si{};
@@ -18,4 +19,3 @@ class c_trace_node
 private:
     static int order_static;
 };
-

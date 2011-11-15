@@ -2867,6 +2867,16 @@ initializer:
 	'=' initializer_clause
 	| '(' expression_list ')'
 	;
+
+  we can reach here:
+    int f(int i = 1, float f);
+
+  or:
+
+  static const char *const yytokens[] = {
+    "hola",
+    "probando"
+  };
 */
 int c_parser_descent::initializer(c_trace_node trace_node)
 {
@@ -2881,22 +2891,37 @@ int c_parser_descent::initializer(c_trace_node trace_node)
         return 0;
     }
 
+    int n_open_braket = 0;
+
     c_context_tokens context_good_way(context);
     token_next(trace_node.get_tab());
     while ( token_is_not(';', trace_node) ) {
         //eof ?
+
         if ( token_is(0, trace_node) ) {
             return 1;
         }
 
+        if ( token_is('{', trace_node) ) {
+            ++n_open_braket;
+        }
+
+        if ( token_is('}', trace_node) ) {
+            --n_open_braket;
+        }
+
         if ( token_is(',', trace_node) ) {
-            context = context_good_way.restore();
-            return 1;
+            if ( 0 == n_open_braket ) {
+                context = context_good_way.restore();
+                return 1;
+            }
         }
 
         if ( token_is(')', trace_node) ) {
-            context = context_good_way.restore();
-            return 1;
+            if ( 0 == n_open_braket ) {
+                context = context_good_way.restore();
+                return 1;
+            }
         }
 
         //## dummy

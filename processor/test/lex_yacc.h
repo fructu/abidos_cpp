@@ -17,9 +17,10 @@
 #ifdef __cplusplus
 //extern "C" {
 #include "parser.h"
+#include "../test_includes/std.h"
 #include <stdio.h>
 #define ID_MAX_LEN (8000)
-struct FILE {};
+//struct FILE {};
     extern int yylineno;
     extern FILE *yyin;
     /*

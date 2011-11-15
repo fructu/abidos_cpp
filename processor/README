@@ -397,3 +397,8 @@ abidos
 -[v] parsing trace.cpp fix this
     int c_trace_node::order_static = 0;
 -[] lex in trace.cpp have several errors with characters ' \ ...
+    using scanner string from http://scottmcpeak.com/elkhound/sources/elsa/cc.lex
+-[v] get the string formation from elsa http://scottmcpeak.com/elkhound/sources/elsa/cc.lex
+-[] parsing enum in enum t_class_specifier_status class_specifier_status;
+    t_class_specifier_status must be a enum type
+
