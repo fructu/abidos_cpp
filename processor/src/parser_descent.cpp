@@ -528,7 +528,6 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
 {
     c_symbol *p_symbol = ts.search_symbol(yytext);
 
-    printf("########:: check_identifier_1 token[%s]\n",token.text.c_str());
     if (p_symbol) {
         if (p_symbol->type != 0) {
             // return symbol.type;
@@ -542,7 +541,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         }
         return;
     }
-    printf("########:: check_identifier_2\n");
+
     /*
       t031 destructors
       A::B::~B()
@@ -552,11 +551,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         if (p_symbol) {
             if (p_symbol->type != 0) {
                 // return symbol.type;
-                printf("%s## next_token found symbol [%s]  context.class_name_declaration[%s]",
-                       tab.c_str(),
-                       yytext,
-                       context.class_name_declaration.c_str()
-                      );
+
                 if ( 1 == p_symbol->is_template ) {
                     token.id = TEMPLATE_NAME;
                 } else {
@@ -566,7 +561,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         }
         return;
     }
-    printf("########:: check_identifier_3\n");
+
     //check if is template type ej template <class T> --> T
     if ( 2 == context.i_am_in_template_declaration ) {
         if ( context.map_template_parameter.count(token.text) > 0) {
@@ -574,7 +569,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         }
         return;
     }
-    printf("########:: check_identifier_4\n");
+
     // declarations of members functions outside of his class
     // but inside of the namespace
     if ( 0 == context.class_name_declaration.size() ) {
@@ -594,7 +589,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
             return;
         }
     }
-    printf("########:: check_identifier_5\n");
+
     // chek the using namespaces
     if ( semantic.vector_using_namespace.size() > 0 ) {
         int unsigned i = 0;
@@ -615,13 +610,12 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
             }
         }
     }
-    printf("########:: check_identifier_6\n");
+
     if ( 0 != context.class_name_declaration.size() ) {
         if ( 0 != context.namespace_name_declaration.size() ) {
             string s = context.namespace_name_declaration + "::" + yytext;
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
-                printf("########:: check_identifier_6b\n");
 //                token.text = p_symbol->text;
                 token.text = s;
 //                token.id = p_symbol->type;
@@ -636,24 +630,18 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         return;
     }
 
-    printf("########:: check_identifier_7\n");
     //preprocessor hack
     if ( 1 == context.prefix_sharp ) {
         string s = "#";
         s = s + yytext;
-        printf("########:: check_identifier_7a [%s]\n",s.c_str());
         c_symbol *p_symbol = ts.search_symbol(s.c_str());
         if (p_symbol) {
-            printf("########:: check_identifier_7b\n");
             token.text = p_symbol->text;
 //                token.text = s;
 //                token.id = p_symbol->type;
-
-
             token.id = PREPROCESSOR_DEFINITION;
         }
     }
-
 }
 /*----------------------------------------------------------------------------*/
 void extract_file_from_path(char *file, char *path)

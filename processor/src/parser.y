@@ -57,6 +57,8 @@ static void yyerror(char *s);
 %token TEMPLATE_TYPE
 %token PREPROCESSOR_DEFINITION
 
+%token UNION_NAME
+
 %start translation_unit
 
 %%

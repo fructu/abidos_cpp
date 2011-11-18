@@ -81,14 +81,14 @@ debug_graph_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
-#FILE_TEST=t031.cpp
+FILE_TEST=t041.cpp
 #FILE_TEST=mass_clases.cpp
 #FILE_TEST=test_symbols_table.cpp
 #FILE_TEST=t038.cpp
 #FILE_TEST=t014.cpp
 #FILE_TEST=trace.cpp
 #FILE_TEST=parser_descent_rules.cpp
-FILE_TEST=parser_descent.h
+#FILE_TEST=parser_descent.h
 execute: $(EXECUTABLE)
 	cp ../python/xdot2.py ../out/
 	./$(EXECUTABLE) --verbose --ts_show ../test/$(FILE_TEST)

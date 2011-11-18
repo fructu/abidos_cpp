@@ -54,6 +54,33 @@ public:
         vector_decl_specifier.push_back(decl);
     }
 
+    /*
+      in:
+        int *a, *b;
+      we must remove the * of a and restore de * of b
+
+      :-) yeeeees think is b have &
+        int *a, &b;
+    */
+    void pop_last_pointers(void) {
+        int last_id = 0;
+        c_decl_specifier last_decl;
+
+        while ( vector_decl_specifier.size() != 0) {
+            if ('*' == vector_decl_specifier.back().token.id ||
+                    '&' == vector_decl_specifier.back().token.id
+               ) {
+                if ( 0 == last_decl.token.id) {
+                    last_decl = vector_decl_specifier.back();
+                }
+                vector_decl_specifier.pop_back();
+            } else {
+                vector_decl_specifier.push_back(last_decl);
+                return;
+            }
+        }
+    }
+
     void clear_decl_specifier(void) {
         vector_decl_specifier.clear();
     }

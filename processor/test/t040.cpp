@@ -20,3 +20,7 @@ private:
     static int order_static;
 };
 
+struct S {
+};
+
+typedef struct S *t_S;

@@ -22,7 +22,7 @@ void
 c_semantic::class_specifier_identifier(c_context & context, c_token token)
 {
     c_symbol symbol(token);
-    printf("## c_semantic::class_specifier_identifier(c_context context)\n");
+    printf("## c_semantic::class_specifier_identifier(c_context context) context.class_key[%d]:[%s]\n",context.class_key, yytokens[context.class_key]);
 
     if (CLASS_SPECIFIER_STATUS_IDENTIFIER !=
             context.class_specifier_status) {
@@ -42,8 +42,10 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     }
     // ## todo
     if (UNION == context.class_key) {
+//        symbol.type = UNION_NAME;
         symbol.type = UNION;
-        symbol.class_key = context.class_key;
+//        symbol.class_key = UNION;
+        symbol.class_key = CLASS;
     }
     // we only take the name of the class the fist time after CLASS
     // if( 1 == context.class_head)
@@ -69,7 +71,8 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
         }
     }
 
-
+    printf("## mark_2 c_semantic::class_specifier_identifier(c_context context) symbol.type[%d]:[%s] symbol.class_key[%d]:[%s] \n"
+           ,symbol.type, yytokens[symbol.type],symbol.class_key,yytokens[symbol.class_key]);
     context.class_name_declaration = symbol.token.text;
 
     ts.insert(symbol);

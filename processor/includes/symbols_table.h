@@ -140,13 +140,23 @@ struct c_decl_specifier {
     int type_specifier;
     int has_colon_colon_after; // A:: ...
 
+    c_decl_specifier() {
+        token.clear();
+
+        storage_class_specifier = 0;
+        type_specifier = 0;
+        has_colon_colon_after = 0;
+    }
+
     c_decl_specifier(c_token t) {
         token = t;
 
         storage_class_specifier = 0;
         type_specifier = 0;
         has_colon_colon_after = 0;
-    } void clear(void) {
+    }
+
+    void clear(void) {
         storage_class_specifier = 0;
         type_specifier = 0;
         has_colon_colon_after = 0;

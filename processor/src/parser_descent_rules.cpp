@@ -655,6 +655,16 @@ int c_parser_descent::decl_specifier(c_trace_node trace_node)
         return 1;
     }
 
+    if ( 1 == context.is_typedef) {
+        c_context_tokens context_tokens(context);
+        token_next(trace_node.get_tab());
+        if ( token_is(STRUCT, trace_node) ) {
+            return 1;
+        }
+
+        context = context_tokens.restore();
+    }
+
     return 0;
 }
 
@@ -738,6 +748,7 @@ int c_parser_descent::typedef_specifier(c_trace_node trace_node)
         if ( token_is(CLASS_NAME, trace_node) ) {
 //          semantic.class_name_friend(context, c_token_get());
             return 1;
+
         }
         return 1;
     }
@@ -2382,6 +2393,29 @@ int c_parser_descent::init_declarator_list(c_trace_node trace_node)
 int c_parser_descent::init_declarator(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "init_declarator");
+
+    /*
+      ### todo
+        in this issue:
+          int *a, *b;
+        we must
+          remove the lasts ptr_specifier (maybe are more than 1)
+    */
+
+    if (1 == ptr_specifier(trace_node)) {
+        //removing * of the previous variable
+        if (1 == context.i_am_in_parameter_declaration) {
+            //### i think here nothing todo...
+        } else if (1 == context.is_template_instantation) {
+            //### i think here nothing todo...
+        } else {
+            semantic.pop_last_pointers();
+        }
+
+        while (1 == ptr_specifier(trace_node)) {
+            ;
+        }
+    }
 
     if (1 == declarator(trace_node)) {
         //### maybe is worth do constant_initializer_opt who knows...
