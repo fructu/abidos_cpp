@@ -406,4 +406,14 @@ abidos
 -[v] fix parsing int *a, *b;
 -[] fix parsing int *a, *b, c;
 -[] fix compile extern "C" { }
-
+-[v] fix     
+    typedef union {
+          int number;
+          char iden[ID_MAX_LEN];
+    } YYLVAL;
+-[] fix char iden[ID_MAX_LEN]; is no saved in ts
+    typedef union {
+          int number;
+          char iden[ID_MAX_LEN];
+    } YYLVAL;
+-[] fix NO_CLASS_NAME#1 must increase.

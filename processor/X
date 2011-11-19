@@ -2,5 +2,10 @@ dir .
 set print address off
 #b c_parser_descent::token_next()
 #b c_class_member::print()
+#b c_semantic::member_insert
+#b c_declarator::print
+#b c_semantic::identifier_typedef
+b c_symbols_table::change_key
 #run  parser_descent_rules.cpp
-run --verbose --ts_show test/t12.cpp
+run --verbose --test_all_tokens_consumed_flag --test_original --ts_show --verbose ../test_real/test_union.h > ../test_out/out_test_union.txt
+

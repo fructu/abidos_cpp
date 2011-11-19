@@ -17,7 +17,7 @@
 #include "lex_yacc.h"
 
 /*----------------------------------------------------------------------------*/
-const char * sharps_substitution(string source)
+string sharps_substitution(string source)
 {
     size_t j;
 
@@ -28,23 +28,30 @@ const char * sharps_substitution(string source)
             str += "\\<";
         } else if ( '>' == source[j] ) {
             str += "\\>";
+        } else if ( '#' == source[j] ) {
+            str += "_";
         } else {
             str += source[j];
         }
     }
 
-    return str.c_str();
+    return str;
 }
 /*----------------------------------------------------------------------------*/
-const char * colon_colon_substitution(string source)
+string colon_colon_substitution(string source)
 {
     size_t j;
     string str = source;
+
     for ( ; (j = str.find( "::" )) != string::npos ; ) {
         str.replace( j, 2, "__" );
     }
 
-    return str.c_str();
+    for ( ; (j = str.find( "#" )) != string::npos ; ) {
+        str.replace( j, 1, "_" );
+    }
+
+    return str;
 }
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::members_url(t_vector_class_member &
@@ -53,7 +60,7 @@ void c_generator_class_diagram::members_url(t_vector_class_member &
     unsigned i_member = 0;
     for (i_member = 0; i_member < vector_class_member.size(); ++i_member) {
         fprintf(f_out, "%s",
-                colon_colon_substitution(vector_class_member[i_member]->token.text));
+                colon_colon_substitution(vector_class_member[i_member]->token.text).c_str() );
 
         if ( 0 < vector_class_member[i_member]->token_definition.file.size()) {
             fprintf(f_out, "[%s:%d]",
@@ -213,10 +220,10 @@ void c_generator_class_diagram::nodes(c_symbol & symbol)
         return;
     }
 
-    fprintf(f_out, "  %s [\n", colon_colon_substitution(symbol.token.text));
-    fprintf(f_out, "    URL=\"%s[%s:%d];", colon_colon_substitution(symbol.token.text),
+    fprintf(f_out, "  %s [\n", colon_colon_substitution(symbol.token.text).c_str());
+    fprintf(f_out, "    URL=\"%s[%s:%d];", colon_colon_substitution(symbol.token.text).c_str(),
             symbol.token.file.c_str(), symbol.token.line);
-    fprintf(f_out, "%s[%s:%d];", colon_colon_substitution(symbol.token.text),
+    fprintf(f_out, "%s[%s:%d];", colon_colon_substitution(symbol.token.text).c_str(),
             symbol.token.file.c_str(), symbol.token.line);
     members_url(symbol.members.vector_class_member);
     fprintf(f_out, "\",\n");
@@ -384,12 +391,21 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
     if (TYPEDEF_NAME != symbol.type) {
         return;
     }
-    fprintf(f_out, "/* typedef_points_to[%s] */\n", symbol.typedef_points_to.c_str());
+    fprintf(f_out, "/* typedef_points_to[%s] */ ", symbol.typedef_points_to.c_str());
 
     string s1 = colon_colon_substitution(symbol.token.text);
     string s2 = colon_colon_substitution(symbol.typedef_points_to);
 
-    fprintf(f_out, "  /*%s->%s*/", s2.c_str(),
+    printf("###### mark_1a  [%s->%s]\n"
+            ,s1.c_str()
+            ,s2.c_str()
+    );
+
+    if( 0 == s2.size() ) {
+      return;
+    }
+
+    fprintf(f_out, "  /*[%s] -> [%s]*/", s2.c_str(),
             s1.c_str());
     /*
             fprintf(f_out, "  %s->%s [\"back\", color = \"gray\", arrowtail = \"open\"];\n"

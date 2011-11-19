@@ -506,6 +506,10 @@ void c_symbols_table::insert(c_symbol symbol)
     stack[last][symbol.text] = symbol;
 }
 /*----------------------------------------------------------------------------*/
+/*
+  ### todo
+    this does not work, corrupts data in ts.
+*/
 void c_symbols_table::change_key(string key_old, string key_new)
 {
     long i = stack.size() - 1;

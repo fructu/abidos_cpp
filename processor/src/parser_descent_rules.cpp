@@ -1393,7 +1393,8 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
                 char * pch = NULL;
                 pch = strstr((char *)context.class_name_declaration.c_str(),NO_CLASS_NAME);
                 if (NULL != pch) {
-                    ts.change_key(context.class_name_declaration, c_token_get().text);
+//## todo investigate way this corrupts data in ts
+//                    ts.change_key(context.class_name_declaration, c_token_get().text);
                 }
             } else {
                 context = context_tokens.restore();
