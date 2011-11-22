@@ -419,4 +419,6 @@ abidos
     } YYLVAL;
 -[v] fix NO_CLASS_NAME#1 must increase, it was done see t027.cpp
 -[v] fix t027 herence from typedef
+-[v] creating links to real code in test dir
+   hevia@vulcano:~/working/abidos/processor/test$ ../scripts/create_links.pl
 
