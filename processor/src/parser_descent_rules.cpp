@@ -1748,6 +1748,11 @@ int c_parser_descent::base_specifier(c_trace_node trace_node)
         return 1;
     }
 
+    //if is typedef_name -> it should check if the typedef_points_to is a class
+    if (1 == typedef_name(trace_node)) {
+        semantic.class_name(context, c_token_get());
+        return 1;
+    }
 
     return 0;
 }

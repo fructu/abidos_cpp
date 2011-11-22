@@ -81,9 +81,9 @@ debug_graph_put:
 	cp parser_descent_rules.cpp_debug parser_descent_rules.cpp
 	rm parser_descent_rules.cpp_debug
 
-#FILE_TEST=t041.cpp
+FILE_TEST=t027.cpp
 #FILE_TEST=mass_clases.cpp
-FILE_TEST=symbols_table.cpp
+#FILE_TEST=symbols_table.cpp
 #FILE_TEST=t038.cpp
 #FILE_TEST=t014.cpp
 #FILE_TEST=trace.cpp

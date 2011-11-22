@@ -21,6 +21,7 @@ typedef class
 
 typedef class
 {
+  int i;
 } t_C3;
 
 int i1;

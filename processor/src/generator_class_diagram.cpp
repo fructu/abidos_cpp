@@ -252,7 +252,8 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
 {
     fprintf(f_out, "/* c_generator_class_diagram::inheritance() */\n");
     if (CLASS_NAME != symbol.type) {
-        return;
+//## maybe is a typedef_name see t027.cpp
+//        return;
     }
 
     t_map_base_class::iterator i_map_base = symbol.map_base_class.begin();

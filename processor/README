@@ -411,9 +411,10 @@ abidos
           int number;
           char iden[ID_MAX_LEN];
     } YYLVAL;
--[] fix char iden[ID_MAX_LEN]; is no saved in ts
+-[] fix char iden[ID_MAX_LEN]; is no saved in ts test with free char i[4];
     typedef union {
           int number;
           char iden[ID_MAX_LEN];
     } YYLVAL;
--[] fix NO_CLASS_NAME#1 must increase.
+-[v] fix NO_CLASS_NAME#1 must increase, it was done see t027.cpp
+-[v] fix t027 herence from typedef
