@@ -24,7 +24,7 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     c_symbol symbol(token);
     printf("## c_semantic::class_specifier_identifier(c_context context) context.class_key[%d]:[%s]\n",context.class_key, yytokens[context.class_key]);
     printf("## c_semantic::class_specifier_identifier(c_context context) symbol.type[%d]:[%s] symbol.class_key[%d]:[%s] \n"
-    ,symbol.type, yytokens[symbol.type],symbol.class_key,yytokens[symbol.class_key]);
+           ,symbol.type, yytokens[symbol.type],symbol.class_key,yytokens[symbol.class_key]);
 
 
     if (CLASS_SPECIFIER_STATUS_IDENTIFIER !=

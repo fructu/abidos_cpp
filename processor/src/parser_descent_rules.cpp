@@ -60,6 +60,7 @@ int c_parser_descent::translation_unit(void)
     if (1 == declaration_seq_opt(trace_node)) {
         return 1;
     }
+
     /*
      * if( 1 == error_recover(trace_node) ) { return 1; }
      */
@@ -75,6 +76,47 @@ int c_parser_descent::translation_unit(void)
     return 0;
 }
 
+/*
+ * extern "C" {
+ * }
+ *
+ */
+int c_parser_descent::extern_c(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "extern_c");
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(EXTERN, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not(STRING, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('{', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    if (0 == declaration_seq_opt(trace_node)) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    token_next(trace_node.get_tab());
+    if ( token_is_not('}', trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    return 1;
+}
 /*----------------------------------------------------------------------
  * Expressions.
  *----------------------------------------------------------------------*/
@@ -485,6 +527,10 @@ int c_parser_descent::declaration(c_trace_node trace_node)
 
     if ( 1 == is_eof(trace_node) ) {
         return 0;
+    }
+
+    if (1 == extern_c(trace_node)) {
+        return 1;
     }
 
     if (1 == preprocessor(trace_node)) {

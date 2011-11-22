@@ -405,7 +405,8 @@ abidos
     working/abidos/processor/src$ ln -s ../../preprocessor/ts.h preprocessor_ts.h
 -[v] fix parsing int *a, *b;
 -[] fix parsing int *a, *b, c;
--[] fix compile extern "C" { }
+-[v] fix compile extern "C" { }
+  cat out/trace_t042.cpp.gv | dot -Tpng > out/trace_t042.cpp.gv.png; eog out/trace_t042.cpp.gv.png
 -[v] fix     
     typedef union {
           int number;
@@ -418,3 +419,4 @@ abidos
     } YYLVAL;
 -[v] fix NO_CLASS_NAME#1 must increase, it was done see t027.cpp
 -[v] fix t027 herence from typedef
+

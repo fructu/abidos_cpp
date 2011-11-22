@@ -336,6 +336,7 @@ private:
     // Translation unit.
     // this is the start rule in yacc
     int translation_unit(void);
+    int extern_c(c_trace_node trace_node);
 
     // Expressions
     int id_expression(c_trace_node trace_node);

@@ -397,13 +397,8 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
     string s1 = colon_colon_substitution(symbol.token.text);
     string s2 = colon_colon_substitution(symbol.typedef_points_to);
 
-    printf("###### mark_1a  [%s->%s]\n"
-            ,s1.c_str()
-            ,s2.c_str()
-    );
-
-    if( 0 == s2.size() ) {
-      return;
+    if ( 0 == s2.size() ) {
+        return;
     }
 
     fprintf(f_out, "  /*[%s] -> [%s]*/", s2.c_str(),
