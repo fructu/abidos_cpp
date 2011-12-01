@@ -421,4 +421,7 @@ abidos
 -[v] fix t027 herence from typedef
 -[v] creating links to real code in test dir
    hevia@vulcano:~/working/abidos/processor/test$ ../scripts/create_links.pl
-
+-[] do script to parse make_output and create a file with the sources files and his
+    -Idirs  abidos_make_process.pl
+-[] do abidos_make_process.pl use .abidos
+-[] do abidos_make_process.pl change dir when make do it
