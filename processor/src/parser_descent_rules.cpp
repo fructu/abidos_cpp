@@ -19,6 +19,7 @@
 
 #include "semantic.h"
 #include "trace.h"
+#include "options.h"
 /*----------------------------------------------------------------------
  * error_recover.
  *----------------------------------------------------------------------*/
@@ -67,7 +68,9 @@ int c_parser_descent::translation_unit(void)
     c_context_tokens context_tokens(context);
     token_next(trace_node.get_tab());
     if (0 == token_get()) {
-        printf("translation_unit() -> EOF\n");
+        if (1 == options.verbose_flag) {
+            printf("translation_unit() -> EOF\n");
+        }
         return 1;
     }
     context = context_tokens.restore();
@@ -506,7 +509,9 @@ int c_parser_descent::declaration_seq(c_trace_node trace_node)
     int result = 0;
 
     while (1 == declaration(trace_node)) {
-        printf("## while declaration [ok] -------------------------------------------------------------------\n\n");
+        if (1 == options.verbose_flag) {
+            printf("## while declaration [ok] -------------------------------------------------------------------\n\n");
+        }
         tokens_vector_clear();
         result = 1;
     }
@@ -619,7 +624,9 @@ int c_parser_descent::simple_declaration(c_trace_node trace_node)
     token_next(trace_node.get_tab());
 
     // functions with body does not have ; in the end
-    printf("\n\n#### context.declarator.has_body[%d]\n\n",context.declarator.has_body);
+    if (1 == options.verbose_flag) {
+        printf("\n\n#### context.declarator.has_body[%d]\n\n",context.declarator.has_body);
+    }
 
     if ( 1 == context.declarator.has_body ) {
         context.declarator.has_body = 0;
@@ -1396,8 +1403,9 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
         context.class_name_declaration = class_name_previous;
         return 0;
     }
-
-    printf("%s## class_specifier {\n", trace_node.get_tab().c_str());
+    if (1 == options.verbose_flag) {
+        printf("%s## class_specifier {\n", trace_node.get_tab().c_str());
+    }
 
     // we need to know what class is processing
     /*
@@ -1430,8 +1438,9 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
     if ( token_is('}', trace_node) ) {
-
-        printf("%s## class_specifier }\n", trace_node.get_tab().c_str());
+        if (1 == options.verbose_flag) {
+            printf("%s## class_specifier }\n", trace_node.get_tab().c_str());
+        }
 
         context.is_typedef = was_typedef;
         if ( 1 == context.is_typedef) {
@@ -1910,7 +1919,8 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
 
     token_next(trace_node.get_tab());
-    tokens_vector_print_from_actual();
+//##
+//    tokens_vector_print_from_actual();
     if ( token_is_not(TEMPLATE, trace_node) ) {
         context = context_tokens.restore();
         return 0;
@@ -2072,8 +2082,10 @@ int c_parser_descent::template_id(c_trace_node trace_node)
     if (p_symbol) {
         if (p_symbol->type != 0) {
             // return symbol.type;
-            printf("## next_token found symbol [%s]",
-                   yytext);
+            if (1 == options.verbose_flag) {
+                printf("## next_token found symbol [%s]",
+                       yytext);
+            }
             if ( 1 == p_symbol->is_template ) {
                 context.is_template_instantation = 1;
                 context.map_template_parameter = p_symbol->map_template_parameter;
@@ -2538,7 +2550,8 @@ int c_parser_descent::declarator(c_trace_node trace_node)
 int c_parser_descent::direct_declarator(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "direct_declarator");
-    tokens_vector_print_from_actual();
+//##
+//    tokens_vector_print_from_actual();
 
 //  c_context_tokens qualified_id_context(context);
 //  qualified_id_context = context;
@@ -2555,11 +2568,17 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
             token_next(trace_node.get_tab());
             if ( token_is('(', trace_node) ) {
                 if (1 == parameter_declaration_clause(trace_node)) {
-                    printf("### 1 == parameter_declaration_clause(trace_node)\n");
+                    if (1 == options.verbose_flag) {
+                        printf("### 1 == parameter_declaration_clause(trace_node)\n");
+                    }
                 } else  if (1 == declarator(trace_node)) {
-                    printf("### 1 == declarator(trace_node)\n");
+                    if (1 == options.verbose_flag) {
+                        printf("### 1 == declarator(trace_node)\n");
+                    }
                 } else {
-                    printf("### no, we are not in a member function !\n");
+                    if (1 == options.verbose_flag) {
+                        printf("### no, we are not in a member function !\n");
+                    }
                     context = context_tokens.restore();
                     return 0;
                 }
@@ -2574,7 +2593,9 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 token_next(trace_node.get_tab());
 
                 if ( token_is(';', trace_node) ) {
-                    printf("### yes we are in a function !\n");
+                    if (1 == options.verbose_flag) {
+                        printf("### yes we are in a function !\n");
+                    }
                     semantic.declarator_insert(trace_node.get_tab(), context);
                     // yes i restore here to consume ';' more up in the
                     // tree
@@ -2584,7 +2605,9 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 // this is posible:
                 // int f1(void), f2(void);
                 if ( token_is(',', trace_node) ) {
-                    printf("### yes we are in a function !\n");
+                    if (1 == options.verbose_flag) {
+                        printf("### yes we are in a function !\n");
+                    }
                     semantic.declarator_insert(trace_node.get_tab(), context);
                     // yes i restore here to consume ',' more up in the
                     // tree

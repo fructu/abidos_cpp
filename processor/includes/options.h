@@ -24,6 +24,9 @@ struct c_options {
     int test_all_tokens_consumed_flag;
 
     char file[FILE_NAME_LEN];
+    char file_loader[FILE_NAME_LEN];
+
+    int loader_flag;
 
     c_options();
     void proccess(int argc, char *argv[]);

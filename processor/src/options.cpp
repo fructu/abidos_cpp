@@ -18,7 +18,7 @@
 
 #include "options.h"
 
-using namespace std;
+//using namespace std;
 
 c_options::c_options()
 {
@@ -26,10 +26,12 @@ c_options::c_options()
     test_original_flag = 0;
     ts_show_flag = 0;
     test_all_tokens_consumed_flag = 0;
+    loader_flag = 0;
 
     int i = 0;
     for (i = 0; i < FILE_NAME_LEN; ++i) {
         file[i] = '\0';
+        file_loader[i] = '\0';
     }
 }
 
@@ -54,11 +56,7 @@ c_options::proccess(int argc, char *argv[])
              * These options don't set a flag. We distinguish them by
              * their indices.
              */
-            {"add", no_argument, 0, 'a'},
-            {"append", no_argument, 0, 'b'},
-            {"delete", required_argument, 0, 'd'},
-            {"create", required_argument, 0, 'c'},
-            {"file", required_argument, 0, 'f'},
+            {"loader", required_argument, 0, 'l'},
             {0, 0, 0, 0}
         };
         /*
@@ -88,24 +86,10 @@ c_options::proccess(int argc, char *argv[])
             printf("\n");
             break;
 
-        case 'a':
-            puts("option -a\n");
-            break;
-
-        case 'b':
-            puts("option -b\n");
-            break;
-
-        case 'c':
-            printf("option -c with value `%s'\n", optarg);
-            break;
-
-        case 'd':
-            printf("option -d with value `%s'\n", optarg);
-            break;
-
-        case 'f':
-            printf("option -f with value `%s'\n", optarg);
+        case 'l':
+            printf("option -l with value '%s'\n", optarg);
+            sprintf(file_loader, "%s", optarg);
+            loader_flag = 1;
             break;
 
         case '?':

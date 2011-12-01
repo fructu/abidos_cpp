@@ -12,6 +12,7 @@ OBJS = options.o \
 	generator_class_diagram.o \
 	generator_original.o \
 	ts.o \
+	loader.o \
 	main.o
 
 INCLUDES=../includes
@@ -96,6 +97,15 @@ execute: $(EXECUTABLE)
 	./$(EXECUTABLE) --verbose --ts_show ../test/$(FILE_TEST)
 	cat ../python/out_begin.py > ../out/out_run.py
 	cat ../out/out_$(FILE_TEST).gv >> ../out/out_run.py
+	cat ../python/out_end.py >> ../out/out_run.py
+	chmod +x ../out/out_run.py
+	../out/out_run.py
+
+loader: $(EXECUTABLE) abidos_files.txt
+	cp ../python/xdot2.py ../out/
+	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader abidos_files.txt
+	cat ../python/out_begin.py > ../out/out_run.py
+	cat ../out/out_abidos_files.txt.gv >> ../out/out_run.py
 	cat ../python/out_end.py >> ../out/out_run.py
 	chmod +x ../out/out_run.py
 	../out/out_run.py

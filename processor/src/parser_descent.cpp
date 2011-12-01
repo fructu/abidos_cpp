@@ -21,6 +21,7 @@
 #include "generator_original.h"
 #include "trace.h"
 #include "semantic.h"
+#include "loader.h"
 /*----------------------------------------------------------------------------*/
 /*
   class_name = "A::B"
@@ -215,7 +216,8 @@ void c_parser_descent::token_print(void)
         exit(-1);
     }
 
-    printf(" line[%d] yy_actual=[%3d] ", yylineno, token_get());
+    printf(" file[%s] line[%d] yy_actual=[%3d] "
+           , lex_file_name , yylineno, token_get());
     printf("-> yytokens[%s] ", yytokens[token_get()]);
     printf(" token.text[%s]\n",
            tokens_vector[context.i_token].text.c_str());
@@ -457,12 +459,14 @@ void c_parser_descent::token_next(string tab)
     int t = 0;
     int get_from_lex = 0;
 
-    printf("%s## token_next file[%s]", tab.c_str(), lex_file_name);
+//    printf("%s## token_next file[%s]", tab.c_str(), lex_file_name);
 
     if (!((0 <= context.i_token)
             && (context.i_token < tokens_vector.size()))) {
-        printf
-        (" c_parser_descent::token_next() -> (context.i_token out of vector)");
+        /*##
+                printf
+                (" c_parser_descent::token_next() -> (context.i_token out of vector)");
+        */
         // context.clear();
         // we don't want loose other information of context
         context.i_token = 0;
@@ -475,13 +479,14 @@ void c_parser_descent::token_next(string tab)
         if (context.i_token < tokens_vector.size()) {
             if (1 == context.just_reloaded) {
                 context.just_reloaded = 0;
-                printf("%s## just_reloaded == 1\n", tab.c_str());
+//                printf("%s## just_reloaded == 1\n", tab.c_str());
                 return;
             }
 
             if (context.i_token < (tokens_vector.size() - 1)) {
                 ++context.i_token;
-                token_print();
+//##
+//                token_print();
 
                 return;
             }
@@ -508,8 +513,8 @@ void c_parser_descent::token_next(string tab)
         tokens_vector.push_back(token);
 
         context.i_token = (tokens_vector.size() - 1);
-
-        token_print();
+//##
+//        token_print();
 
         return;
     }
@@ -531,8 +536,9 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
     if (p_symbol) {
         if (p_symbol->type != 0) {
             // return symbol.type;
-            printf("%s## next_token found symbol [%s]",
-                   tab.c_str(), yytext);
+            /*            printf("%s## next_token found symbol [%s]",
+                               tab.c_str(), yytext);
+            */
             if ( 1 == p_symbol->is_template ) {
                 token.id = TEMPLATE_NAME;
             } else {
@@ -724,9 +730,92 @@ void c_parser_descent::yyparse(char *file_name)
     lex_file_end();
     yylex_destroy();
 }
-
 /*----------------------------------------------------------------------------*/
+void c_parser_descent::yyparse_loader(char *file_loader)
+{
+    ts.set();
+    char file_name[1024] = {0};
 
+    loader.process_file(file_loader);
+    loader.begin();
+
+    if ( 1 == loader.file_get(file_name) ) {
+        if (1 != lex_file_init(file_name)) {
+            printf("\nERROR: yyparse_loader did not can open [%s]\n", file_name);
+            return;
+        }
+        translation_unit();
+        loader.next();
+    }
+
+
+    while ( 1 == loader.file_get(file_name) ) {
+        /*##
+          if (1 != lex_file_init(file_name)) {
+              printf("\nERROR: yyparse_loader did not can open [%s]\n", file_name);
+              return;
+          }
+          */
+
+        if (1 != lex_file_push( file_name ) ) {
+            printf("\nERROR: yyparse_loader did not can open [%s]\n", file_name);
+            return;
+        }
+
+        translation_unit();
+        loader.next();
+    }
+
+    if (1 == options.test_all_tokens_consumed_flag) {
+        if (token_get() == 0) {
+            printf("##ALL_TOKENS_CONSUMED\n");
+        } else {
+            printf
+            ("\n##---------------- rest of tokens has not been consumed -------------------------------\n");
+            printf("##{\n");
+            while (token_get() != 0) {
+                token_next("");
+            }
+            printf("##}\n");
+        }
+    }
+
+
+    if (1 == options.ts_show_flag) {
+        ts.print();
+    }
+
+    char str_temp[100] = { '\0' };
+    char file_gv[100];
+    extract_file_from_path(str_temp, file_loader);
+
+    /*## todo
+      this should pass in main parameter
+    */
+    sprintf(file_gv, "../out/out_%s.gv", str_temp);
+    c_generator_class_diagram generator;
+
+    generator.run(file_gv);
+
+    if (1 == options.test_original_flag) {
+        char file_original[100];
+        sprintf(file_original, "../out/out_%s", str_temp);
+        c_generator_original generator_original;
+        generator_original.run(file_original);
+    }
+
+    if (1 == options.verbose_flag) {
+        char file_original[100];
+        sprintf(file_original, "../out/trace_%s.gv", str_temp);
+        c_generator_trace generator_trace_graph;
+        generator_trace_graph.run(file_original);
+    }
+
+    ts.unset();
+    lex_file_end();
+    yylex_destroy();
+}
+/*----------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------*/
 int c_parser_descent::test_01(void)
 {

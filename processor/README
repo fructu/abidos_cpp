@@ -425,3 +425,9 @@ abidos
     -Idirs  abidos_make_process.pl
 -[] do abidos_make_process.pl use .abidos
 -[] do abidos_make_process.pl change dir when make do it
+-[] in options.cpp fail in this line
+  -using namespace std;
+  +//using namespace std;
+-[] in trace.cpp fail in this line
+   int c_trace_node::order_static = 0;
+

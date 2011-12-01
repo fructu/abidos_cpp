@@ -320,6 +320,7 @@ private:
 
     // preprocesssor
     void push_file(const char * f);
+    void push_file_loader(const char * f);
     void push_sharp_file(const char * f);
     int preprocessor(c_trace_node trace_node);
     int preprocessor_include(c_trace_node trace_node);
@@ -445,6 +446,7 @@ public:
     c_parser_descent();
     ~c_parser_descent();
     void yyparse(char *file_name);
+    void yyparse_loader(char *file_name);
 
     /*
      * tests

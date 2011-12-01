@@ -447,8 +447,8 @@ int lex_file_push(const char *f)
 {
     unsigned len = strlen(f);
     unsigned i = 0;
-
-      printf("##:    lex_file_push [%s]\n",f);
+//##
+//      printf("##:    lex_file_push [%s]\n",f);
 
     if(len < 3){
       printf("     error lex_file_push file too short [%s]\n",f);

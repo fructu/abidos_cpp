@@ -23,6 +23,7 @@
 #include "lex_yacc.h"
 
 #include "preprocessor_ts.h"
+#include "loader.h"
 #include <sys/param.h>
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::push_file(const char * f)
@@ -70,25 +71,65 @@ void c_parser_descent::push_file(const char * f)
 
     if (1 != lex_file_push( file_included.full() ) ) {
 //      if (1 != lex_file_push( file_without_commillas ) ) {
-        printf("\nERROR:c_parser_descent::preprocessor_include[%s]\n"
+        printf("\nERROR:c_parser_descent::push_file[%s]\n"
                , file_included.full());
         exit(-1);
 //      }
     }
 }
 /*----------------------------------------------------------------------------*/
+void c_parser_descent::push_file_loader(const char * f)
+{
+    char file_without_commillas[ID_MAX_LEN]={'\0'};
+
+    sprintf(file_without_commillas,"%s",f);
+    str_drop_char(file_without_commillas, '\"');
+
+    if ( 1 != loader.include_file_get(file_without_commillas) ) {
+        printf("\nERROR:c_parser_descent::push_file_loader[%s]\n"
+               , file_without_commillas );
+        exit(-1);
+    }
+
+    if (1 != lex_file_push( file_without_commillas ) ) {
+        printf("\nERROR:c_parser_descent::push_file_loader[%s]\n"
+               , file_without_commillas );
+        exit(-1);
+    }
+}
+/*----------------------------------------------------------------------------*/
 void c_parser_descent::push_sharp_file(const char * f)
 {
     if (strcmp("vector", f) == 0) {
-        push_file("../test_includes/std.h");
+        if ( 1 == options.loader_flag) {
+            push_file_loader("../test_includes/std.h");
+        } else {
+            push_file("../test_includes/std.h");
+        }
     } else if (strcmp("map", f) == 0) {
-        push_file("../test_includes/std.h");
+        if ( 1 == options.loader_flag) {
+            push_file_loader("../test_includes/std.h");
+        } else {
+            push_file("../test_includes/std.h");
+        }
     } else if (strcmp("string", f) == 0) {
-        push_file("../test_includes/std.h");
+        if ( 1 == options.loader_flag) {
+            push_file_loader("../test_includes/std.h");
+        } else {
+            push_file("../test_includes/std.h");
+        }
     } else if (strcmp("stdio.h", f) == 0) {
-        push_file("../test_includes/stdio.h");
+        if ( 1 == options.loader_flag) {
+            push_file_loader("../test_includes/stdio.h");
+        } else {
+            push_file("../test_includes/stdio.h");
+        }
     } else if (strcmp("inttypes.h", f) == 0) {
-        push_file("../test_includes/inttypes.h");
+        if ( 1 == options.loader_flag) {
+            push_file_loader("../test_includes/inttypes.h");
+        } else {
+            push_file("../test_includes/inttypes.h");
+        }
     }
 }
 /*----------------------------------------------------------------------------*/
@@ -171,12 +212,14 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
 
         char f[1024];
         get_string_between_sharps(f);
-        printf("####:: mark_7 f [%s]\n",f);
         push_sharp_file(f);
         return 1;
     }
-
-    push_file(c_token_get().text.c_str());
+    if ( 1 == options.loader_flag) {
+        push_file_loader(c_token_get().text.c_str());
+    } else {
+        push_file(c_token_get().text.c_str());
+    }
 
     return 1;
 }

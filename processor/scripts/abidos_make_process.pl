@@ -37,7 +37,7 @@ sub p1
 	      push(@directories, $1);
 	    }
 
-      if( $_ = /[^\-]([\w\d\-]+)\.(cpp|cc)/) {
+      if( $_ = /[^\-]([\S]+)\.(cpp|cc)/) {
         my $str = join(':', @directories);
         print f_out "$1.$2:$str\n";
       } else {
