@@ -27,10 +27,9 @@ using namespace std;
 
 typedef vector<string> t_vector_directories;
 
-struct c_loader_file
-{
-  string name;
-  t_vector_directories vector_directories;
+struct c_loader_file {
+    string name;
+    t_vector_directories vector_directories;
 };
 
 typedef vector<c_loader_file> t_vector_files;
@@ -38,21 +37,21 @@ typedef vector<c_loader_file> t_vector_files;
 class c_loader
 {
 private:
-  t_vector_files vector_files;
+    t_vector_files vector_files;
 
-  void process_line(char * line);
-  
-  size_t position_actual;
+    void process_line(char * line);
+
+    size_t position_actual;
 public:
-  void print(void);
-  void process_file(char * file_loader);
-  
-  void begin(void);
-  void next(void);
-  int  file_get(char * file_name);
+    void print(void);
+    void process_file(char * file_loader);
 
-  //change file_name too
-  int include_file_get(char * file_name);
+    void begin(void);
+    void next(void);
+    int  file_get(char * file_name);
+
+    //change file_name too
+    int include_file_get(char * file_name);
 };
 
 //typedef vector<c_trace_node> t_vector_trace_nodes;

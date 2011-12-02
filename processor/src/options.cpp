@@ -27,6 +27,7 @@ c_options::c_options()
     ts_show_flag = 0;
     test_all_tokens_consumed_flag = 0;
     loader_flag = 0;
+    no_std_flag = 0;
 
     int i = 0;
     for (i = 0; i < FILE_NAME_LEN; ++i) {
@@ -51,6 +52,7 @@ c_options::proccess(int argc, char *argv[])
             {"ts_show", no_argument, &ts_show_flag, 1},
             {"test_all_tokens_consumed_flag", no_argument,
              &test_all_tokens_consumed_flag, 1},
+            {"no_std", no_argument, &no_std_flag, 1},
 
             /*
              * These options don't set a flag. We distinguish them by

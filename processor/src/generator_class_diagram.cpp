@@ -13,9 +13,21 @@
 
 ------------------------------------------------------------------------------*/
 #include <stdio.h>
+#include <string.h>
 #include "generator_class_diagram.h"
 #include "lex_yacc.h"
+#include "options.h"
+/*----------------------------------------------------------------------------*/
+int is_banned(string str)
+{
+    const char * p_str = str.c_str();
 
+    if ( NULL != strstr(p_str, "std__") ) {
+        return 1;
+    }
+
+    return 0;
+}
 /*----------------------------------------------------------------------------*/
 string sharps_substitution(string source)
 {
@@ -141,8 +153,6 @@ void c_generator_class_diagram::typedef_label(c_symbol & symbol)
 /*
   this generate relations to things like this:
     typedef map < string, c_symbol > t_symbols;
-
-  ## todo maybe this is too verbose in some cases -> put parameter line
 */
 void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symbol & symbol)
 {
@@ -176,6 +186,16 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
 
             string s1 = colon_colon_substitution(symbol.token.text);
             string s2 = colon_colon_substitution(decl.token.text);
+
+            if ( 1 == options.no_std_flag) {
+                if ( 1 == is_banned(s1 ) ) {
+                    continue;
+                }
+
+                if ( 1 == is_banned(s2 ) ) {
+                    continue;
+                }
+            }
 
             fprintf(f_out, "  /*%s->%s*/", s1.c_str(),
                     s2.c_str());
@@ -354,6 +374,16 @@ void c_generator_class_diagram::members_compositions_aggregations(
         string s1 = colon_colon_substitution(symbol.token.text);
         string s2 = colon_colon_substitution(class_name);
 
+        if ( 1 == options.no_std_flag) {
+            if ( 1 == is_banned(s1 ) ) {
+                continue;
+            }
+
+            if ( 1 == is_banned(s2 ) ) {
+                continue;
+            }
+        }
+
         if ( 0 == is_ptr ) {
             fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"diamond\"];\n"
                     , s1.c_str()
@@ -396,6 +426,16 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
 
     string s1 = colon_colon_substitution(symbol.token.text);
     string s2 = colon_colon_substitution(symbol.typedef_points_to);
+
+    if ( 1 == options.no_std_flag) {
+        if ( 1 == is_banned(s1 ) ) {
+            return;
+        }
+
+        if ( 1 == is_banned(s2 ) ) {
+            return;
+        }
+    }
 
     if ( 0 == s2.size() ) {
         return;

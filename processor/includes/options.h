@@ -22,6 +22,7 @@ struct c_options {
     int test_original_flag;
     int ts_show_flag;
     int test_all_tokens_consumed_flag;
+    int no_std_flag;
 
     char file[FILE_NAME_LEN];
     char file_loader[FILE_NAME_LEN];

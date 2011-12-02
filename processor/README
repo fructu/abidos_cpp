@@ -423,11 +423,16 @@ abidos
    hevia@vulcano:~/working/abidos/processor/test$ ../scripts/create_links.pl
 -[] do script to parse make_output and create a file with the sources files and his
     -Idirs  abidos_make_process.pl
+    abidos/processor/src$ make all &> make_ouput.txt
+    abidos/processor/src$ ../scripts/abidos_make_process.pl
+    make loader
 -[] do abidos_make_process.pl use .abidos
 -[] do abidos_make_process.pl change dir when make do it
 -[] in options.cpp fail in this line
   -using namespace std;
   +//using namespace std;
--[] in trace.cpp fail in this line
+-[v] fixed in trace.cpp fail in this line
    int c_trace_node::order_static = 0;
+   cat out/trace_t043.cpp.gv | dot -Tpng > out/trace_t043.cpp.gv.png; eog out/trace_t043.cpp.gv.png
+-[v] option --no_std --> does not show std classes in diagram
 

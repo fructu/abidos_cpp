@@ -88,10 +88,11 @@ debug_graph_put:
 #FILE_TEST=t038.cpp
 #FILE_TEST=t014.cpp
 #FILE_TEST=trace.cpp
-FILE_TEST=parser_descent_rules.cpp
+#FILE_TEST=parser_descent_rules.cpp
 #FILE_TEST=parser_descent.h
 #FILE_TEST=generator_class_diagram.cpp
 #FILE_TEST=symbols_table.cpp
+FILE_TEST=t043.cpp
 execute: $(EXECUTABLE)
 	cp ../python/xdot2.py ../out/
 	./$(EXECUTABLE) --verbose --ts_show ../test/$(FILE_TEST)
@@ -103,7 +104,8 @@ execute: $(EXECUTABLE)
 
 loader: $(EXECUTABLE) abidos_files.txt
 	cp ../python/xdot2.py ../out/
-	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader abidos_files.txt
+	./$(EXECUTABLE) --test_all_tokens_consumed_flag --no_std --loader abidos_files.txt
+#	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader abidos_files.txt
 	cat ../python/out_begin.py > ../out/out_run.py
 	cat ../out/out_abidos_files.txt.gv >> ../out/out_run.py
 	cat ../python/out_end.py >> ../out/out_run.py

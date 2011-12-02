@@ -606,6 +606,8 @@ int c_parser_descent::simple_declaration(c_trace_node trace_node)
         semantic.clear_decl_specifier();
     }
 
+    string class_name_declaration = context.class_name_declaration;
+
     decl_specifier_seq_opt(trace_node);	// long int a = 0; this is 'long
     // int'
     init_declarator_list_opt(trace_node);	// long int a = 0; this is 'a = 0'
@@ -635,6 +637,7 @@ int c_parser_descent::simple_declaration(c_trace_node trace_node)
     } else {
         if ( token_is(';', trace_node) ) {
 //          tokens_vector_clear();
+            context.class_name_declaration = class_name_declaration;
             return 1;
         }
     }
