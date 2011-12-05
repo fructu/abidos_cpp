@@ -47,6 +47,12 @@ dot ../out/out_test_symbols_table.h.gv -Tsvg -o ../out/out_test_symbols_table.h.
 7. Either recent project news or a pointer to a file containing same (usually NEWS).
 8. Project mailing list addresses.
 
+#abidos parsing and showing his own classes:
+make clean
+make all &> make_out.txt
+make loader
+cat ../out/out_abidos_files.txt.gv | dot -Tpng > ../out/out_abidos_files.txt.gv.png; eog  ../out/out_abidos_files.txt.gv.png
+
 todo
   -[] clear context when class has been processed
   -[v] put other field to know when a type is a class or a struct
@@ -396,7 +402,7 @@ abidos
   i workarround for the moment... :-)
 -[v] parsing trace.cpp fix this
     int c_trace_node::order_static = 0;
--[] lex in trace.cpp have several errors with characters ' \ ...
+-[] lex in trace.cpp have several errors with characters ' \ ... '
     using scanner string from http://scottmcpeak.com/elkhound/sources/elsa/cc.lex
 -[v] get the string formation from elsa http://scottmcpeak.com/elkhound/sources/elsa/cc.lex
 -[v] parsing enum in enum t_class_specifier_status class_specifier_status;
@@ -421,7 +427,7 @@ abidos
 -[v] fix t027 herence from typedef
 -[v] creating links to real code in test dir
    hevia@vulcano:~/working/abidos/processor/test$ ../scripts/create_links.pl
--[] do script to parse make_output and create a file with the sources files and his
+-[v] do script to parse make_output and create a file with the sources files and his
     -Idirs  abidos_make_process.pl
     abidos/processor/src$ make all &> make_ouput.txt
     abidos/processor/src$ ../scripts/abidos_make_process.pl
@@ -435,4 +441,5 @@ abidos
    int c_trace_node::order_static = 0;
    cat out/trace_t043.cpp.gv | dot -Tpng > out/trace_t043.cpp.gv.png; eog out/trace_t043.cpp.gv.png
 -[v] option --no_std --> does not show std classes in diagram
-
+-[v] in abidos_make_process.pl drop final /
+-[v] in abidos_make_process.pl do case ../../preprocessor/ts.cpp:../../preprocessor:../includes

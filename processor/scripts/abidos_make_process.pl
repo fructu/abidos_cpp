@@ -8,7 +8,7 @@ use strict;
 
 sub p1
 {
-  my $file_input_name = "make_output.txt";
+  my $file_input_name = "make_out.txt";
   my $file_output_name = "abidos_files.txt";
   
   open(f_in,"< $file_input_name") or die("error open < $file_input_name");
@@ -34,14 +34,27 @@ sub p1
       #we are in a line like this:
       #g++ -Wall -c -g -I../includes trace.cpp
 	    while ($_ =~ m/-I([\S]+)/g) {
-	      push(@directories, $1);
+	      my $d = $1;
+	      if( $d =~ /\/$/) {
+	        chop($d);
+        }
+
+        push(@directories, $d);
 	    }
 
       if( $_ = /[^\-]([\S]+)\.(cpp|cc)/) {
-        my $str = join(':', @directories);
-        print f_out "$1.$2:$str\n";
+        #../../preprocessor/ts.cpp:../../preprocessor:../includes:.
+        my $file = $1.'.'.$2;
+	      if ($file =~ m/([\S]+)\/([\S]+)\.(cpp|cc)/g) {
+          push(@directories, $1);
+          my $str = join(':', @directories);
+          print f_out "$1/$2.$3:$str\n";
+	      } else {
+          my $str = join(':', @directories);
+          print f_out "$1.$2:$str\n";
+        }
       } else {
-        print f_out "#error [$l]\n";
+        print f_out "#no cpp file [$l]\n";
       }
     }
   }

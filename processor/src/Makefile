@@ -24,7 +24,7 @@ LFLAGS = -Wall $(DEBUG) -I$(INCLUDES)
 EXECUTABLE=abidos
 SCRIPTS_DIR=../scripts/
 
-all: clean check_directories $(EXECUTABLE) test_run
+all: check_directories $(EXECUTABLE) test_run
 
 indent_run: clean $(EXECUTABLE) $(SCRIPTS_DIR)check_indent.sh $(SCRIPTS_DIR)indent_run.sh
 	$(SCRIPTS_DIR)check_indent.sh
@@ -102,7 +102,9 @@ execute: $(EXECUTABLE)
 	chmod +x ../out/out_run.py
 	../out/out_run.py
 
-loader: $(EXECUTABLE) abidos_files.txt
+#loader: $(EXECUTABLE) abidos_files.txt
+loader:
+	../scripts/abidos_make_process.pl
 	cp ../python/xdot2.py ../out/
 	./$(EXECUTABLE) --test_all_tokens_consumed_flag --no_std --loader abidos_files.txt
 #	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader abidos_files.txt
@@ -131,5 +133,5 @@ clean:
 	rm -f *.orig
 	rm -f *.pyc
 	rm -f ../test_out/*.pyc
-
-
+	rm -f make_out.txt
+	rm -f abidos_files.txt
