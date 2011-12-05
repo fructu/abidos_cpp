@@ -6,10 +6,32 @@
 #-------------------------------------------
 use strict;
 
-sub p1
+use strict;
+my $dir = '.abidos';
+
+sub create_directories
+{
+  my @directories = ($dir);
+
+  foreach (@directories) {
+    print "  checking existence $_ ...";
+
+    unless(-d $_){
+        print "creating...";
+        mkdir $_ or die "  Couldn't create dir: [$_]\n";
+        print "[ok]\n";
+    }
+    else
+    {
+        print "[ok]\n";
+    }
+  }
+}
+
+sub generate_loader_file
 {
   my $file_input_name = "make_out.txt";
-  my $file_output_name = "abidos_files.txt";
+  my $file_output_name = "$dir/files";
   
   open(f_in,"< $file_input_name") or die("error open < $file_input_name");
   my @raw_data=<f_in>;
@@ -63,4 +85,31 @@ sub p1
   close(f_out);
 }
 
-p1;
+sub process_project
+{
+  system "cp /opt/abidos/xdot2.py .abidos/";
+  system "/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --loader .abidos/files";
+  system "cp /opt/abidos/out_files.gv .abidos/";
+  system "cat /opt/abidos/out_begin.py > .abidos/out_run.py";
+  system "cat .abidos/out_files.gv >> .abidos/out_run.py";
+  system "cat /opt/abidos/out_end.py >> .abidos/out_run.py";
+  system "chmod +x .abidos/out_run.py";
+  system ".abidos/out_run.py";
+}
+
+sub main
+{
+  my $num_args = $#ARGV;
+
+  if ($num_args != 0) {
+    print "\n no --debug mode\n";
+  }
+
+  create_directories();
+  generate_loader_file();
+  if ($num_args != 0) {
+    process_project();
+  }
+}
+
+main();

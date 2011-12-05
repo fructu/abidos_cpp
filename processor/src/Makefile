@@ -104,15 +104,16 @@ execute: $(EXECUTABLE)
 
 #loader: $(EXECUTABLE) abidos_files.txt
 loader:
-	../scripts/abidos_make_process.pl
-	cp ../python/xdot2.py ../out/
-	./$(EXECUTABLE) --test_all_tokens_consumed_flag --no_std --loader abidos_files.txt
-#	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader abidos_files.txt
-	cat ../python/out_begin.py > ../out/out_run.py
-	cat ../out/out_abidos_files.txt.gv >> ../out/out_run.py
-	cat ../python/out_end.py >> ../out/out_run.py
-	chmod +x ../out/out_run.py
-	../out/out_run.py
+	../scripts/abidos_make_process.pl --debug
+	cp ../python/xdot2.py .abidos/
+	./$(EXECUTABLE) --test_all_tokens_consumed_flag --no_std --loader .abidos/files
+#	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader .abidos/files.txt
+	cp ../out/out_files.gv .abidos/
+	cat ../python/out_begin.py > .abidos/out_run.py
+	cat .abidos/out_files.gv >> .abidos/out_run.py
+	cat ../python/out_end.py >> .abidos/out_run.py
+	chmod +x .abidos/out_run.py
+	.abidos/out_run.py
 
 debug_drop:
 	cp parser_descent_rules.cpp parser_descent_rules.cpp.debug.bk
@@ -134,4 +135,14 @@ clean:
 	rm -f *.pyc
 	rm -f ../test_out/*.pyc
 	rm -f make_out.txt
-	rm -f abidos_files.txt
+	rm -rf .abidos
+
+install: $(EXECUTABLE)
+	rm -rf /opt/abidos
+	mkdir -p /opt/abidos
+	cp $(EXECUTABLE) /opt/abidos
+	cp ../scripts/abidos_make_process.pl /opt/abidos
+	cp ../python/out_begin.py /opt/abidos
+	cp ../python/out_end.py /opt/abidos
+	cp ../python/xdot2.py /opt/abidos
+
