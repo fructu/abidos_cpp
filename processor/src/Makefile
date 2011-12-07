@@ -49,7 +49,12 @@ $(EXECUTABLE):  $(OBJS)
 parser.c parser.h: parser.y
 	$(YACC) -dt parser.y
 	mv -f y.tab.c parser.c
-	mv -f y.tab.h $(INCLUDES)/parser.h
+	echo '#ifndef parser_h' > $(INCLUDES)/parser.h
+	echo '#define parser_h' >> $(INCLUDES)/parser.h
+	cat y.tab.h >> $(INCLUDES)/parser.h
+	echo '#endif' >> $(INCLUDES)/parser.h
+	rm -f y.tab.h
+#	mv -f y.tab.h $(INCLUDES)/parser.h
 	$(SCRIPTS_DIR)extract_symbols.pl
 	mv -f tokens.h $(INCLUDES)
 

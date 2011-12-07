@@ -308,7 +308,10 @@ void c_class_members::print(const char *tab)
 void c_class_members::insert(c_class_member member)
 {
     if ( 0 == member.token.text.size() ) {
-        printf("error c_class_members::insert() 0 == member.token.text.size()\n");
+        printf("%s:%d error c_class_members::insert() 0 == member.token.text.size()\n"
+        , member.token.file.c_str()
+        , member.token.line
+        );
         exit(-1);
     }
 
@@ -368,8 +371,11 @@ void c_symbol::process_token_text()
 
 void c_symbol::print(const char *tab)
 {
-    printf(" id[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n",
-           /*tab,*/ token.id, yytokens[token.id], token.text.c_str(), type,
+    printf("%s:%d id[%d]->[%s] text[%s] type[%d]->[%s] class_key[%d]->[%s]\n"
+           /*tab*/
+           ,token.file.c_str()
+           ,token.line
+           , token.id, yytokens[token.id], token.text.c_str(), type,
            yytokens[type], class_key, yytokens[class_key]);
     printf("%s{\n" , tab);
 
@@ -498,7 +504,9 @@ void c_symbols_table::insert(c_symbol symbol)
     // c_symbol symbol(token);
     if ( 0 != search_symbol(symbol.text) ) {
         printf
-        ("error c_symbols_table::insert(%s) symbol exists yet\n"
+        ("%s:%d error c_symbols_table::insert(%s) symbol exists yet\n"
+         , symbol.token.file.c_str()
+         , symbol.token.line
          , symbol.text.c_str());
         return;
     }
