@@ -444,7 +444,7 @@ abidos
     make loader
 -[] do abidos_make_process.pl use .abidos
 -[] do abidos_make_process.pl change dir when make do it
--[] in options.cpp fail in this line
+-[v] in options.cpp fail in this line in version d4e1ce1 works
   -using namespace std;
   +//using namespace std;
 -[v] fixed in trace.cpp fail in this line
@@ -460,11 +460,17 @@ abidos
 -[v] do uninstall
 -[v] do install fake libraris in /opt/abidos/includes
 -[v] install /opt/abidos/out_files.gv
--[] id dont apears in diagram
+-[v] id dont apears in diagram
    class Identificador
    {
 	    char id[50];
 	    int tipo;
+	 };
+	 cat .abidos/trace_t045.cpp.gv | dot -Tpng > .abidos/trace_t045.cpp.gv.png; eog .abidos/trace_t045.cpp.gv.png
+-[] put the [] in class diagrams via context.is_array -> symbol.is_array
+   class Identificador
+   {
+	    char id[50];	 
 	 };
 -[v] do parsing things like
   class Value;
