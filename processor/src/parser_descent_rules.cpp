@@ -1329,6 +1329,11 @@ int c_parser_descent::using_directive(c_trace_node trace_node)
  *   typedef class {};
  * and
  *   typedef class A t_A;
+ * and:
+ *   class A;
+ *
+ *   class A{};
+ *
  */
 // ## todo rest of rule
 int c_parser_descent::class_specifier(c_trace_node trace_node)
@@ -1349,8 +1354,11 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
         return 0;
     }
 
-    //we can get this point wihout identifer of class
-    // typedef class A t_A; in this clase
+    //we can get this point wihout identifer of class:
+    //  typedef class A t_A; in this clase
+    // or
+    //  class A;
+    //  class A {}; <-- we can are here
     // A is not a IDENTIFIER is CLASS_NAME -> enter in next if
     if ( 0 == context.class_name_declaration.size() ) {
         if ( 1 == was_typedef ) {
@@ -1392,19 +1400,39 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
             context = context_tokens_2.restore();
             context.class_name_declaration = get_class_no_name().c_str();
         } else {
-            printf("error c_parser_descent::class_specifier() class without name\n");
-            context.class_name_declaration = class_name_previous;
-            return 0;
+            //  class A;
+            //  class A {}; <-- we are in A here
+            token_next(trace_node.get_tab());
+            if ( token_is(CLASS_NAME, trace_node) ) {
+                context.class_name_declaration = c_token_get().text;
+                context.class_predeclaration = 1;
+                semantic.class_predeclaration_to_declaration(context, c_token_get());
+                context.class_predeclaration = 0;
+            } else {
+                printf("error c_parser_descent::class_specifier() class without name\n");
+                context.class_name_declaration = class_name_previous;
+                return 0;
+            }
         }
     }
+
     c_context_tokens context_tokens(context);
+    c_context_tokens context_good_way(context);
     // context.class_specifier = 1;
 
     token_next(trace_node.get_tab());
     if ( token_is_not('{', trace_node) ) {
-        context = context_tokens.restore();
-        context.class_name_declaration = class_name_previous;
-        return 0;
+        // maybe is a predeclaration:
+        //  class A;
+        if ( token_is(';', trace_node) ) {
+            context = context_good_way.restore();
+            context.class_predeclaration = 1;
+            return 1;
+        } else {
+            context = context_tokens.restore();
+            context.class_name_declaration = class_name_previous;
+            return 0;
+        }
     }
     if (1 == options.verbose_flag) {
         printf("%s## class_specifier {\n", trace_node.get_tab().c_str());

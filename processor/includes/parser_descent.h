@@ -122,6 +122,9 @@ struct c_context {
     //in preprocessor we must search in ts "#.."
     int prefix_sharp;
 
+    // class A;
+    int class_predeclaration;
+
     void print(void)
     // this is for debug
     {
@@ -173,6 +176,8 @@ struct c_context {
         is_enum_declaration = 0;
 
         prefix_sharp = 0;
+
+        class_predeclaration = 0;
     }
     void clear(void) {
         i_token = 0;
@@ -224,6 +229,8 @@ struct c_context {
         is_enum_declaration = 0;
 
 //        prefix_sharp = 0;
+
+        class_predeclaration = 0;
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -260,6 +267,8 @@ struct c_context {
         context_param.is_enum_declaration = is_enum_declaration;
 
         context_param.prefix_sharp = prefix_sharp;
+
+        context_param.class_predeclaration = class_predeclaration;
     }
 };
 

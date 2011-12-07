@@ -450,6 +450,8 @@ public:
     t_vector_template_argument vector_template_argument;
     t_map_template_argument map_template_argument;
 
+    int class_predeclaration;
+
     c_symbol() {
         text = "";
         type = 0;
@@ -468,6 +470,8 @@ public:
         is_template_instantation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
+
+        class_predeclaration = 0;
     }
 
     c_symbol(c_token token_1) {
@@ -491,6 +495,8 @@ public:
         is_template_instantation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
+
+        class_predeclaration = 0;
     }
 
     ~c_symbol() {
@@ -513,6 +519,8 @@ public:
         is_template_instantation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
+
+        class_predeclaration = 0;
     }
     void process_token_text();
     void print(const char *tab);

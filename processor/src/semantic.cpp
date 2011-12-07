@@ -65,6 +65,10 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
         //symbol.process_token_text();
     }
 
+    if ( 1 == context.class_predeclaration ) {
+        symbol.class_predeclaration = 1;
+    }
+
     if ( 0 != context.class_name_declaration.size() ) {
         string s = symbol.token.text;
         symbol.token.text = context.class_name_declaration + "::" + s;
@@ -732,6 +736,52 @@ c_semantic::namespace_declarator(c_context & context, c_token token)
     symbol.type = NAMESPACE_NAME;
 
     ts.insert(symbol);
+}
+/*----------------------------------------------------------------------------*/
+/*
+  now we are in 2
+
+  //1
+  class Value;
+
+  //2
+  class Value {
+    int v;
+  };
+
+
+  and is better have the file and the line of the point 2
+*/
+void
+c_semantic::class_predeclaration_to_declaration(c_context & context, c_token token)
+{
+    c_symbol *p_symbol =
+        ts.search_symbol(context.class_name_declaration);
+
+    if (0 == p_symbol ) {
+        printf("## c_semantic::class_predeclaration_to_declaration() context.class_name_declaration[%s] not found!\n",context.class_name_declaration.c_str());
+        return;
+    }
+
+    if (1 == options.verbose_flag) {
+        printf("## c_semantic::class_predeclaration_to_declaration() context.class_name_declaration[%s] founded\n",context.class_name_declaration.c_str());
+    }
+
+    if (0 == p_symbol->class_key) {
+        printf
+        ("error c_semantic::class_predeclaration_to_declaration()  0 == p_symbol->class_key )\n\n");
+        exit(-1);
+    }
+
+    if (0 == context.class_predeclaration ) {
+        printf
+        ("error c_semantic::class_predeclaration_to_declaration() 0 == context.class_predeclaration )\n\n");
+        exit(-1);
+    }
+
+    p_symbol->token = token;
+
+    ts.insert(*p_symbol);
 }
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;

@@ -453,7 +453,7 @@ abidos
 -[v] option --no_std --> does not show std classes in diagram
 -[v] in abidos_make_process.pl drop final /
 -[v] in abidos_make_process.pl do case ../../preprocessor/ts.cpp:../../preprocessor:../includes
--[] do make install rule
+-[v] do make install rule
     /opt/abidos/
 -[] do param to pass char * p_file_out [../out/out_files.gv]
 -[] check if any system line fail in abidos_make_process.pl
@@ -466,7 +466,7 @@ abidos
 	    char id[50];
 	    int tipo;
 	 };
--[] do parsing things like
+-[v] do parsing things like
   class Value;
 
   class A{
