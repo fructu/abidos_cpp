@@ -39,7 +39,7 @@ sub test_run_tokens_consumed
   my $f = $_[0];
 
   print " [$f]->";
-  system "./abidos --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ../test_out/out_$f.txt";
+  system "./abidos --includes ../test_includes/ --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ../test_out/out_$f.txt";
 
   my $result = is_test_ok("../test_out/out_$f.txt");
 

@@ -89,7 +89,7 @@ sub process_project
 {
   system "cp /opt/abidos/xdot2.py .abidos/";
   system "/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --loader .abidos/files";
-  system "cp /opt/abidos/out_files.gv .abidos/";
+#  system "cp /opt/abidos/out_files.gv .abidos/";
   system "cat /opt/abidos/out_begin.py > .abidos/out_run.py";
   system "cat .abidos/out_files.gv >> .abidos/out_run.py";
   system "cat /opt/abidos/out_end.py >> .abidos/out_run.py";

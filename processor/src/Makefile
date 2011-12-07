@@ -92,12 +92,13 @@ debug_graph_put:
 #FILE_TEST=parser_descent.h
 #FILE_TEST=generator_class_diagram.cpp
 #FILE_TEST=symbols_table.cpp
-FILE_TEST=t043.cpp
+FILE_TEST=t044.cpp
 execute: $(EXECUTABLE)
 	cp ../python/xdot2.py ../out/
-	./$(EXECUTABLE) --verbose --ts_show ../test/$(FILE_TEST)
+	./$(EXECUTABLE) --verbose --ts_show --includes ../test_includes/ ../test/$(FILE_TEST)
 	cat ../python/out_begin.py > ../out/out_run.py
-	cat ../out/out_$(FILE_TEST).gv >> ../out/out_run.py
+#	cat ../out/out_$(FILE_TEST).gv >> ../out/out_run.py
+	cat .abidos/out_$(FILE_TEST).gv >> ../out/out_run.py
 	cat ../python/out_end.py >> ../out/out_run.py
 	chmod +x ../out/out_run.py
 	../out/out_run.py
@@ -106,9 +107,9 @@ execute: $(EXECUTABLE)
 loader:
 	../scripts/abidos_make_process.pl --debug
 	cp ../python/xdot2.py .abidos/
-	./$(EXECUTABLE) --test_all_tokens_consumed_flag --no_std --loader .abidos/files
+	./$(EXECUTABLE) --includes ../test_includes/ --test_all_tokens_consumed_flag --no_std --loader .abidos/files
 #	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader .abidos/files.txt
-	cp ../out/out_files.gv .abidos/
+#	cp ../out/out_files.gv .abidos/
 	cat ../python/out_begin.py > .abidos/out_run.py
 	cat .abidos/out_files.gv >> .abidos/out_run.py
 	cat ../python/out_end.py >> .abidos/out_run.py
@@ -140,9 +141,16 @@ clean:
 install: $(EXECUTABLE)
 	rm -rf /opt/abidos
 	mkdir -p /opt/abidos
+	mkdir -p /opt/abidos/includes
 	cp $(EXECUTABLE) /opt/abidos
 	cp ../scripts/abidos_make_process.pl /opt/abidos
 	cp ../python/out_begin.py /opt/abidos
 	cp ../python/out_end.py /opt/abidos
 	cp ../python/xdot2.py /opt/abidos
+	cp ../test_includes/stdio.h /opt/abidos/includes
+	cp ../test_includes/std.h /opt/abidos/includes
+	cp ../test_includes/inttypes.h /opt/abidos/includes
+
+uninstall:
+	rm -rf /opt/abidos
 

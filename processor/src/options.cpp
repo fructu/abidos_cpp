@@ -33,7 +33,10 @@ c_options::c_options()
     for (i = 0; i < FILE_NAME_LEN; ++i) {
         file[i] = '\0';
         file_loader[i] = '\0';
+        includes[i] = '\0';
     }
+
+    sprintf(includes,"/opt/abidos/includes/");
 }
 
 void
@@ -59,6 +62,7 @@ c_options::proccess(int argc, char *argv[])
              * their indices.
              */
             {"loader", required_argument, 0, 'l'},
+            {"includes", required_argument, 0, 'i'},
             {0, 0, 0, 0}
         };
         /*
@@ -92,6 +96,11 @@ c_options::proccess(int argc, char *argv[])
             printf("option -l with value '%s'\n", optarg);
             sprintf(file_loader, "%s", optarg);
             loader_flag = 1;
+            break;
+
+        case 'i':
+            printf("option -i with value '%s'\n", optarg);
+            sprintf(includes, "%s", optarg);
             break;
 
         case '?':

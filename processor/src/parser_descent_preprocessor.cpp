@@ -100,35 +100,43 @@ void c_parser_descent::push_file_loader(const char * f)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::push_sharp_file(const char * f)
 {
+    char include_file[ID_MAX_LEN]={'\0'};
+
+//    sprintf(include_file,"%s%s",options.includes, f);
+    sprintf(include_file,"%s%s",options.includes, f);
+
     if (strcmp("vector", f) == 0) {
+        sprintf(include_file,"%sstd.h",options.includes);
         if ( 1 == options.loader_flag) {
-            push_file_loader("../test_includes/std.h");
+            push_file_loader(include_file);
         } else {
-            push_file("../test_includes/std.h");
+            push_file(include_file);
         }
     } else if (strcmp("map", f) == 0) {
+        sprintf(include_file,"%sstd.h",options.includes);
         if ( 1 == options.loader_flag) {
-            push_file_loader("../test_includes/std.h");
+            push_file_loader(include_file);
         } else {
-            push_file("../test_includes/std.h");
+            push_file(include_file);
         }
     } else if (strcmp("string", f) == 0) {
+        sprintf(include_file,"%sstd.h",options.includes);
         if ( 1 == options.loader_flag) {
-            push_file_loader("../test_includes/std.h");
+            push_file_loader(include_file);
         } else {
-            push_file("../test_includes/std.h");
+            push_file(include_file);
         }
     } else if (strcmp("stdio.h", f) == 0) {
         if ( 1 == options.loader_flag) {
-            push_file_loader("../test_includes/stdio.h");
+            push_file_loader(include_file);
         } else {
-            push_file("../test_includes/stdio.h");
+            push_file(include_file);
         }
     } else if (strcmp("inttypes.h", f) == 0) {
         if ( 1 == options.loader_flag) {
-            push_file_loader("../test_includes/inttypes.h");
+            push_file_loader(include_file);
         } else {
-            push_file("../test_includes/inttypes.h");
+            push_file(include_file);
         }
     }
 }

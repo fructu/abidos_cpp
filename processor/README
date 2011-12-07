@@ -53,6 +53,16 @@ make all &> make_out.txt
 make loader
 cat ../out/out_abidos_files.txt.gv | dot -Tpng > ../out/out_abidos_files.txt.gv.png; eog  ../out/out_abidos_files.txt.gv.png
 
+#
+/home/hevia/bashrc
+{
+PATH="/opt/abidos:$PATH"
+}
+
+#generate make_out.txt when there are not a Makefile:
+ls -l *.cpp | awk '{print "g++ -c "$8}' > make_out.txt
+abidos_make_process.pl
+
 todo
   -[] clear context when class has been processed
   -[v] put other field to know when a type is a class or a struct
@@ -447,4 +457,29 @@ abidos
     /opt/abidos/
 -[] do param to pass char * p_file_out [../out/out_files.gv]
 -[] check if any system line fail in abidos_make_process.pl
+-[v] do uninstall
+-[v] do install fake libraris in /opt/abidos/includes
+-[v] install /opt/abidos/out_files.gv
+-[] id dont apears in diagram
+   class Identificador
+   {
+	    char id[50];
+	    int tipo;
+	 };
+-[] do parsing things like
+  class Value;
 
+  class A{
+    Value v;
+  };
+
+  class Value {
+    int value;
+  };
+
+  cat .abidos/trace_t044.cpp.gv | dot -Tpng > .abidos/trace_t044.cpp.gv.png; eog .abidos/trace_t044.cpp.gv.png
+-[] do parsing abstract classes
+  class IClassVisitor{
+  public:
+  	virtual void Visit(Value& ) = 0;
+  };

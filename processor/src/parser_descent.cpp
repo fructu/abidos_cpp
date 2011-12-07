@@ -706,21 +706,21 @@ void c_parser_descent::yyparse(char *file_name)
     /*## todo
       this should pass in main parameter
     */
-    sprintf(file_gv, "../out/out_%s.gv", str_temp);
+    sprintf(file_gv, ".abidos/out_%s.gv", str_temp);
     c_generator_class_diagram generator;
 
     generator.run(file_gv);
 
     if (1 == options.test_original_flag) {
         char file_original[100];
-        sprintf(file_original, "../out/out_%s", str_temp);
+        sprintf(file_original, ".abidos/out_%s", str_temp);
         c_generator_original generator_original;
         generator_original.run(file_original);
     }
 
     if (1 == options.verbose_flag) {
         char file_original[100];
-        sprintf(file_original, "../out/trace_%s.gv", str_temp);
+        sprintf(file_original, ".abidos/trace_%s.gv", str_temp);
         c_generator_trace generator_trace_graph;
         generator_trace_graph.run(file_original);
     }
@@ -792,21 +792,21 @@ void c_parser_descent::yyparse_loader(char *file_loader)
     /*## todo
       this should pass in main parameter
     */
-    sprintf(file_gv, "../out/out_%s.gv", str_temp);
+    sprintf(file_gv, ".abidos/out_%s.gv", str_temp);
     c_generator_class_diagram generator;
 
     generator.run(file_gv);
 
     if (1 == options.test_original_flag) {
         char file_original[100];
-        sprintf(file_original, "../out/out_%s", str_temp);
+        sprintf(file_original, ".abidos/out_%s", str_temp);
         c_generator_original generator_original;
         generator_original.run(file_original);
     }
 
     if (1 == options.verbose_flag) {
         char file_original[100];
-        sprintf(file_original, "../out/trace_%s.gv", str_temp);
+        sprintf(file_original, ".abidos/trace_%s.gv", str_temp);
         c_generator_trace generator_trace_graph;
         generator_trace_graph.run(file_original);
     }
