@@ -491,6 +491,6 @@ abidos
   };
 -[v] put file and line in: error c_symbols_table::insert(Armor) symbol exists yet
 -[] do a simulation of #ifndef h in loader using a map of parsed files to dont repeat the files
--[] in parser_descent_preprocessor improbe to nested #ifndef #define it must works with parser.h
+-[v] in parser_descent_preprocessor improbe to nested #ifndef #define it must works with parser.h
   ../includes/parser.h:148 error c_symbols_table::insert(#IDENTIFIER) symbol exists yet
 

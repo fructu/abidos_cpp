@@ -309,9 +309,9 @@ void c_class_members::insert(c_class_member member)
 {
     if ( 0 == member.token.text.size() ) {
         printf("%s:%d error c_class_members::insert() 0 == member.token.text.size()\n"
-        , member.token.file.c_str()
-        , member.token.line
-        );
+               , member.token.file.c_str()
+               , member.token.line
+              );
         exit(-1);
     }
 
@@ -328,8 +328,10 @@ c_class_member *c_class_members::get(string member)
     i_member = map_class_member.find(member);
 
     if (i_member == map_class_member.end()) {
-        printf("warning c_class_member * c_class_members::get(%s)",
-               member.c_str());
+        printf("%s:%d warning c_class_member * c_class_members::get(%s)\n"
+               , lex_file_name
+               , yylineno
+               , member.c_str());
 //      exit(-1);
         return 0;
     }

@@ -586,22 +586,21 @@ c_semantic::class_name_friend(c_context & context, c_token token)
         exit(1);
     }
 
-    //## todo save friends like ancestors
-    token.print(" ");
+//    token.print(" ");
 
-    {
-        // printf("\n\n### WE ADDING BASES CLASS TO
-        // [%s]\n\n",context.class_name_declaration.c_str());
+//    {
+    // printf("\n\n### WE ADDING BASES CLASS TO
+    // [%s]\n\n",context.class_name_declaration.c_str());
 
-        c_symbol *p_symbol =
-            ts.search_symbol(context.class_name_declaration);
-        if (p_symbol) {
-            c_friend_class friend_class(token.text);
-            p_symbol->insert_friend_class(friend_class);
+    c_symbol *p_symbol =
+        ts.search_symbol(context.class_name_declaration);
+    if (p_symbol) {
+        c_friend_class friend_class(token.text);
+        p_symbol->insert_friend_class(friend_class);
 
-            return;
-        }
+        return;
     }
+//    }
 
     return;
 }

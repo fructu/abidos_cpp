@@ -6,7 +6,7 @@ OBJS = options.o \
 	lexer.o \
 	parser_descent.o \
 	parser_descent_rules.o \
-	parser_descent_preprocessor.cpp \
+	parser_descent_preprocessor.o \
 	symbols_table.o \
 	semantic.o \
 	generator_class_diagram.o \

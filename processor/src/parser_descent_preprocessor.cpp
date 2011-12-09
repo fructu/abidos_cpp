@@ -307,6 +307,8 @@ int c_parser_descent::preprocessor_ifndef(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
     if ( token_is(PREPROCESSOR_DEFINITION, trace_node) ) {
+        int if_number = 1;
+
         context.prefix_sharp = 0;
         // we must eat all tokens until #endif
         while ( 1 ) {
@@ -319,9 +321,18 @@ int c_parser_descent::preprocessor_ifndef(c_trace_node trace_node)
                 continue;
             }
 
-            token_next(trace_node.get_tab());
+            token_next(trace_node.get_tab()); //maybe nested #if..
+            if ( c_token_get().text.size() >= 2 ) {
+                if ( "if" == c_token_get().text.substr(0,2) ) {
+                    ++if_number;
+                }
+            }
+
             if ( "endif" == c_token_get().text ) {
-                return 1;
+                --if_number;
+                if ( if_number <= 0) {
+                    return 1;
+                }
             }
         }
     } else {

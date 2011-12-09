@@ -374,7 +374,7 @@ int c_parser_descent::template_name(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
     if ( token_is(TEMPLATE_NAME, trace_node) ) {
-        token_print();
+//        token_print();
         semantic.class_name(context, c_token_get());
         c_decl_specifier decl(c_token_get());
         semantic.push_back_vector_decl_specifier(decl);
@@ -2664,7 +2664,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                             }
                             --n_open_braket;
                         }
-                    }                    
+                    }
                 } else if (1 != context.class_member.is_function) {
                     if ( 1 != context.declarator.is_function) {
                         semantic.declarator_insert(trace_node.get_tab(), context);
