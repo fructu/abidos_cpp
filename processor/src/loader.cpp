@@ -13,6 +13,7 @@
 ------------------------------------------------------------------------------*/
 #include <stdio.h>
 #include "loader.h"
+#include "options.h"
 
 c_loader loader;
 /*
@@ -55,6 +56,18 @@ void c_loader::process_line(char * line)
     c_loader_file loader_file;
 
     loader_file.name = file_name;
+
+    if (1 == options.no_repeat_files_flag) {
+        if (map_files.find(loader_file.name) != map_files.end() ) {
+            // key exist
+            if (1 == options.verbose_flag) {
+                printf("warning %s repeated\n",loader_file.name.c_str());
+            }
+            return;
+        }
+    }
+
+    map_files[loader_file.name] = 1;
 
     //process dirs
     string dir = "";
@@ -144,8 +157,16 @@ int c_loader::include_file_get(char * file_name)
 {
     FILE * f = NULL;
 
-    if ((f = fopen(file_name, "r"))) {
+    if (options.no_repeat_files_flag &&
+            map_files.find(file_name) != map_files.end() ) {
+        // key exist
+        if (1 == options.verbose_flag) {
+            printf("warning %s repeated\n",file_name);
+        }
+        return 0;
+    } else if ((f = fopen(file_name, "r"))) {
         fclose(f);
+        map_files[file_name] = 1;
         return 1;
     }
 
@@ -160,6 +181,19 @@ int c_loader::include_file_get(char * file_name)
     for ( j = 0; j < vector_files[position_actual].vector_directories.size(); ++j) {
         dir_file = vector_files[position_actual].vector_directories[j] + "/" + file;
         sprintf(file_name,"%s",dir_file.c_str());
+
+        if (1 == options.no_repeat_files_flag) {
+
+            if (map_files.find(file_name) != map_files.end() ) {
+                // key exist
+                if (1 == options.verbose_flag) {
+                    printf("warning %s repeated\n",file_name);
+                }
+                continue;
+            }
+
+            map_files[file_name] = 1;
+        }
         if ((f = fopen(file_name, "r"))) {
             fclose(f);
             return 1;

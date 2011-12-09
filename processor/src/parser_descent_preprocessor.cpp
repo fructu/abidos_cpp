@@ -86,9 +86,12 @@ void c_parser_descent::push_file_loader(const char * f)
     str_drop_char(file_without_commillas, '\"');
 
     if ( 1 != loader.include_file_get(file_without_commillas) ) {
+        /*
         printf("\nERROR:c_parser_descent::push_file_loader[%s]\n"
                , file_without_commillas );
         exit(-1);
+        */
+        return;
     }
 
     if (1 != lex_file_push( file_without_commillas ) ) {

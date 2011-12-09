@@ -47,7 +47,7 @@ sub generate_loader_file
     $_= $l;
 
     my @directories = ();
-    if( $_ =~ /^(g++|cc)/ ) {
+    if( $_ =~ /^(g++|cc|c++)/ ) {
       if( $_ !~ /-c/ ) {
         next;
       }

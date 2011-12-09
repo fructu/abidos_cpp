@@ -512,7 +512,7 @@ void c_symbols_table::insert(c_symbol symbol)
          , symbol.text.c_str()
          , symbol.token.file.c_str()
          , symbol.token.line
-         );
+        );
         return;
     }
 

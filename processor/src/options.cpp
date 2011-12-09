@@ -28,6 +28,7 @@ c_options::c_options()
     test_all_tokens_consumed_flag = 0;
     loader_flag = 0;
     no_std_flag = 0;
+    no_repeat_files_flag = 1;
 
     int i = 0;
     for (i = 0; i < FILE_NAME_LEN; ++i) {
@@ -56,6 +57,7 @@ c_options::proccess(int argc, char *argv[])
             {"test_all_tokens_consumed_flag", no_argument,
              &test_all_tokens_consumed_flag, 1},
             {"no_std", no_argument, &no_std_flag, 1},
+            {"no_repeat_files", no_argument, &no_repeat_files_flag, 0},
 
             /*
              * These options don't set a flag. We distinguish them by

@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -33,11 +34,13 @@ struct c_loader_file {
 };
 
 typedef vector<c_loader_file> t_vector_files;
+typedef map<string,int> t_map_files;
 
 class c_loader
 {
 private:
     t_vector_files vector_files;
+    t_map_files map_files;
 
     void process_line(char * line);
 

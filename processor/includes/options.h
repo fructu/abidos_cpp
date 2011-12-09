@@ -23,6 +23,7 @@ struct c_options {
     int ts_show_flag;
     int test_all_tokens_consumed_flag;
     int no_std_flag;
+    int no_repeat_files_flag;
 
     char file[FILE_NAME_LEN];
     char file_loader[FILE_NAME_LEN];
