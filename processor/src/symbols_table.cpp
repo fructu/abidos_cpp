@@ -506,10 +506,13 @@ void c_symbols_table::insert(c_symbol symbol)
     // c_symbol symbol(token);
     if ( 0 != search_symbol(symbol.text) ) {
         printf
-        ("%s:%d error c_symbols_table::insert(%s) symbol exists yet\n"
+        ("%s:%d error c_symbols_table::insert(%s) symbol exists yet %s:%d\n"
+         , lex_file_name
+         , yylineno
+         , symbol.text.c_str()
          , symbol.token.file.c_str()
          , symbol.token.line
-         , symbol.text.c_str());
+         );
         return;
     }
 

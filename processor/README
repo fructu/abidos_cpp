@@ -63,6 +63,15 @@ PATH="/opt/abidos:$PATH"
 ls -l *.cpp | awk '{print "g++ -c "$8}' > make_out.txt
 abidos_make_process.pl
 
+#generate png diagram with abidos installed
+cat .abidos/out_files.gv | dot -Tpng > .abidos/out_files.gv.png; eog  .abidos/out_files.gv.png
+
+#print diagrams more prety:
+http://www.hokstad.com/making-graphviz-output-pretty-with-xsl.html
+git://github.com/vidarh/diagram-tools.git
+cat .abidos/out_files.gv | dot -Tsvg > .abidos/out_files.gv.svg
+xsltproc notugly.xsl .abidos/out_files.gv.svg > .abidos/out_files_2.gv.svg; eog .abidos/out_files_2.gv.svg
+
 todo
   -[] clear context when class has been processed
   -[v] put other field to know when a type is a class or a struct
@@ -493,4 +502,13 @@ abidos
 -[] do a simulation of #ifndef h in loader using a map of parsed files to dont repeat the files
 -[v] in parser_descent_preprocessor improbe to nested #ifndef #define it must works with parser.h
   ../includes/parser.h:148 error c_symbols_table::insert(#IDENTIFIER) symbol exists yet
+-[] fix errors like this:
+  options.cpp:139 error c_symbols_table::insert(options) symbol exists yet options.cpp:139
+  in options.h
+    extern c_options options;
+  in options.cpp
+    c_options options;
+  maybe a vector<struct file_line> extern_declarations_vector in the symbol
+-[] the same idea to improve predeclarations of classes
+  vector vector<struct file_line> predeclarations;
 

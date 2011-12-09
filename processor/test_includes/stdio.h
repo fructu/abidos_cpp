@@ -5,5 +5,6 @@
 #ifndef _stdio_h
 #define _stdio_h
 struct FILE {};
+typedef int size_t;
 
 #endif

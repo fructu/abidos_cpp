@@ -30,10 +30,6 @@ extern "C" {
 
     int yylex(void);
 
-    int lex_file_init(const char *f);
-    int lex_file_push(const char *f);
-    int lex_file_pop(void);
-
     /*
      * void yyerror (char *s);
      */

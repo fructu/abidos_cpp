@@ -432,7 +432,8 @@ int lex_file_init(const char *f)
     stack_file_name_init();
 
     sprintf(lex_file_name,"%s",f);
-
+    
+//    printf("## [%s]\n",f);
     yyin=fopen(f,"r");
     if( NULL==yyin )
     {
@@ -474,6 +475,7 @@ int lex_file_push(const char *f)
       sprintf(lex_file_name,"%s",f);
     }
 
+//    printf("## [%s]\n",lex_file_name);
     yyin=fopen(lex_file_name,"r");
     if( NULL==yyin )
     {
@@ -495,7 +497,7 @@ int lex_file_pop(void)
   if ( !YY_CURRENT_BUFFER ){
     yyterminate();
   }
-
+//  printf("## [%s]\n",lex_file_name);
   return 1;
 }
 

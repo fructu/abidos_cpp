@@ -13,6 +13,5 @@ typedef int uint16_t;
 typedef int int32_t;
 typedef int uint32_t;
 
-typedef int size_t;
 //typedef int YY_BUFFER_STATE;
 #endif
