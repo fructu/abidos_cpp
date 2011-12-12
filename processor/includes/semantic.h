@@ -63,7 +63,7 @@ public:
         int *a, &b;
     */
     void pop_last_pointers(void) {
-        int last_id = 0;
+//        int last_id = 0;
         c_decl_specifier last_decl;
 
         while ( vector_decl_specifier.size() != 0) {

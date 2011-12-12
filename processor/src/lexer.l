@@ -41,7 +41,7 @@
 //static int yywrap(void);
 char lex_file_name[LONG_STR];
 
-//static void skip_until_eol(void);
+static void skip_until_eol(void);
 static void skip_comment(void);
 static int check_identifier(const char *);
 // i chosed the elsa string works better than this
@@ -424,7 +424,9 @@ void stack_file_name_pop(void)
   free(stack_file_name[stack_top]);
 
   stack_file_name[stack_top] == NULL;
-  fclose(yyin);
+
+// lexer.l: warning: statement with no effect
+//  fclose(yyin);
 }
 
 int lex_file_init(const char *f)

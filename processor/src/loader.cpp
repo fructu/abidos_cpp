@@ -168,6 +168,9 @@ int c_loader::include_file_get(char * file_name)
         fclose(f);
         map_files[file_name] = 1;
         return 1;
+    } else if ( 1 == try_open_file_lowercase(NULL, file_name)) {
+        map_files[file_name] = 1;
+        return 1;
     }
 
     if ( !(position_actual < vector_files.size()) ) {
@@ -198,10 +201,152 @@ int c_loader::include_file_get(char * file_name)
             fclose(f);
             return 1;
         }
+
+        char directory[LINE_LONG] = {'\0'};
+        sprintf(directory,"%s",vector_files[position_actual].vector_directories[j].c_str());
+        if ( 1 == try_open_file_lowercase(directory, file_name)) {
+            map_files[file_name] = 1;
+            return 1;
+        }
     }
 
     return 0;
 }
 /*----------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*/
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/param.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <string.h>
+#include <ctype.h>
+/*----------------------------------------------------------------------------*/
+void string_to_lower(char str[LINE_LONG])
+{
+    if (1 != options.incasitive_includes_flag) {
+        return;
+    }
 
+    char *p = str;
+    while ( *p != '\0' ) {
+        *p = tolower(*p);
+        ++p;
+    }
+}
+/*----------------------------------------------------------------------------*/
+/*
+  do a map
+  d/H1.h
+
+  map d -> map
+    h1.h -> H1.h
+*/
+void c_loader::do_map_files_lowercase( char  * directory )
+{
+    if (1 != options.incasitive_includes_flag) {
+        return;
+    }
+
+    char result[LINE_LONG];
+    DIR           *d;
+    struct dirent *dir;
+
+    if ( map_directory_files.find(directory) != map_directory_files.end() ) {
+        return;
+    }
+
+    d = opendir( directory );
+
+    if ( d == NULL ) {
+        return;
+    }
+
+    t_map_files_lowercase map_files_lowercase;
+    while ( ( dir = readdir( d ) ) ) {
+        if ( strcmp( dir->d_name, "." ) == 0 ||
+                strcmp( dir->d_name, ".." ) == 0 ) {
+            continue;
+        }
+        if ( dir->d_type == DT_DIR ) {
+            continue;
+        }
+
+        snprintf( result, MAXPATHLEN, "%s", dir->d_name );
+
+        string_to_lower(result);
+        string str_lower = result;
+        string str_file = dir->d_name;
+        map_files_lowercase[str_lower] = str_file;
+    }
+
+    map_directory_files[directory] = map_files_lowercase;
+
+    closedir( d );
+
+    return;
+}
+/*----------------------------------------------------------------------------*/
+string c_loader::search_file_lowercase( char  * directory, char  * file )
+{
+    string str_file = "";
+    string str_dir = "";
+
+    if (1 != options.incasitive_includes_flag) {
+        return str_file;
+    }
+
+    char file_lower[LINE_LONG];
+    sprintf(file_lower,"%s",file);
+    string_to_lower(file_lower);
+    string str_lower_file = file_lower;
+
+    if ( NULL == directory ) {
+        do_map_files_lowercase((char *)".");
+        str_dir = ".";
+    } else {
+        str_dir = directory;
+        do_map_files_lowercase(directory);
+    }
+
+    if ( map_directory_files.find(str_dir) == map_directory_files.end() ) {
+        return str_file;
+    }
+
+    if ( map_directory_files[str_dir].find(str_lower_file) == map_directory_files[str_dir].end() ) {
+        return str_file;
+    }
+
+    str_file = map_directory_files[str_dir][str_lower_file];
+
+    return str_file;
+}
+/*----------------------------------------------------------------------------*/
+int c_loader::try_open_file_lowercase( char  * directory, char  * file )
+{
+    string str_file = search_file_lowercase(directory,file);
+    FILE * f = NULL;
+
+    if ( 0 == str_file.size() ) {
+        return 0;
+    }
+
+    string str_dir_file = "";
+    if ( NULL != directory ) {
+        str_dir_file = directory;
+        str_dir_file += "/" + str_file;
+    } else {
+        str_dir_file = str_file;
+    }
+
+    if ((f = fopen(str_dir_file.c_str(), "r"))) {
+        printf("###2#incasitive %s->%s\n",file, str_dir_file.c_str());
+        sprintf(file,"%s",str_file.c_str());
+        fclose(f);
+        return 1;
+    }
+
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
 

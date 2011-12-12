@@ -512,4 +512,6 @@ abidos
   maybe a vector<struct file_line> extern_declarations_vector in the symbol
 -[] the same idea to improve predeclarations of classes
   vector vector<struct file_line> predeclarations;
+-[v] if #include "H.h" dont found search in lowercase in directories.
+
 

@@ -18,8 +18,6 @@
 
 #include "options.h"
 
-//using namespace std;
-
 c_options::c_options()
 {
     verbose_flag = 0;
@@ -29,6 +27,7 @@ c_options::c_options()
     loader_flag = 0;
     no_std_flag = 0;
     no_repeat_files_flag = 1;
+    incasitive_includes_flag = 1;
 
     int i = 0;
     for (i = 0; i < FILE_NAME_LEN; ++i) {

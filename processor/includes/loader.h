@@ -36,6 +36,9 @@ struct c_loader_file {
 typedef vector<c_loader_file> t_vector_files;
 typedef map<string,int> t_map_files;
 
+typedef map<string,string> t_map_files_lowercase;
+typedef map<string,t_map_files_lowercase> t_map_directory_files;
+
 class c_loader
 {
 private:
@@ -45,6 +48,8 @@ private:
     void process_line(char * line);
 
     size_t position_actual;
+
+    t_map_directory_files map_directory_files;
 public:
     void print(void);
     void process_file(char * file_loader);
@@ -55,6 +60,11 @@ public:
 
     //change file_name too
     int include_file_get(char * file_name);
+
+    //open files incasitive way
+    void do_map_files_lowercase( char  * directory );
+    string search_file_lowercase( char  * directory, char  * file );
+    int try_open_file_lowercase( char  * directory, char  * file );
 };
 
 //typedef vector<c_trace_node> t_vector_trace_nodes;

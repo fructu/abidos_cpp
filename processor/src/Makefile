@@ -140,7 +140,7 @@ clean:
 	rm -f *.orig
 	rm -f *.pyc
 	rm -f ../test_out/*.pyc
-	rm -f make_out.txt
+#	rm -f make_out.txt
 	rm -rf .abidos
 
 install: $(EXECUTABLE)
