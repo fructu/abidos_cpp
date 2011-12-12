@@ -153,6 +153,19 @@ int c_loader::file_get(char * file_name)
     return 1;
 }
 /*----------------------------------------------------------------------------*/
+void string_to_lower(char str[LINE_LONG])
+{
+    if (1 != options.incasitive_includes_flag) {
+        return;
+    }
+
+    char *p = str;
+    while ( *p != '\0' ) {
+        *p = tolower(*p);
+        ++p;
+    }
+}
+/*----------------------------------------------------------------------------*/
 int c_loader::include_file_get(char * file_name)
 {
     FILE * f = NULL;
@@ -166,7 +179,11 @@ int c_loader::include_file_get(char * file_name)
         return 0;
     } else if ((f = fopen(file_name, "r"))) {
         fclose(f);
+        char file_name_lower[LINE_LONG];
+        sprintf(file_name_lower,"%s",file_name);
+        string_to_lower(file_name_lower);
         map_files[file_name] = 1;
+        map_files[file_name_lower] = 1;
         return 1;
     } else if ( 1 == try_open_file_lowercase(NULL, file_name)) {
         map_files[file_name] = 1;
@@ -197,6 +214,7 @@ int c_loader::include_file_get(char * file_name)
 
             map_files[file_name] = 1;
         }
+
         if ((f = fopen(file_name, "r"))) {
             fclose(f);
             return 1;
@@ -205,7 +223,6 @@ int c_loader::include_file_get(char * file_name)
         char directory[LINE_LONG] = {'\0'};
         sprintf(directory,"%s",vector_files[position_actual].vector_directories[j].c_str());
         if ( 1 == try_open_file_lowercase(directory, file_name)) {
-            map_files[file_name] = 1;
             return 1;
         }
     }
@@ -221,19 +238,6 @@ int c_loader::include_file_get(char * file_name)
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
-/*----------------------------------------------------------------------------*/
-void string_to_lower(char str[LINE_LONG])
-{
-    if (1 != options.incasitive_includes_flag) {
-        return;
-    }
-
-    char *p = str;
-    while ( *p != '\0' ) {
-        *p = tolower(*p);
-        ++p;
-    }
-}
 /*----------------------------------------------------------------------------*/
 /*
   do a map
@@ -339,10 +343,20 @@ int c_loader::try_open_file_lowercase( char  * directory, char  * file )
         str_dir_file = str_file;
     }
 
+    if (map_files.find(str_dir_file) != map_files.end() ) {
+        // key exist
+        if (1 == options.verbose_flag) {
+            printf("warning %s repeated\n",str_dir_file);
+        }
+        return 0;
+    }
+
     if ((f = fopen(str_dir_file.c_str(), "r"))) {
         printf("###2#incasitive %s->%s\n",file, str_dir_file.c_str());
         sprintf(file,"%s",str_file.c_str());
         fclose(f);
+
+        map_files[str_dir_file] = 1;
         return 1;
     }
 
