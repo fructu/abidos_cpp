@@ -74,6 +74,7 @@ struct c_context {
     int access_specifier;
 
     string class_name_declaration;	// class
+    int is_abstract;
     // class_name_declaration
 
     int i_am_in_member;
@@ -145,6 +146,7 @@ struct c_context {
         access_specifier = 0;
 
         class_name_declaration = "";
+        is_abstract = 0;
 
         i_am_in_member = 0;
         member_declaration = "";
@@ -197,6 +199,7 @@ struct c_context {
 
             class_name_declaration = "";
         */
+//        is_abstract = 0;
 
         i_am_in_member = 0;
         member_declaration = "";
@@ -243,6 +246,8 @@ struct c_context {
             i_am_in_parameter_declaration;
 
         context_param.class_name_declaration = class_name_declaration;
+        context_param.is_abstract = is_abstract;
+
         context_param.param_vector_decl_specifier =
             param_vector_decl_specifier;
         context_param.class_member = class_member;

@@ -81,6 +81,8 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
         }
     }
 
+    symbol.is_abstract = context.is_abstract;
+
     context.class_name_declaration = symbol.token.text;
 
     ts.insert(symbol);
@@ -781,6 +783,16 @@ c_semantic::class_predeclaration_to_declaration(c_context & context, c_token tok
     p_symbol->token = token;
 
     ts.insert(*p_symbol);
+}
+/*----------------------------------------------------------------------------*/
+void
+c_semantic::class_is_abstract(c_context & context)
+{
+    c_symbol *p_symbol = 0;
+    p_symbol = ts.search_symbol(context.class_name_declaration);
+    if ( 0 != p_symbol) {
+        p_symbol->is_abstract = 1;
+    }
 }
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;

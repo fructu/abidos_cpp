@@ -160,6 +160,7 @@ public:
     void class_name_friend(c_context & context, c_token token);
 
     void class_predeclaration_to_declaration(c_context & context, c_token token);
+    void class_is_abstract(c_context & context);
 };
 
 extern c_semantic semantic;

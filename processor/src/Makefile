@@ -97,8 +97,9 @@ debug_graph_put:
 #FILE_TEST=parser_descent.h
 #FILE_TEST=generator_class_diagram.cpp
 #FILE_TEST=symbols_table.cpp
-FILE_TEST=t045.cpp
+FILE_TEST=t044.cpp
 execute: $(EXECUTABLE)
+	mkdir -p .abidos
 	cp ../python/xdot2.py ../out/
 	./$(EXECUTABLE) --verbose --ts_show --includes ../test_includes/ ../test/$(FILE_TEST)
 	cat ../python/out_begin.py > ../out/out_run.py

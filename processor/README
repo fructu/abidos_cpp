@@ -493,7 +493,7 @@ abidos
   };
 
   cat .abidos/trace_t044.cpp.gv | dot -Tpng > .abidos/trace_t044.cpp.gv.png; eog .abidos/trace_t044.cpp.gv.png
--[] do parsing abstract classes
+-[v] do parsing abstract classes
   class IClassVisitor{
   public:
   	virtual void Visit(Value& ) = 0;

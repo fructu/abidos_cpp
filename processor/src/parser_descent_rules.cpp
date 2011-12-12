@@ -1341,9 +1341,11 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
     trace_graph.add(trace_node, "class_specifier");
 
     int was_typedef = 0;
+    int was_abstract = 0;
     string class_name_previous = context.class_name_declaration;
 
     was_typedef = context.is_typedef;
+    was_abstract = context.is_abstract;
     context.is_typedef = 0;
 
     //maybe will need read class other time
@@ -1365,6 +1367,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
             context = context_tokens_1.restore();
             if (0 == class_key(trace_node)) {
                 context.class_name_declaration = class_name_previous;
+                context.is_abstract = was_abstract;
                 return 0;
             }
 
@@ -1387,6 +1390,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
                 if ( 1 == identifier(trace_node)) {
                     context.is_typedef = 0;
                     context.class_name_declaration = class_name_previous;
+                    context.is_abstract = was_abstract;
                     return 1;
                 }
             }
@@ -1411,6 +1415,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
             } else {
                 printf("error c_parser_descent::class_specifier() class without name\n");
                 context.class_name_declaration = class_name_previous;
+                context.is_abstract = was_abstract;
                 return 0;
             }
         }
@@ -1427,10 +1432,12 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
         if ( token_is(';', trace_node) ) {
             context = context_good_way.restore();
             context.class_predeclaration = 1;
+            context.is_abstract = was_abstract;
             return 1;
         } else {
             context = context_tokens.restore();
             context.class_name_declaration = class_name_previous;
+            context.is_abstract = was_abstract;
             return 0;
         }
     }
@@ -1493,10 +1500,12 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
 
         tokens_vector_clear();
         context.class_name_declaration = class_name_previous;
+        context.is_abstract = was_abstract;
         return 1;
     }
 
     context.is_typedef = was_typedef;
+    context.is_abstract = 0;
 
     context = context_tokens.restore();
     context.class_name_declaration = class_name_previous;
@@ -2622,6 +2631,20 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
 
                 context_good_way.save(context);
                 token_next(trace_node.get_tab());
+
+                //abstract class
+                if ( token_is('=', trace_node) ) {
+                    token_next(trace_node.get_tab());
+
+                    if ( token_is(INTEGER, trace_node) ) {
+                        context.is_abstract = 1;
+                        semantic.class_is_abstract(context);
+                        context_good_way.save(context);
+                        token_next(trace_node.get_tab());
+                    } else {
+                        printf("### warning f() = 0 <- expected 0 here\n");
+                    }
+                }
 
                 if ( token_is(';', trace_node) ) {
                     if (1 == options.verbose_flag) {

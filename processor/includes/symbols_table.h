@@ -430,6 +430,7 @@ public:
     c_token token;
     int type;
     int class_key;
+    int is_abstract;
 
     // t_map_class_member map_class_member;
     c_class_members members;
@@ -456,6 +457,7 @@ public:
         text = "";
         type = 0;
         class_key = 0;
+        is_abstract = 0;
         map_base_class.clear();
         members.clear();
 
@@ -479,6 +481,7 @@ public:
         token = token_1;
         type = 0;
         class_key = 0;
+        is_abstract = 0;
         map_base_class.clear();
         members.clear();
 
@@ -503,6 +506,7 @@ public:
         text = "";
         type = 0;
         class_key = 0;
+        is_abstract = 0;
         map_base_class.clear();
         members.clear();
 

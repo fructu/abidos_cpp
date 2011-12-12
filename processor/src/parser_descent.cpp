@@ -487,7 +487,6 @@ void c_parser_descent::token_next(string tab)
                 ++context.i_token;
 //##
 //                token_print();
-
                 return;
             }
         }
@@ -515,7 +514,6 @@ void c_parser_descent::token_next(string tab)
         context.i_token = (tokens_vector.size() - 1);
 //##
 //        token_print();
-
         return;
     }
 
