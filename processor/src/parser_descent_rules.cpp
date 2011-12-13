@@ -2749,6 +2749,13 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                     return 0;
                 }
 
+                // for cases like void f();
+                if( 0 < context.class_name_declaration.size() ){
+                  context.class_member.is_function = 1;
+                }else{
+                  context.declarator.is_function = 1;
+                }
+
                 context_good_way.save(context);
                 token_next(trace_node.get_tab());
 

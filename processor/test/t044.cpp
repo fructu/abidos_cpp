@@ -25,3 +25,11 @@
     void f1(void);
     void f2(void);
   };
+
+class D{
+  public:
+   C c;
+   A f(void);
+   virtual B * V();
+   int i;
+};

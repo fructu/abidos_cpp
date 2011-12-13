@@ -516,9 +516,10 @@ abidos
 -[v] parse operator overload
     int TipoBase::operator== (TipoBase& otro)
     cat .abidos/trace_t045.cpp.gv | dot -Tpng > .abidos/trace_t045.cpp.gv.png; eog .abidos/trace_t045.cpp.gv.png
--[] do not aggregation of compositions whith the types of methods
+-[v] do not aggregation of compositions whith the types of methods
   class Void : public Tipo
   {
 	  virtual Tipo * sig();
   };
+-[v] in classes like previous point don appear () in diagram
 
