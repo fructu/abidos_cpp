@@ -153,7 +153,13 @@ int c_parser_descent::unqualified_id(c_trace_node trace_node)
         return 1;
     }
 
+    if (1 == operator_function_id(trace_node)) {
+        context.class_member.is_operator_overload = 1;
+        return 1;
+    }
+
     //## todo
+    //conversion_function_id
 
     // destructor
     // | '~' class_name
@@ -557,6 +563,7 @@ int c_parser_descent::declaration(c_trace_node trace_node)
     }
 
     string class_name_bk = context.class_name_declaration;
+
     if (1 == function_definition(trace_node)) {
         semantic.declarator_insert(trace_node.get_tab(), context);
         context.class_name_declaration = class_name_bk;
@@ -1943,7 +1950,120 @@ mem_initializer:
 	;
 */
 //## todo
+/*----------------------------------------------------------------------
+ * Overloading.
+ *----------------------------------------------------------------------*/
+/*
+operator_function_id:
+	OPERATOR operator
+	;
+*/
+int c_parser_descent::operator_function_id(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "template_declaration");
 
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+
+    if ( token_is_not(OPERATOR, trace_node) ) {
+        context = context_tokens.restore();
+        return 0;
+    }
+
+    if ( 1 == _operator(trace_node) ) {
+        //a litle hacking to make more easy this
+        c_token token;
+        token.save(c_token_get());
+        token.id = IDENTIFIER;
+        token.text = "OPERATOR_";
+        token.text += yytokens[c_token_get().id];
+
+        semantic.identifier(context, token);
+        return 1;
+    }
+
+    context = context_tokens.restore();
+    return 0;
+}
+/*
+_operator:
+	NEW
+	| DELETE
+	| NEW '[' ']'
+	| DELETE '[' ']'
+	| '+'
+	| '_'
+	| '*'
+	| '/'
+	| '%'
+	| '^'
+	| '&'
+	| '|'
+	| '~'
+	| '!'
+	| '='
+	| '<'
+	| '>'
+	| ADDEQ
+	| SUBEQ
+	| MULEQ
+	| DIVEQ
+	| MODEQ
+	| XOREQ
+	| ANDEQ
+	| OREQ
+	| SL
+	| SR
+	| SREQ
+	| SLEQ
+	| EQ
+	| NOTEQ
+	| LTEQ
+	| GTEQ
+	| ANDAND
+	| OROR
+	| PLUSPLUS
+	| MINUSMINUS
+	| ','
+	| ARROWSTAR
+	| ARROW
+	| '(' ')'
+	| '[' ']'
+	;
+*/
+int c_parser_descent::_operator(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "_operator");
+
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+
+    /* ## todo
+      NEW
+      | DELETE
+      | NEW '[' ']'
+      | DELETE '[' ']'
+    */
+    const int vector_id[]={ '+', '_','*','/','%','^','&','|','~','!'
+                            ,'=','<','>',ADDEQ,SUBEQ,MULEQ,DIVEQ,MODEQ,XOREQ,ANDEQ,OREQ
+                            ,SL,SR,SREQ,SLEQ,EQ,NOTEQ,LTEQ,GTEQ,ANDAND,OROR,PLUSPLUS
+                            ,MINUSMINUS,',',ARROWSTAR,ARROW
+                            ,-1
+                          };
+
+    if (token_is_one(vector_id,trace_node) != 0) {
+        return 1;
+    }
+
+    /* ## todo
+      | '(' ')'
+      | '[' ']'
+    */
+    context = context_tokens.restore();
+    return 0;
+}
 /*----------------------------------------------------------------------
  * Templates.
  *----------------------------------------------------------------------*/

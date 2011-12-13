@@ -346,7 +346,7 @@ int c_loader::try_open_file_lowercase( char  * directory, char  * file )
     if (map_files.find(str_dir_file) != map_files.end() ) {
         // key exist
         if (1 == options.verbose_flag) {
-            printf("warning %s repeated\n",str_dir_file);
+            printf("warning %s repeated\n",str_dir_file.c_str());
         }
         return 0;
     }

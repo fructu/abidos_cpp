@@ -58,8 +58,16 @@ struct c_token {
         file = "";
         line = 0;
     }
+    /*
+        void save(c_token & token) {
+            id = token.id;
+            text = token.text;
 
-    void save(c_token & token) {
+            file = token.file;
+            line = token.line;
+        }
+    */
+    void save(c_token token) {
         id = token.id;
         text = token.text;
 
@@ -286,6 +294,7 @@ public:
     int access_specifier;
     int is_constructor;
     int is_destructor;
+    int is_operator_overload;
 
     void parameter_insert(c_parameter parameter);
     void print(const char *tab);
@@ -304,6 +313,7 @@ public:
         access_specifier = 0;
         is_constructor = 0;
         is_destructor = 0;
+        is_operator_overload = 0;
 
         is_typedef = 0;
         is_template = 0;
@@ -335,6 +345,7 @@ public:
         is_constructor = 0;
         is_destructor = 0;
         is_template = 0;
+        is_operator_overload = 0;
 
         is_template_instantation = 0;
         vector_template_argument.clear();
@@ -350,6 +361,7 @@ public:
         access_specifier = 0;
         is_constructor = 0;
         is_destructor = 0;
+        is_operator_overload = 0;
 
         token_definition.clear();
 

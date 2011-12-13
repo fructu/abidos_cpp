@@ -6,7 +6,7 @@
 #-------------------------------------------
 use strict;
 
-my @directories = ('../out', '../test_out');
+my @directories = ('../out', '../test_out', '.abidos');
 
 foreach (@directories) {
  	print "  checking existence $_ ...";

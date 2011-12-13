@@ -432,6 +432,10 @@ private:
     int ctor_initializer(c_trace_node trace_node);
     int mem_initializer_list(c_trace_node trace_node);
 
+    //Overloading.
+    int operator_function_id(c_trace_node trace_node);
+    int _operator(c_trace_node trace_node);
+
     // Templates.
     int template_declaration(c_trace_node trace_node);
     int template_parameter_list(c_trace_node trace_node);
