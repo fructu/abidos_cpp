@@ -46,7 +46,7 @@ $(EXECUTABLE):  $(OBJS)
 	$(CC) -o $(EXECUTABLE)  $(OBJS) $(LFLAGS)
 
 # extract_symbols.pl tokens.h
-parser.c parser.h: parser.y
+parser.c $(INCLUDES)/parser.h: parser.y
 	$(YACC) -dt parser.y
 	mv -f y.tab.c parser.c
 	echo '#ifndef parser_h' > $(INCLUDES)/parser.h
@@ -54,18 +54,21 @@ parser.c parser.h: parser.y
 	cat y.tab.h >> $(INCLUDES)/parser.h
 	echo '#endif' >> $(INCLUDES)/parser.h
 	rm -f y.tab.h
-#	mv -f y.tab.h $(INCLUDES)/parser.h
+
+$(INCLUDES)/tokens.h: parser.c
 	$(SCRIPTS_DIR)extract_symbols.pl
 	mv -f tokens.h $(INCLUDES)
 
-lexer.c: lexer.l
+parser_descent.cpp: $(INCLUDES)/tokens.h
+
+lexer.c: lexer.l parser.c $(INCLUDES)/parser.h
 	$(LEX) -t lexer.l >lexer.c
 
 parser_descent.o: lex_yacc.h
 
-lexer.o: parser.h
+lexer.o: $(INCLUDES)/parser.h
 
-lex_yacc.h: parser.h
+lex_yacc.h: $(INCLUDES)/parser.h
 
 generator_class_diagram.cpp: generate_begin_graph.cpp
 

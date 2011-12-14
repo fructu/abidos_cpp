@@ -180,7 +180,7 @@ abidos
 -[v] draw compositions
 -[v] draw aggregations
 -[v] typedef parse typedef class A;
--[] typedef do create sinom in ts
+-[v] typedef do create sinom in ts
 -[v] use this fields
     int type_specifier;
     int function_specifier; <-- dropped
@@ -406,7 +406,7 @@ abidos
 -[v] parsing #ifndef
 -[v] saving  #ifndef <ID> int ts
 -[v] parsing #endif
--[] maybe check the number of #endif is paired with his #ifndef
+-[v] maybe check the number of #endif is paired with his #ifndef
 -[v] parsing #define id
     this is necesary for things like this
     #ifndef parser_descent_h
