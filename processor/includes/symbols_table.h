@@ -295,6 +295,7 @@ public:
     int is_constructor;
     int is_destructor;
     int is_operator_overload;
+    string operator_overload_sufix;
 
     void parameter_insert(c_parameter parameter);
     void print(const char *tab);
@@ -314,6 +315,7 @@ public:
         is_constructor = 0;
         is_destructor = 0;
         is_operator_overload = 0;
+        operator_overload_sufix = "";
 
         is_typedef = 0;
         is_template = 0;
@@ -346,6 +348,7 @@ public:
         is_destructor = 0;
         is_template = 0;
         is_operator_overload = 0;
+        operator_overload_sufix = "";
 
         is_template_instantation = 0;
         vector_template_argument.clear();
@@ -362,6 +365,7 @@ public:
         is_constructor = 0;
         is_destructor = 0;
         is_operator_overload = 0;
+        operator_overload_sufix = "";
 
         token_definition.clear();
 

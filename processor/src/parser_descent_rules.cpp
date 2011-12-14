@@ -154,7 +154,6 @@ int c_parser_descent::unqualified_id(c_trace_node trace_node)
     }
 
     if (1 == operator_function_id(trace_node)) {
-        context.class_member.is_operator_overload = 1;
         return 1;
     }
 
@@ -411,7 +410,37 @@ int c_parser_descent::identifier(c_trace_node trace_node)
     context = context_tokens.restore();
     return 0;
 }
+/*
+assignment_expression:
+	conditional_expression
+	| logical_or_expression assignment_operator assignment_expression
+	| throw_expression
+	;
+*/
+int c_parser_descent::assignment_expression(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "assignment_expression_dummy");
 
+    trace_graph.add(trace_node, "identifier");
+    c_context_tokens context_tokens(context);
+
+    token_next(trace_node.get_tab());
+
+    if ( token_is(INTEGER, trace_node) ) {
+        return 1;
+    }
+
+    if ( token_is(STRING, trace_node) ) {
+        return 1;
+    }
+
+    if ( token_is(CHARACTER, trace_node) ) {
+        return 1;
+    }
+
+    context = context_tokens.restore();
+    return 0;
+}
 /*----------------------------------------------------------------------
  * Statements.
  *----------------------------------------------------------------------*/
@@ -429,7 +458,7 @@ statement:
 */
 int c_parser_descent::statement(c_trace_node trace_node)
 {
-    trace_graph.add(trace_node, "statement");
+    trace_graph.add(trace_node, "statement_dummy");
     return 1;
 }
 
@@ -1960,7 +1989,7 @@ operator_function_id:
 */
 int c_parser_descent::operator_function_id(c_trace_node trace_node)
 {
-    trace_graph.add(trace_node, "template_declaration");
+    trace_graph.add(trace_node, "operator_function_id");
 
     c_context_tokens context_tokens(context);
 
@@ -1971,15 +2000,17 @@ int c_parser_descent::operator_function_id(c_trace_node trace_node)
         return 0;
     }
 
+    context.class_member.is_operator_overload = 1;
     if ( 1 == _operator(trace_node) ) {
         //a litle hacking to make more easy this
         c_token token;
         token.save(c_token_get());
         token.id = IDENTIFIER;
         token.text = "OPERATOR_";
-        token.text += yytokens[c_token_get().id];
-
+        token.text += context.class_member.operator_overload_sufix;
         semantic.identifier(context, token);
+        context.class_member.is_operator_overload = 0;
+        context.class_member.operator_overload_sufix = "";
         return 1;
     }
 
@@ -2040,27 +2071,80 @@ int c_parser_descent::_operator(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
 
-    /* ## todo
+    /*
       NEW
       | DELETE
       | NEW '[' ']'
       | DELETE '[' ']'
     */
-    const int vector_id[]={ '+', '_','*','/','%','^','&','|','~','!'
-                            ,'=','<','>',ADDEQ,SUBEQ,MULEQ,DIVEQ,MODEQ,XOREQ,ANDEQ,OREQ
-                            ,SL,SR,SREQ,SLEQ,EQ,NOTEQ,LTEQ,GTEQ,ANDAND,OROR,PLUSPLUS
-                            ,MINUSMINUS,',',ARROWSTAR,ARROW
-                            ,-1
-                          };
-
-    if (token_is_one(vector_id,trace_node) != 0) {
+    const int vector_id_1[]={ NEW, DELETE
+                              ,-1
+                            };
+    if (token_is_one(vector_id_1,trace_node) != 0) {
+        if ( 1 == context.class_member.is_operator_overload ) {
+            context.class_member.operator_overload_sufix += yytokens[c_token_get().id];
+        }
+        c_context_tokens context_good_way(context);
+        token_next(trace_node.get_tab());
+        if ( token_is('[', trace_node) ) {
+            token_next(trace_node.get_tab());
+            if ( token_is(']', trace_node) ) {
+                if ( 1 == context.class_member.is_operator_overload ) {
+                    context.class_member.operator_overload_sufix += "ARRAY";
+                }
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        context = context_good_way.restore();
         return 1;
     }
 
-    /* ## todo
+    const int vector_id_2[]={ '+', '_','*','/','%','^','&','|','~','!'
+                              ,'=','<','>',ADDEQ,SUBEQ,MULEQ,DIVEQ,MODEQ,XOREQ,ANDEQ,OREQ
+                              ,SL,SR,SREQ,SLEQ,EQ,NOTEQ,LTEQ,GTEQ,ANDAND,OROR,PLUSPLUS
+                              ,MINUSMINUS,',',ARROWSTAR,ARROW
+                              ,-1
+                            };
+
+    if (token_is_one(vector_id_2,trace_node) != 0) {
+        if ( 1 == context.class_member.is_operator_overload ) {
+            context.class_member.operator_overload_sufix += yytokens[c_token_get().id];
+        }
+        return 1;
+    }
+
+    /*
       | '(' ')'
       | '[' ']'
     */
+    if ( token_is('[', trace_node) ) {
+        token_next(trace_node.get_tab());
+        if ( token_is(']', trace_node) ) {
+            if ( 1 == context.class_member.is_operator_overload ) {
+                context.class_member.operator_overload_sufix += "ARRAY";
+            }
+            return 1;
+        } else {
+            context = context_tokens.restore();
+            return 0;
+        }
+    }
+
+    if ( token_is('(', trace_node) ) {
+        token_next(trace_node.get_tab());
+        if ( token_is(')', trace_node) ) {
+            if ( 1 == context.class_member.is_operator_overload ) {
+                context.class_member.operator_overload_sufix += "()";
+            }
+            return 1;
+        } else {
+            context = context_tokens.restore();
+            return 0;
+        }
+    }
+
     context = context_tokens.restore();
     return 0;
 }
@@ -2750,10 +2834,10 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 }
 
                 // for cases like void f();
-                if( 0 < context.class_name_declaration.size() ){
-                  context.class_member.is_function = 1;
-                }else{
-                  context.declarator.is_function = 1;
+                if ( 0 < context.class_name_declaration.size() ) {
+                    context.class_member.is_function = 1;
+                } else {
+                    context.declarator.is_function = 1;
                 }
 
                 context_good_way.save(context);
@@ -3105,7 +3189,16 @@ int c_parser_descent::parameter_declaration(c_trace_node trace_node)
     }
 
     if (1 == declarator(trace_node)) {
-        // ## todo the rest...
+        c_context_tokens context_good_way(context);
+        token_next(trace_node.get_tab());
+        if ( token_is('=', trace_node) ) {
+            if ( 1 == assignment_expression(trace_node) ) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        context = context_good_way.restore();
         return 1;
     }
 

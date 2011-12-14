@@ -367,6 +367,7 @@ private:
 
     // Lexical elements.
     int identifier(c_trace_node trace_node);
+    int assignment_expression(c_trace_node trace_node);
 
     // Statements
     int statement(c_trace_node trace_node);

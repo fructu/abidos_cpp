@@ -451,7 +451,7 @@ abidos
     abidos/processor/src$ make all &> make_ouput.txt
     abidos/processor/src$ ../scripts/abidos_make_process.pl
     make loader
--[] do abidos_make_process.pl use .abidos
+-[v] do abidos_make_process.pl use .abidos
 -[] do abidos_make_process.pl change dir when make do it
 -[v] in options.cpp fail in this line in version d4e1ce1 works
   -using namespace std;
@@ -465,7 +465,7 @@ abidos
 -[v] do make install rule
     /opt/abidos/
 -[] do param to pass char * p_file_out [../out/out_files.gv]
--[] check if any system line fail in abidos_make_process.pl
+-[v] check if any system line fail in abidos_make_process.pl
 -[v] do uninstall
 -[v] do install fake libraris in /opt/abidos/includes
 -[v] install /opt/abidos/out_files.gv
@@ -516,10 +516,12 @@ abidos
 -[v] parse operator overload
     int TipoBase::operator== (TipoBase& otro)
     cat .abidos/trace_t045.cpp.gv | dot -Tpng > .abidos/trace_t045.cpp.gv.png; eog .abidos/trace_t045.cpp.gv.png
+-[v] parse other operator overload
 -[v] do not aggregation of compositions whith the types of methods
   class Void : public Tipo
   {
 	  virtual Tipo * sig();
   };
 -[v] in classes like previous point don appear () in diagram
+
 
