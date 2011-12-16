@@ -3,7 +3,7 @@
      overloading operators;
      default parameters values;
 */
-
+/*
 int f(int i = 0);
 
 #include<string>
@@ -28,4 +28,11 @@ class B{
   C n1;
   N::C n2;
 };
-
+*/
+	struct strip_data
+	{
+	  int i;
+		unsigned channel : 6;
+		int j;
+		unsigned value : 10;
+	};

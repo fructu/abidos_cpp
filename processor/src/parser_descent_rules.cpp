@@ -2858,6 +2858,19 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                     }
                 }
 
+                // for things like:
+                //		unsigned channel : 6;
+                if ( token_is(':', trace_node) ) {
+                    token_next(trace_node.get_tab());
+                    if ( token_is_not(INTEGER, trace_node) ) {
+                      printf("###### : no INTEGER !!!");
+//                      exit(-1);
+//                      context = context_good_way.restore();
+                    } else {
+                      token_next(trace_node.get_tab());
+                    }
+                }
+
                 if ( token_is(';', trace_node) ) {
                     if (1 == options.verbose_flag) {
                         printf("### yes we are in a function !\n");
@@ -3287,10 +3300,17 @@ int c_parser_descent::initializer(c_trace_node trace_node)
 
     token_next(trace_node.get_tab());
 
+    const int vector_id[]={'=', -1};
+    if (token_is_one(vector_id,trace_node) == 0) {
+        context = context_tokens.restore();
+        return 0;
+    }
+/*
     if ( token_is_not('=', trace_node) ) {
         context = context_tokens.restore();
         return 0;
     }
+*/
 
     int n_open_braket = 0;
 
