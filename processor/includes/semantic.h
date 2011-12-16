@@ -141,6 +141,26 @@ public:
         map_using_namespace[s] = s;
     }
 
+    int is_a_using_namespace(string str) {
+        size_t i = 0;
+        for (i = 0;  i < vector_using_namespace.size(); ++i ) {
+            if ( str != vector_using_namespace[i] ) {
+                continue;
+            }
+            c_symbol *p_symbol = ts.search_symbol(str.c_str());
+            if (p_symbol) {
+                // we are in this case:
+                //  using namespace std;
+                //  std::string;
+                if ( NAMESPACE_NAME == p_symbol->type) {
+                    return 1;
+                }
+            }
+        }
+
+        return 0;
+    }
+
     void check_coloncolon_member_function(c_context & context, c_token token);
 
     void identifier_typedef(c_context & context, c_token token);

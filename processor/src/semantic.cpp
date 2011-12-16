@@ -77,7 +77,7 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
         if (0 != context.namespace_name_declaration.size() ) {
             string s = symbol.token.text;
             symbol.token.text = context.namespace_name_declaration + "::" + symbol.text;
-            symbol.text = symbol.token.text;
+            symbol.text       = symbol.token.text;
         }
     }
 

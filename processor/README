@@ -523,5 +523,13 @@ abidos
 	  virtual Tipo * sig();
   };
 -[v] in classes like previous point don appear () in diagram
-
+-[] parse in dummy mode
+	struct strip_data
+	{
+		unsigned channel : 6;
+		unsigned value : 10;
+	};
+-[v] fix problem with std::string, fixing with a dark path ...
+  cat .abidos/trace_t046.cpp.gv | dot -Tpng > .abidos/trace_t046.cpp.gv.png; eog .abidos/trace_t046.cpp.gv.png
+-[] do subgrammar to active/desactivate traces in some parts of the code
 

@@ -251,6 +251,7 @@ int c_parser_descent::nested_name_specifier(c_trace_node trace_node)
         if ( 0 != chain.size() ) {
             chain = chain + "::";
         }
+
         chain = chain + c_token_get().text;
 
         token_next(trace_node.get_tab());
@@ -620,8 +621,8 @@ int c_parser_descent::block_declaration(c_trace_node trace_node)
     if (1 == simple_declaration(trace_node)) {
         return 1;
     }
-    // tokens_vector_reload();
 
+    // tokens_vector_reload();
     if (1 == using_directive(trace_node)) {
         return 1;
     }
@@ -977,6 +978,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
     } else {
         if ( 1 == nested_name_specifier(trace_node) ) {
             has_colon_colon_after = 1;
+//            result = 1;
         }
     }
 
@@ -1018,7 +1020,6 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
         }
     }
     //###}
-
     if (1 == result) {
         c_decl_specifier decl(c_token_get());
         decl.type_specifier = 1;

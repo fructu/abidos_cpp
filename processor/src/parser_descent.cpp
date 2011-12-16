@@ -413,6 +413,7 @@ in ts:
  [A::A1] is class_name
 
 ## improve to using namespace
+
 */
 void c_parser_descent::colon_colon_chain_process(c_token & token)
 {
@@ -463,12 +464,6 @@ void c_parser_descent::token_next(string tab)
 
     if (!((0 <= context.i_token)
             && (context.i_token < tokens_vector.size()))) {
-        /*##
-                printf
-                (" c_parser_descent::token_next() -> (context.i_token out of vector)");
-        */
-        // context.clear();
-        // we don't want loose other information of context
         context.i_token = 0;
         context.just_reloaded = 1;
     }
@@ -479,14 +474,11 @@ void c_parser_descent::token_next(string tab)
         if (context.i_token < tokens_vector.size()) {
             if (1 == context.just_reloaded) {
                 context.just_reloaded = 0;
-//                printf("%s## just_reloaded == 1\n", tab.c_str());
                 return;
             }
 
             if (context.i_token < (tokens_vector.size() - 1)) {
                 ++context.i_token;
-//##
-//                token_print();
                 return;
             }
         }
@@ -494,31 +486,91 @@ void c_parser_descent::token_next(string tab)
         get_from_lex = 1;
     }
 
+    int dont_avance = 0;
+
     if (1 == get_from_lex) {
         context.just_reloaded = 0;
 
-        t = yylex();
-        c_token token(t, yytext);
+        c_token token;
+        while (1) {
+            int result = 0;
+            t = yylex();
+            token.save(t, yytext);
+            result = drop_head_namespace(tab, token);
+            if (0==result) { // is not a using namespace
+                break;
+            }
+            if (1==result) { // is in using namespace
+                continue;
+            }
+            if (2==result) { // is in using namespace but not is a N::
+                return;
+            }
+        }
 
         colon_colon_chain_process(token);
-        /*
-         * i tried put this part in lex but did not compile maybe for the
-         * link C mode of lexical module
-         */
         if (IDENTIFIER == t) {
             check_identifier(tab, token);
         }
-
         tokens_vector.push_back(token);
 
         context.i_token = (tokens_vector.size() - 1);
-//##
-//        token_print();
         return;
     }
 
     printf("error c_parser_descent::token_next(void)\n");
     exit(-1);
+}
+/*----------------------------------------------------------------------------*/
+/*
+  this is a dark side of this parser
+  when we have something like
+  usi
+    using namespace N;
+
+  class B{
+    C n1;
+    N::C n2;
+  };
+
+  i cut N:: because is reconstructing more later in
+  void c_parser_descent::check_identifier(string tab, c_token &token)
+  because N is in the vector semantic.vector_using_namespace
+
+  i thinks would be better do this more later in some sintatic rule but this
+  is more easy for now.
+*/
+int c_parser_descent::drop_head_namespace(string tab, c_token &token)
+{
+    //droping std::
+    if ( semantic.is_a_using_namespace(token.text) ) {
+        c_token token_1;
+        token_1.save(token);
+        int t = yylex();
+        c_token token_2(t, yytext);
+        if ( COLONCOLON == t) {
+            return 1;
+        } else {
+            colon_colon_chain_process(token);
+            if (IDENTIFIER == t) {
+                check_identifier(tab, token);
+            }
+            tokens_vector.push_back(token);
+            context.i_token = (tokens_vector.size() - 1);
+
+            token.save(token_2);
+            colon_colon_chain_process(token);
+            if (IDENTIFIER == t) {
+                check_identifier(tab, token);
+            }
+            tokens_vector.push_back(token);
+            // i dont avance i need this token for the next call to token_next()
+
+            return 2;
+        }
+    }
+
+    return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -595,11 +647,13 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
     }
 
     // chek the using namespaces
+
     if ( semantic.vector_using_namespace.size() > 0 ) {
         int unsigned i = 0;
 
         for (i = 0;  i < semantic.vector_using_namespace.size(); ++i ) {
             string s = semantic.vector_using_namespace[i] + "::" + yytext;
+
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
                 token.text = p_symbol->text;
@@ -667,7 +721,6 @@ void extract_file_from_path(char *file, char *path)
         ++n;
     }
 }
-
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::yyparse(char *file_name)
 {
@@ -847,5 +900,4 @@ int c_parser_descent::test_01(void)
 
     return 0;
 }
-
 /*----------------------------------------------------------------------------*/

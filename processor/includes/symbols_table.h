@@ -75,6 +75,14 @@ struct c_token {
         line = token.line;
     }
 
+    void save(int t, const char *s) {
+        id = t;
+        text = s;
+
+        file = lex_file_name;
+        line = yylineno;
+    }
+
     void print(const char *tab) {
         printf("%sc_ctoken::print id[%d]->[%s] text[%s] file[%s] line[%d]\n"
                ,tab

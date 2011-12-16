@@ -28,7 +28,7 @@ Parts
 
   preprocessor
   this part of the project have his own Makefile and can generate a graph with
-  the relations betwen the sources of a projects with his #includes
+  the relations between the sources of a projects with his #includes
 
   processor
   this part of abidos is the core of the c++'s parser, it is a descent parser
