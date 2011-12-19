@@ -333,6 +333,9 @@ private:
     int drop_head_namespace(string tab, c_token &token);
     void check_identifier(string tab, c_token &token);
 
+    //## dummy to consume int a[][];
+    int consume_array_brakets(c_trace_node trace_node);
+
     // preprocesssor
     void push_file(const char * f);
     void push_file_loader(const char * f);

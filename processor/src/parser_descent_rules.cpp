@@ -2858,6 +2858,14 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                     }
                 }
 
+                //const member function
+                if ( token_is(CONST, trace_node) ) {
+                    //## maybe do in future:
+                    //context.is_const = 1;
+                    context_good_way.save(context);
+                    token_next(trace_node.get_tab());
+                }
+
                 if ( token_is(';', trace_node) ) {
                     if (1 == options.verbose_flag) {
                         printf("### yes we are in a function !\n");
@@ -2884,7 +2892,6 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 if ( token_is(':', trace_node) ) {
                     token_next(trace_node.get_tab());
                     if ( token_is(INTEGER, trace_node) ) {
-                        printf("###### : no INTEGER !!!");
                         context_good_way.save(context);
                         token_next(trace_node.get_tab());
                     }
@@ -2893,27 +2900,7 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
                 // ## todo | direct_declarator '[' constant_expression_opt
                 // ']'
                 if ( token_is('[', trace_node) ) {
-                    int n_open_braket = 0;
-                    while ( token_get() != 0) {
-                        context_good_way.save(context);
-                        token_next(trace_node.get_tab());
-                        if ( token_is('[', trace_node) ) {
-                            ++n_open_braket;
-                        }
-
-                        if ( token_is(']', trace_node) ) {
-                            if ( 0 == n_open_braket ) {
-                                if (1 != context.class_member.is_function) {
-                                    if ( 1 != context.declarator.is_function) {
-                                        semantic.declarator_insert(trace_node.get_tab(), context);
-                                    }
-                                }
-                                return 1;
-//                                break;
-                            }
-                            --n_open_braket;
-                        }
-                    }
+                    return consume_array_brakets(trace_node);
                 } else if (1 != context.class_member.is_function) {
                     if ( 1 != context.declarator.is_function) {
                         semantic.declarator_insert(trace_node.get_tab(), context);
@@ -2932,6 +2919,45 @@ int c_parser_descent::direct_declarator(c_trace_node trace_node)
     }
 
     return 0;
+}
+/*----------------------------------------------------------------------------*/
+int c_parser_descent::consume_array_brakets(c_trace_node trace_node)
+{
+    trace_graph.add(trace_node, "consume_array_brakets_dummy");
+    int result = 0;
+    int n_open_braket = 0;
+    c_context_tokens context_good_way(context);
+
+    while ( token_is('[', trace_node) ) {
+        n_open_braket = 0;
+        while ( token_get() != 0) {
+            context_good_way.save(context);
+            token_next(trace_node.get_tab());
+            if ( token_is('[', trace_node) ) {
+                ++n_open_braket;
+            }
+
+            if ( token_is(']', trace_node) ) {
+                if ( 0 == n_open_braket ) {
+                    result = 1;
+                    context_good_way.save(context);
+                    token_next(trace_node.get_tab());
+                    break;
+                }
+                --n_open_braket;
+            }
+        }
+    }
+
+    if (1 == result) {
+        if (1 != context.class_member.is_function) {
+            if ( 1 != context.declarator.is_function) {
+                semantic.declarator_insert(trace_node.get_tab(), context);
+            }
+        }
+    }
+    context = context_good_way.restore();
+    return result;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -3341,3 +3367,4 @@ int c_parser_descent::initializer(c_trace_node trace_node)
     return 1;
 }
 /*----------------------------------------------------------------------------*/
+

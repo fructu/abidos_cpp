@@ -34,6 +34,11 @@ struct strip_data
   unsigned channel : 6;
   int j;
   unsigned value : 10;
+  void f(void) const;
+  int table_1[10];
+  int table_2[10][20];
+  int table_3[10][20][30];
+  int k;
 };
 
 class A
@@ -45,3 +50,4 @@ class A
     A_1 a1;
   };
 };
+
