@@ -12,6 +12,7 @@ class A
 
   class A_2
   {
+    A_1 a1;
     class A_2_1
     {
       int A_2_1_i1;

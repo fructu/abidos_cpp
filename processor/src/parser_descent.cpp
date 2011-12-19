@@ -71,6 +71,48 @@ int chain_is_tail(string class_name_declaration, char * text)
     return 1;
 }
 /*----------------------------------------------------------------------------*/
+/*
+  class_name = "A::B"
+  text = "A"
+  return 1 if droped
+*/
+int drop_chain_tail(char * text)
+{
+    unsigned len_text  = strlen(text);
+
+    if ( 0 == len_text) {
+        return 0;
+    }
+
+    unsigned i = len_text - 1;
+
+    while (1) {
+        if ( 0 == i ) {
+            return 0;
+        }
+
+        if ( '\0' == text[i] ) {
+            return 0;
+        }
+
+        if ( ':' == text[i] ) {
+            --i;
+            if (i == 0) {
+                return 0;
+            }
+
+            if ( ':' == text[i] ) {
+                text[i] = '\0';
+                return 1;
+            }
+        }
+
+        --i;
+    }
+
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
 c_context_tokens::c_context_tokens(c_context context_param)
 {
     context = context_param;
@@ -492,7 +534,7 @@ void c_parser_descent::token_next(string tab)
         context.just_reloaded = 0;
 
         c_token token;
-        while (1) {
+        while (1) { // this is for drop std::
             int result = 0;
             t = yylex();
             token.save(t, yytext);
@@ -595,6 +637,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
                 token.id = p_symbol->type;
             }
         }
+
         return;
     }
 
@@ -615,6 +658,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
                 }
             }
         }
+
         return;
     }
 
@@ -623,6 +667,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         if ( context.map_template_parameter.count(token.text) > 0) {
             token.id = TEMPLATE_TYPE;
         }
+
         return;
     }
 
@@ -634,7 +679,6 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
                 token.text = p_symbol->text;
-//                token.id = p_symbol->type;
 
                 if ( 1 == p_symbol->is_template ) {
                     token.id = TEMPLATE_NAME;
@@ -642,12 +686,12 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
                     token.id = p_symbol->type;
                 }
             }
+
             return;
         }
     }
 
     // chek the using namespaces
-
     if ( semantic.vector_using_namespace.size() > 0 ) {
         int unsigned i = 0;
 
@@ -657,13 +701,13 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
                 token.text = p_symbol->text;
-//                token.id = p_symbol->type;
 
                 if ( 1 == p_symbol->is_template ) {
                     token.id = TEMPLATE_NAME;
                 } else {
                     token.id = p_symbol->type;
                 }
+
                 return;
             }
         }
@@ -674,9 +718,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
             string s = context.namespace_name_declaration + "::" + yytext;
             c_symbol *p_symbol = ts.search_symbol(s.c_str());
             if (p_symbol) {
-//                token.text = p_symbol->text;
                 token.text = s;
-//                token.id = p_symbol->type;
 
                 if ( 1 == p_symbol->is_template ) {
                     token.id = TEMPLATE_NAME;
@@ -684,8 +726,37 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
                     token.id = p_symbol->type;
                 }
             }
+
+            return;
         }
-        return;
+    }
+
+    // maybe is a class defined inside the current class
+    if ( 0 != context.class_name_declaration.size() ) {
+        char str[1000];
+        char str_droped[1000];
+        c_symbol *p_symbol = 0;
+        sprintf(str,"%s::%s",context.class_name_declaration.c_str(),yytext);
+        sprintf(str_droped,"%s",context.class_name_declaration.c_str());
+        while (1) {
+            p_symbol = ts.search_symbol(str);
+            if (p_symbol) {
+                token.text = str;
+
+                if ( 1 == p_symbol->is_template ) {
+                    token.id = TEMPLATE_NAME;
+                } else {
+                    token.id = p_symbol->type;
+                }
+                return;
+            }
+
+            if ( 0 == drop_chain_tail(str_droped) ) {
+                break;
+            }
+
+            sprintf(str,"%s::%s",str_droped,yytext);
+        }
     }
 
     //preprocessor hack
@@ -695,8 +766,6 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         c_symbol *p_symbol = ts.search_symbol(s.c_str());
         if (p_symbol) {
             token.text = p_symbol->text;
-//                token.text = s;
-//                token.id = p_symbol->type;
             token.id = PREPROCESSOR_DEFINITION;
         }
     }
@@ -741,6 +810,7 @@ void c_parser_descent::yyparse(char *file_name)
             printf("##{\n");
             while (token_get() != 0) {
                 token_next("");
+                token_print();
             }
             printf("##}\n");
         }
