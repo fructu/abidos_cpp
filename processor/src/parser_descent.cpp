@@ -528,8 +528,6 @@ void c_parser_descent::token_next(string tab)
         get_from_lex = 1;
     }
 
-    int dont_avance = 0;
-
     if (1 == get_from_lex) {
         context.just_reloaded = 0;
 

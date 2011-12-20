@@ -1,7 +1,8 @@
 /*
   testing:
-    std::string //it should drop std:: in parser
-    unsigned channel : 6; //parsing :
+    - std::string //it should drop std:: in parser
+    - unsigned channel : 6; //parsing :
+    - extern
 */
 
 int f(int i = 0);
@@ -51,3 +52,9 @@ class A
   };
 };
 
+
+class A{};
+
+extern A a;
+
+A a;

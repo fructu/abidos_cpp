@@ -315,6 +315,9 @@ public:
     t_vector_template_argument vector_template_argument;
     t_map_template_argument map_template_argument;
 
+    int is_extern;
+    c_token extern_points_token;
+
     c_declarator() {
         is_function = 0;
         has_body = 0;
@@ -332,17 +335,24 @@ public:
         vector_template_argument.clear();
         map_template_argument.clear();
 
+        is_extern = 0;
+        extern_points_token.clear();
     }
     c_declarator(c_token t, t_vector_decl_specifier v) {
         token = t;
 
         is_typedef = 0;
 
+        is_extern = 0;
+
         unsigned i_decl = 0;
         for ( i_decl = 0; i_decl < v.size(); ++i_decl ) {
             if ( TYPEDEF == v[i_decl].token.id ) {
                 is_typedef = 1;
                 continue;
+            }
+            if ( EXTERN == v[i_decl].token.id ) {
+                is_extern = 1;
             }
 
             vector_decl_specifier.push_back(v[i_decl]);
@@ -361,6 +371,7 @@ public:
         is_template_instantation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
+        extern_points_token.clear();
     }
     void clear(void) {
         map_parameter.clear();
@@ -383,6 +394,9 @@ public:
         is_template_instantation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
+
+        is_extern = 0;
+        extern_points_token.clear();
     }
     string get_full_name(void);
 };

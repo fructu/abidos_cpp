@@ -717,6 +717,15 @@ void c_semantic::declarator_insert(string tab, c_context & context)
             symbol.map_template_argument    = context.map_template_argument;
         }
 
+        // extern declaration
+        c_symbol *p_symbol_search = ts.search_symbol(symbol.text);
+        if ( p_symbol_search ) {
+            if ( 1 == p_symbol_search->declarator.is_extern) {
+                p_symbol_search->declarator.extern_points_token.save(symbol.declarator.token);
+                return;
+            }
+        }
+
         ts.insert(symbol);
     } else {
         member_insert(tab, context);

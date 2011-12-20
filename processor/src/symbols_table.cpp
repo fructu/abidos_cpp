@@ -167,6 +167,12 @@ void c_declarator::print(const char *tab)
         printf(">");
     }
 
+    if ( 1 == is_extern ) {
+        printf("  extern_points_token[");
+        extern_points_token.print("");
+        printf("  extern_points_token]");
+    }
+
     if (1 == is_function) {
         if (1 == is_template) {
             printf("[%s]<>", token.text.c_str());

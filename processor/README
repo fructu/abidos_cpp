@@ -503,7 +503,7 @@ abidos
      option --no_repeat_files by default is 1
 -[v] in parser_descent_preprocessor improbe to nested #ifndef #define it must works with parser.h
   ../includes/parser.h:148 error c_symbols_table::insert(#IDENTIFIER) symbol exists yet
--[] fix errors like this:
+-[v] fix errors like this:
   options.cpp:139 error c_symbols_table::insert(options) symbol exists yet options.cpp:139
   in options.h
     extern c_options options;
@@ -533,16 +533,17 @@ abidos
   cat .abidos/trace_t046.cpp.gv | dot -Tpng > .abidos/trace_t046.cpp.gv.png; eog .abidos/trace_t046.cpp.gv.png
 -[] do subgrammar to active/desactivate traces in some parts of the code
 -[v] fix A_1 a1; A_1 should be reconize A::A_1 class type
-class A
-{
-  class A_1
+  class A
   {
-  };
+    class A_1
+    {
+    };
 
-  class A_2
-  {
-    A_1 a1;
-  };
-}
+    class A_2
+    {
+      A_1 a1;
+    };
+  }
 -[v] parse void Properties(void) const;
 -[v] parse arrays with more than 1 dimension;
+

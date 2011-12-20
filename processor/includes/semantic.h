@@ -38,6 +38,7 @@ private:
 //    t_vector_template_parameter vector_template_parameter;
 //    t_map_template_parameter map_template_parameter;
 //### this functionality is in context object
+
 public:
     void push_decl_specifier(c_token token, c_context &context) {
         c_decl_specifier decl(token);
@@ -99,6 +100,19 @@ public:
         printf("\n");
         printf("## }\n");
     }
+
+    int vector_decl_specifier_is_extern(void) {
+        unsigned i = 0;
+
+        for ( i = 0; i < vector_decl_specifier.size(); ++i) {
+            if ( EXTERN == vector_decl_specifier[i].token.id) {
+                return 1;
+            }
+        }
+
+        return 0;
+    }
+
     /*
         in vector_decl_specifier can be
           void A::
