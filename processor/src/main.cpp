@@ -18,6 +18,7 @@
 #include "parser_descent.h"
 #include "options.h"
 #include "loader.h"
+#include "config.h"
 
 // included only to do tests
 // #include "symbols_table.h"
@@ -46,10 +47,25 @@ void process_file_loader(char file_name[])
     parser.yyparse_loader(file_name);
 }
 
+void print_version(void)
+{
+  printf("%s %d.%d.%02d [%s]\n"
+    ,EXECUTABLE
+    ,VERSION_MAJOR
+    ,VERSION_MINOR
+    ,VERSION_PATCH
+    ,PROJECT_COMPILATION_TIME
+  );
+}
+
 int main(int argc, char *argv[])
 {
-    printf("abidos v0.0.1\n");
     options.proccess(argc, argv);
+
+    if(1 == options.version_flag) {
+      print_version();
+      return 0;
+    };
 
     // ts_tests();
 

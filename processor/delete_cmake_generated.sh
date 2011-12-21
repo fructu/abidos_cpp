@@ -22,6 +22,7 @@ rm 	-f src/Makefile
 rm  -rf includes/CMakeFiles/
 rm  -f	includes/Makefile
 rm 	-r  includes/cmake_install.cmake
+rm  -rf out/*
 
 
 

@@ -57,13 +57,13 @@ c_options::proccess(int argc, char *argv[])
              &test_all_tokens_consumed_flag, 1},
             {"no_std", no_argument, &no_std_flag, 1},
             {"no_repeat_files", no_argument, &no_repeat_files_flag, 0},
-
             /*
              * These options don't set a flag. We distinguish them by
              * their indices.
              */
             {"loader", required_argument, 0, 'l'},
             {"includes", required_argument, 0, 'i'},
+            {"version", no_argument, &version_flag, 1},
             {0, 0, 0, 0}
         };
         /*

@@ -11,10 +11,17 @@
 
 cmake_minimum_required(VERSION 2.8)
 
+INCLUDE(FindPerl)
+#INCLUDE(FindPython)
+
+#the next will bee reemplace with the script/put_ifndef_date.pl
+set(PROJECT_COMPILATION_TIME "COMPILATION_TIME")
+
+message("## PROJECT_COMPILATION_TIME->[${PROJECT_COMPILATION_TIME}]")
 set(CMAKE_VERBOSE_MAKEFILE 1)
 
 # The version number.
-set( VERSION_MAJOR 0 )
+set( VERSION_MAJOR 1 )
 set( VERSION_MINOR 0 )
 set( VERSION_PATCH 1 )
 
@@ -34,7 +41,8 @@ set(PYTHON_THIRD_PARTY "${PROJECT_SOURCE_DIR}/python/")
 message("## source_dir->[${PROJECT_SOURCE_DIR}]")
 message("## includes->[${INCLUDES}]")
 
-add_subdirectory(${CMAKE_SOURCE_DIR})
 add_subdirectory(${INCLUDES})
+add_subdirectory(${CMAKE_SOURCE_DIR})
+
 
 

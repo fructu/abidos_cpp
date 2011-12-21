@@ -30,13 +30,12 @@ set (CMAKE_C_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
 find_package(BISON)
 find_package(FLEX)
 
-set(LEX lex)
-set(YACC yacc)
+set(LEX  ${FLEX_EXECUTABLE})
+set(YACC ${BISON_EXECUTABLE})
 
 # lex
 add_custom_command(
    OUTPUT lexer.c
-   COMMAND echo "# generating lex --------------------------"
    COMMAND ${SCRIPTS_DIR}flex_execute.pl
    DEPENDS parser.c ${INCLUDES}parser.h
 )   
@@ -51,23 +50,19 @@ add_custom_command(
 #yacc
 add_custom_command(
    OUTPUT  ${INCLUDES}parser.h
-   COMMAND echo "# generating bison ------------------------"
    COMMAND ${SCRIPTS_DIR}bison_execute.pl
    DEPENDS parser.y
 )
 
 add_custom_command(
-#  tokens_h
-  OUTPUT  ${INCLUDES}tokens.h  
-  COMMAND echo "# generaint tokens.h -----------------------"
+  OUTPUT  ${INCLUDES}tokens.h
 	COMMAND ${SCRIPTS_DIR}extract_symbols.pl
-	COMMAND mv -f tokens.h ${INCLUDES}	
+	COMMAND mv -f tokens.h ${INCLUDES}
 	DEPENDS ${INCLUDES}parser.h
 )
 
 add_custom_target(
   parser_descent_cpp
-	COMMAND echo "# parser_descent.cpp depends of parser.h ---"
 	DEPENDS ${INCLUDES}tokens.h
 )
 
@@ -97,6 +92,5 @@ add_executable(${EXECUTABLE}
 	main	
 )
 
-#add_dependencies(${EXECUTABLE}  parser_descent_cpp generator_class_diagram_cpp)
-add_dependencies(${EXECUTABLE}  parser_descent_cpp )
+add_dependencies(${EXECUTABLE}  parser_descent_cpp generator_class_diagram_cpp config_h)
 
