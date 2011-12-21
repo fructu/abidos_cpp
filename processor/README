@@ -549,4 +549,7 @@ abidos
 -[v] use cmake .
 -[v] option --version show version and compile date
 -[v] generate rule test_run in cmake
+-[v] generate rule install
+-[v] generate rule uninstall
+-[v] generate rule execute_one_test
 
