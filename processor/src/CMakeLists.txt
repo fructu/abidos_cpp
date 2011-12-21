@@ -4,8 +4,8 @@
 # make VERBOSE=1
 #
 
-message("## --cmake procesing src--")
-message("## includes->[${INCLUDES}]")
+message("# --cmake procesing src--")
+message("# includes->[${INCLUDES}]")
 
 #CMAKE_CXX_COMPILER
 
@@ -36,9 +36,9 @@ set(YACC yacc)
 # lex
 add_custom_command(
    OUTPUT lexer.c
-   COMMAND echo "generating lex --------------------------"
+   COMMAND echo "# generating lex --------------------------"
    COMMAND ${SCRIPTS_DIR}flex_execute.pl
-   DEPENDS parser.c ${INCLUDES}/parser.h
+   DEPENDS parser.c ${INCLUDES}parser.h
 )   
 
 add_custom_command(
@@ -50,24 +50,25 @@ add_custom_command(
 
 #yacc
 add_custom_command(
-   OUTPUT  ${INCLUDES}/parser.h
-   COMMAND echo "generating bison -----------------------"   
+   OUTPUT  ${INCLUDES}parser.h
+   COMMAND echo "# generating bison ------------------------"
    COMMAND ${SCRIPTS_DIR}bison_execute.pl
    DEPENDS parser.y
 )
 
-add_custom_target(
-  tokens_h
+add_custom_command(
+#  tokens_h
+  OUTPUT  ${INCLUDES}tokens.h  
+  COMMAND echo "# generaint tokens.h -----------------------"
 	COMMAND ${SCRIPTS_DIR}extract_symbols.pl
-	COMMAND mv -f tokens.h ${INCLUDES}
-	OUTPUT  ${INCLUDES}/tokens.h
-	DEPENDS ${INCLUDES}/parser.h
+	COMMAND mv -f tokens.h ${INCLUDES}	
+	DEPENDS ${INCLUDES}parser.h
 )
 
 add_custom_target(
   parser_descent_cpp
-	COMMAND echo "parser_descent.cpp depends of parser.h"
-	DEPENDS ${INCLUDES}/tokens.h
+	COMMAND echo "# parser_descent.cpp depends of parser.h ---"
+	DEPENDS ${INCLUDES}tokens.h
 )
 
 #generator_class_diagram.cpp: generate_begin_graph.cpp
@@ -99,9 +100,3 @@ add_executable(${EXECUTABLE}
 #add_dependencies(${EXECUTABLE}  parser_descent_cpp generator_class_diagram_cpp)
 add_dependencies(${EXECUTABLE}  parser_descent_cpp )
 
-# configure a header file to pass some of the CMake settings
-# to the source code
-#configure_file (
-#  ${INCLUDES}/config.h.in"
-#  ${INCLUDES}/config.h"
-#)

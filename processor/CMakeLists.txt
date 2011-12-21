@@ -18,19 +18,23 @@ set( VERSION_MAJOR 0 )
 set( VERSION_MINOR 0 )
 set( VERSION_PATCH 1 )
 
+# configure a header file to pass some of the CMake settings
+# to the source code
+
 set(EXECUTABLE abidos)
 
 project (${EXECUTABLE})
 
-set(CMAKE_SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
+set(CMAKE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/")
 
-set(INCLUDES "${PROJECT_SOURCE_DIR}/includes")
+set(INCLUDES "${PROJECT_SOURCE_DIR}/includes/")
 set(SCRIPTS_DIR "${PROJECT_SOURCE_DIR}/scripts/")
 set(PYTHON_THIRD_PARTY "${PROJECT_SOURCE_DIR}/python/")
 
 message("## source_dir->[${PROJECT_SOURCE_DIR}]")
 message("## includes->[${INCLUDES}]")
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/src)
+add_subdirectory(${CMAKE_SOURCE_DIR})
+add_subdirectory(${INCLUDES})
 
 
