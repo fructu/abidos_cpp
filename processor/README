@@ -546,4 +546,5 @@ abidos
   }
 -[v] parse void Properties(void) const;
 -[v] parse arrays with more than 1 dimension;
+-[v] use cmake.
 
