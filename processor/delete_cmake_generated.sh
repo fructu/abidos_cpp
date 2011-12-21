@@ -8,7 +8,7 @@ rm 	-f includes/parser.h
 rm 	-f includes/tokens.h
 #rm 	-f "src/\n  /"
 rm 	-f src/CMakeCache.txt
-rm -rf	src/CMakeFiles/
+rm -rf src/CMakeFiles/
 #	src/Makefile.bk
 rm  -f src/cmake_install.cmake
 rm 	-f src/lexer.c
@@ -24,5 +24,6 @@ rm  -f	includes/Makefile
 rm 	-r  includes/cmake_install.cmake
 rm  -rf out/*
 
-
+rm  -rf src/.abidos/
+rm  -f  install_manifest.txt
 

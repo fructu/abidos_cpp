@@ -3,13 +3,7 @@
 # Manuel Hevia
 # make VERBOSE=1
 #
-
 message("# --cmake procesing src--")
-message("# includes->[${INCLUDES}]")
-
-#CMAKE_CXX_COMPILER
-
-message("## CMAKE_EXE_LINK_FLAGS [${CMAKE_EXE_LINK_FLAGS}]")
 
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
@@ -21,8 +15,6 @@ set(DEBUG "-g")
 set(CMAKE_CXX_FLAGS "-Wall -c ${DEBUG} -I${INCLUDES}")
 set(CMAKE_CXX_FLAGS_DEBUG "-Wall -c ${DEBUG} -I${INCLUDES}")
 set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_COMPILER} -o ${EXECUTABLE} <OBJECTS>")
-
-#link_directories (${HELLO_BINARY_DIR}) 
 
 set (CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS})
 set (CMAKE_C_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
@@ -93,4 +85,41 @@ add_executable(${EXECUTABLE}
 )
 
 add_dependencies(${EXECUTABLE}  parser_descent_cpp generator_class_diagram_cpp config_h)
+
+add_custom_target(
+  test_run
+	COMMAND ${SCRIPTS_DIR}tests_run.pl
+	DEPENDS ${EXECUTABLE}
+)
+
+set(TEST_TO_RUN "t028.cpp")
+
+add_custom_target(
+  execute_one_test
+	COMMAND ${SCRIPTS_DIR}execute_one_test.pl ${TEST_TO_RUN}
+	DEPENDS ${EXECUTABLE}
+)
+
+# install
+set(INSTALL_DIR "/opt/abidos")
+set(INSTALL_INCLUDES_DIR "/opt/abidos/includes")
+
+INSTALL(FILES ${EXECUTABLE} DESTINATION ${INSTALL_DIR}
+  PERMISSIONS OWNER_READ OWNER_WRITE WORLD_READ WORLD_EXECUTE
+)
+INSTALL(FILES ${SCRIPTS_DIR}abidos_make_process.pl DESTINATION ${INSTALL_DIR}
+  PERMISSIONS OWNER_READ OWNER_WRITE WORLD_READ WORLD_EXECUTE
+)
+INSTALL(FILES ${PYTHON_THIRD_PARTY}out_begin.py DESTINATION ${INSTALL_DIR})
+INSTALL(FILES ${PYTHON_THIRD_PARTY}out_end.py   DESTINATION ${INSTALL_DIR})
+INSTALL(FILES ${PYTHON_THIRD_PARTY}xdot2.py     DESTINATION ${INSTALL_DIR})
+INSTALL(FILES ${TEST_INCLUDES}stdio.h           DESTINATION ${INSTALL_DIR})
+INSTALL(FILES ${TEST_INCLUDES}std.h             DESTINATION ${INSTALL_DIR})
+INSTALL(FILES ${TEST_INCLUDES}inttypes.h        DESTINATION ${INSTALL_DIR})
+
+# uninstall
+add_custom_target(
+  uninstall
+	COMMAND rm -rf /opt/abidos
+)
 

@@ -37,6 +37,8 @@ set(CMAKE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/")
 set(INCLUDES "${PROJECT_SOURCE_DIR}/includes/")
 set(SCRIPTS_DIR "${PROJECT_SOURCE_DIR}/scripts/")
 set(PYTHON_THIRD_PARTY "${PROJECT_SOURCE_DIR}/python/")
+set(TEST_INCLUDES "${PROJECT_SOURCE_DIR}/test_includes/")
+
 
 message("## source_dir->[${PROJECT_SOURCE_DIR}]")
 message("## includes->[${INCLUDES}]")

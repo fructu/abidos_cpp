@@ -546,5 +546,7 @@ abidos
   }
 -[v] parse void Properties(void) const;
 -[v] parse arrays with more than 1 dimension;
--[v] use cmake.
+-[v] use cmake .
+-[v] option --version show version and compile date
+-[v] generate rule test_run in cmake
 
