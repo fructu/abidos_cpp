@@ -24,7 +24,7 @@ set(CMAKE_VERBOSE_MAKEFILE 1)
 # The version number.
 set( VERSION_MAJOR 1 )
 set( VERSION_MINOR 0 )
-set( VERSION_PATCH 3 )
+set( VERSION_PATCH 4 )
 
 # configure a header file to pass some of the CMake settings
 # to the source code

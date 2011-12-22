@@ -64,7 +64,7 @@ sub generate_loader_file
         push(@directories, $d);
 	    }
 
-      if( $_ = /[^\-]([\S]+)\.(cpp|cc)/) {
+      if( $_ = /[^\-]([\S]+)\.(cpp|cc)(\s|$)/) {
         #../../preprocessor/ts.cpp:../../preprocessor:../includes:.
         my $file = $1.'.'.$2;
 	      if ($file =~ m/([\S]+)\/([\S]+)\.(cpp|cc)/g) {

@@ -26,4 +26,5 @@ rm  -rf out/*
 
 rm  -rf src/.abidos/
 rm  -f  install_manifest.txt
+rm  -rf .abidos/
 

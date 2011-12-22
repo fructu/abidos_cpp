@@ -558,4 +558,5 @@ abidos
   cat .abidos/trace_t028f.cpp.gv | dot -Tpng > .abidos/trace_t028f.cpp.gv.png; eog .abidos/trace_t028f.cpp.gv.png
 -[v] put cmake-gui
     cmake-gui .
+-[v] scripts/abidos_make_process.pl now parse make VERBOSE=1 &> make_out
 
