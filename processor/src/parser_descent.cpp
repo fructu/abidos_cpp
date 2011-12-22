@@ -487,7 +487,19 @@ void c_parser_descent::colon_colon_chain_process(c_token & token)
 
     colon_colon_chain = "";
 }
-
+/*----------------------------------------------------------------------------*/
+/*
+  this is for trace purpuose
+*/
+//void c_parser_descent::token_next(string tab)
+void c_parser_descent::token_next_trace(string tab)
+{
+  token_next_trace(tab);
+  printf("### token.text[%s]\n",c_token_get().text.c_str());
+  printf("### context.i_am_in_member[%d] \n",context.i_am_in_member);
+  printf("### context.class_specifier_status [%d] \n", context.class_specifier_status);
+  printf("### context.context.class_name_declaration [%s] \n", context.class_name_declaration.c_str());
+};
 /*----------------------------------------------------------------------------*/
 /*
  * void c_parser_descent::token_previous(void) { if( tokens_vector.empty()
@@ -498,6 +510,7 @@ void c_parser_descent::colon_colon_chain_process(c_token & token)
  */
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::token_next(string tab)
+//void c_parser_descent::token_next_trace(string tab)
 {
     int t = 0;
     int get_from_lex = 0;

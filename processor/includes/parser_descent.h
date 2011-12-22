@@ -330,6 +330,7 @@ private:
     string colon_colon_chain;
     void colon_colon_chain_process(c_token & token);
     void token_next(string tab);
+    void token_next_trace(string tab);
     int drop_head_namespace(string tab, c_token &token);
     void check_identifier(string tab, c_token &token);
 

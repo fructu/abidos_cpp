@@ -552,5 +552,7 @@ abidos
 -[v] generate rule install
 -[v] generate rule uninstall
 -[v] generate rule execute_one_test
--[v] fix problem in click A_2_1() go to declaration does not go to definition.
-
+-[v] fix problem in click t208 A_2_1() go to declaration does not go to definition.
+-[v] fix problem t208  in click A() bad.
+  cat .abidos/trace_t028a.cpp.gv | dot -Tpng > .abidos/trace_t028a.cpp.gv.png; eog .abidos/trace_t028a.cpp.gv.png
+  cat .abidos/trace_t028f.cpp.gv | dot -Tpng > .abidos/trace_t028f.cpp.gv.png; eog .abidos/trace_t028f.cpp.gv.png

@@ -1487,6 +1487,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
         saving this part of context should be in another object
         and be a composition of context -> c_template_context
     */
+
     string class_name = context.class_name_declaration;
     int i_am_in_template_declaration = context.i_am_in_template_declaration;
     t_vector_template_parameter vector_template_parameter = context.vector_template_parameter;
@@ -1497,6 +1498,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
     t_map_template_argument map_template_argument = context.map_template_argument;
 
     tokens_vector_clear();
+
     context.class_name_declaration = class_name;
     context.i_am_in_template_declaration = i_am_in_template_declaration;
     context.vector_template_parameter = vector_template_parameter;
@@ -3261,6 +3263,14 @@ int c_parser_descent::parameter_declaration(c_trace_node trace_node)
 int c_parser_descent::function_definition(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "function_definition");
+    /*
+       this preanalisys is necesary to avoid parsin class declarations
+       in this rule.
+    */
+    const int vector_id[]={CLASS , STRUCT, UNION, -1};
+    if (preanalisys_has_one(vector_id,trace_node) ) {
+        return 0;
+    }
 
     decl_specifier_seq_opt(trace_node);
 
