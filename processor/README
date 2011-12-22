@@ -556,3 +556,6 @@ abidos
 -[v] fix problem t208  in click A() bad.
   cat .abidos/trace_t028a.cpp.gv | dot -Tpng > .abidos/trace_t028a.cpp.gv.png; eog .abidos/trace_t028a.cpp.gv.png
   cat .abidos/trace_t028f.cpp.gv | dot -Tpng > .abidos/trace_t028f.cpp.gv.png; eog .abidos/trace_t028f.cpp.gv.png
+-[v] put cmake-gui
+    cmake-gui .
+

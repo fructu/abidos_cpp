@@ -3,6 +3,9 @@
 # Manuel Hevia
 # make VERBOSE=1
 #
+
+#set(CMAKE_BUILD_TYPE ${GLOBAL_CMAKE_BUILD_TYPE})
+
 configure_file (
   config.h.in
   config.h

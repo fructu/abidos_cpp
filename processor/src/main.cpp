@@ -49,11 +49,12 @@ void process_file_loader(char file_name[])
 
 void print_version(void)
 {
-  printf("%s %d.%d.%02d [%s]\n"
+  printf("%s %d.%d.%02d_%s [%s]\n"
     ,EXECUTABLE
     ,VERSION_MAJOR
     ,VERSION_MINOR
     ,VERSION_PATCH
+    ,CMAKE_BUILD_TYPE
     ,PROJECT_COMPILATION_TIME
   );
 }

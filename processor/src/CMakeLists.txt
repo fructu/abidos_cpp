@@ -3,20 +3,24 @@
 # Manuel Hevia
 # make VERBOSE=1
 #
-message("# --cmake procesing src--")
 
+set(VERBOSE 1)
+#set(CMAKE_BUILD_TYPE ${GLOBAL_CMAKE_BUILD_TYPE})
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
+
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
    SET(CMAKE_BUILD_TYPE Debug)
 ENDIF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
-set(DEBUG "-g")
-set(CMAKE_CXX_FLAGS "-Wall -c ${DEBUG} -I${INCLUDES}")
-set(CMAKE_CXX_FLAGS_DEBUG "-Wall -c ${DEBUG} -I${INCLUDES}")
+set(CMAKE_CXX_FLAGS_RELEASE "-Wall -c -o3 -I${INCLUDES}")
+set(CMAKE_CXX_FLAGS_DEBUG "-Wall -c -g -I${INCLUDES}")
+
 set(CMAKE_CXX_LINK_EXECUTABLE "${CMAKE_CXX_COMPILER} -o ${EXECUTABLE} <OBJECTS>")
 
-set (CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS})
+#set (CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS})
+#if not lexx fail..
+set (CMAKE_C_FLAGS ${CMAKE_CXX_FLAGS_DEBUG})
 set (CMAKE_C_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
 
 find_package(BISON)
