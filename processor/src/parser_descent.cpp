@@ -65,7 +65,7 @@ int chain_is_tail(string class_name_declaration, char * text)
         }
 
         --i;
-        --len_class_name;
+        --i_class_name;
     }
 
     return 1;
@@ -648,7 +648,6 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         if (p_symbol) {
             if (p_symbol->type != 0) {
                 // return symbol.type;
-
                 if ( 1 == p_symbol->is_template ) {
                     token.id = TEMPLATE_NAME;
                 } else {

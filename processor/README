@@ -552,4 +552,5 @@ abidos
 -[v] generate rule install
 -[v] generate rule uninstall
 -[v] generate rule execute_one_test
+-[v] fix problem in click A_2_1() go to declaration does not go to definition.
 

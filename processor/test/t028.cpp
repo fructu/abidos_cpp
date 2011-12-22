@@ -1,7 +1,6 @@
 /*
    define classes inside classes
 */
-
 class A
 {
 
@@ -13,6 +12,7 @@ class A
   class A_2
   {
     A_1 a1;
+    A_2();
     class A_2_1
     {
       int A_2_1_i1;
@@ -27,13 +27,17 @@ class A
     {
     };
   };
-  
+
   A();
 };
 
 A::A()
 {
-};
+}
+
+A::A_2::A_2()
+{
+}
 
 class B
 {
@@ -59,4 +63,3 @@ float aqui;
 int A::A_2::A_2_1::A_2_1_f(int long p1)
 {
 }
-
