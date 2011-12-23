@@ -29,7 +29,7 @@ typedef map<string,string> t_map_check_include_files;
 
 class c_generator_check_include_files
 {
-private:    
+private:
     t_map_check_include_files map_check_include_files;
 public:
     void push(const char *file);

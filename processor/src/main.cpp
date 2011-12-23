@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     }
 
     if ( 1 == options.check_include_files_flag ) {
-        generator_check_include_files.run(".abidos/check_include_files.txt");
+        generator_check_include_files.run((char *)".abidos/check_include_files.txt");
     }
 
     return 0;

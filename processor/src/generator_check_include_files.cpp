@@ -17,37 +17,40 @@
 
 c_generator_check_include_files generator_check_include_files;
 
-void get_constant(const char * file, char * constant) {
-  unsigned len = strlen(file);
-  if(0 == len) {
-    return;
-  }
-  unsigned i = 0;
+void get_constant(const char * file, char * constant)
+{
+    unsigned len = strlen(file);
+    if (0 == len) {
+        return;
+    }
+    unsigned i = 0;
 
-  constant[i] = '\0';
+    constant[i] = '\0';
 
-  while(file[i] != '\0') {
-    if(isalnum(file[i])) {
-      constant[i] = toupper(file[i]);
-    } else {
-      constant[i] = '_';
+    while (file[i] != '\0') {
+        if (isalnum(file[i])) {
+            constant[i] = toupper(file[i]);
+        } else {
+            constant[i] = '_';
+        }
+
+        ++i;
     }
 
-    ++i;
-  }
-
-  constant[i] = '\0';
+    constant[i] = '\0';
 }
 /*----------------------------------------------------------------------------*/
-    void c_generator_check_include_files::push(const char *file) {
-      char constant[4000] = {'\0'};
-      get_constant(file,constant);
+void c_generator_check_include_files::push(const char *file)
+{
+    char constant[4000] = {'\0'};
+    get_constant(file,constant);
 
-      map_check_include_files[file] = constant;
-    }
+    map_check_include_files[file] = constant;
+}
 /*----------------------------------------------------------------------------*/
-    void c_generator_check_include_files::run(char *p_file_out) {
-    FILE * f_out = NULL;;    
+void c_generator_check_include_files::run(char *p_file_out)
+{
+    FILE * f_out = NULL;;
     printf("## void c_generator_check_include_files::run(char * p_file_out [%s])\n",
            p_file_out);
 
@@ -62,15 +65,15 @@ void get_constant(const char * file, char * constant) {
     for (i_map = map_check_include_files.begin();
             i_map != map_check_include_files.end(); ++i_map) {
         fprintf(f_out
-          , "CHECK_INCLUDE_FILES(%s %s)\n"
-          , (*i_map).first.c_str()          
-          , (*i_map).second.c_str()
-        );
+                , "CHECK_INCLUDE_FILES(%s %s)\n"
+                , (*i_map).first.c_str()
+                , (*i_map).second.c_str()
+               );
     }
 
     if (NULL != f_out) {
         fclose(f_out);
         f_out = NULL;
-    }    
     }
+}
 /*----------------------------------------------------------------------------*/

@@ -144,7 +144,8 @@ set(ADDITIONAL_MAKE_CLEAN_FILES
 )
 
 # install
-set(INSTALL_DIR "/opt/abidos")
+set(INSTALL_LINKS_DIR "/usr/local/bin/")
+set(INSTALL_DIR "/opt/abidos/")
 set(INSTALL_INCLUDES_DIR "/opt/abidos/includes")
 
 INSTALL(FILES ${EXECUTABLE} DESTINATION ${INSTALL_DIR}
@@ -159,10 +160,13 @@ INSTALL(FILES ${PYTHON_THIRD_PARTY}xdot2.py     DESTINATION ${INSTALL_DIR})
 INSTALL(FILES ${TEST_INCLUDES}stdio.h           DESTINATION ${INSTALL_INCLUDES_DIR})
 INSTALL(FILES ${TEST_INCLUDES}std.h             DESTINATION ${INSTALL_INCLUDES_DIR})
 INSTALL(FILES ${TEST_INCLUDES}inttypes.h        DESTINATION ${INSTALL_INCLUDES_DIR})
+INSTALL(SCRIPT abidos_install.cmake)
 
 # uninstall
 add_custom_target(
   uninstall
-	COMMAND rm -rf /opt/abidos
+	COMMAND rm -rf ${INSTALL_DIR}
+	COMMAND rm -f  ${INSTALL_LINKS_DIR}${EXECUTABLE}
+	COMMAND rm -f  ${INSTALL_LINKS_DIR}abidos_make_process.pl
 )
 
