@@ -28,6 +28,7 @@ c_options::c_options()
     no_std_flag = 0;
     no_repeat_files_flag = 1;
     incasitive_includes_flag = 1;
+    check_include_files_flag = 0;
 
     int i = 0;
     for (i = 0; i < FILE_NAME_LEN; ++i) {
@@ -64,6 +65,7 @@ c_options::proccess(int argc, char *argv[])
             {"loader", required_argument, 0, 'l'},
             {"includes", required_argument, 0, 'i'},
             {"version", no_argument, &version_flag, 1},
+            {"check_include_files", no_argument, &check_include_files_flag, 1},
             {0, 0, 0, 0}
         };
         /*

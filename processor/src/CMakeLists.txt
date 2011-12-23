@@ -8,6 +8,21 @@ set(VERBOSE 1)
 #set(CMAKE_BUILD_TYPE ${GLOBAL_CMAKE_BUILD_TYPE})
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
+INCLUDE (CheckIncludeFiles)
+
+CHECK_INCLUDE_FILES(ctype.h CTYPE_H)
+CHECK_INCLUDE_FILES(dirent.h DIRENT_H)
+CHECK_INCLUDE_FILES(getopt.h GETOPT_H)
+CHECK_INCLUDE_FILES(map MAP)
+CHECK_INCLUDE_FILES(stdio.h STDIO_H)
+CHECK_INCLUDE_FILES(stdlib.h STDLIB_H)
+CHECK_INCLUDE_FILES(string STRING)
+CHECK_INCLUDE_FILES(string.h STRING_H)
+CHECK_INCLUDE_FILES(sys/param.h SYS_PARAM_H)
+CHECK_INCLUDE_FILES(sys/stat.h SYS_STAT_H)
+CHECK_INCLUDE_FILES(sys/types.h SYS_TYPES_H)
+CHECK_INCLUDE_FILES(unistd.h UNISTD_H)
+CHECK_INCLUDE_FILES(vector VECTOR)
 
 find_package(BISON)
 find_package(FLEX)
@@ -31,6 +46,7 @@ set (CMAKE_C_FLAGS_DEBUG ${CMAKE_CXX_FLAGS_DEBUG})
 set(LEX  ${FLEX_EXECUTABLE})
 set(YACC ${BISON_EXECUTABLE})
 
+set_source_files_properties(lexer.c PROPERTIES GENERATED TRUE)
 # lex
 add_custom_command(
    OUTPUT lexer.c
@@ -38,19 +54,27 @@ add_custom_command(
    DEPENDS parser.c ${INCLUDES}parser.h
 )   
 
+set_source_files_properties(ts.cpp PROPERTIES GENERATED TRUE)
+set_source_files_properties(ts.h PROPERTIES GENERATED TRUE)
+
 add_custom_command(
-   OUTPUT ts.cpp
+   OUTPUT ts.cpp ts.h
    COMMAND echo "coping ts.cpp from preprocessor"
    COMMAND cp ../../preprocessor/ts.cpp .
    COMMAND cp ../../preprocessor/ts.h .   
 )
 
+set_source_files_properties(${INCLUDES}parser.h PROPERTIES GENERATED TRUE)
+set_source_files_properties(parser.c PROPERTIES GENERATED TRUE)
+
 #yacc
 add_custom_command(
-   OUTPUT  ${INCLUDES}parser.h
+   OUTPUT  ${INCLUDES}parser.h parser.c
    COMMAND ${SCRIPTS_DIR}bison_execute.pl
    DEPENDS parser.y
 )
+
+set_source_files_properties(tokens.h PROPERTIES GENERATED TRUE)
 
 add_custom_command(
   OUTPUT  ${INCLUDES}tokens.h
@@ -87,10 +111,18 @@ add_executable(${EXECUTABLE}
 	generator_original
 	ts
 	loader
+	generator_check_include_files
 	main	
 )
 
 add_dependencies(${EXECUTABLE}  parser_descent_cpp generator_class_diagram_cpp config_h)
+
+add_custom_target(
+  indent_run
+  COMMAND ${SCRIPTS_DIR}check_indent.sh
+  COMMAND ${SCRIPTS_DIR}indent_run.sh
+  DEPENDS ${EXECUTABLE}
+)
 
 add_custom_target(
   test_run
@@ -99,11 +131,16 @@ add_custom_target(
 )
 
 set(TEST_TO_RUN "t028.cpp")
-
 add_custom_target(
   execute_one_test
 	COMMAND ${SCRIPTS_DIR}execute_one_test.pl ${TEST_TO_RUN}
 	DEPENDS ${EXECUTABLE}
+)
+
+set(ADDITIONAL_MAKE_CLEAN_FILES
+  ${INCLUDES}config.h
+  parser.c
+  ts.h
 )
 
 # install

@@ -559,4 +559,6 @@ abidos
 -[v] put cmake-gui
     cmake-gui .
 -[v] scripts/abidos_make_process.pl now parse make VERBOSE=1 &> make_out
-
+-[v] cmake use
+    CHECK_INCLUDE_FILES(headers variable)
+-[v] do option abidos generate the previous point and add_dependencies --check_include_files      

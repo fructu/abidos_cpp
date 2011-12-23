@@ -19,6 +19,7 @@
 #include "options.h"
 #include "loader.h"
 #include "config.h"
+#include "generator_check_include_files.h"
 
 // included only to do tests
 // #include "symbols_table.h"
@@ -49,23 +50,23 @@ void process_file_loader(char file_name[])
 
 void print_version(void)
 {
-  printf("%s %d.%d.%02d_%s [%s]\n"
-    ,EXECUTABLE
-    ,VERSION_MAJOR
-    ,VERSION_MINOR
-    ,VERSION_PATCH
-    ,CMAKE_BUILD_TYPE
-    ,PROJECT_COMPILATION_TIME
-  );
+    printf("%s %d.%d.%02d_%s [%s]\n"
+           ,EXECUTABLE
+           ,VERSION_MAJOR
+           ,VERSION_MINOR
+           ,VERSION_PATCH
+           ,CMAKE_BUILD_TYPE
+           ,PROJECT_COMPILATION_TIME
+          );
 }
 
 int main(int argc, char *argv[])
 {
     options.proccess(argc, argv);
 
-    if(1 == options.version_flag) {
-      print_version();
-      return 0;
+    if (1 == options.version_flag) {
+        print_version();
+        return 0;
     };
 
     // ts_tests();
@@ -81,6 +82,10 @@ int main(int argc, char *argv[])
         process_file_loader(options.file_loader);
     } else {
         process_file(options.file);
+    }
+
+    if ( 1 == options.check_include_files_flag ) {
+        generator_check_include_files.run(".abidos/check_include_files.txt");
     }
 
     return 0;

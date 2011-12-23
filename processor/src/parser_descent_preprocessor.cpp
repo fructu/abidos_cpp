@@ -14,6 +14,8 @@
 ------------------------------------------------------------------------------*/
 #include <stdlib.h>
 #include <string.h>
+#include <sys/param.h>
+
 #include "parser_descent.h"
 #include "options.h"
 #include "tokens.h"
@@ -24,7 +26,7 @@
 
 #include "preprocessor_ts.h"
 #include "loader.h"
-#include <sys/param.h>
+#include "generator_check_include_files.h"
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::push_file(const char * f)
 {
@@ -107,6 +109,10 @@ void c_parser_descent::push_sharp_file(const char * f)
 
 //    sprintf(include_file,"%s%s",options.includes, f);
     sprintf(include_file,"%s%s",options.includes, f);
+
+    if ( 1 == options.check_include_files_flag ) {
+        generator_check_include_files.push(f);
+    }
 
     if (strcmp("vector", f) == 0) {
         sprintf(include_file,"%sstd.h",options.includes);

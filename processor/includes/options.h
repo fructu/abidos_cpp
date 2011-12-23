@@ -26,6 +26,7 @@ struct c_options {
     int no_repeat_files_flag;
     int incasitive_includes_flag;
     int version_flag;
+    int check_include_files_flag;
 
     char file[FILE_NAME_LEN];
     char file_loader[FILE_NAME_LEN];
