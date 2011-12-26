@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 #
 # Copyright 2008 Jose Fonseca
 #
@@ -17,13 +16,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-
-
 '''Visualize dot graphs via the xdot format.'''
 
 __author__ = "Jose Fonseca"
 
-__version__ = "0.4"
+__version__ = "0.5"
 
 
 import os
@@ -49,6 +46,17 @@ import math
 # - http://mirageiv.berlios.de/
 # - http://comix.sourceforge.net/
 
+class Options:
+    def __init__(self):
+      self.multi_line = 0
+
+    def set_multi_line(self, multi_line):
+      self.multi_line = multi_line
+
+    def get_multi_line(self):
+      return self.multi_line
+
+options = Options()
 
 class Pen:
     """Store pen attributes."""
@@ -385,7 +393,8 @@ class Node(Element):
         return self.x1 <= x and x <= self.x2 and self.y1 <= y and y <= self.y2
 
     #
-    # hevia hack
+    # multi_line feature fructu@gmail.com
+    # 
     # y2_inside the top of the node is 0
     #           and the bottom is the height
     #
@@ -394,9 +403,9 @@ class Node(Element):
     def get_item_url(self, x, y):
         item_selected = "";
         if ( self.y1 >= 0 ):
-          y_inside = y - self.y1;
+          y_inside = y - self.y1
         else:
-          y_inside = y + self.y1;
+          y_inside = y + self.y1
           url=Url(self, self.url)
 
           l_class_parts = url.url.split(";")
@@ -408,19 +417,11 @@ class Node(Element):
           n_element = int( math.ceil( y_inside_centered / element_height ) ) - 1
 
           if( 0 <= n_element and n_element <= n_parts):
-            item_selected = l_class_parts[n_element];
+            url.url = l_class_parts[n_element]
 
-          call_parts = item_selected.split(":")
-          file_parts = call_parts[0].split("[");
-          line_parts  = call_parts[1].split("]");
-
-          url.url = "gedit "+ file_parts[1]+" +"+ line_parts[0]
-#kate
-#			url.url = "kate " + file_parts[1]+" -l"+ line_parts[0]
           return url;
 
-
-    def get_url(self, x, y):
+    def get_url_multi_line(self, x, y):
         if not self.is_inside(x, y):
           return None
 
@@ -430,10 +431,16 @@ class Node(Element):
         url = self.get_item_url(x,y)
 
         if self.is_inside(x, y):
-#            print"## return url"+ url.url
             return url
         return None
 
+    def get_url(self, x, y):    
+        if self.url is None:
+            return None
+        #print (x, y), (self.x1, self.y1), "-", (self.x2, self.y2)
+        if self.is_inside(x, y):
+            return Url(self, self.url)
+        return None
 
     def get_jump(self, x, y):
         if self.is_inside(x, y):
@@ -496,7 +503,10 @@ class Graph(Shape):
 
     def get_url(self, x, y):
         for node in self.nodes:
-            url = node.get_url(x, y)
+            if options.get_multi_line() == 1:
+              url = node.get_url_multi_line(x, y)            
+            else:
+              url = node.get_url(x, y)
             if url is not None:
                 return url
         return None
@@ -521,19 +531,14 @@ class XDotAttrParser:
 
     def __init__(self, parser, buf):
         self.parser = parser
-        self.buf = self.unescape(buf)
+        self.buf = buf
         self.pos = 0
-
+        
         self.pen = Pen()
         self.shapes = []
 
     def __nonzero__(self):
         return self.pos < len(self.buf)
-
-    def unescape(self, buf):
-        buf = buf.replace('\\"', '"')
-        buf = buf.replace('\\n', '\n')
-        return buf
 
     def read_code(self):
         pos = self.buf.find(" ", self.pos)
@@ -619,7 +624,7 @@ class XDotAttrParser:
             b = b*s
             a = 1.0
             return r, g, b, a
-
+                
         sys.stderr.write("unknown color '%s'\n" % c)
         return None
 
@@ -643,7 +648,7 @@ class XDotAttrParser:
                     lw = style.split("(")[1].split(")")[0]
                     lw = float(lw)
                     self.handle_linewidth(lw)
-                elif style in ("solid", "dashed"):
+                elif style in ("solid", "dashed", "dotted"):
                     self.handle_linestyle(style)
             elif op == "F":
                 size = s.read_float()
@@ -691,7 +696,7 @@ class XDotAttrParser:
                 break
 
         return self.shapes
-
+    
     def transform(self, x, y):
         return self.parser.transform(x, y)
 
@@ -709,6 +714,8 @@ class XDotAttrParser:
             self.pen.dash = ()
         elif style == "dashed":
             self.pen.dash = (6, )       # 6pt on, 6pt off
+        elif style == "dotted":
+            self.pen.dash = (2, 4)       # 2pt on, 4pt off
 
     def handle_font(self, size, name):
         self.pen.fontsize = size
@@ -756,7 +763,7 @@ class ParseError(Exception):
 
     def __str__(self):
         return ':'.join([str(part) for part in (self.filename, self.line, self.col, self.msg) if part != None])
-
+        
 
 class Scanner:
     """Stateless scanner."""
@@ -895,9 +902,9 @@ class Parser:
     def match(self, type):
         if self.lookahead.type != type:
             raise ParseError(
-                msg = 'unexpected token %r' % self.lookahead.text,
-                filename = self.lexer.filename,
-                line = self.lookahead.line,
+                msg = 'unexpected token %r' % self.lookahead.text, 
+                filename = self.lexer.filename, 
+                line = self.lookahead.line, 
                 col = self.lookahead.col)
 
     def skip(self, type):
@@ -1000,11 +1007,12 @@ class DotLexer(Lexer):
             text = text.replace('\\\r\n', '')
             text = text.replace('\\\r', '')
             text = text.replace('\\\n', '')
+            
+            # quotes
+            text = text.replace('\\"', '"')
 
-            text = text.replace('\\r', '\r')
-            text = text.replace('\\n', '\n')
-            text = text.replace('\\t', '\t')
-            text = text.replace('\\', '')
+            # layout engines recognize other escape codes (many non-standard)
+            # but we don't translate them here
 
             type = ID
 
@@ -1141,7 +1149,7 @@ class XDotParser(DotParser):
     def __init__(self, xdotcode):
         lexer = DotLexer(buf = xdotcode)
         DotParser.__init__(self, lexer)
-
+        
         self.nodes = []
         self.edges = []
         self.shapes = []
@@ -1166,11 +1174,11 @@ class XDotParser(DotParser):
             self.yscale = -1.0
             # FIXME: scale from points to pixels
 
-            self.width = xmax - xmin
-            self.height = ymax - ymin
+            self.width  = max(xmax - xmin, 1)
+            self.height = max(ymax - ymin, 1)
 
             self.top_graph = False
-
+        
         for attr in ("_draw_", "_ldraw_", "_hdraw_", "_tdraw_", "_hldraw_", "_tldraw_"):
             if attr in attrs:
                 parser = XDotAttrParser(self, attrs[attr])
@@ -1201,7 +1209,7 @@ class XDotParser(DotParser):
             pos = attrs['pos']
         except KeyError:
             return
-
+        
         points = self.parse_edge_pos(pos)
         shapes = []
         for attr in ("_draw_", "_ldraw_", "_hdraw_", "_tdraw_", "_hldraw_", "_tldraw_"):
@@ -1478,6 +1486,9 @@ class DotWidget(gtk.DrawingArea):
         self.connect("size-allocate", self.on_area_size_allocate)
 
         self.connect('key-press-event', self.on_key_press_event)
+        self.last_mtime = None
+
+        gobject.timeout_add(1000, self.update)
 
         self.x, self.y = 0.0, 0.0
         self.zoom_ratio = 1.0
@@ -1490,9 +1501,9 @@ class DotWidget(gtk.DrawingArea):
     def set_filter(self, filter):
         self.filter = filter
 
-    def set_dotcode(self, dotcode, filename='<stdin>'):
-        if isinstance(dotcode, unicode):
-            dotcode = dotcode.encode('utf8')
+    def run_filter(self, dotcode):
+        if not self.filter:
+            return dotcode
         p = subprocess.Popen(
             [self.filter, '-Txdot'],
             stdin=subprocess.PIPE,
@@ -1502,6 +1513,7 @@ class DotWidget(gtk.DrawingArea):
             universal_newlines=True
         )
         xdotcode, error = p.communicate(dotcode)
+        sys.stderr.write(error)
         if p.returncode != 0:
             dialog = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
                                        message_format=error,
@@ -1509,6 +1521,15 @@ class DotWidget(gtk.DrawingArea):
             dialog.set_title('Dot Viewer')
             dialog.run()
             dialog.destroy()
+            return None
+        return xdotcode
+
+    def set_dotcode(self, dotcode, filename=None):
+        self.openfilename = None
+        if isinstance(dotcode, unicode):
+            dotcode = dotcode.encode('utf8')
+        xdotcode = self.run_filter(dotcode)
+        if xdotcode is None:
             return False
         try:
             self.set_xdotcode(xdotcode)
@@ -1521,6 +1542,10 @@ class DotWidget(gtk.DrawingArea):
             dialog.destroy()
             return False
         else:
+            if filename is None:
+                self.last_mtime = None
+            else:
+                self.last_mtime = os.stat(filename).st_mtime
             self.openfilename = filename
             return True
 
@@ -1538,6 +1563,14 @@ class DotWidget(gtk.DrawingArea):
                 fp.close()
             except IOError:
                 pass
+
+    def update(self):
+        if self.openfilename is not None:
+            current_mtime = os.stat(self.openfilename).st_mtime
+            if current_mtime != self.last_mtime:
+                self.last_mtime = current_mtime
+                self.reload()
+        return True
 
     def do_expose_event(self, event):
         cr = self.window.cairo_create()
@@ -1653,11 +1686,16 @@ class DotWidget(gtk.DrawingArea):
             self.y += self.POS_INCREMENT/self.zoom_ratio
             self.queue_draw()
             return True
-        if event.keyval == gtk.keysyms.Page_Up:
+        if event.keyval in (gtk.keysyms.Page_Up,
+                            gtk.keysyms.plus,
+                            gtk.keysyms.equal,
+                            gtk.keysyms.KP_Add):
             self.zoom_image(self.zoom_ratio * self.ZOOM_INCREMENT)
             self.queue_draw()
             return True
-        if event.keyval == gtk.keysyms.Page_Down:
+        if event.keyval in (gtk.keysyms.Page_Down,
+                            gtk.keysyms.minus,
+                            gtk.keysyms.KP_Subtract):
             self.zoom_image(self.zoom_ratio / self.ZOOM_INCREMENT)
             self.queue_draw()
             return True
@@ -1783,14 +1821,17 @@ class DotWindow(gtk.Window):
     </ui>
     '''
 
-    def __init__(self):
+    base_title = 'Dot Viewer'
+
+    def __init__(self, multi_line = 0):
         gtk.Window.__init__(self)
 
         self.graph = Graph()
+        options.set_multi_line(multi_line) 
 
         window = self
 
-        window.set_title('Dot Viewer')
+        window.set_title(self.base_title)
         window.set_default_size(512, 512)
         vbox = gtk.VBox()
         window.add(vbox)
@@ -1834,30 +1875,24 @@ class DotWindow(gtk.Window):
 
         self.show_all()
 
-    def update(self, filename):
-        import os
-        if not hasattr(self, "last_mtime"):
-            self.last_mtime = None
-
-        current_mtime = os.stat(filename).st_mtime
-        if current_mtime != self.last_mtime:
-            self.last_mtime = current_mtime
-            self.open_file(filename)
-
-        return True
-
     def set_filter(self, filter):
         self.widget.set_filter(filter)
 
-    def set_dotcode(self, dotcode, filename='<stdin>'):
+    def set_dotcode(self, dotcode, filename=None):
         if self.widget.set_dotcode(dotcode, filename):
-            self.set_title(os.path.basename(filename) + ' - Dot Viewer')
+            self.update_title(filename)
             self.widget.zoom_to_fit()
 
-    def set_xdotcode(self, xdotcode, filename='<stdin>'):
+    def set_xdotcode(self, xdotcode, filename=None):
         if self.widget.set_xdotcode(xdotcode):
-            self.set_title(os.path.basename(filename) + ' - Dot Viewer')
+            self.update_title(filename)
             self.widget.zoom_to_fit()
+        
+    def update_title(self, filename=None):
+        if filename is None:
+            self.set_title(self.base_title)
+        else:
+            self.set_title(os.path.basename(filename) + ' - ' + self.base_title)
 
     def open_file(self, filename):
         try:
@@ -1868,7 +1903,7 @@ class DotWindow(gtk.Window):
             dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
                                     message_format=str(ex),
                                     buttons=gtk.BUTTONS_OK)
-            dlg.set_title('Dot Viewer')
+            dlg.set_title(self.base_title)
             dlg.run()
             dlg.destroy()
 
@@ -1910,6 +1945,10 @@ def main():
         type='choice', choices=('dot', 'neato', 'twopi', 'circo', 'fdp'),
         dest='filter', default='dot',
         help='graphviz filter: dot, neato, twopi, circo, or fdp [default: %default]')
+    parser.add_option(
+        '-n', '--no-filter',
+        action='store_const', const=None, dest='filter',
+        help='assume input is already filtered into xdot format (use e.g. dot -Txdot)')
 
     (options, args) = parser.parse_args(sys.argv[1:])
     if len(args) > 1:
@@ -1923,30 +1962,29 @@ def main():
             win.set_dotcode(sys.stdin.read())
         else:
             win.open_file(args[0])
-            gobject.timeout_add(1000, win.update, args[0])
     gtk.main()
 
 
 # Apache-Style Software License for ColorBrewer software and ColorBrewer Color
 # Schemes, Version 1.1
-#
+# 
 # Copyright (c) 2002 Cynthia Brewer, Mark Harrower, and The Pennsylvania State
 # University. All rights reserved.
-#
+# 
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
-#
+# 
 #    1. Redistributions as source code must retain the above copyright notice,
-#    this list of conditions and the following disclaimer.
+#    this list of conditions and the following disclaimer.  
 #
 #    2. The end-user documentation included with the redistribution, if any,
 #    must include the following acknowledgment:
-#
+# 
 #       This product includes color specifications and designs developed by
 #       Cynthia Brewer (http://colorbrewer.org/).
-#
+# 
 #    Alternately, this acknowledgment may appear in the software itself, if and
-#    wherever such third-party acknowledgments normally appear.
+#    wherever such third-party acknowledgments normally appear.  
 #
 #    3. The name "ColorBrewer" must not be used to endorse or promote products
 #    derived from this software without prior written permission. For written
@@ -1954,8 +1992,8 @@ def main():
 #
 #    4. Products derived from this software may not be called "ColorBrewer",
 #    nor may "ColorBrewer" appear in their name, without prior written
-#    permission of Cynthia Brewer.
-#
+#    permission of Cynthia Brewer. 
+# 
 # THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES,
 # INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 # FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL CYNTHIA
@@ -1965,7 +2003,7 @@ def main():
 # LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 brewer_colors = {
     'accent3': [(127, 201, 127), (190, 174, 212), (253, 192, 134)],
     'accent4': [(127, 201, 127), (190, 174, 212), (253, 192, 134), (255, 255, 153)],
@@ -2236,4 +2274,3 @@ brewer_colors = {
 
 if __name__ == '__main__':
     main()
-

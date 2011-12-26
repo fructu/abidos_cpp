@@ -6,7 +6,6 @@
 #-------------------------------------------
 use strict;
 
-use strict;
 my $dir = '.abidos';
 
 sub create_directories
