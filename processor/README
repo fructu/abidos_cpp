@@ -563,4 +563,7 @@ abidos
     CHECK_INCLUDE_FILES(headers variable)
 -[v] do option abidos generate the previous point and add_dependencies --check_include_files
 -[v] cmake install in /opt/abidos and create links in /usr/local/bin
+-[v] merge last version of xdot.py
+-[v] use file instead embbeded dot in xdot_run.py
+-[v] remove superflous parts of instalation
 

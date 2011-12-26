@@ -86,14 +86,11 @@ sub generate_loader_file
 
 sub process_project
 {
-  system ("cp /opt/abidos/xdot2.py .abidos/") == 0 or die "system failed: $?";
+#  system ("cp /opt/abidos/xdot2.py .abidos/") == 0 or die "system failed: $?";
   system ("/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --loader .abidos/files") == 0 or die "system failed: $?";
 #  system ("cp /opt/abidos/out_files.gv .abidos/" == 0) or die "system failed: $?";
-  system ("cat /opt/abidos/out_begin.py > .abidos/out_run.py") == 0 or die "system failed: $?";
-  system ("cat .abidos/out_files.gv >> .abidos/out_run.py") == 0 or die "system failed: $?";
-  system ("cat /opt/abidos/out_end.py >> .abidos/out_run.py") == 0 or die "system failed: $?";
-  system ("chmod +x .abidos/out_run.py") == 0 or die "system failed: $?";
-  system (".abidos/out_run.py") == 0 or die "system failed: $?";
+#  system ("cp /opt/abidos/xdot_run.py .abidos/") == 0 or die "system failed: $?";
+  system ("xdot_run.py") == 0 or die "system failed: $?";
 }
 
 sub main
