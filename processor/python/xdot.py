@@ -406,20 +406,22 @@ class Node(Element):
           y_inside = y - self.y1
         else:
           y_inside = y + self.y1
-          url=Url(self, self.url)
 
-          l_class_parts = url.url.split(";")
-          n_parts = len(l_class_parts)
+        url=Url(self, self.url)
 
-          element_height = (self.y2 - self.y1) / n_parts
-          y_inside_centered = y_inside
+        l_class_parts = url.url.split(";")
+        n_parts = len(l_class_parts)
 
-          n_element = int( math.ceil( y_inside_centered / element_height ) ) - 1
+        element_height = (self.y2 - self.y1) / n_parts
+        y_inside_centered = y_inside
 
-          if( 0 <= n_element and n_element <= n_parts):
-            url.url = l_class_parts[n_element]
+        n_element = int( math.ceil( y_inside_centered / element_height ) ) - 1
 
-          return url;
+        if( 0 <= n_element and n_element <= n_parts):
+          url.url = l_class_parts[n_element]
+
+        return url;
+
 
     def get_url_multi_line(self, x, y):
         if not self.is_inside(x, y):
@@ -507,6 +509,7 @@ class Graph(Shape):
               url = node.get_url_multi_line(x, y)            
             else:
               url = node.get_url(x, y)
+
             if url is not None:
                 return url
         return None
