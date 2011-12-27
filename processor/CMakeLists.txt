@@ -11,11 +11,11 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-set(VERBOSE 1 CACHE STRING "1 is necesary to run make &> make_out.txt and use abidos_make_process.pl")
+set(CMAKE_VERBOSE_MAKEFILE 1 CACHE STRING "1 is necesary to run make &> make_out.txt and use abidos_make_process.pl")
 SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Debug or Release avalible")
 SET(CMAKE_INSTALL_PREFIX /usr/local/bin/ CACHE STRING "abidos install in /opt/abidos and links in /usr/local/bin/")
 
-message("-- VERBOSE ${VERBOSE}")
+message("-- CMAKE_VERBOSE_MAKEFILE ${CMAKE_VERBOSE_MAKEFILE}")
 message("-- CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}")
 message("-- CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
 
@@ -26,8 +26,6 @@ include(FindPythonInterp)
 
 #the next will bee reemplace with the script/put_ifndef_date.pl
 set(PROJECT_COMPILATION_TIME "COMPILATION_TIME")
-
-set(CMAKE_VERBOSE_MAKEFILE 1)
 
 # The version number.
 set( VERSION_MAJOR 1 )
