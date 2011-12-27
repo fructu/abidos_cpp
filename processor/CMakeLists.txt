@@ -15,6 +15,7 @@ set(VERBOSE 1 CACHE STRING "1 is necesary to run make &> make_out.txt and use ab
 SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Debug or Release avalible")
 SET(CMAKE_INSTALL_PREFIX /usr/local/bin/ CACHE STRING "abidos install in /opt/abidos and links in /usr/local/bin/")
 
+message("-- VERBOSE ${VERBOSE}")
 message("-- CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}")
 message("-- CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
 
@@ -31,7 +32,7 @@ set(CMAKE_VERBOSE_MAKEFILE 1)
 # The version number.
 set( VERSION_MAJOR 1 )
 set( VERSION_MINOR 0 )
-set( VERSION_PATCH 7 )
+set( VERSION_PATCH 8 )
 
 # configure a header file to pass some of the CMake settings
 # to the source code
