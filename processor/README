@@ -566,4 +566,7 @@ abidos
 -[v] merge last version of xdot.py
 -[v] use file instead embbeded dot in xdot_run.py
 -[v] remove superflous parts of instalation
+-[v] put messages of instalation
+-[v] put messages of desinstalation
+-[] put example of new xdot.py version
 

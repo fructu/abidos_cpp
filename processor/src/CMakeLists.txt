@@ -170,11 +170,6 @@ INSTALL(SCRIPT abidos_install.cmake)
 # uninstall
 add_custom_target(
   uninstall
-	COMMAND rm -rf ${INSTALL_DIR}
-	COMMAND rm -f  ${INSTALL_BIN_LINKS_DIR}${EXECUTABLE}
-	COMMAND rm -f  ${INSTALL_BIN_LINKS_DIR}abidos_make_process.pl
-	COMMAND rm -f  ${INSTALL_BIN_LINKS_DIR}xdot_run.py
-	COMMAND rm -f  ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.py
-	COMMAND rm -f  ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.pyc
+  cmake -P abidos_uninstall.cmake
 )
 
