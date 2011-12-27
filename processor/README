@@ -573,4 +573,22 @@ abidos
 -[v] set cache CMAKE_INSTALL_PREFIX /usr/local/bin/
 -[v] pass install and uninstall scripts to targets
 -[v] use variables in install and uninstall targets
+-[v] xdot-multi-line
+  /home/hevia/working
+  tar -czvf xdot_multi_line_v5_0_1.git.tar.gz xdot_multi_line/
+  http://code.google.com/p/xdot-multi-line/
+-[v] send patch to fonseca with xdot multi_line
+  jrfonseca.xdot$
+    diff -crB xdot.py xdot_v5_1.py > xdot_v5_1_multi_line.patch
+    patch --dry-run -p0 -i xdot_v5_1_multi_line.patch
+
+-[v] cmake, in make check directories.
+-[v] new instructions to compile and execute
+    cd abidos/processor/
+    cmake .
+    make VERBOSE=1 &> make_out.txt
+    sudo make install
+    abidos_make_process.pl
+
+
 

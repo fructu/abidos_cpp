@@ -93,6 +93,7 @@ add_custom_target(
 
 add_custom_target(
   generator_class_diagram_cpp
+  COMMAND ${SCRIPTS_DIR}check_directories.pl
   COMMAND ${SCRIPTS_DIR}generate_begin_graph.pl
   DEPENDS ${PYTHON_THIRD_PARTY}out_begin_2.gv
 )
@@ -114,7 +115,7 @@ add_executable(${EXECUTABLE}
 	main	
 )
 
-add_dependencies(${EXECUTABLE}  parser_descent_cpp generator_class_diagram_cpp config_h)
+add_dependencies(${EXECUTABLE} parser_descent_cpp generator_class_diagram_cpp config_h)
 
 add_custom_target(
   indent_run

@@ -49,8 +49,10 @@ Intructions
 
   3) testin processor:
     cd abidos/processor/
-    make all
-    make execute
+    cmake .
+    make VERBOSE=1 &> make_out.txt
+    sudo make install
+    abidos_make_process.pl
 
 thanks
   
