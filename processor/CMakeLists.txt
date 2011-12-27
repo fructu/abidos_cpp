@@ -11,7 +11,13 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-set(GLOBAL_VERBOSE 1)
+set(VERBOSE 1 CACHE STRING "1 is necesary to run make &> make_out.txt and use abidos_make_process.pl")
+SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Debug or Release avalible")
+SET(CMAKE_INSTALL_PREFIX /usr/local/bin/ CACHE STRING "abidos install in /opt/abidos and links in /usr/local/bin/")
+
+message("-- CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}")
+message("-- CMAKE_INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX}")
+
 
 INCLUDE(FindPerl)
 include(FindPythonInterp)

@@ -569,4 +569,8 @@ abidos
 -[v] put messages of instalation
 -[v] put messages of desinstalation
 -[] put example of new xdot.py version
+-[v] set cache variable CMAKE_BUILD_TYPE Debug
+-[v] set cache CMAKE_INSTALL_PREFIX /usr/local/bin/
+-[v] pass install and uninstall scripts to targets
+-[v] use variables in install and uninstall targets
 

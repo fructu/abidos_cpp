@@ -4,7 +4,6 @@
 # make VERBOSE=1
 #
 
-set(VERBOSE 1)
 #set(CMAKE_BUILD_TYPE ${GLOBAL_CMAKE_BUILD_TYPE})
 # Set a default build type for single-configuration
 # CMake generators if no build type is set.
@@ -144,7 +143,8 @@ set(ADDITIONAL_MAKE_CLEAN_FILES
 )
 
 # install
-set(INSTALL_BIN_LINKS_DIR "/usr/local/bin/")
+#set(INSTALL_BIN_LINKS_DIR "/usr/local/bin/")
+set(INSTALL_BIN_LINKS_DIR ${CMAKE_INSTALL_PREFIX})
 set(INSTALL_LIB_PYTHON_LINKS_DIR "/usr/lib/python2.6/dist-packages/")
 set(INSTALL_DIR "/opt/abidos/")
 set(INSTALL_INCLUDES_DIR "/opt/abidos/includes")
@@ -165,11 +165,40 @@ INSTALL(FILES ${PYTHON_THIRD_PARTY}xdot.py     DESTINATION ${INSTALL_DIR}
 INSTALL(FILES ${TEST_INCLUDES}stdio.h           DESTINATION ${INSTALL_INCLUDES_DIR})
 INSTALL(FILES ${TEST_INCLUDES}std.h             DESTINATION ${INSTALL_INCLUDES_DIR})
 INSTALL(FILES ${TEST_INCLUDES}inttypes.h        DESTINATION ${INSTALL_INCLUDES_DIR})
-INSTALL(SCRIPT abidos_install.cmake)
+
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}abidos <- ${INSTALL_BIN_LINKS_DIR}abidos\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}abidos; ${INSTALL_BIN_LINKS_DIR})")
+
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}abidos_make_process.pl <- ${INSTALL_BIN_LINKS_DIR}abidos_make_process.pl\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}abidos_make_process.pl; ${INSTALL_BIN_LINKS_DIR})")
+
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}xdot_run.py <- ${INSTALL_BIN_LINKS_DIR}xdot_run.py\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}xdot_run.py; ${INSTALL_BIN_LINKS_DIR};)")
+
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}xdot_run.py <- ${INSTALL_BIN_LINKS_DIR}xdot_run.py\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}xdot.py; ${INSTALL_LIB_PYTHON_LINKS_DIR})")
+
 
 # uninstall
 add_custom_target(
   uninstall
-  cmake -P abidos_uninstall.cmake
+	COMMAND echo "deleting"
+	COMMAND echo   "  ${INSTALL_DIR}"
+	COMMAND rm -rf    ${INSTALL_DIR}
+
+	COMMAND echo "  ${INSTALL_BIN_LINKS_DIR}${EXECUTABLE}"
+	COMMAND rm -f   ${INSTALL_BIN_LINKS_DIR}${EXECUTABLE}
+
+	COMMAND echo "  ${INSTALL_BIN_LINKS_DIR}abidos_make_process.pl"
+	COMMAND rm -f   ${INSTALL_BIN_LINKS_DIR}abidos_make_process.pl
+
+	COMMAND echo "  ${INSTALL_BIN_LINKS_DIR}xdot_run.py"
+	COMMAND rm -f   ${INSTALL_BIN_LINKS_DIR}xdot_run.py
+
+	COMMAND echo "  ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.py"
+	COMMAND rm -f   ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.py
+
+	COMMAND echo "  ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.pyc"
+	COMMAND rm -f   ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.pyc
 )
 
