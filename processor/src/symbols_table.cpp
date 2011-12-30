@@ -15,6 +15,7 @@
 #include "symbols_table.h"
 #include "parser_descent.h"
 #include "parser.h"
+#include "options.h"
 #include <stdio.h>
 #include <stdlib.h>
 /*----------------------------------------------------------------------------*/
@@ -521,6 +522,8 @@ void c_symbols_table::insert(c_symbol symbol)
         );
         return;
     }
+
+    symbol.is_banned = options.ban_symbols_on;
 
     stack[last][symbol.text] = symbol;
 }

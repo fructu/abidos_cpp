@@ -18,6 +18,9 @@ class T{
 
 namespace N {
   class C{};
+//ban_symbols_on
+  class C_banned{};
+//ban_symbols_off
 };
 
 using namespace N;
@@ -51,10 +54,9 @@ class A
     A_1 a1;
   };
 };
-
-
-class A{};
-
+//ban_symbols_on
+class probando_ban{};
+//ban_symbols_off
 extern A a;
 
 A a;

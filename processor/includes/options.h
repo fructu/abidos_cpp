@@ -34,6 +34,10 @@ struct c_options {
 
     int loader_flag;
 
+
+    //abidos_commands
+    int ban_symbols_on;
+
     c_options();
     void proccess(int argc, char *argv[]);
 };

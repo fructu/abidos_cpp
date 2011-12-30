@@ -568,7 +568,8 @@ abidos
 -[v] remove superflous parts of instalation
 -[v] put messages of instalation
 -[v] put messages of desinstalation
--[] put example of new xdot.py version
+-[v] put example of new xdot.py version
+    http://code.google.com/p/xdot-multi-line/
 -[v] set cache variable CMAKE_BUILD_TYPE Debug
 -[v] set cache CMAKE_INSTALL_PREFIX /usr/local/bin/
 -[v] pass install and uninstall scripts to targets
@@ -589,6 +590,9 @@ abidos
     make VERBOSE=1 &> make_out.txt
     sudo make install
     abidos_make_process.pl
-
-
+-[v] do abidos command to ban symbols
+    //ban_symbols_on
+    ...
+    //ban_symbols_off
+    
 

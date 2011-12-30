@@ -37,6 +37,9 @@ c_options::c_options()
         includes[i] = '\0';
     }
 
+    //abidos_commands
+    ban_symbols_on = 0;
+
     sprintf(includes,"/opt/abidos/includes/");
 }
 

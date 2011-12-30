@@ -170,7 +170,12 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
         for ( j = 0; j < a.vector_decl_specifier.size(); ++j) {
             c_decl_specifier decl = a.vector_decl_specifier[j];
 //                fprintf(f_out, " %s",decl.token.text.c_str());
-            if ( 0 == ts.search_symbol(decl.token.text) ) {
+            c_symbol *p_symbol = ts.search_symbol(decl.token.text);
+            if ( 0 ==  p_symbol) {
+                continue;
+            }
+
+            if ( 1 ==  p_symbol->is_banned) {
                 continue;
             }
 
@@ -195,6 +200,10 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
                 if ( 1 == is_banned(s2 ) ) {
                     continue;
                 }
+            }
+
+            if (1 == symbol.is_banned) {
+              continue;
             }
 
             fprintf(f_out, "  /*%s->%s*/", s1.c_str(),
@@ -231,6 +240,11 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
  */
 void c_generator_class_diagram::nodes(c_symbol & symbol)
 {
+    if (1 == symbol.is_banned) {
+      fprintf(f_out, "/* banned [%s] */\n",symbol.text.c_str());
+      return;
+    }
+
     fprintf(f_out, "/* c_generator_class_diagram::classes() */\n");
     // first[B] id[258]->[IDENTIFIER] text[B] type[265]->[CLASS_NAME]
     // class_key[300]->[CLASS]
@@ -348,6 +362,15 @@ void c_generator_class_diagram::members_compositions_aggregations(
                 ++i_decl) {
             c_decl_specifier * p_decl_specifier = & vector_class_member[i_member]->vector_decl_specifier[i_decl];
 
+            c_symbol *p_symbol = ts.search_symbol(p_decl_specifier->token.text);
+            if ( 0 ==  p_symbol) {
+                continue;
+            }
+
+            if ( 1 ==  p_symbol->is_banned) {
+                continue;
+            }
+
             if ( 0 != class_name.size() ) {
                 if (
                     ('*' == p_decl_specifier->token.id) ||
@@ -386,6 +409,10 @@ void c_generator_class_diagram::members_compositions_aggregations(
             if ( 1 == is_banned(s2 ) ) {
                 continue;
             }
+        }
+
+        if (1 == symbol.is_banned) {
+          continue;
         }
 
         if ( 0 == is_ptr ) {
@@ -439,6 +466,10 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
         if ( 1 == is_banned(s2 ) ) {
             return;
         }
+    }
+
+    if (1 == symbol.is_banned) {
+      return;
     }
 
     if ( 0 == s2.size() ) {

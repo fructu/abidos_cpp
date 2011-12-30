@@ -491,6 +491,9 @@ public:
 
     int class_predeclaration;
 
+    //this is to put in symbols we dont wan visualize it in graphs.
+    int is_banned;
+
     c_symbol() {
         text = "";
         type = 0;
@@ -512,6 +515,7 @@ public:
         map_template_argument.clear();
 
         class_predeclaration = 0;
+        is_banned = 0;
     }
 
     c_symbol(c_token token_1) {
@@ -538,6 +542,7 @@ public:
         map_template_argument.clear();
 
         class_predeclaration = 0;
+        is_banned = 0;
     }
 
     ~c_symbol() {
@@ -563,6 +568,7 @@ public:
         map_template_argument.clear();
 
         class_predeclaration = 0;
+        is_banned = 0;
     }
     void process_token_text();
     void print(const char *tab);

@@ -6,7 +6,7 @@
 
 #ifndef _std_h
 #define _std_h
-
+//ban_symbols_on
 namespace std
 {
 class string
@@ -29,5 +29,5 @@ class vector
 };
 
 }
-
+//ban_symbols_off
 #endif

@@ -56,7 +56,16 @@ static void yyerror(char *s);
 
 %token TEMPLATE_TYPE
 %token PREPROCESSOR_DEFINITION
-
+/*
+  abidos commands
+  put all together
+  {
+*/
+%token ABIDOS_BAN_SYMBOLS_ON
+%token ABIDOS_BAN_SYMBOLS_OFF
+/*
+ }
+*/
 %token UNION_NAME
 
 %start translation_unit

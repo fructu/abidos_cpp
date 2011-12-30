@@ -337,6 +337,11 @@ private:
     //## dummy to consume int a[][];
     int consume_array_brakets(c_trace_node trace_node);
 
+    //## abidos commands
+    int check_abidos_command(int t);
+    void ban_symbols_on(void);
+    void ban_symbols_off(void);
+
     // preprocesssor
     void push_file(const char * f);
     void push_file_loader(const char * f);

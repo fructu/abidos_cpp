@@ -113,6 +113,7 @@ add_executable(${EXECUTABLE}
 	ts
 	loader
 	generator_check_include_files
+	parser_descent_abidos_commands
 	main	
 )
 
@@ -131,7 +132,7 @@ add_custom_target(
 	DEPENDS ${EXECUTABLE}
 )
 
-set(TEST_TO_RUN "t028.cpp")
+set(TEST_TO_RUN "t046.cpp")
 add_custom_target(
   execute_one_test
 	COMMAND ${SCRIPTS_DIR}execute_one_test.pl ${TEST_TO_RUN}

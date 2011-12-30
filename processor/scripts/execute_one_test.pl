@@ -38,7 +38,7 @@ sub test_run
 	$estado=`mkdir -p .abidos`;
 	$estado=`cp ../python/xdot.py .abidos/`;
 	$estado=`cp ../python/xdot_run.py .abidos/`;	
-	$estado=`./abidos --verbose --ts_show --includes ../test_includes/ ../test/$file`;
+	$estado=`./abidos --verbose --ts_show --includes ../test_includes/ ../test/$file > ../test_out/out_$file.txt`;
 	$estado=`cp ../test/$file .abidos/$file`;	
 	$estado=`.abidos/xdot_run.py`;
 }

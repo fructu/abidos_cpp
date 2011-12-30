@@ -30,7 +30,7 @@ set(PROJECT_COMPILATION_TIME "COMPILATION_TIME")
 # The version number.
 set( VERSION_MAJOR 1 )
 set( VERSION_MINOR 0 )
-set( VERSION_PATCH 8 )
+set( VERSION_PATCH 9 )
 
 # configure a header file to pass some of the CMake settings
 # to the source code

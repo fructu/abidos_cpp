@@ -85,6 +85,8 @@ ESCAPE        ({BACKSL}{ANY})
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
 "/*"					{ skip_comment(); }
+"//ban_symbols_on" { return ABIDOS_BAN_SYMBOLS_ON; }
+"//ban_symbols_off" { return ABIDOS_BAN_SYMBOLS_OFF; }
 "//"					{ skip_until_eol(); }
 "#"					{ return '#'; }
 "{"					{ return '{'; }
