@@ -594,5 +594,7 @@ abidos
     //ban_symbols_on
     ...
     //ban_symbols_off
-    
+-[v] use cmake ADD_TEST() -> make test
+      make test_run is more verbose
+
 

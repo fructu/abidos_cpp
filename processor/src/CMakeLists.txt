@@ -145,6 +145,15 @@ set(ADDITIONAL_MAKE_CLEAN_FILES
   ts.h
 )
 
+#-------------------------------------------------------------------------------
+
+ENABLE_TESTING()
+ADD_TEST(
+  abidos_testing
+  ${SCRIPTS_DIR}tests_run.pl
+)
+
+#-------------------------------------------------------------------------------
 # install
 #set(INSTALL_BIN_LINKS_DIR "/usr/local/bin/")
 set(INSTALL_BIN_LINKS_DIR ${CMAKE_INSTALL_PREFIX})

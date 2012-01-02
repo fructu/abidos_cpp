@@ -28,3 +28,7 @@ rm  -rf src/.abidos/
 rm  -f  install_manifest.txt
 rm  -rf .abidos/
 
+rm CTestTestfile.cmake
+rm  -rf Testing/
+rm src/CTestTestfile.cmake
+
