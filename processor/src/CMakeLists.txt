@@ -70,7 +70,7 @@ set_source_files_properties(parser.c PROPERTIES GENERATED TRUE)
 #yacc
 add_custom_command(
    OUTPUT  ${INCLUDES}parser.h parser.c
-   COMMAND ${SCRIPTS_DIR}bison_execute.pl
+   COMMAND ${SCRIPTS_DIR}bison_execute.pl ${YACC} ${CMAKE_SOURCE_DIR} ${INCLUDES}
    DEPENDS parser.y
 )
 
