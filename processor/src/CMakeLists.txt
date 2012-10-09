@@ -50,18 +50,18 @@ set_source_files_properties(lexer.c PROPERTIES GENERATED TRUE)
 # lex
 add_custom_command(
    OUTPUT lexer.c
-   COMMAND ${SCRIPTS_DIR}flex_execute.pl
+   COMMAND ${SCRIPTS_DIR}flex_execute.pl ${LEX} ${CMAKE_SOURCE_DIR}
    DEPENDS parser.c ${INCLUDES}parser.h
 )   
 
-set_source_files_properties(ts.cpp PROPERTIES GENERATED TRUE)
-set_source_files_properties(ts.h PROPERTIES GENERATED TRUE)
+set_source_files_properties(${CMAKE_PROJECT_PREPROCESSOR}ts.cpp PROPERTIES GENERATED TRUE)
+set_source_files_properties(${CMAKE_PROJECT_PREPROCESSOR}ts.h PROPERTIES GENERATED TRUE)
 
 add_custom_command(
    OUTPUT ts.cpp ts.h
    COMMAND echo "coping ts.cpp from preprocessor"
-   COMMAND cp ../../preprocessor/ts.cpp .
-   COMMAND cp ../../preprocessor/ts.h .   
+   COMMAND cp ${CMAKE_PROJECT_PREPROCESSOR}ts.cpp ${CMAKE_SOURCE_DIR}
+   COMMAND cp ${CMAKE_PROJECT_PREPROCESSOR}ts.h ${CMAKE_SOURCE_DIR}
 )
 
 set_source_files_properties(${INCLUDES}parser.h PROPERTIES GENERATED TRUE)
@@ -78,7 +78,7 @@ set_source_files_properties(tokens.h PROPERTIES GENERATED TRUE)
 
 add_custom_command(
   OUTPUT  ${INCLUDES}tokens.h
-	COMMAND ${SCRIPTS_DIR}extract_symbols.pl
+	COMMAND ${SCRIPTS_DIR}extract_symbols.pl ${CMAKE_SOURCE_DIR}
 	COMMAND mv -f tokens.h ${INCLUDES}
 	DEPENDS ${INCLUDES}parser.h
 )
@@ -94,8 +94,8 @@ add_custom_target(
 
 add_custom_target(
   generator_class_diagram_cpp
-  COMMAND ${SCRIPTS_DIR}check_directories.pl
-  COMMAND ${SCRIPTS_DIR}generate_begin_graph.pl
+  COMMAND ${SCRIPTS_DIR}check_directories.pl ${CMAKE_PROJECT_DIR}
+  COMMAND ${SCRIPTS_DIR}generate_begin_graph.pl ${PYTHON_THIRD_PARTY} ${PROJECT_OUT_DIR}
   DEPENDS ${PYTHON_THIRD_PARTY}out_begin_2.gv
 )
 

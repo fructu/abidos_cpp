@@ -12,4 +12,26 @@ processor/out.gv
 processor/out/*
 processor/out_run.py
 processor/test_create_mass_classes_01.pl
+processor/build/*
+processor/make_out.txt
+processor/CMakeCache.txt
+processor/CMakeFiles/
+processor/CTestTestfile.cmake
+processor/Makefile
+processor/cmake_install.cmake
+processor/includes/CMakeFiles/
+processor/includes/Makefile
+processor/includes/cmake_install.cmake
+processor/includes/config.h
+processor/includes/parser.h
+processor/includes/tokens.h
+processor/src/CMakeFiles/
+processor/src/CTestTestfile.cmake
+processor/src/Makefile
+processor/src/abidos
+processor/src/cmake_install.cmake
+processor/src/lexer.c
+processor/src/parser.c
+processor/src/ts.cpp
+processor/src/ts.h
 

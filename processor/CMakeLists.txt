@@ -30,7 +30,7 @@ set(PROJECT_COMPILATION_TIME "COMPILATION_TIME")
 # The version number.
 set( VERSION_MAJOR 1 )
 set( VERSION_MINOR 0 )
-set( VERSION_PATCH 10 )
+set( VERSION_PATCH 11 )
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -40,6 +40,9 @@ set(EXECUTABLE abidos)
 project (${EXECUTABLE})
 
 set(CMAKE_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src/")
+set(CMAKE_PROJECT_DIR "${PROJECT_SOURCE_DIR}/")
+set(PROJECT_OUT_DIR "${PROJECT_SOURCE_DIR}/out/")
+set(CMAKE_PROJECT_PREPROCESSOR "${PROJECT_SOURCE_DIR}/../preprocessor/")
 
 set(INCLUDES "${PROJECT_SOURCE_DIR}/includes/")
 set(SCRIPTS_DIR "${PROJECT_SOURCE_DIR}/scripts/")

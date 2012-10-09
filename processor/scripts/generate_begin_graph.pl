@@ -8,9 +8,13 @@ use strict;
 
 sub p1
 {
-  open(f_in,"< ../python/out_begin_2.gv")||die("error open < file");
+
+  my $PYTHON_THIRD_PARTY = shift;
+  my $out_dir = shift;
+
+  open(f_in,"< ${PYTHON_THIRD_PARTY}out_begin_2.gv")||die("error open < file");
   my @raw_data=<f_in>;
-  open(f_out,"> ../out/generate_begin_graph.cpp")||die("error open > file");
+  open(f_out,"> ${out_dir}generate_begin_graph.cpp")||die("error open > file");
 
   foreach my $l (@raw_data)
   {
@@ -24,4 +28,16 @@ sub p1
   close(f_out);
 }
 
-p1;
+sub main
+{
+  my $num_args = $#ARGV;
+
+  if ($num_args != 1) {
+    print "\n need <python third party> <out_path>\n";
+    return;
+  }
+
+  p1($ARGV[0], $ARGV[1]);
+}
+
+main();

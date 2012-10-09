@@ -6,10 +6,15 @@
 #-------------------------------------------
 use strict;
 
-my @directories = ('../out', '../test_out', '.abidos');
+#${PROJECT_SOURCE_DIR}
 
-foreach (@directories) {
- 	print "  checking existence $_ ...";
+sub check_directories
+{
+  my $project_dir = shift;
+  my @directories = ("${project_dir}out", "${project_dir}test_out", "${project_dir}.abidos");
+
+  foreach (@directories) {
+    print "  checking existence $_ ...";
 
     unless(-d $_){
         print "creating...";
@@ -20,7 +25,19 @@ foreach (@directories) {
     {
         print "[ok]\n";
     }
-} 
+  }
+}
 
+sub main
+{
+  my $num_args = $#ARGV;
 
+  if ($num_args != 0) {
+    print "\n need <project path>\n";
+    return;
+  }
 
+  check_directories($ARGV[0]);
+}
+
+main();

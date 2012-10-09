@@ -597,4 +597,11 @@ abidos
 -[v] use cmake ADD_TEST() -> make test
       make test_run is more verbose
 -[] pass paths of directories to scripts
+#	modified:   scripts/flex_execute.pl
+#	modified:   scripts/bison_execute.pl
+#	modified:   scripts/check_directories.pl
+#	modified:   scripts/extract_symbols.pl
+#	modified:   scripts/flex_execute.pl
+#	modified:   scripts/generate_begin_graph.pl
+
 

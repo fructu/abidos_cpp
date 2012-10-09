@@ -30,7 +30,7 @@ sub main
   my $num_args = $#ARGV;
 
   if ($num_args != 2) {
-    print "\n need source path and includes path\n";
+    print "\n need <yacc path> <source path> and <includes path>\n";
     return;
   }
 

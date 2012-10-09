@@ -9,10 +9,11 @@ use strict;
 
 sub p1
 {
+  my $SOURCE   = shift;
   
-  open(f_in,"< parser.c")||die("error open < file");
+  open(f_in,"< ${SOURCE}parser.c")||die("error open < ${SOURCE}parser.c");
   my @raw_data=<f_in>;
-  open(f_out,"> tokens.h")||die("error open > file");
+  open(f_out,"> ${SOURCE}tokens.h")||die("error open > ${SOURCE}tokens.h");
 
   print f_out "#ifndef tokens_h\n";
   print f_out "#define tokens_h\n";
@@ -237,4 +238,16 @@ sub p1
   close(f_out);
 }
 
-p1;
+sub main
+{
+  my $num_args = $#ARGV;
+
+  if ($num_args != 0) {
+    print "\n need <source path>\n";
+    return;
+  }
+
+  p1($ARGV[0]);
+}
+
+main();
