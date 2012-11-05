@@ -1,5 +1,6 @@
 *.o
 *.pyc
+processor/.abidos/
 processor/abidos
 processor/lexer.c
 processor/nohup.out
@@ -34,4 +35,4 @@ processor/src/lexer.c
 processor/src/parser.c
 processor/src/ts.cpp
 processor/src/ts.h
-
+processor/install_manifest.txt

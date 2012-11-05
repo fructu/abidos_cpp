@@ -2,12 +2,15 @@
 #
 # autor:Manuel Hevia
 # description:
+#  scripts/tests_run.pl src/abidos test/ test_includes/ test_out/
 #
 #-------------------------------------------
 use strict;
 
 #my $tests_dir = "../test_real/";
-my $tests_dir = "../test/";
+#my $tests_dir = "../test/";
+
+my $version = "0.0.06";
 
 sub is_test_ok
 {
@@ -36,12 +39,19 @@ sub is_test_ok
 
 sub test_run_tokens_consumed
 {
-  my $f = $_[0];
+  my $executable_with_dir = shift;
+  my $tests_dir = shift;
+  my $test_includes_dir = shift;
+  my $tests_dir_out = shift;
+  my $f = shift;
+  my $log_file = shift;
 
   print " [$f]->";
-  system "./abidos --includes ../test_includes/ --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ../test_out/out_$f.txt";
+  my $command = "$executable_with_dir --includes $test_includes_dir --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ${tests_dir_out}out_$f.txt";
+  system($command);
+  print $log_file "  $command\n";
 
-  my $result = is_test_ok("../test_out/out_$f.txt");
+  my $result = is_test_ok("${tests_dir_out}out_$f.txt");
 
   if( $result eq "ok" ) {
     print " [$result]";
@@ -64,6 +74,12 @@ sub test_gcc_diff
 
 sub all_tests
 {
+  my $executable_with_dir = shift;
+  my $tests_dir = shift;
+  my $test_includes_dir = shift;
+  my $tests_dir_out = shift;
+  my $log_file = shift;
+
 #	$tests_dir = "../test/";
   my $result = "";
   my $tests_total = 0;
@@ -80,7 +96,7 @@ sub all_tests
 	{
 		unless ( ($f eq ".") || ($f eq "..") )
 		{
-      $result = test_run_tokens_consumed($f);
+      $result = test_run_tokens_consumed($executable_with_dir, $tests_dir, $test_includes_dir, $tests_dir_out, $f, $log_file);
       if( $result eq "ok" )
       {
         $tests_ok++;
@@ -113,9 +129,41 @@ sub all_tests
   }
 }
 
-print "abidos runing suit tests [v0.0.01]\n";
-my $result_total = 0;
-print "{\n";
-$result_total = all_tests;
-print "}\n";
-exit($result_total);
+sub main
+{
+  my $num_args = $#ARGV;
+
+  if ($num_args != 3) {
+    print "\n need <executable_with_dir> <tests_dir> <test_includes_dir> <tests_dir_out>\n";
+    return;
+  }
+
+  my $executable_with_dir = $ARGV[0];
+  my $tests_dir           = $ARGV[1];
+  my $test_includes_dir   = $ARGV[2];
+  my $tests_dir_out       = $ARGV[3];
+
+#  flex_execute($ARGV[0], $ARGV[1]);
+  print "abidos runing suit tests [$version] \n";
+  my $result_total = 0;
+  print "{\n";
+  print " executable_with_dir [$executable_with_dir]\n";
+  print " test_dir            [$tests_dir]\n";
+  print " test_includes_dir   [$test_includes_dir]\n";
+  print " test_out dir        [$tests_dir_out]\n";
+
+  open( log_file, ">${tests_dir_out}test_out.log") or die $!;
+  print log_file "abidos runing suit tests [$version]\n";
+  print log_file "{\n";
+
+  $result_total = all_tests($executable_with_dir, $tests_dir, $test_includes_dir, $tests_dir_out, *log_file);
+  
+  print log_file "}\n";
+  close(log_file);
+
+  print "}\n";
+  exit($result_total);
+}
+
+main();
+

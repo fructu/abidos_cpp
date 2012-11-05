@@ -16,6 +16,14 @@ sub p1
   my @raw_data=<f_in>;
   open(f_out,"> ${out_dir}generate_begin_graph.cpp")||die("error open > file");
 
+  print f_out '#include "config.h"';
+  print f_out "\n";
+  print f_out 'fprintf(f_out, "/*\n");';
+  print f_out "\n";
+  print f_out "fprintf(f_out, \"  %s %d.%d.%02d_%s [%s] \\n\",EXECUTABLE,VERSION_MAJOR,VERSION_MINOR,VERSION_PATCH,CMAKE_BUILD_TYPE,PROJECT_COMPILATION_TIME );\n";
+  print f_out 'fprintf(f_out, "*/\n");';
+  print f_out "\n";
+
   foreach my $l (@raw_data)
   {
     chomp($l);

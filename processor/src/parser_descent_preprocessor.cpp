@@ -32,6 +32,7 @@ void c_parser_descent::push_file(const char * f)
 {
     char path[MAXPATHLEN];
     char path2[MAXPATHLEN];
+    char includes_file[MAXPATHLEN];
 
     getcwd(path, MAXPATHLEN);
     getcwd(path2, MAXPATHLEN);
@@ -68,16 +69,37 @@ void c_parser_descent::push_file(const char * f)
 
     printf("####file_lex -> %s\n", file_lex.full());
     printf("####file_included a -> %s\n", file_included.full());
+    if (1 == lex_file_push( file_included.full() ) ) {
+      return;
+    }
+
     file_lex.path_resolve(file_included);
     printf("####file_included b -> %s\n", file_included.full());
 
-    if (1 != lex_file_push( file_included.full() ) ) {
+    if (1 == lex_file_push( file_included.full() ) ) {
+        return;
 //      if (1 != lex_file_push( file_without_commillas ) ) {
-        printf("\nERROR:c_parser_descent::push_file[%s]\n"
-               , file_included.full());
-        exit(-1);
 //      }
     }
+
+    sprintf(includes_file,"%s%s",path2,file_included.get_name());
+
+    printf("\n####1# includes_file [%s]\n", includes_file );
+
+    if (1 == lex_file_push( includes_file ) ) {
+       return;
+    }
+
+    sprintf(includes_file,"%s%s", options.includes, file_included.get_name());
+
+    printf("\n####2# includes_file [%s]\n", includes_file );
+
+    if (1 == lex_file_push( includes_file ) ) {
+       return;
+    }
+
+    printf("\nERROR:c_parser_descent::push_file[%s]\n", file_included.full());
+    exit(-1);
 }
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::push_file_loader(const char * f)
@@ -108,28 +130,28 @@ void c_parser_descent::push_sharp_file(const char * f)
     char include_file[ID_MAX_LEN]={'\0'};
 
 //    sprintf(include_file,"%s%s",options.includes, f);
-    sprintf(include_file,"%s%s",options.includes, f);
+    sprintf(include_file,"%s%s",options.includes_sharp, f);
 
     if ( 1 == options.check_include_files_flag ) {
         generator_check_include_files.push(f);
     }
 
     if (strcmp("vector", f) == 0) {
-        sprintf(include_file,"%sstd.h",options.includes);
+        sprintf(include_file,"%sstd.h",options.includes_sharp);
         if ( 1 == options.loader_flag) {
             push_file_loader(include_file);
         } else {
             push_file(include_file);
         }
     } else if (strcmp("map", f) == 0) {
-        sprintf(include_file,"%sstd.h",options.includes);
+        sprintf(include_file,"%sstd.h",options.includes_sharp);
         if ( 1 == options.loader_flag) {
             push_file_loader(include_file);
         } else {
             push_file(include_file);
         }
     } else if (strcmp("string", f) == 0) {
-        sprintf(include_file,"%sstd.h",options.includes);
+        sprintf(include_file,"%sstd.h",options.includes_sharp);
         if ( 1 == options.loader_flag) {
             push_file_loader(include_file);
         } else {
@@ -400,3 +422,4 @@ int c_parser_descent::preprocessor_other_dummy(c_trace_node trace_node)
     return 1;
 }
 /*----------------------------------------------------------------------------*/
+

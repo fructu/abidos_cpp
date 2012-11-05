@@ -39,8 +39,8 @@ c_options::c_options()
 
     //abidos_commands
     ban_symbols_on = 0;
-
-    sprintf(includes,"/opt/abidos/includes/");
+    sprintf(includes_sharp,"/opt/abidos/includes/");
+    sprintf(includes,"");
 }
 
 void

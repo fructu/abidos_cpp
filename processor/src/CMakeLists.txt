@@ -128,7 +128,7 @@ add_custom_target(
 
 add_custom_target(
   test_run
-	COMMAND ${SCRIPTS_DIR}tests_run.pl
+	COMMAND ${SCRIPTS_DIR}tests_run.pl ${CMAKE_EXECUTABLE_WITH_DIR} ${CMAKE_TEST_DIR} ${TEST_INCLUDES} ${CMAKE_TEST_OUT_DIR}
 	DEPENDS ${EXECUTABLE}
 )
 
