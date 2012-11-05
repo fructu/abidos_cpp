@@ -32,3 +32,4 @@ rm CTestTestfile.cmake
 rm  -rf Testing/
 rm src/CTestTestfile.cmake
 
+rm -rf build/

@@ -448,6 +448,40 @@ int lex_file_init(const char *f)
     return 1;
 }
 
+int lex_file_exists(const char *f)
+{
+    unsigned len = strlen(f);
+    unsigned i = 0;
+    char file_name[LONG_STR];
+    FILE *f_to_check = NULL;
+
+    if( f[0] == '"' ){
+      file_name[i] = f[i+1];
+      ++i;
+      while( i < len ){
+        if( '"' == f[i+1]){
+          file_name[i] = '\0';
+          break;
+        }
+
+        file_name[i] = f[i+1];
+        ++i;
+      }
+    }else{
+      sprintf(file_name,"%s",f);
+    }
+
+    f_to_check = fopen(file_name,"r");
+    if( NULL == f_to_check )
+    {
+        printf("     error lex_file_push open [%s]\n", file_name);
+        return 0;
+    }
+
+    fclose(f_to_check);
+    return 1;
+}
+
 int lex_file_push(const char *f)
 {
     unsigned len = strlen(f);
@@ -457,6 +491,10 @@ int lex_file_push(const char *f)
 
     if(len < 3){
       printf("     error lex_file_push file too short [%s]\n",f);
+    }
+
+    if(1 != lex_file_exists(f) ){
+      return 0;
     }
 
     //save the actual file name

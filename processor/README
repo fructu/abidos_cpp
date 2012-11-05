@@ -596,12 +596,24 @@ abidos
     //ban_symbols_off
 -[v] use cmake ADD_TEST() -> make test
       make test_run is more verbose
--[] pass paths of directories to scripts
-#	modified:   scripts/flex_execute.pl
-#	modified:   scripts/bison_execute.pl
-#	modified:   scripts/check_directories.pl
-#	modified:   scripts/extract_symbols.pl
-#	modified:   scripts/flex_execute.pl
-#	modified:   scripts/generate_begin_graph.pl
-
+      scripts/tests_run.pl src/abidos test/ test_includes/ test_out/
+-[v] pass paths of directories to scripts
+  #	modified:   scripts/flex_execute.pl
+  #	modified:   scripts/bison_execute.pl
+  #	modified:   scripts/extract_symbols.pl
+  #	modified:   scripts/check_directories.pl
+  #	modified:   scripts/generate_begin_graph.pl
+  find . -name "CMakeLists.txt" -exec grep -EHni "\.pl" {} \; | less
+-[v] pass paths to tests_run.pl
+    /working/abidos/processor$ perl scripts/tests_run.pl src/abidos test/ test_includes/ test_out/
+-[v] pass execute_one_test.pl
+    /working/abidos/processor$ perl scripts/execute_one_test.pl test/t046.cpp
+-[] put generate files in a generate dir
+-[v] scripts/tests_run.pl know generates a draft log
+    for now in log prints the command lines
+-[v] fix this 2 lines should work, only first works
+  #include "../test_includes/h034_B.h"
+  now abidos check the includes path to
+  #include "h034_B.h"
+-[v] abidos print version in begin of .abidos/files.dot
 

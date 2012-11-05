@@ -30,7 +30,7 @@ set(PROJECT_COMPILATION_TIME "COMPILATION_TIME")
 # The version number.
 set( VERSION_MAJOR 1 )
 set( VERSION_MINOR 0 )
-set( VERSION_PATCH 11 )
+set( VERSION_PATCH 12 )
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -49,6 +49,9 @@ set(SCRIPTS_DIR "${PROJECT_SOURCE_DIR}/scripts/")
 set(PYTHON_THIRD_PARTY "${PROJECT_SOURCE_DIR}/python/")
 set(TEST_INCLUDES "${PROJECT_SOURCE_DIR}/test_includes/")
 
+set(CMAKE_TEST_DIR "${PROJECT_SOURCE_DIR}/test/")
+set(CMAKE_TEST_OUT_DIR "${PROJECT_SOURCE_DIR}/test_out/")
+set(CMAKE_EXECUTABLE_WITH_DIR "${PROJECT_SOURCE_DIR}/src/${EXECUTABLE}")
 #message("## includes->[${INCLUDES}]")
 
 add_subdirectory(${INCLUDES})
