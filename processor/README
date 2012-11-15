@@ -36,6 +36,8 @@ tar -xzvf working_2011-03-12_16_18.tar.gz
 
 git commit -C HEAD -a --amend
 
+abidos/processor$ python python/xdot_run.py test_out/out_t044.cpp.dot
+
 dot ../out/out_test_symbols_table.h.gv -Tpng -o ../out/out_test_symbols_table.h.png
 dot ../out/out_test_symbols_table.h.gv -Tsvg -o ../out/out_test_symbols_table.h.svg
 
@@ -618,3 +620,4 @@ abidos
 -[v] abidos print version in begin of .abidos/files.dot
 -[v] c_generator_trace::run can not write file in .abidos because pwd is in src
 	   now i pass the out_dir parameter, that dir must exists!
+-[v] pass to xdot_run.py paremeter with the <file>.dot.

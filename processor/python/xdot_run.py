@@ -11,6 +11,7 @@
 #
 
 import os
+import sys
 import gtk
 import gtk.gdk
 
@@ -45,9 +46,17 @@ class MyDotWindow(xdot.DotWindow):
         return True
 
 def main():
+    file_dot = ".abidos/files.dot"
+
+    if len(sys.argv) > 1:
+      file_dot = sys.argv[1]
+
+    if not os.path.exists(file_dot):
+      sys.exit('ERROR: %s not found!' % file_dot)
+
     window = MyDotWindow()
     window.set_filter("dot")
-    window.open_file(".abidos/files.dot");
+    window.open_file(file_dot);
     window.connect('destroy', gtk.main_quit)
     gtk.main()
 
