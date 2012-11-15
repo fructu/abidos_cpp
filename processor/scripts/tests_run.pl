@@ -6,6 +6,7 @@
 #
 #-------------------------------------------
 use strict;
+use File::Copy;
 
 #my $tests_dir = "../test_real/";
 #my $tests_dir = "../test/";
@@ -47,7 +48,7 @@ sub test_run_tokens_consumed
   my $log_file = shift;
 
   print " [$f]->";
-  my $command = "$executable_with_dir --includes $test_includes_dir --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ${tests_dir_out}out_$f.txt";
+  my $command = "$executable_with_dir --includes $test_includes_dir --out_dir $tests_dir_out --test_all_tokens_consumed_flag --test_original --ts_show --verbose $tests_dir$f > ${tests_dir_out}out_$f.txt";
   system($command);
   print $log_file "  $command\n";
 
@@ -58,6 +59,9 @@ sub test_run_tokens_consumed
   } else {
     print " [$result] <--##\n";
   }
+
+	# i want a dot file for each test file
+	copy("$tests_dir_out/files.dot","$tests_dir_out/out_$f.dot");
 
   return $result;
 }

@@ -833,31 +833,31 @@ void c_parser_descent::yyparse(char *file_name)
         ts.print();
     }
 
-    char str_temp[100] = { '\0' };
-    char file_gv[100];
+    char str_temp[FILE_NAME_LEN] = { '\0' };
+    char file_gv[FILE_NAME_LEN];
     extract_file_from_path(str_temp, file_name);
 
     /*## todo
       this should pass in main parameter
     */
 //    sprintf(file_gv, ".abidos/out_%s.dot", str_temp);
-    sprintf(file_gv, ".abidos/files.dot");
+    sprintf(file_gv, "%s/files.dot",options.out_dir);
     c_generator_class_diagram generator;
 
     generator.run(file_gv);
 
     if (1 == options.test_original_flag) {
-        char file_original[100];
-        sprintf(file_original, ".abidos/out_%s", str_temp);
+        char file_original[FILE_NAME_LEN];
+        sprintf(file_original, "%s/out_%s",options.out_dir, str_temp);
         c_generator_original generator_original;
         generator_original.run(file_original);
     }
 
     if (1 == options.verbose_flag) {
-        char file_original[100];
-        sprintf(file_original, ".abidos/trace_%s.gv", str_temp);
+        char file_trace[FILE_NAME_LEN];
+        sprintf(file_trace, "%s/trace_%s.gv",options.out_dir, str_temp);
         c_generator_trace generator_trace_graph;
-        generator_trace_graph.run(file_original);
+        generator_trace_graph.run(file_trace);
     }
 
     ts.unset();
@@ -882,7 +882,6 @@ void c_parser_descent::yyparse_loader(char *file_loader)
         translation_unit();
         loader.next();
     }
-
 
     while ( 1 == loader.file_get(file_name) ) {
         /*##
@@ -920,29 +919,29 @@ void c_parser_descent::yyparse_loader(char *file_loader)
         ts.print();
     }
 
-    char str_temp[100] = { '\0' };
-    char file_gv[100];
+    char str_temp[FILE_NAME_LEN] = { '\0' };
+    char file_gv[FILE_NAME_LEN];
     extract_file_from_path(str_temp, file_loader);
 
     /*## todo
       this should pass in main parameter
     */
 //    sprintf(file_gv, ".abidos/out_%s.gv", str_temp);
-    sprintf(file_gv, ".abidos/files.dot");
+    sprintf(file_gv, "%s/files.dot",options.out_dir);
     c_generator_class_diagram generator;
 
     generator.run(file_gv);
 
     if (1 == options.test_original_flag) {
-        char file_original[100];
-        sprintf(file_original, ".abidos/out_%s", str_temp);
+        char file_original[FILE_NAME_LEN];
+        sprintf(file_original, "%s/out_%s",options.out_dir, str_temp);
         c_generator_original generator_original;
         generator_original.run(file_original);
     }
 
     if (1 == options.verbose_flag) {
-        char file_original[100];
-        sprintf(file_original, ".abidos/trace_%s.gv", str_temp);
+        char file_original[FILE_NAME_LEN];
+        sprintf(file_original, "%s/trace_%s.gv",options.out_dir, str_temp);
         c_generator_trace generator_trace_graph;
         generator_trace_graph.run(file_original);
     }

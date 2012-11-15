@@ -23,6 +23,7 @@ rm  -rf includes/CMakeFiles/
 rm  -f	includes/Makefile
 rm 	-r  includes/cmake_install.cmake
 rm  -rf out/*
+rm  -rf test_out/*
 
 rm  -rf src/.abidos/
 rm  -f  install_manifest.txt

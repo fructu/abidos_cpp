@@ -244,7 +244,7 @@ void c_generator_trace::run(char *p_file_out)
 
     f_out = fopen(p_file_out, "w");
     if (NULL == f_out) {
-        printf("  c_generator_trace::run() cant fopen()\n");
+        printf("  c_generator_trace::run() cant fopen[%s]()\n", p_file_out);
         return;
     }
     fprintf(f_out, "/*\n");

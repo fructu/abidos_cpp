@@ -616,4 +616,5 @@ abidos
   now abidos check the includes path to
   #include "h034_B.h"
 -[v] abidos print version in begin of .abidos/files.dot
-
+-[v] c_generator_trace::run can not write file in .abidos because pwd is in src
+	   now i pass the out_dir parameter, that dir must exists!

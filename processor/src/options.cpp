@@ -48,6 +48,8 @@ c_options::proccess(int argc, char *argv[])
 {
     int c;
 
+	  sprintf(out_dir,"./abidos");
+
     while (1) {
         static struct option long_options[] = {
             /*
@@ -67,6 +69,7 @@ c_options::proccess(int argc, char *argv[])
              */
             {"loader", required_argument, 0, 'l'},
             {"includes", required_argument, 0, 'i'},
+            {"out_dir", required_argument, 0, 'o'},
             {"version", no_argument, &version_flag, 1},
             {"check_include_files", no_argument, &check_include_files_flag, 1},
             {0, 0, 0, 0}
@@ -107,6 +110,11 @@ c_options::proccess(int argc, char *argv[])
         case 'i':
             printf("option -i with value '%s'\n", optarg);
             sprintf(includes, "%s", optarg);
+            break;
+
+        case 'o':
+            printf("option -i with value '%s'\n", optarg);
+            sprintf(out_dir, "%s", optarg);
             break;
 
         case '?':
