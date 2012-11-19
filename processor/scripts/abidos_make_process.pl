@@ -2,6 +2,7 @@
 #
 # autor:Manuel Hevia
 # description: 
+#   make_out.txt -> .abidos/files_input
 #
 #-------------------------------------------
 use strict;
@@ -30,7 +31,8 @@ sub create_directories
 sub generate_loader_file
 {
   my $file_input_name = "make_out.txt";
-  my $file_output_name = "$dir/files";
+  #the output for this scripts the input for abidos parser
+  my $file_output_name = "$dir/files_input";
   
   open(f_in,"< $file_input_name") or die("error open < $file_input_name");
   my @raw_data=<f_in>;
@@ -86,11 +88,8 @@ sub generate_loader_file
 
 sub process_project
 {
-#  system ("cp /opt/abidos/xdot2.py .abidos/") == 0 or die "system failed: $?";
-  system ("/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --loader .abidos/files") == 0 or die "system failed: $?";
-#  system ("cp /opt/abidos/out_files.gv .abidos/" == 0) or die "system failed: $?";
-#  system ("cp /opt/abidos/xdot_run.py .abidos/") == 0 or die "system failed: $?";
-  system ("xdot_run.py") == 0 or die "system failed: $?";
+  system ("/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --out_dir .abidos --loader .abidos/files_input") == 0 or die "system failed: $?";  
+  system ("/opt/abidos/xdot_run.py .abidos/files_output.dot") == 0 or die "system failed: $?";
 }
 
 sub main

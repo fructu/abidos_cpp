@@ -41,6 +41,9 @@ c_options::c_options()
     ban_symbols_on = 0;
     sprintf(includes_sharp,"/opt/abidos/includes/");
     sprintf(includes,"");
+
+    sprintf(files_input,"files_input");
+    sprintf(files_output,"files_output.dot");
 }
 
 void

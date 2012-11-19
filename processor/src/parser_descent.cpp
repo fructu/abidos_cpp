@@ -841,7 +841,7 @@ void c_parser_descent::yyparse(char *file_name)
       this should pass in main parameter
     */
 //    sprintf(file_gv, ".abidos/out_%s.dot", str_temp);
-    sprintf(file_gv, "%s/files.dot",options.out_dir);
+    sprintf(file_gv, "%s/%s",options.out_dir,options.files_output);
     c_generator_class_diagram generator;
 
     generator.run(file_gv);
@@ -927,7 +927,7 @@ void c_parser_descent::yyparse_loader(char *file_loader)
       this should pass in main parameter
     */
 //    sprintf(file_gv, ".abidos/out_%s.gv", str_temp);
-    sprintf(file_gv, "%s/files.dot",options.out_dir);
+    sprintf(file_gv, "%s/%s",options.out_dir,options.files_output);
     c_generator_class_diagram generator;
 
     generator.run(file_gv);

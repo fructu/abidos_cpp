@@ -33,6 +33,8 @@ struct c_options {
     char includes_sharp[FILE_NAME_LEN];
     char includes[FILE_NAME_LEN];
     char out_dir[FILE_NAME_LEN];
+    char files_input[FILE_NAME_LEN];
+    char files_output[FILE_NAME_LEN];
 
     int loader_flag;
 

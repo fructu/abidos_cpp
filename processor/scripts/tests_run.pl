@@ -61,7 +61,7 @@ sub test_run_tokens_consumed
   }
 
 	# i want a dot file for each test file
-	copy("$tests_dir_out/files.dot","$tests_dir_out/out_$f.dot");
+	copy("$tests_dir_out/files_output.dot","$tests_dir_out/out_$f.dot");
 
   return $result;
 }

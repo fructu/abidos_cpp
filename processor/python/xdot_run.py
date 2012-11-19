@@ -46,7 +46,7 @@ class MyDotWindow(xdot.DotWindow):
         return True
 
 def main():
-    file_dot = ".abidos/files.dot"
+    file_dot = ".abidos/files_output.dot"
 
     if len(sys.argv) > 1:
       file_dot = sys.argv[1]
