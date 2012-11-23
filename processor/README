@@ -76,6 +76,11 @@ git://github.com/vidarh/diagram-tools.git
 cat .abidos/out_files.gv | dot -Tsvg > .abidos/out_files.gv.svg
 xsltproc notugly.xsl .abidos/out_files.gv.svg > .abidos/out_files_2.gv.svg; eog .abidos/out_files_2.gv.svg
 
+# using gdb
+gdb src/abidos -x X
+# X file run like this
+run --includes test_includes/ --out_dir test_out/ --test_all_tokens_consumed_flag --test_original --ts_show --verbose test/t001.cpp > test_out/out_t001.cpp.txt
+
 todo
   -[] clear context when class has been processed
   -[v] put other field to know when a type is a class or a struct
