@@ -30,22 +30,22 @@
 /*----------------------------------------------------------------------------*/
 int c_parser_descent::check_abidos_command(int t)
 {
-  switch(t){
+    switch (t) {
     case ABIDOS_BAN_SYMBOLS_ON:
-      ban_symbols_on();
-      return 1;
-      break;
+        ban_symbols_on();
+        return 1;
+        break;
 
     case ABIDOS_BAN_SYMBOLS_OFF:
-      ban_symbols_off();
-      return 1;
-      break;
+        ban_symbols_off();
+        return 1;
+        break;
 
     default:
-      return 0;
-  }
+        return 0;
+    }
 
-  return 0;
+    return 0;
 }
 /*----------------------------------------------------------------------------*/
 /*
@@ -54,12 +54,12 @@ int c_parser_descent::check_abidos_command(int t)
 */
 void c_parser_descent::ban_symbols_on(void)
 {
-  options.ban_symbols_on = 1;
+    options.ban_symbols_on = 1;
 }
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::ban_symbols_off(void)
 {
-  options.ban_symbols_on = 0;
+    options.ban_symbols_on = 0;
 }
 /*----------------------------------------------------------------------------*/
 

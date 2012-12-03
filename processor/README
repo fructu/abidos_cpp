@@ -23,6 +23,8 @@ useful commands:
 
     ./$(EXECUTABLE)  test/$(FILE_TEST)
 
+  abidos/processor/src$ ../scripts/indent_run.sh
+
 to see trace.dot files:
   xdot_run.py processor/test_out/trace_t001.cpp.gv
   cat ../out/trace_t030.cpp.gv | dot -Tpng > ../out/trace_t030.cpp.gv.png; eog ../out/trace_t030.cpp.gv.png
@@ -630,6 +632,8 @@ abidos
 -[v] pass to xdot_run.py paremeter with the <file>.dot.
 -[v] check and create if is necesary .abidos directory, the problem was the
   incorrect use of: make_out.txt .abidos/files_input  .abidos/files_output.dot
--[] option to dont generating url tags in dot ouput
+-[v] option to dont generating url tags in dot ouput
+  abidos --out_dir .abidos --loader .abidos/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
 -[v] option to process white list and only generates class from it.
+  abidos --out_dir .abidos --loader .abidos/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
 

@@ -39,7 +39,7 @@ struct c_options {
     char white_list_file[FILE_NAME_LEN];
 
     int loader_flag;
-
+    int no_url_flag;
 
     //abidos_commands
     int ban_symbols_on;

@@ -548,8 +548,8 @@ void c_parser_descent::token_next(string tab)
         while (1) { // this is for drop std::
             int result = 0;
             t = yylex();
-            if( 1 == check_abidos_command(t) ) {
-              continue;
+            if ( 1 == check_abidos_command(t) ) {
+                continue;
             }
             token.save(t, yytext);
             result = drop_head_namespace(tab, token);

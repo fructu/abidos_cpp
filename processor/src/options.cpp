@@ -30,6 +30,7 @@ c_options::c_options()
     no_repeat_files_flag = 1;
     incasitive_includes_flag = 1;
     check_include_files_flag = 0;
+    no_url_flag = 0;
 
     int i = 0;
     for (i = 0; i < FILE_NAME_LEN; ++i) {
@@ -53,7 +54,7 @@ c_options::proccess(int argc, char *argv[])
 {
     int c;
 
-	  sprintf(out_dir,"./abidos");
+    sprintf(out_dir,"./abidos");
 
     while (1) {
         static struct option long_options[] = {
@@ -68,6 +69,7 @@ c_options::proccess(int argc, char *argv[])
              &test_all_tokens_consumed_flag, 1},
             {"no_std", no_argument, &no_std_flag, 1},
             {"no_repeat_files", no_argument, &no_repeat_files_flag, 0},
+            {"no_url_flag", no_argument, &no_url_flag, 1},
             /*
              * These options don't set a flag. We distinguish them by
              * their indices.

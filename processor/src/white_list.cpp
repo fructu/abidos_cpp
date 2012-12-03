@@ -19,7 +19,7 @@ c_white_list white_list;
 /*----------------------------------------------------------------------------*/
 c_white_list::c_white_list()
 {
-  active = 0;
+    active = 0;
 }
 /*----------------------------------------------------------------------------*/
 void c_white_list::process_line(char * line)
@@ -90,14 +90,14 @@ int c_white_list::find(string s)
 {
     int result = 0;
 
-    if( 0 == active){
-      return 1;
+    if ( 0 == active) {
+        return 1;
     }
 
     t_map_files::iterator i_map = map_files.find(s);
     if (i_map != map_files.end()) {
-      result = (*i_map).second;
-      return( result );
+        result = (*i_map).second;
+        return( result );
     }
 
     return 0;
