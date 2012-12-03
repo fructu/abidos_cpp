@@ -17,6 +17,7 @@
 #include "generator_class_diagram.h"
 #include "lex_yacc.h"
 #include "options.h"
+#include "white_list.h"
 /*----------------------------------------------------------------------------*/
 int is_banned(string str)
 {
@@ -208,6 +209,11 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
 
             fprintf(f_out, "  /*%s->%s*/", s1.c_str(),
                     s2.c_str());
+
+            if( 0 == white_list.find(s1.c_str()) ) {
+              fprintf(f_out, "/* not in white_list\n");
+            }
+
             /*
                     fprintf(f_out, "  %s->%s [dir = \"back\", color = \"black\", arrowtail = \"empty\"];\n"
                             ,s1.c_str()
@@ -224,6 +230,10 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
                         , s1.c_str()
                         , s2.c_str()
                        );
+            }
+
+            if( 0 == white_list.find(s1.c_str()) ) {
+              fprintf(f_out, "*/\n");
             }
         }
     }
@@ -246,6 +256,12 @@ void c_generator_class_diagram::nodes(c_symbol & symbol)
     }
 
     fprintf(f_out, "/* c_generator_class_diagram::classes() */\n");
+
+    if( 0 == white_list.find( symbol.text.c_str() ) ) {
+      fprintf(f_out, "/* [%s] not in white_list*/\n", symbol.text.c_str() );
+      return;
+    }
+
     // first[B] id[258]->[IDENTIFIER] text[B] type[265]->[CLASS_NAME]
     // class_key[300]->[CLASS]
     if (CLASS_NAME != symbol.type &&
@@ -305,9 +321,17 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
         string s1 = colon_colon_substitution(((*i_map_base).second).text);
         string s2 = colon_colon_substitution(symbol.token.text);
 
+        if( 0 == white_list.find(s1.c_str()) ) {
+           fprintf(f_out, "/* not in white_list\n");
+        }
+
         fprintf(f_out, "  %s->%s [dir = \"back\", color = \"black\", arrowtail = \"empty\"];\n"
                 ,s1.c_str()
                 ,s2.c_str() );
+
+        if( 0 == white_list.find(s1.c_str()) ) {
+            fprintf(f_out, "*/\n");
+        }
     }
 }
 
@@ -328,13 +352,22 @@ void c_generator_class_diagram::friends(c_symbol & symbol)
 
     for (i_map_friend = symbol.map_friend_class.begin();
             i_map_friend != symbol.map_friend_class.end(); ++i_map_friend) {
+
         // C1->B [dir = "back"];
         fprintf(f_out, "  /*%s->%s*/", symbol.token.text.c_str(),
                 ((*i_map_friend).second).text.c_str());
 
+        if( 0 == white_list.find(symbol.token.text.c_str()) ) {
+           fprintf(f_out, "/* not in white_list\n");
+        }
+
         fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"open\"];\n"
                 ,((*i_map_friend).second).text.c_str()
                 , symbol.token.text.c_str() );
+
+        if( 0 == white_list.find(symbol.token.text.c_str()) ) {
+            fprintf(f_out, "*/\n");
+        }
     }
 }
 
@@ -415,6 +448,11 @@ void c_generator_class_diagram::members_compositions_aggregations(
           continue;
         }
 
+
+        if( 0 == white_list.find(s1.c_str()) ) {
+           fprintf(f_out, "/* not in white_list\n");
+        }
+
         if ( 0 == is_ptr ) {
             fprintf(f_out, "  %s->%s [dir = \"back\", color = \"gray\", arrowtail = \"diamond\"];\n"
                     , s1.c_str()
@@ -425,6 +463,10 @@ void c_generator_class_diagram::members_compositions_aggregations(
                     , s1.c_str()
                     , s2.c_str()
                    );
+        }
+
+        if( 0 == white_list.find(s1.c_str()) ) {
+           fprintf(f_out, "*/\n");
         }
 
         class_name = "";
@@ -478,6 +520,11 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
 
     fprintf(f_out, "  /*[%s] -> [%s]*/", s2.c_str(),
             s1.c_str());
+
+    if( 0 == white_list.find(s1.c_str()) ) {
+      fprintf(f_out, "/* not in white_list\n");
+    }
+
     /*
             fprintf(f_out, "  %s->%s [\"back\", color = \"gray\", arrowtail = \"open\"];\n"
                     ,s1.c_str()
@@ -487,6 +534,10 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
     fprintf(f_out, "  %s->%s [color = \"gray\", arrowtail = \"\"];\n"
             ,s1.c_str()
             ,s2.c_str() );
+
+    if( 0 == white_list.find(s1.c_str()) ) {
+      fprintf(f_out, "*/\n");
+    }
 }
 /*----------------------------------------------------------------------------*/
 void c_generator_class_diagram::run(char *p_file_out)

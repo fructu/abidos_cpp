@@ -630,3 +630,6 @@ abidos
 -[v] pass to xdot_run.py paremeter with the <file>.dot.
 -[v] check and create if is necesary .abidos directory, the problem was the
   incorrect use of: make_out.txt .abidos/files_input  .abidos/files_output.dot
+-[] option to dont generating url tags in dot ouput
+-[v] option to process white list and only generates class from it.
+

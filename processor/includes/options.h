@@ -16,6 +16,7 @@
 #define options_h
 
 #define FILE_NAME_LEN (1000)
+#define LINE_LONG (5000)
 
 struct c_options {
     int verbose_flag;
@@ -35,6 +36,7 @@ struct c_options {
     char out_dir[FILE_NAME_LEN];
     char files_input[FILE_NAME_LEN];
     char files_output[FILE_NAME_LEN];
+    char white_list_file[FILE_NAME_LEN];
 
     int loader_flag;
 

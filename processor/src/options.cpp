@@ -17,6 +17,7 @@
 #include <getopt.h>
 
 #include "options.h"
+#include "white_list.h"
 
 c_options::c_options()
 {
@@ -40,10 +41,11 @@ c_options::c_options()
     //abidos_commands
     ban_symbols_on = 0;
     sprintf(includes_sharp,"/opt/abidos/includes/");
-    sprintf(includes,"");
+    includes[0]='\0';
 
     sprintf(files_input,"files_input");
     sprintf(files_output,"files_output.dot");
+    white_list_file[0]='\0';
 }
 
 void
@@ -73,6 +75,7 @@ c_options::proccess(int argc, char *argv[])
             {"loader", required_argument, 0, 'l'},
             {"includes", required_argument, 0, 'i'},
             {"out_dir", required_argument, 0, 'o'},
+            {"white_list", required_argument, 0, 'w'},
             {"version", no_argument, &version_flag, 1},
             {"check_include_files", no_argument, &check_include_files_flag, 1},
             {0, 0, 0, 0}
@@ -82,7 +85,7 @@ c_options::proccess(int argc, char *argv[])
          */
         int option_index = 0;
 
-        c = getopt_long(argc, argv, "abc:d:f:", long_options,
+        c = getopt_long(argc, argv, "liow:v", long_options,
                         &option_index);
 
         /*
@@ -105,19 +108,30 @@ c_options::proccess(int argc, char *argv[])
             break;
 
         case 'l':
-            printf("option -l with value '%s'\n", optarg);
+            printf("option -%c with value '%s'\n",c , optarg);
             sprintf(file_loader, "%s", optarg);
             loader_flag = 1;
             break;
 
         case 'i':
-            printf("option -i with value '%s'\n", optarg);
+            printf("option -%c with value '%s'\n",c , optarg);
             sprintf(includes, "%s", optarg);
             break;
 
         case 'o':
-            printf("option -i with value '%s'\n", optarg);
+            printf("option -%c with value '%s'\n",c , optarg);
             sprintf(out_dir, "%s", optarg);
+            break;
+
+        case 'w':
+            printf("option -%c with value '%s'\n",c , optarg);
+            sprintf(white_list_file, "%s", optarg);
+
+            white_list.process_file(white_list_file);
+            break;
+
+        case 'v':
+            version_flag=1;
             break;
 
         case '?':
@@ -154,3 +168,4 @@ c_options::proccess(int argc, char *argv[])
 }
 
 c_options options;
+

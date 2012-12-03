@@ -27,7 +27,7 @@ struct c_loader_file
 
 typedef vector<c_loader_file> t_vector_files;
 */
-#define LINE_LONG (5000)
+
 /*----------------------------------------------------------------------------*/
 void c_loader::process_line(char * line)
 {

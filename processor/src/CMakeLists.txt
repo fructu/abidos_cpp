@@ -114,6 +114,7 @@ add_executable(${EXECUTABLE}
 	loader
 	generator_check_include_files
 	parser_descent_abidos_commands
+	white_list
 	main	
 )
 
