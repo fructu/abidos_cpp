@@ -30,7 +30,7 @@ set(PROJECT_COMPILATION_TIME "COMPILATION_TIME")
 # The version number.
 set( VERSION_MAJOR 1 )
 set( VERSION_MINOR 0 )
-set( VERSION_PATCH 14 )
+set( VERSION_PATCH 15 )
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -53,6 +53,7 @@ set(CMAKE_TEST_DIR "${PROJECT_SOURCE_DIR}/test/")
 set(CMAKE_TEST_OUT_DIR "${PROJECT_SOURCE_DIR}/test_out/")
 set(CMAKE_EXECUTABLE_WITH_DIR "${PROJECT_SOURCE_DIR}/src/${EXECUTABLE}")
 #message("## includes->[${INCLUDES}]")
+set(CMAKE_ABIDOS_WORKING_DIR "${PROJECT_SOURCE_DIR}/.abidos/")
 
 add_subdirectory(${INCLUDES})
 add_subdirectory(${CMAKE_SOURCE_DIR})

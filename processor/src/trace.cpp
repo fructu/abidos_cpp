@@ -171,9 +171,9 @@ void c_generator_trace::functions(t_vector_trace_nodes & v)
     unsigned len = v.size();
     int shape_record = 0;
 
-    fprintf(f_out, "  ROOT[label=\"ROOT\"]");
+    fprintf(f_out, "  ROOT[label=\"ROOT\"]\n");
 
-    for ( i = 1; i < len; ++i) {
+    for ( i = 0; i < len; ++i) {
         if ( 0 == v[i].function_token_text_is.size() &&
                 0 == v[i].function_token_text_is_not.size()
            ) {

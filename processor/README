@@ -636,4 +636,8 @@ abidos
   abidos --out_dir .abidos --loader .abidos/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
 -[v] option to process white list and only generates class from it.
   abidos --out_dir .abidos --loader .abidos/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
-
+-[v] generate trace tree with url in each node to open easily his rule in cpp source.
+    test_out/trace_book_01.cpp.gv
+    test_out/trace_book_01.cpp_urls.gv
+-[] abidos/processor$ make test_run
+    needs abidos/processor$ abidos_make_process.pl executed before.
