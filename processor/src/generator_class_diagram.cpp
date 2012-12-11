@@ -210,7 +210,7 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
             fprintf(f_out, "  /*%s->%s*/", s1.c_str(),
                     s2.c_str());
 
-            if ( 0 == white_list.find(s1.c_str()) ) {
+            if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
                 fprintf(f_out, "/* not in white_list\n");
             }
 
@@ -232,7 +232,7 @@ void c_generator_class_diagram::typedef_members_compositions_aggregations(c_symb
                        );
             }
 
-            if ( 0 == white_list.find(s1.c_str()) ) {
+            if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
                 fprintf(f_out, "*/\n");
             }
         }
@@ -325,7 +325,7 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
         string s1 = colon_colon_substitution(((*i_map_base).second).text);
         string s2 = colon_colon_substitution(symbol.token.text);
 
-        if ( 0 == white_list.find(s1.c_str()) ) {
+        if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
             fprintf(f_out, "/* not in white_list\n");
         }
 
@@ -333,7 +333,7 @@ void c_generator_class_diagram::inheritance(c_symbol & symbol)
                 ,s1.c_str()
                 ,s2.c_str() );
 
-        if ( 0 == white_list.find(s1.c_str()) ) {
+        if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
             fprintf(f_out, "*/\n");
         }
     }
@@ -453,7 +453,7 @@ void c_generator_class_diagram::members_compositions_aggregations(
         }
 
 
-        if ( 0 == white_list.find(s1.c_str()) ) {
+        if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
             fprintf(f_out, "/* not in white_list\n");
         }
 
@@ -469,7 +469,7 @@ void c_generator_class_diagram::members_compositions_aggregations(
                    );
         }
 
-        if ( 0 == white_list.find(s1.c_str()) ) {
+        if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
             fprintf(f_out, "*/\n");
         }
 
@@ -525,7 +525,7 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
     fprintf(f_out, "  /*[%s] -> [%s]*/", s2.c_str(),
             s1.c_str());
 
-    if ( 0 == white_list.find(s1.c_str()) ) {
+    if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
         fprintf(f_out, "/* not in white_list\n");
     }
 
@@ -539,7 +539,7 @@ void c_generator_class_diagram::typedef_points_to(c_symbol & symbol)
             ,s1.c_str()
             ,s2.c_str() );
 
-    if ( 0 == white_list.find(s1.c_str()) ) {
+    if ( 0 == white_list.find(s1.c_str()) ||  0 == white_list.find(s2.c_str())) {
         fprintf(f_out, "*/\n");
     }
 }
