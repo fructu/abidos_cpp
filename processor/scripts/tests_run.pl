@@ -2,7 +2,7 @@
 #
 # autor:Manuel Hevia
 # description:
-#  scripts/tests_run.pl src/abidos test/ test_includes/ test_out/
+#  scripts/tests_run.pl src/abidos test/ test_includes/ test_out/ .abidos
 #
 #-------------------------------------------
 use strict;
