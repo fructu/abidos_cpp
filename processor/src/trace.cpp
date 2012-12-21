@@ -191,13 +191,13 @@ void c_generator_trace::functions(t_vector_trace_nodes & v)
         }
 
         if ( 0 < v[i].function_token_text_is.size() ) {
-            fprintf(f_out, "|[%s]\\l"
+            fprintf(f_out, "|%s\\l"
                     ,v[i].function_token_text_is.c_str()
                    );
         }
 
         if ( 0 < v[i].function_token_text_is_not.size() ) {
-            fprintf(f_out, "|[%s]"
+            fprintf(f_out, "|%s"
                     ,v[i].function_token_text_is_not.c_str()
                    );
         }
