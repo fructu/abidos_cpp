@@ -88,7 +88,7 @@ sub generate_loader_file
 
 sub process_project
 {
-  system ("/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --out_dir .abidos --loader .abidos/files_input") == 0 or die "system failed: $?";  
+  system ("/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --out_dir .abidos --loader .abidos/files_input") == 0 or die "system failed: $?";
   system ("/opt/abidos/xdot_run.py .abidos/files_output.dot") == 0 or die "system failed: $?";
 }
 

@@ -641,3 +641,8 @@ abidos
     test_out/trace_book_01.cpp_urls.gv
 -[] abidos/processor$ make test_run
     needs abidos/processor$ abidos_make_process.pl executed before.
+    for now i call 
+    system ("$executable_with_dir --test_all_tokens_consumed_flag --no_s...")
+    but i need create the ./abidos/files_input.
+-[v] script to prune subtrees from trace tree,
+    scripts/trace_prune.pl

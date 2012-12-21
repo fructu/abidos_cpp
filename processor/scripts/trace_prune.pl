@@ -136,7 +136,14 @@ sub generate_dot
 
 sub main
 {
-  my $file_input = shift;
+  my $num_args = $#ARGV;
+
+  if ($num_args != 0) {
+    print "\n need <trace_file.gv>\n";
+    return;
+  }
+
+  my $file_input = $ARGV[0];
 
   print "trace_prune\n";
   print "{\n";
@@ -152,5 +159,6 @@ sub main
   print "}\n";
 }
 
-main($ARGV[0]);
+
+main();
 

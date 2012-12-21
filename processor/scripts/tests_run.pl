@@ -62,9 +62,13 @@ sub test_run_tokens_consumed
   }
 
 	# i want a dot file for each test file
-	copy("$tests_dir_out/files_output.dot","$tests_dir_out/out_$f.dot");
+
+	copy("${tests_dir_out}files_output.dot","${tests_dir_out}out_$f.dot");
 
   file_put_urls($tests_dir_out, $f, $url_hash, $log_file);
+
+  system("perl ../scripts/trace_prune.pl ${tests_dir_out}trace_${f}.gv >> ${tests_dir_out}prune.log");
+  system("perl ../scripts/trace_prune.pl ${tests_dir_out}trace_${f}_urls.gv >> ${tests_dir_out}prune.log");
 
   return $result;
 }
@@ -245,6 +249,8 @@ sub main
   print " test_includes_dir   [$test_includes_dir]\n";
   print " test_out dir        [$tests_dir_out]\n";
   print " abidos_working_dir  [$abidos_working_dir]\n";
+
+  system ("$executable_with_dir --test_all_tokens_consumed_flag --no_std --out_dir $abidos_working_dir --loader ${abidos_working_dir}/files_input") == 0 or die "system failed: $?";
 
   open( log_file, ">${tests_dir_out}test_out.log") or die $!;
   print log_file "abidos runing suit tests [$version]\n";
