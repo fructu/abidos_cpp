@@ -184,8 +184,6 @@ void yytname_print(void)
 /*----------------------------------------------------------------------------*/
 void c_parser_descent::tokens_vector_print(void)
 {
-    // t_tokens::iterator i_token = tokens_vector.begin();
-
     unsigned n = 0;
 
     printf("tokens_vector_print\n");
@@ -225,21 +223,6 @@ void c_parser_descent::tokens_vector_print_from_actual(void)
     }
 
     printf("}\n");
-    /*
-      unsigned i = context.i_token;
-      printf("{\n");
-      while (i < tokens_vector.size())
-        {
-          c_token token;
-          token = tokens_vector[i];
-
-          printf(" [%3d] -> yytokens[%s] token.text[%s]\n", token.id,
-                 yytokens[token.id], token.text.c_str());
-
-          ++i;
-        }
-      printf("}\n");
-    */
 }
 
 /*----------------------------------------------------------------------------*/
@@ -328,17 +311,12 @@ int c_parser_descent::token_is(int id , c_trace_node trace_node)
     int result = 0;
 
     if ( id == token_get()) {
-//        trace_graph.token_is_add(c_token_get().text, trace_node.position);
         string s_id = yytokens[id];
         string s = c_token_get().text;
         trace_graph.token_is_add(s, s_id, trace_node.position);
         result = 1;
     } else {
-//      char s_id[10] = {};
-//      sprintf(s_id,"[%d]",id);
         string s = yytokens_short[id];
-//      s += s_id;
-
         trace_graph.token_is_not_add( c_token_get().text, s, trace_node.position );
     }
 
@@ -352,13 +330,9 @@ int c_parser_descent::token_is_not(int id , c_trace_node trace_node)
     if ( id == token_get()) {
         string s_id = yytokens[id];
         string s = c_token_get().text;
-        trace_graph.token_is_add(s,s_id, trace_node.position);
+        trace_graph.token_is_add(s, s_id, trace_node.position);
     } else {
-//      char s_id[10] = {};
-//      sprintf(s_id,"[%d]",id);
         string s = yytokens_short[id];
-//      s += s_id;
-
         trace_graph.token_is_not_add( c_token_get().text, s, trace_node.position );
         result = 1;
     }
@@ -513,7 +487,6 @@ void c_parser_descent::token_next(string tab)
 //void c_parser_descent::token_next_trace(string tab)
 {
     int t = 0;
-    int get_from_lex = 0;
 
 //    printf("%s## token_next file[%s]", tab.c_str(), lex_file_name);
 
@@ -522,57 +495,57 @@ void c_parser_descent::token_next(string tab)
         context.i_token = 0;
         context.just_reloaded = 1;
     }
-        // get from buffer
-        if (context.i_token < tokens_vector.size()) {
-            if (1 == context.just_reloaded) {
-                context.just_reloaded = 0;
-                return;
-            }
-
-            if (context.i_token < (tokens_vector.size() - 1)) {
-                ++context.i_token;
-                return;
-            }
+    // get from buffer
+    if (context.i_token < tokens_vector.size()) {
+        if (1 == context.just_reloaded) {
+            context.just_reloaded = 0;
+            return;
         }
 
-        // get from lexer
-        context.just_reloaded = 0;
-
-        c_token token;
-        while (1) { // this is for drop std::
-            int result = 0;
-            t = yylex();
-            if ( 1 == check_abidos_command(t) ) {
-                continue;
-            }
-            token.save(t, yytext);
-            result = drop_head_namespace(tab, token);
-            if (0==result) { // is not a using namespace
-                break;
-            }
-            if (1==result) { // is in using namespace
-                continue;
-            }
-            if (2==result) { // is in using namespace but not is a N::
-                return;
-            }
+        if (context.i_token < (tokens_vector.size() - 1)) {
+            ++context.i_token;
+            return;
         }
+    }
 
-        colon_colon_chain_process(token);
-        if (IDENTIFIER == t) {
-            check_identifier(tab, token);
+    // get from lexer
+    context.just_reloaded = 0;
+
+    c_token token;
+    while (1) { // this is for drop std::
+        int result = 0;
+        t = yylex();
+        if ( 1 == check_abidos_command(t) ) {
+            continue;
         }
-        tokens_vector.push_back(token);
+        token.save(t, yytext);
+        result = drop_head_namespace(tab, token);
+        if (0==result) { // is not a using namespace
+            break;
+        }
+        if (1==result) { // is in using namespace
+            continue;
+        }
+        if (2==result) { // is in using namespace but not is a N::
+            return;
+        }
+    }
 
-        context.i_token = (tokens_vector.size() - 1);
-        return;
+    colon_colon_chain_process(token);
+    if (IDENTIFIER == t) {
+        check_identifier(tab, token);
+    }
+    tokens_vector.push_back(token);
+
+    context.i_token = (tokens_vector.size() - 1);
+    return;
 }
 /*----------------------------------------------------------------------------*/
 /*
   this is a dark side of this parser
-  when we have something like
-  usi
-    using namespace N;
+  when we have something like:
+
+  using namespace N;
 
   class B{
     C n1;
@@ -583,7 +556,7 @@ void c_parser_descent::token_next(string tab)
   void c_parser_descent::check_identifier(string tab, c_token &token)
   because N is in the vector semantic.vector_using_namespace
 
-  i thinks would be better do this more later in some sintatic rule but this
+  i think would be better do this more later in some sintatic rule but this
   is more easy for now.
 */
 int c_parser_descent::drop_head_namespace(string tab, c_token &token)
@@ -827,10 +800,6 @@ void c_parser_descent::yyparse(char *file_name)
     char file_gv[FILE_NAME_LEN];
     extract_file_from_path(str_temp, file_name);
 
-    /*## todo
-      this should pass in main parameter
-    */
-//    sprintf(file_gv, ".abidos/out_%s.dot", str_temp);
     sprintf(file_gv, "%s/%s",options.out_dir,options.files_output);
     c_generator_class_diagram generator;
 
@@ -874,13 +843,6 @@ void c_parser_descent::yyparse_loader(char *file_loader)
     }
 
     while ( 1 == loader.file_get(file_name) ) {
-        /*##
-          if (1 != lex_file_init(file_name)) {
-              printf("\nERROR: yyparse_loader did not can open [%s]\n", file_name);
-              return;
-          }
-          */
-
         if (1 != lex_file_push( file_name ) ) {
             printf("\nERROR: yyparse_loader did not can open [%s]\n", file_name);
             return;
@@ -913,10 +875,6 @@ void c_parser_descent::yyparse_loader(char *file_loader)
     char file_gv[FILE_NAME_LEN];
     extract_file_from_path(str_temp, file_loader);
 
-    /*## todo
-      this should pass in main parameter
-    */
-//    sprintf(file_gv, ".abidos/out_%s.gv", str_temp);
     sprintf(file_gv, "%s/%s",options.out_dir,options.files_output);
     c_generator_class_diagram generator;
 
