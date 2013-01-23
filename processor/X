@@ -16,12 +16,21 @@ set print address off
 #b c_parser_descent::init_declarator_list_opt
 #b c_parser_descent::direct_declarator
 #b c_parser_descent::declarator_id
-b c_semantic::identifier
+#b c_semantic::identifier
+#
+#
+#b c_parser_descent::colon_colon_chain_process
+b c_parser_descent::colon_colon_chain_process
+display token.text
+display colon_colon_chain
+b src/parser_descent.cpp:470
+#
+#
 # gdb src/abidos -x X
 run --includes test_includes/ \
     --out_dir test_out/ \
     --test_all_tokens_consumed_flag \
     --test_original \
     --ts_show \
-    --verbose test/book_01.cpp > test_out/out_book_01.cpp.txt
+    --verbose test/book_inner_class_01.cpp > test_out/out_book_inner_class_01.cpp.txt
 

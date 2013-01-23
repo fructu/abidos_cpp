@@ -1,5 +1,8 @@
+/*
+	easy test with function member
+*/
 class A
 {
-	int a1;
+	int f1();
 };
 

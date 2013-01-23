@@ -522,10 +522,7 @@ void c_parser_descent::token_next(string tab)
         context.i_token = 0;
         context.just_reloaded = 1;
     }
-
-    if (tokens_vector.empty()) {
-        get_from_lex = 1;
-    } else {
+        // get from buffer
         if (context.i_token < tokens_vector.size()) {
             if (1 == context.just_reloaded) {
                 context.just_reloaded = 0;
@@ -538,10 +535,7 @@ void c_parser_descent::token_next(string tab)
             }
         }
 
-        get_from_lex = 1;
-    }
-
-    if (1 == get_from_lex) {
+        // get from lexer
         context.just_reloaded = 0;
 
         c_token token;
@@ -572,10 +566,6 @@ void c_parser_descent::token_next(string tab)
 
         context.i_token = (tokens_vector.size() - 1);
         return;
-    }
-
-    printf("error c_parser_descent::token_next(void)\n");
-    exit(-1);
 }
 /*----------------------------------------------------------------------------*/
 /*
