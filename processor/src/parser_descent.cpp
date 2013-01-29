@@ -113,6 +113,11 @@ int drop_chain_tail(char * text)
     return 0;
 }
 /*----------------------------------------------------------------------------*/
+c_context_tokens::c_context_tokens()
+{
+    context.clear();
+}
+/*----------------------------------------------------------------------------*/
 c_context_tokens::c_context_tokens(c_context context_param)
 {
     context = context_param;
@@ -124,7 +129,18 @@ c_context_tokens::save(c_context context_param)
 {
     context = context_param;
 }
-
+/*----------------------------------------------------------------------------*/
+void
+c_context_tokens::save_only_template(c_context context_param)
+{
+    context.class_name_declaration = context_param.class_name_declaration;
+    context.i_am_in_template_declaration = context_param.i_am_in_template_declaration;
+    context.vector_template_parameter = context_param.vector_template_parameter;
+    context.map_template_parameter = context_param.map_template_parameter;
+    context.is_template_instantiation = context_param.is_template_instantiation;
+    context.vector_template_argument = context_param.vector_template_argument;
+    context.map_template_argument = context_param.map_template_argument;
+}
 /*----------------------------------------------------------------------------*/
 c_context c_context_tokens::restore(void)
 {
@@ -132,6 +148,17 @@ c_context c_context_tokens::restore(void)
      * if( 0 == context.i_token) { context.just_reloaded = 1; }
      */
     return context;
+}
+/*----------------------------------------------------------------------------*/
+void c_context_tokens::restore_only_template(c_context & context_param)
+{
+    context_param.class_name_declaration = context.class_name_declaration;
+    context_param.i_am_in_template_declaration = context.i_am_in_template_declaration;
+    context_param.vector_template_parameter = context.vector_template_parameter;
+    context_param.map_template_parameter = context.map_template_parameter;
+    context_param.is_template_instantiation = context.is_template_instantiation;
+    context_param.vector_template_argument = context.vector_template_argument;
+    context_param.map_template_argument = context.map_template_argument;
 }
 
 /*----------------------------------------------------------------------------*/

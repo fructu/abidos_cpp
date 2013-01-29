@@ -249,11 +249,11 @@ class A3 {
 };
 
 class B {
-  A3<int> a3;// template instantation
+  A3<int> a3;// template instantiation
 }
 
   symbol.name = a3
-  symbol.is_template_instantation = 1;
+  symbol.is_template_instantiation = 1;
   symbol.vector_template_argument[0]
     c_token.text = T
     vector_decl_specifier = int
@@ -311,7 +311,7 @@ public:
     int is_typedef;
     int is_template;
 
-    int is_template_instantation;
+    int is_template_instantiation;
     t_vector_template_argument vector_template_argument;
     t_map_template_argument map_template_argument;
 
@@ -331,7 +331,7 @@ public:
         is_typedef = 0;
         is_template = 0;
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
 
@@ -368,7 +368,7 @@ public:
         is_operator_overload = 0;
         operator_overload_sufix = "";
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
         extern_points_token.clear();
@@ -391,7 +391,7 @@ public:
         is_typedef = 0;
         is_template = 0;
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
 
@@ -485,11 +485,11 @@ public:
     t_vector_template_parameter vector_template_parameter;
     t_map_template_parameter map_template_parameter;
 
-    int is_template_instantation;
+    int is_template_instantiation;
     t_vector_template_argument vector_template_argument;
     t_map_template_argument map_template_argument;
 
-    int class_predeclaration;
+    int class_pre_declaration;
 
     //this is to put in symbols we dont wan visualize it in graphs.
     int is_banned;
@@ -510,11 +510,11 @@ public:
         vector_template_parameter.clear();
         map_template_parameter.clear();
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
 
-        class_predeclaration = 0;
+        class_pre_declaration = 0;
         is_banned = 0;
     }
 
@@ -537,11 +537,11 @@ public:
         vector_template_parameter.clear();
         map_template_parameter.clear();
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
 
-        class_predeclaration = 0;
+        class_pre_declaration = 0;
         is_banned = 0;
     }
 
@@ -563,11 +563,11 @@ public:
         vector_template_parameter.clear();
         map_template_parameter.clear();
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
 
-        class_predeclaration = 0;
+        class_pre_declaration = 0;
         is_banned = 0;
     }
     void process_token_text();

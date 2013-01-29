@@ -112,7 +112,7 @@ struct c_context {
     t_map_template_parameter map_template_parameter;
 
 //    int template_instantation;
-    int is_template_instantation;
+    int is_template_instantiation;
     t_vector_template_argument vector_template_argument;
     t_map_template_argument map_template_argument;
 
@@ -124,7 +124,7 @@ struct c_context {
     int prefix_sharp;
 
     // class A;
-    int class_predeclaration;
+    int class_pre_declaration;
 
     void print(void)
     // this is for debug
@@ -169,7 +169,7 @@ struct c_context {
         vector_template_parameter.clear();
         map_template_parameter.clear();
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
 
@@ -179,7 +179,7 @@ struct c_context {
 
         prefix_sharp = 0;
 
-        class_predeclaration = 0;
+        class_pre_declaration = 0;
     }
     void clear(void) {
         i_token = 0;
@@ -223,7 +223,7 @@ struct c_context {
         vector_template_parameter.clear();
         map_template_parameter.clear();
 
-        is_template_instantation = 0;
+        is_template_instantiation = 0;
         vector_template_argument.clear();
         map_template_argument.clear();
 
@@ -233,7 +233,7 @@ struct c_context {
 
 //        prefix_sharp = 0;
 
-        class_predeclaration = 0;
+        class_pre_declaration = 0;
     }
     void restore_but_not_i_token(c_context & context_param) {
         context_param.class_specifier_status = class_specifier_status;
@@ -263,7 +263,7 @@ struct c_context {
         context_param.vector_template_parameter = vector_template_parameter;
         context_param.map_template_parameter = map_template_parameter;
 
-        context_param.is_template_instantation = is_template_instantation;
+        context_param.is_template_instantiation = is_template_instantiation;
         context_param.vector_template_argument = vector_template_argument;
         context_param.map_template_argument = map_template_argument;
 
@@ -273,7 +273,7 @@ struct c_context {
 
         context_param.prefix_sharp = prefix_sharp;
 
-        context_param.class_predeclaration = class_predeclaration;
+        context_param.class_pre_declaration = class_pre_declaration;
     }
 };
 
@@ -286,9 +286,12 @@ struct c_context_tokens {
     // unsigned i_token;
     c_context context;
 
+    c_context_tokens();
     c_context_tokens(c_context context_param);
     void save(c_context context_param);
+    void save_only_template(c_context context_param);
     c_context restore(void);
+    void restore_only_template(c_context & context_param);
 
     void restore_but_not_i_token(c_context & context_param);
 };

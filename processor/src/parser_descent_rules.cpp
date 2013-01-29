@@ -421,7 +421,7 @@ int c_parser_descent::assignment_expression(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "assignment_expression_dummy");
 
-    trace_graph.add(trace_node, "identifier");
+//    trace_graph.add(trace_node, "identifier");
     c_context_tokens context_tokens(context);
 
     token_next(trace_node.get_tab());
@@ -1012,7 +1012,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
       ###{
     */
     if (0 == result) {
-        if (1 == context.is_template_instantation) {
+        if (1 == context.is_template_instantiation) {
             if ( token_is(INTEGER, trace_node) ) {
                 result = 1;
             }
@@ -1026,7 +1026,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
 
         if (1 == context.i_am_in_parameter_declaration) {
             context.param_vector_decl_specifier.push_back(decl);
-        } else if (1 == context.is_template_instantation) {
+        } else if (1 == context.is_template_instantiation) {
             //### todo this if is weird
             if ( token_is_not('>', trace_node) ) {
                 /*
@@ -1117,7 +1117,7 @@ int c_parser_descent::ptr_specifier(c_trace_node trace_node)
 
     if (token_is_one(  vector_id,trace_node) != 0) {
 
-        if (1 == context.is_template_instantation) {
+        if (1 == context.is_template_instantiation) {
             c_decl_specifier decl(c_token_get());
             //### todo this if is weird
             //### todo maybe mov this code to semantic ???
@@ -1445,9 +1445,9 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
             token_next(trace_node.get_tab());
             if ( token_is(CLASS_NAME, trace_node) ) {
                 context.class_name_declaration = c_token_get().text;
-                context.class_predeclaration = 1;
-                semantic.class_predeclaration_to_declaration(context, c_token_get());
-                context.class_predeclaration = 0;
+                context.class_pre_declaration = 1;
+                semantic.class_pre_declaration_to_declaration(context, c_token_get());
+                context.class_pre_declaration = 0;
             } else {
                 printf("error c_parser_descent::class_specifier() class without name\n");
                 context.class_name_declaration = class_name_previous;
@@ -1467,7 +1467,7 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
         //  class A;
         if ( token_is(';', trace_node) ) {
             context = context_good_way.restore();
-            context.class_predeclaration = 1;
+            context.class_pre_declaration = 1;
             context.is_abstract = was_abstract;
             return 1;
         } else {
@@ -1482,31 +1482,13 @@ int c_parser_descent::class_specifier(c_trace_node trace_node)
     }
 
     // we need to know what class is processing
-    /*
-      ### todo
-        saving this part of context should be in another object
-        and be a composition of context -> c_template_context
-    */
 
-    string class_name = context.class_name_declaration;
-    int i_am_in_template_declaration = context.i_am_in_template_declaration;
-    t_vector_template_parameter vector_template_parameter = context.vector_template_parameter;
-    t_map_template_parameter map_template_parameter = context.map_template_parameter;
-
-    int is_template_instantation = context.is_template_instantation;
-    t_vector_template_argument vector_template_argument = context.vector_template_argument;
-    t_map_template_argument map_template_argument = context.map_template_argument;
+    c_context_tokens context_tokens_template;
+    context_tokens_template.save_only_template(context);
 
     tokens_vector_clear();
 
-    context.class_name_declaration = class_name;
-    context.i_am_in_template_declaration = i_am_in_template_declaration;
-    context.vector_template_parameter = vector_template_parameter;
-    context.map_template_parameter = map_template_parameter;
-
-    context.is_template_instantation = is_template_instantation;
-    context.vector_template_argument = vector_template_argument;
-    context.map_template_argument = map_template_argument;
+    context_tokens_template.restore_only_template(context);
 
     context_tokens.save(context);
 
@@ -2316,7 +2298,7 @@ int c_parser_descent::template_id(c_trace_node trace_node)
 
     c_context_tokens context_tokens(context);
 
-    context.is_template_instantation = 1;
+    context.is_template_instantiation = 1;
 
     c_symbol *p_symbol = ts.search_symbol(c_token_get().text.c_str());
     if (0 == p_symbol) {
@@ -2333,7 +2315,7 @@ int c_parser_descent::template_id(c_trace_node trace_node)
                        yytext);
             }
             if ( 1 == p_symbol->is_template ) {
-                context.is_template_instantation = 1;
+                context.is_template_instantiation = 1;
                 context.map_template_parameter = p_symbol->map_template_parameter;
                 context.vector_template_parameter = p_symbol->vector_template_parameter;
             }
@@ -2357,7 +2339,7 @@ int c_parser_descent::template_id(c_trace_node trace_node)
         return 0;
     }
     /*#### maybe mv this to semantic
-                          context.is_template_instantation = 0;
+                          context.is_template_instantiation = 0;
                           context.map_template_parameter.clear();
                           context.vector_template_parameter.clear();
     */
@@ -2416,7 +2398,7 @@ int c_parser_descent::template_argument(c_trace_node trace_node)
 {
     trace_graph.add(trace_node, "template_argument");
 
-    context.is_template_instantation = 1;
+    context.is_template_instantiation = 1;
 
     //### todo search types in context.map_template_parameter
 
@@ -2436,7 +2418,7 @@ int c_parser_descent::template_argument(c_trace_node trace_node)
         return 1;
     }
 
-    context.is_template_instantation = 0;
+    context.is_template_instantiation = 0;
 
     return 0;
 }
@@ -2716,7 +2698,7 @@ int c_parser_descent::init_declarator(c_trace_node trace_node)
         //removing * of the previous variable
         if (1 == context.i_am_in_parameter_declaration) {
             //### i think here nothing todo...
-        } else if (1 == context.is_template_instantation) {
+        } else if (1 == context.is_template_instantiation) {
             //### i think here nothing todo...
         } else {
             semantic.pop_last_pointers();

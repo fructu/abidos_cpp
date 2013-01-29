@@ -65,8 +65,8 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
         //symbol.process_token_text();
     }
 
-    if ( 1 == context.class_predeclaration ) {
-        symbol.class_predeclaration = 1;
+    if ( 1 == context.class_pre_declaration ) {
+        symbol.class_pre_declaration = 1;
     }
 
     if ( 0 != context.class_name_declaration.size() ) {
@@ -186,8 +186,8 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
         }
     }
 
-    if ( 1 == context.is_template_instantation ) {
-        class_member.is_template_instantation = context.is_template_instantation;
+    if ( 1 == context.is_template_instantiation ) {
+        class_member.is_template_instantiation = context.is_template_instantiation;
         class_member.vector_template_argument = context.vector_template_argument;
         class_member.map_template_argument    = context.map_template_argument;
     }
@@ -364,8 +364,8 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
         symbol.typedef_points_to = context.class_name_declaration;
         symbol.type = TYPEDEF_NAME;
 
-        if ( 1 == context.is_template_instantation ) {
-            symbol.is_template_instantation = context.is_template_instantation;
+        if ( 1 == context.is_template_instantiation ) {
+            symbol.is_template_instantiation = context.is_template_instantiation;
             symbol.vector_template_argument = context.vector_template_argument;
             symbol.map_template_argument    = context.map_template_argument;
         }
@@ -378,8 +378,8 @@ void c_semantic::identifier_typedef(c_context & context, c_token token)
         c_declarator declarator(token, vector_decl_specifier);
         declarator.is_typedef = 1;
 
-        if ( 1 == context.is_template_instantation ) {
-            declarator.is_template_instantation = context.is_template_instantation;
+        if ( 1 == context.is_template_instantiation ) {
+            declarator.is_template_instantiation = context.is_template_instantiation;
             declarator.vector_template_argument = context.vector_template_argument;
             declarator.map_template_argument    = context.map_template_argument;
         }
@@ -711,8 +711,8 @@ void c_semantic::declarator_insert(string tab, c_context & context)
             }
         }
 
-        if ( 1 == context.is_template_instantation ) {
-            symbol.is_template_instantation = context.is_template_instantation;
+        if ( 1 == context.is_template_instantiation ) {
+            symbol.is_template_instantiation = context.is_template_instantiation;
             symbol.vector_template_argument = context.vector_template_argument;
             symbol.map_template_argument    = context.map_template_argument;
         }
@@ -763,29 +763,29 @@ c_semantic::namespace_declarator(c_context & context, c_token token)
   and is better have the file and the line of the point 2
 */
 void
-c_semantic::class_predeclaration_to_declaration(c_context & context, c_token token)
+c_semantic::class_pre_declaration_to_declaration(c_context & context, c_token token)
 {
     c_symbol *p_symbol =
         ts.search_symbol(context.class_name_declaration);
 
     if (0 == p_symbol ) {
-        printf("## c_semantic::class_predeclaration_to_declaration() context.class_name_declaration[%s] not found!\n",context.class_name_declaration.c_str());
+        printf("## c_semantic::class_pre_declaration_to_declaration() context.class_name_declaration[%s] not found!\n",context.class_name_declaration.c_str());
         return;
     }
 
     if (1 == options.verbose_flag) {
-        printf("## c_semantic::class_predeclaration_to_declaration() context.class_name_declaration[%s] founded\n",context.class_name_declaration.c_str());
+        printf("## c_semantic::class_pre_declaration_to_declaration() context.class_name_declaration[%s] founded\n",context.class_name_declaration.c_str());
     }
 
     if (0 == p_symbol->class_key) {
         printf
-        ("error c_semantic::class_predeclaration_to_declaration()  0 == p_symbol->class_key )\n\n");
+        ("error c_semantic::class_pre_declaration_to_declaration()  0 == p_symbol->class_key )\n\n");
         exit(-1);
     }
 
-    if (0 == context.class_predeclaration ) {
+    if (0 == context.class_pre_declaration ) {
         printf
-        ("error c_semantic::class_predeclaration_to_declaration() 0 == context.class_predeclaration )\n\n");
+        ("error c_semantic::class_pre_declaration_to_declaration() 0 == context.class_pre_declaration )\n\n");
         exit(-1);
     }
 

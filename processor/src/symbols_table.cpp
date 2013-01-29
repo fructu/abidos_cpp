@@ -148,7 +148,7 @@ void c_declarator::print(const char *tab)
         printf("[%s] ", vector_decl_specifier[i_decl].token.text.c_str());
     }
 
-    if ( 1 == is_template_instantation ) {
+    if ( 1 == is_template_instantiation ) {
         size_t i = 0;
         printf("<");
         for ( i = 0; i < vector_template_argument.size(); ++i) {
@@ -300,8 +300,8 @@ void c_class_members::print(const char *tab)
                    vector_decl_specifier[i_decl].token.text.c_str());
         }
 
-        if ( 1 == ((*i_map_member).second).is_template_instantation ) {
-            printf(" TEMPLATE INSTANTATION ");
+        if ( 1 == ((*i_map_member).second).is_template_instantiation ) {
+            printf(" TEMPLATE INSTANTIATION ");
         }
 
         printf("first[%s]->[%s]\n"
@@ -395,8 +395,8 @@ void c_symbol::print(const char *tab)
                , typedef_points_to.c_str()
               );
     }
-    if ( 1 == is_template_instantation ) {
-        printf("%s   TEMPLATE_INSTANTATION\n",tab);
+    if ( 1 == is_template_instantiation ) {
+        printf("%s   TEMPLATE_INSTANTIATION\n",tab);
     }
 
     // t_map_base_class map_base_class;
