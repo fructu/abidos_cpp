@@ -619,6 +619,50 @@ int c_parser_descent::drop_head_namespace(string tab, c_token &token)
     return 0;
 }
 /*----------------------------------------------------------------------------*/
+int c_parser_descent::identifier_search_with_type(string tab, const char * p_str, c_token &token)
+{
+    c_symbol *p_symbol = ts.search_symbol( p_str );
+
+    if (p_symbol) {
+//
+// dont do it fails in test_out/out_t028.cpp.dot
+//        token.text = p_symbol->text;
+
+        if (p_symbol->type != 0) {
+
+            if ( 1 == p_symbol->is_template ) {
+                token.id = TEMPLATE_NAME;
+            } else {
+                token.id = p_symbol->type;
+            }
+        }
+
+        return 1;
+    }
+
+    return 0;
+}
+/*----------------------------------------------------------------------------*/
+int c_parser_descent::identifier_search(string tab, const char * p_str, c_token &token)
+{
+    c_symbol *p_symbol = ts.search_symbol( p_str );
+
+    if (p_symbol) {
+        token.text = p_symbol->text;
+
+        if ( 1 == p_symbol->is_template ) {
+            token.id = TEMPLATE_NAME;
+        } else {
+            token.id = p_symbol->type;
+        }
+
+        return 1;
+    }
+
+    return 0;
+}
+
+/*----------------------------------------------------------------------------*/
 /*
   we look if identifier is other thing:
     - a class
@@ -627,21 +671,8 @@ int c_parser_descent::drop_head_namespace(string tab, c_token &token)
 */
 void c_parser_descent::check_identifier(string tab, c_token &token)
 {
-    c_symbol *p_symbol = ts.search_symbol(yytext);
 
-    if (p_symbol) {
-        if (p_symbol->type != 0) {
-            // return symbol.type;
-            /*            printf("%s## next_token found symbol [%s]",
-                               tab.c_str(), yytext);
-            */
-            if ( 1 == p_symbol->is_template ) {
-                token.id = TEMPLATE_NAME;
-            } else {
-                token.id = p_symbol->type;
-            }
-        }
-
+    if ( 1 == identifier_search_with_type(tab, yytext, token) ) {
         return;
     }
 
@@ -650,19 +681,9 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
       A::B::~B()
     */
     if ( 1 == chain_is_tail(context.class_name_declaration, yytext) ) {
-        c_symbol *p_symbol = ts.search_symbol(context.class_name_declaration);
-        if (p_symbol) {
-            if (p_symbol->type != 0) {
-                // return symbol.type;
-                if ( 1 == p_symbol->is_template ) {
-                    token.id = TEMPLATE_NAME;
-                } else {
-                    token.id = p_symbol->type;
-                }
-            }
+        if ( 1 == identifier_search_with_type(tab, context.class_name_declaration.c_str(), token) ) {
+            return;
         }
-
-        return;
     }
 
     //check if is template type ej template <class T> --> T
@@ -679,18 +700,9 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
     if ( 0 == context.class_name_declaration.size() ) {
         if ( 0 != context.namespace_name_declaration.size() ) {
             string s = context.namespace_name_declaration + "::" + yytext;
-            c_symbol *p_symbol = ts.search_symbol(s.c_str());
-            if (p_symbol) {
-                token.text = p_symbol->text;
-
-                if ( 1 == p_symbol->is_template ) {
-                    token.id = TEMPLATE_NAME;
-                } else {
-                    token.id = p_symbol->type;
-                }
+            if ( 1 == identifier_search(tab, s.c_str(), token) ) {
+                return;
             }
-
-            return;
         }
     }
 
@@ -701,16 +713,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         for (i = 0;  i < semantic.vector_using_namespace.size(); ++i ) {
             string s = semantic.vector_using_namespace[i] + "::" + yytext;
 
-            c_symbol *p_symbol = ts.search_symbol(s.c_str());
-            if (p_symbol) {
-                token.text = p_symbol->text;
-
-                if ( 1 == p_symbol->is_template ) {
-                    token.id = TEMPLATE_NAME;
-                } else {
-                    token.id = p_symbol->type;
-                }
-
+            if ( 1 == identifier_search(tab, s.c_str(), token) ) {
                 return;
             }
         }
@@ -719,18 +722,9 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
     if ( 0 != context.class_name_declaration.size() ) {
         if ( 0 != context.namespace_name_declaration.size() ) {
             string s = context.namespace_name_declaration + "::" + yytext;
-            c_symbol *p_symbol = ts.search_symbol(s.c_str());
-            if (p_symbol) {
-                token.text = s;
-
-                if ( 1 == p_symbol->is_template ) {
-                    token.id = TEMPLATE_NAME;
-                } else {
-                    token.id = p_symbol->type;
-                }
+            if ( 1 == identifier_search(tab, s.c_str(), token) ) {
+                return;
             }
-
-            return;
         }
     }
 
@@ -742,18 +736,9 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         sprintf(str,"%s::%s",context.class_name_declaration.c_str(),yytext);
         sprintf(str_droped,"%s",context.class_name_declaration.c_str());
         while (1) {
-            p_symbol = ts.search_symbol(str);
-            if (p_symbol) {
-                token.text = str;
-
-                if ( 1 == p_symbol->is_template ) {
-                    token.id = TEMPLATE_NAME;
-                } else {
-                    token.id = p_symbol->type;
-                }
+            if ( 1 == identifier_search(tab, str, token) ) {
                 return;
             }
-
             if ( 0 == drop_chain_tail(str_droped) ) {
                 break;
             }

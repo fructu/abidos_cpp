@@ -25,6 +25,9 @@ useful commands:
 
   abidos/processor/src$ ../scripts/indent_run.sh
 
+to check output test with previus version
+  processor$ rm test_out/prune.log rm test_out.bk/prune.log; diff test_out/ test_out.bk/ | less
+
 to see trace.dot files:
   xdot_run.py processor/test_out/trace_t001.cpp.gv
   cat ../out/trace_t030.cpp.gv | dot -Tpng > ../out/trace_t030.cpp.gv.png; eog ../out/trace_t030.cpp.gv.png
@@ -646,3 +649,4 @@ abidos
     but i need create the ./abidos/files_input.
 -[v] script to prune subtrees from trace tree,
     scripts/trace_prune.pl
+-[v] refactor  c_parser_descent::check_identifier.

@@ -335,6 +335,9 @@ private:
     void token_next(string tab);
     void token_next_trace(string tab);
     int drop_head_namespace(string tab, c_token &token);
+
+    int identifier_search(string tab, const char p_str[], c_token &token);
+    int identifier_search_with_type(string tab, const char p_str[], c_token &token);
     void check_identifier(string tab, c_token &token);
 
     //## dummy to consume int a[][];
