@@ -9,7 +9,7 @@ my $YACC = "yacc";
 my $INCLUDES = "../includes";
 
 use strict;
-my $dir = '.abidos';
+my $dir = '.abidos_cpp';
 
 sub create_directories
 {
@@ -35,12 +35,12 @@ sub test_run
   my $file = shift;
   my $estado = '';
 
-	$estado=`mkdir -p .abidos`;
-	$estado=`cp ../python/xdot.py .abidos/`;
-	$estado=`cp ../python/xdot_run.py .abidos/`;	
-	$estado=`./abidos --verbose --ts_show --includes ../test_includes/ ../test/$file > ../test_out/out_$file.txt`;
-	$estado=`cp ../test/$file .abidos/$file`;	
-	$estado=`.abidos/xdot_run.py`;
+	$estado=`mkdir -p .abidos_cpp`;
+	$estado=`cp ../python/xdot.py .abidos_cpp/`;
+	$estado=`cp ../python/xdot_run.py .abidos_cpp/`;	
+	$estado=`./abidos_cpp --verbose --ts_show --includes ../test_includes/ ../test/$file > ../test_out/out_$file.txt`;
+	$estado=`cp ../test/$file .abidos_cpp/$file`;	
+	$estado=`.abidos_cpp/xdot_run.py`;
 }
 
 sub main

@@ -1,7 +1,7 @@
 *.o
 *.pyc
-processor/.abidos/
-processor/abidos
+processor/.abidos_cpp/
+processor/abidos_cpp
 processor/lexer.c
 processor/nohup.out
 processor/parser.c
@@ -29,7 +29,7 @@ processor/includes/tokens.h
 processor/src/CMakeFiles/
 processor/src/CTestTestfile.cmake
 processor/src/Makefile
-processor/src/abidos
+processor/src/abidos_cpp
 processor/src/cmake_install.cmake
 processor/src/lexer.c
 processor/src/parser.c

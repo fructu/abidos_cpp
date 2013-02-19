@@ -15,15 +15,15 @@ useful commands:
 
 	gedit Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO
     kate Makefile parser_descent.cpp  parser_descent.h parser_descent_rules.cpp YACC_RULES_TODO semantic.cpp semantic.h symbols_table.h symbols_table.cpp
- -q -x X abidos
+ -q -x X abidos_cpp
     ulimit -c unlimited
 
-    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose ../test/mass_clases.cpp| grep -E "==\d=="
-    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos --verbose ../test/test_symbols_table.h| grep -E "==\d=="
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos_cpp --verbose ../test/mass_clases.cpp| grep -E "==\d=="
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos_cpp --verbose ../test/test_symbols_table.h| grep -E "==\d=="
 
     ./$(EXECUTABLE)  test/$(FILE_TEST)
 
-  abidos/processor/src$ ../scripts/indent_run.sh
+  abidos_cpp/processor/src$ ../scripts/indent_run.sh
 
 to check output test with previus version
   processor$ rm test_out/prune.log rm test_out.bk/prune.log; diff test_out/ test_out.bk/ | less
@@ -32,10 +32,10 @@ to see trace.dot files:
   xdot_run.py processor/test_out/trace_t001.cpp.gv
   cat ../out/trace_t030.cpp.gv | dot -Tpng > ../out/trace_t030.cpp.gv.png; eog ../out/trace_t030.cpp.gv.png
 
-git bundle create abidos_$(date '+%F_%H_%M')_master.bundle master
-mv abidos_2011-04-14_15_06_master.bundle /home/hevia/Descargas/
-cd /home/hevia/Descargas/working/abidos
-git pull /home/hevia/Descargas/abidos_2011-04-14_15_06_master.bundle master
+git bundle create abidos_cpp_$(date '+%F_%H_%M')_master.bundle master
+mv abidos_cpp_2011-04-14_15_06_master.bundle /home/hevia/Descargas/
+cd /home/hevia/Descargas/working/abidos_cpp
+git pull /home/hevia/Descargas/abidos_cpp_2011-04-14_15_06_master.bundle master
 
 make clean
 tar -czvf working_$(date '+%F_%H_%M').tar.gz working/
@@ -43,7 +43,7 @@ tar -xzvf working_2011-03-12_16_18.tar.gz
 
 git commit -C HEAD -a --amend
 
-abidos/processor$ python python/xdot_run.py test_out/out_t044.cpp.dot
+abidos_cpp/processor$ python python/xdot_run.py test_out/out_t044.cpp.dot
 
 dot ../out/out_test_symbols_table.h.gv -Tpng -o ../out/out_test_symbols_table.h.png
 dot ../out/out_test_symbols_table.h.gv -Tsvg -o ../out/out_test_symbols_table.h.svg
@@ -56,7 +56,7 @@ dot ../out/out_test_symbols_table.h.gv -Tsvg -o ../out/out_test_symbols_table.h.
 7. Either recent project news or a pointer to a file containing same (usually NEWS).
 8. Project mailing list addresses.
 
-#abidos parsing and showing his own classes:
+#abidos_cpp parsing and showing his own classes:
 make clean
 make all &> make_out.txt
 make loader
@@ -65,7 +65,7 @@ cat ../out/out_abidos_files.txt.gv | dot -Tpng > ../out/out_abidos_files.txt.gv.
 #
 /home/hevia/bashrc
 {
-PATH="/opt/abidos:$PATH"
+PATH="/opt/abidos_cpp:$PATH"
 }
 
 #generate make_out.txt when there are not a Makefile:
@@ -73,16 +73,16 @@ ls -l *.cpp | awk '{print "g++ -c "$8}' > make_out.txt
 abidos_make_process.pl
 
 #generate png diagram with abidos installed
-cat .abidos/out_files.gv | dot -Tpng > .abidos/out_files.gv.png; eog  .abidos/out_files.gv.png
+cat .abidos_cpp/out_files.gv | dot -Tpng > .abidos_cpp/out_files.gv.png; eog  .abidos_cpp/out_files.gv.png
 
 #print diagrams more prety:
 http://www.hokstad.com/making-graphviz-output-pretty-with-xsl.html
 git://github.com/vidarh/diagram-tools.git
-cat .abidos/out_files.gv | dot -Tsvg > .abidos/out_files.gv.svg
-xsltproc notugly.xsl .abidos/out_files.gv.svg > .abidos/out_files_2.gv.svg; eog .abidos/out_files_2.gv.svg
+cat .abidos_cpp/out_files.gv | dot -Tsvg > .abidos_cpp/out_files.gv.svg
+xsltproc notugly.xsl .abidos_cpp/out_files.gv.svg > .abidos_cpp/out_files_2.gv.svg; eog .abidos_cpp/out_files_2.gv.svg
 
 # using gdb
-gdb src/abidos -x X
+gdb src/abidos_abidos -x X
 # X file run like this
 run --includes test_includes/ --out_dir test_out/ --test_all_tokens_consumed_flag --test_original --ts_show --verbose test/t001.cpp > test_out/out_t001.cpp.txt
 
@@ -96,13 +96,13 @@ todo
 	-[] refactor test in a class.
 
 show includes todo
--[] class config_parameters do like abidos/processor/options.cpp 
+-[] class config_parameters do like abidos_cpp/processor/options.cpp 
 -[] refactor code from main.cpp to the previous class.
--[] move code inside of abidos/preprocessor.
+-[] move code inside of abidos_cpp/preprocessor.
 -[] parser will be invoke from preprocesso
     maybe the easy way is create a big file preprocesed with gcc
 
-abidos
+abidos_cpp
 -[v] draft first version of types_table.
 -[v] draft first version of symbol_table.
 -[v] class B : A { ... put public by default
@@ -357,7 +357,7 @@ abidos
         mkdir test_out
 -[] pass file out in main parameter parser_descent yyparse()
 -[v] rename abidos -> abydos in all project
-    find . -name "*" -exec sed -e 's/abidos/abydos/g' {} \;
+    find . -name "*" -exec sed -e 's/abidos_cpp/abydos/g' {} \;
     the name of the project is abidos for the moment exists other projects and
     companies named abydos.
 -[v] t031 void f(void); in diagram in A::B class appears:
@@ -441,7 +441,7 @@ abidos
 -[v] parsing enum in enum t_class_specifier_status class_specifier_status;
     t_class_specifier_status must be a enum type
 -[v] fix this weid include with a link: 
-    working/abidos/processor/src$ ln -s ../../preprocessor/ts.h preprocessor_ts.h
+    working/abidos_cpp/processor/src$ ln -s ../../preprocessor/ts.h preprocessor_ts.h
 -[v] fix parsing int *a, *b;
 -[] fix parsing int *a, *b, c;
 -[v] fix compile extern "C" { }
@@ -459,11 +459,11 @@ abidos
 -[v] fix NO_CLASS_NAME#1 must increase, it was done see t027.cpp
 -[v] fix t027 herence from typedef
 -[v] creating links to real code in test dir
-   hevia@vulcano:~/working/abidos/processor/test$ ../scripts/create_links.pl
+   hevia@vulcano:~/working/abidos_cpp/processor/test$ ../scripts/create_links.pl
 -[v] do script to parse make_output and create a file with the sources files and his
     -Idirs  abidos_make_process.pl
-    abidos/processor/src$ make all &> make_ouput.txt
-    abidos/processor/src$ ../scripts/abidos_make_process.pl
+    abidos_cpp/processor/src$ make all &> make_ouput.txt
+    abidos_cpp/processor/src$ ../scripts/abidos_make_process.pl
     make loader
 -[v] do abidos_make_process.pl use .abidos
 -[] do abidos_make_process.pl change dir when make do it
@@ -477,19 +477,19 @@ abidos
 -[v] in abidos_make_process.pl drop final /
 -[v] in abidos_make_process.pl do case ../../preprocessor/ts.cpp:../../preprocessor:../includes
 -[v] do make install rule
-    /opt/abidos/
+    /opt/abidos_cpp/
 -[] do param to pass char * p_file_out [../out/out_files.gv]
 -[v] check if any system line fail in abidos_make_process.pl
 -[v] do uninstall
--[v] do install fake libraris in /opt/abidos/includes
--[v] install /opt/abidos/out_files.gv
+-[v] do install fake libraris in /opt/abidos_cpp/includes
+-[v] install /opt/abidos_cpp/out_files.gv
 -[v] id dont apears in diagram
    class Identificador
    {
 	    char id[50];
 	    int tipo;
 	 };
-	 cat .abidos/trace_t045.cpp.gv | dot -Tpng > .abidos/trace_t045.cpp.gv.png; eog .abidos/trace_t045.cpp.gv.png
+	 cat .abidos_cpp/trace_t045.cpp.gv | dot -Tpng > .abidos_cpp/trace_t045.cpp.gv.png; eog .abidos_cpp/trace_t045.cpp.gv.png
 -[] put the [] in class diagrams via context.is_array -> symbol.is_array
    class Identificador
    {
@@ -506,7 +506,7 @@ abidos
     int value;
   };
 
-  cat .abidos/trace_t044.cpp.gv | dot -Tpng > .abidos/trace_t044.cpp.gv.png; eog .abidos/trace_t044.cpp.gv.png
+  cat .abidos_cpp/trace_t044.cpp.gv | dot -Tpng > .abidos_cpp/trace_t044.cpp.gv.png; eog .abidos_cpp/trace_t044.cpp.gv.png
 -[v] do parsing abstract classes
   class IClassVisitor{
   public:
@@ -529,7 +529,7 @@ abidos
 -[v] if #include "H.h" dont found search in lowercase in directories.
 -[v] parse operator overload
     int TipoBase::operator== (TipoBase& otro)
-    cat .abidos/trace_t045.cpp.gv | dot -Tpng > .abidos/trace_t045.cpp.gv.png; eog .abidos/trace_t045.cpp.gv.png
+    cat .abidos_cpp/trace_t045.cpp.gv | dot -Tpng > .abidos_cpp/trace_t045.cpp.gv.png; eog .abidos_cpp/trace_t045.cpp.gv.png
 -[v] parse other operator overload
 -[v] do not aggregation of compositions whith the types of methods
   class Void : public Tipo
@@ -544,7 +544,7 @@ abidos
 		unsigned value : 10;
 	};
 -[v] fix problem with std::string, fixing with a dark path ...
-  cat .abidos/trace_t046.cpp.gv | dot -Tpng > .abidos/trace_t046.cpp.gv.png; eog .abidos/trace_t046.cpp.gv.png
+  cat .abidos_cpp/trace_t046.cpp.gv | dot -Tpng > .abidos_cpp/trace_t046.cpp.gv.png; eog .abidos_cpp/trace_t046.cpp.gv.png
 -[] do subgrammar to active/desactivate traces in some parts of the code
 -[v] fix A_1 a1; A_1 should be reconize A::A_1 class type
   class A
@@ -568,8 +568,8 @@ abidos
 -[v] generate rule execute_one_test
 -[v] fix problem in click t208 A_2_1() go to declaration does not go to definition.
 -[v] fix problem t208  in click A() bad.
-  cat .abidos/trace_t028a.cpp.gv | dot -Tpng > .abidos/trace_t028a.cpp.gv.png; eog .abidos/trace_t028a.cpp.gv.png
-  cat .abidos/trace_t028f.cpp.gv | dot -Tpng > .abidos/trace_t028f.cpp.gv.png; eog .abidos/trace_t028f.cpp.gv.png
+  cat .abidos_cpp/trace_t028a.cpp.gv | dot -Tpng > .abidos_cpp/trace_t028a.cpp.gv.png; eog .abidos_cpp/trace_t028a.cpp.gv.png
+  cat .abidos_cpp/trace_t028f.cpp.gv | dot -Tpng > .abidos_cpp/trace_t028f.cpp.gv.png; eog .abidos_cpp/trace_t028f.cpp.gv.png
 -[v] put cmake-gui
     cmake-gui .
 -[v] scripts/abidos_make_process.pl now parse make VERBOSE=1 &> make_out
@@ -599,7 +599,7 @@ abidos
 
 -[v] cmake, in make check directories.
 -[v] new instructions to compile and execute
-    cd abidos/processor/
+    cd abidos_cpp/processor/
     cmake .
     make VERBOSE=1 &> make_out.txt
     sudo make install
@@ -619,9 +619,9 @@ abidos
   #	modified:   scripts/generate_begin_graph.pl
   find . -name "CMakeLists.txt" -exec grep -EHni "\.pl" {} \; | less
 -[v] pass paths to tests_run.pl
-    /working/abidos/processor$ perl scripts/tests_run.pl src/abidos test/ test_includes/ test_out/
+    /working/abidos_cpp/processor$ perl scripts/tests_run.pl src/abidos test/ test_includes/ test_out/
 -[v] pass execute_one_test.pl
-    /working/abidos/processor$ perl scripts/execute_one_test.pl test/t046.cpp
+    /working/abidos_cpp/processor$ perl scripts/execute_one_test.pl test/t046.cpp
 -[] put generate files in a generate dir
 -[v] scripts/tests_run.pl know generates a draft log
     for now in log prints the command lines
@@ -629,24 +629,24 @@ abidos
   #include "../test_includes/h034_B.h"
   now abidos check the includes path to
   #include "h034_B.h"
--[v] abidos print version in begin of .abidos/files.dot
+-[v] abidos print version in begin of .abidos_cpp/files.dot
 -[v] c_generator_trace::run can not write file in .abidos because pwd is in src
 	   now i pass the out_dir parameter, that dir must exists!
 -[v] pass to xdot_run.py paremeter with the <file>.dot.
 -[v] check and create if is necesary .abidos directory, the problem was the
-  incorrect use of: make_out.txt .abidos/files_input  .abidos/files_output.dot
+  incorrect use of: make_out.txt .abidos_cpp/files_input  .abidos_cpp/files_output.dot
 -[v] option to dont generating url tags in dot ouput
-  abidos --out_dir .abidos --loader .abidos/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
+  abidos --out_dir .abidos --loader .abidos_cpp/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
 -[v] option to process white list and only generates class from it.
-  abidos --out_dir .abidos --loader .abidos/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
+  abidos --out_dir .abidos --loader .abidos_cpp/files_input --white_list ../../abidos_cpp_doc/programmer_manual/chapter_architecture/white_list_01.txt --no_url
 -[v] generate trace tree with url in each node to open easily his rule in cpp source.
     test_out/trace_book_01.cpp.gv
     test_out/trace_book_01.cpp_urls.gv
--[] abidos/processor$ make test_run
-    needs abidos/processor$ abidos_make_process.pl executed before.
+-[] abidos_cpp/processor$ make test_run
+    needs abidos_cpp/processor$ abidos_make_process.pl executed before.
     for now i call 
     system ("$executable_with_dir --test_all_tokens_consumed_flag --no_s...")
-    but i need create the ./abidos/files_input.
+    but i need create the ./abidos_cpp/files_input.
 -[v] script to prune subtrees from trace tree,
     scripts/trace_prune.pl
 -[v] refactor  c_parser_descent::check_identifier.

@@ -2,12 +2,12 @@
 #
 # autor:Manuel Hevia
 # description: 
-#   make_out.txt -> .abidos/files_input
+#   make_out.txt -> .abidos_cpp/files_input
 #
 #-------------------------------------------
 use strict;
 
-my $dir = '.abidos';
+my $dir = '.abidos_cpp';
 
 sub create_directories
 {
@@ -88,8 +88,8 @@ sub generate_loader_file
 
 sub process_project
 {
-  system ("/opt/abidos/abidos --test_all_tokens_consumed_flag --no_std --out_dir .abidos --loader .abidos/files_input") == 0 or die "system failed: $?";
-  system ("/opt/abidos/xdot_run.py .abidos/files_output.dot") == 0 or die "system failed: $?";
+  system ("/opt/abidos_cpp/abidos_cpp --test_all_tokens_consumed_flag --no_std --out_dir .abidos_cpp --loader .abidos_cpp/files_input") == 0 or die "system failed: $?";
+  system ("/opt/abidos_cpp/xdot_run.py .abidos_cpp/files_output.dot") == 0 or die "system failed: $?";
 }
 
 sub main

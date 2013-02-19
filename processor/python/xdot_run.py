@@ -3,7 +3,7 @@
 #
 # example of xdot with multiline support
 # author: F. Manuel Hevia (fructu@gmail.com)
-# part of abidos https://github.com/fructu/abidos
+# part of abidos_cpp https://github.com/fructu/abidos_cpp
 #
 # original code_
 #  http://code.google.com/p/jrfonseca/wiki/XDot
@@ -46,7 +46,7 @@ class MyDotWindow(xdot.DotWindow):
         return True
 
 def main():
-    file_dot = ".abidos/files_output.dot"
+    file_dot = ".abidos_cpp/files_output.dot"
 
     if len(sys.argv) > 1:
       file_dot = sys.argv[1]

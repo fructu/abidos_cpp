@@ -11,7 +11,7 @@ use strict;
 sub check_directories
 {
   my $project_dir = shift;
-  my @directories = ("${project_dir}out", "${project_dir}test_out", "${project_dir}.abidos");
+  my @directories = ("${project_dir}out", "${project_dir}test_out", "${project_dir}.abidos_cpp");
 
   foreach (@directories) {
     print "  checking existence $_ ...";

@@ -107,7 +107,7 @@ execute: $(EXECUTABLE)
 	./$(EXECUTABLE) --verbose --ts_show --includes ../test_includes/ ../test/$(FILE_TEST)
 	cat ../python/out_begin.py > ../out/out_run.py
 #	cat ../out/out_$(FILE_TEST).gv >> ../out/out_run.py
-	cat .abidos/out_$(FILE_TEST).gv >> ../out/out_run.py
+	cat .abidos_cpp/out_$(FILE_TEST).gv >> ../out/out_run.py
 	cat ../python/out_end.py >> ../out/out_run.py
 	chmod +x ../out/out_run.py
 	../out/out_run.py
@@ -115,15 +115,15 @@ execute: $(EXECUTABLE)
 #loader: $(EXECUTABLE) abidos_files.txt
 loader:
 	../scripts/abidos_make_process.pl --debug
-	cp ../python/xdot2.py .abidos/
-	./$(EXECUTABLE) --includes ../test_includes/ --test_all_tokens_consumed_flag --no_std --loader .abidos/files
-#	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader .abidos/files.txt
-#	cp ../out/out_files.gv .abidos/
-	cat ../python/out_begin.py > .abidos/out_run.py
-	cat .abidos/out_files.gv >> .abidos/out_run.py
-	cat ../python/out_end.py >> .abidos/out_run.py
-	chmod +x .abidos/out_run.py
-	.abidos/out_run.py
+	cp ../python/xdot2.py .abidos_cpp/
+	./$(EXECUTABLE) --includes ../test_includes/ --test_all_tokens_consumed_flag --no_std --loader .abidos_cpp/files
+#	./$(EXECUTABLE) --test_all_tokens_consumed_flag --loader .abidos_cpp/files.txt
+#	cp ../out/out_files.gv .abidos_cpp/
+	cat ../python/out_begin.py > .abidos_cpp/out_run.py
+	cat .abidos_cpp/out_files.gv >> .abidos_cpp/out_run.py
+	cat ../python/out_end.py >> .abidos_cpp/out_run.py
+	chmod +x .abidos_cpp/out_run.py
+	.abidos_cpp/out_run.py
 
 debug_drop:
 	cp parser_descent_rules.cpp parser_descent_rules.cpp.debug.bk
@@ -150,15 +150,15 @@ clean:
 install: $(EXECUTABLE)
 	rm -rf /opt/abidos
 	mkdir -p /opt/abidos
-	mkdir -p /opt/abidos/includes
+	mkdir -p /opt/abidos_cpp/includes
 	cp $(EXECUTABLE) /opt/abidos
 	cp ../scripts/abidos_make_process.pl /opt/abidos
 	cp ../python/out_begin.py /opt/abidos
 	cp ../python/out_end.py /opt/abidos
 	cp ../python/xdot2.py /opt/abidos
-	cp ../test_includes/stdio.h /opt/abidos/includes
-	cp ../test_includes/std.h /opt/abidos/includes
-	cp ../test_includes/inttypes.h /opt/abidos/includes
+	cp ../test_includes/stdio.h /opt/abidos_cpp/includes
+	cp ../test_includes/std.h /opt/abidos_cpp/includes
+	cp ../test_includes/inttypes.h /opt/abidos_cpp/includes
 
 uninstall:
 	rm -rf /opt/abidos

@@ -1,19 +1,14 @@
 #
-# project abidos
+# project abidos_cpp
 # Manuel Hevia
 # make VERBOSE=1
 #
-# g++ -o abidos src/CMakeFiles/abidos.dir/generator_class_diagram.cpp.o  src/CMakeFiles/abidos.dir/parser_descent_preprocessor.cpp.o src/CMakeFiles/abidos.dir/generator_original.cpp.o       src/CMakeFiles/abidos.dir/parser_descent_rules.cpp.o src/CMakeFiles/abidos.dir/lexer.c.o                      src/CMakeFiles/abidos.dir/semantic.cpp.o src/CMakeFiles/abidos.dir/loader.cpp.o                   src/CMakeFiles/abidos.dir/symbols_table.cpp.o src/CMakeFiles/abidos.dir/main.cpp.o                     src/CMakeFiles/abidos.dir/trace.cpp.o src/CMakeFiles/abidos.dir/options.cpp.o                  src/CMakeFiles/abidos.dir/ts.cpp.o src/CMakeFiles/abidos.dir/parser_descent.cpp.o -rdynamic 
-#
-#/usr/bin/cmake -E cmake_link_script CMakeFiles/abidos.dir/link.txt --verbose=1
-#/usr/bin/c++   -Wall -c -g -I/home/hevia/working/abidos/processor/includes -Wall -c -g -I/home/hevia/working/abidos/processor/includes   CMakeFiles/abidos.dir/options.cpp.o CMakeFiles/abidos.dir/trace.cpp.o CMakeFiles/abidos.dir/lexer.c.o CMakeFiles/abidos.dir/parser_descent.cpp.o CMakeFiles/abidos.dir/parser_descent_rules.cpp.o CMakeFiles/abidos.dir/parser_descent_preprocessor.cpp.o CMakeFiles/abidos.dir/symbols_table.cpp.o CMakeFiles/abidos.dir/semantic.cpp.o CMakeFiles/abidos.dir/generator_class_diagram.cpp.o CMakeFiles/abidos.dir/generator_original.cpp.o CMakeFiles/abidos.dir/ts.cpp.o CMakeFiles/abidos.dir/loader.cpp.o CMakeFiles/abidos.dir/main.cpp.o  -o abidos -rdynamic
-#/usr/bin/c++   -Wall -c -g -I/home/hevia/working/abidos/processor/includes   CMakeFiles/abidos.dir/options.cpp.o CMakeFiles/abidos.dir/trace.cpp.o CMakeFiles/abidos.dir/lexer.c.o CMakeFiles/abidos.dir/parser_descent.cpp.o CMakeFiles/abidos.dir/parser_descent_rules.cpp.o CMakeFiles/abidos.dir/parser_descent_preprocessor.cpp.o CMakeFiles/abidos.dir/symbols_table.cpp.o CMakeFiles/abidos.dir/semantic.cpp.o CMakeFiles/abidos.dir/generator_class_diagram.cpp.o CMakeFiles/abidos.dir/generator_original.cpp.o CMakeFiles/abidos.dir/ts.cpp.o CMakeFiles/abidos.dir/loader.cpp.o CMakeFiles/abidos.dir/main.cpp.o  -o abidos -rdynamic
 
 cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_VERBOSE_MAKEFILE 1 CACHE STRING "1 is necesary to run make &> make_out.txt and use abidos_make_process.pl")
 SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Debug or Release avalible")
-SET(CMAKE_INSTALL_PREFIX /usr/local/bin/ CACHE STRING "abidos install in /opt/abidos and links in /usr/local/bin/")
+SET(CMAKE_INSTALL_PREFIX /usr/local/bin/ CACHE STRING "abidos_cpp install in /opt/abidos_cpp and links in /usr/local/bin/")
 
 message("-- CMAKE_VERBOSE_MAKEFILE ${CMAKE_VERBOSE_MAKEFILE}")
 message("-- CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE}")
@@ -35,7 +30,7 @@ set( VERSION_PATCH 16 )
 # configure a header file to pass some of the CMake settings
 # to the source code
 
-set(EXECUTABLE abidos)
+set(EXECUTABLE abidos_cpp)
 
 project (${EXECUTABLE})
 
@@ -53,7 +48,7 @@ set(CMAKE_TEST_DIR "${PROJECT_SOURCE_DIR}/test/")
 set(CMAKE_TEST_OUT_DIR "${PROJECT_SOURCE_DIR}/test_out/")
 set(CMAKE_EXECUTABLE_WITH_DIR "${PROJECT_SOURCE_DIR}/src/${EXECUTABLE}")
 #message("## includes->[${INCLUDES}]")
-set(CMAKE_ABIDOS_WORKING_DIR "${PROJECT_SOURCE_DIR}/.abidos/")
+set(CMAKE_ABIDOS_WORKING_DIR "${PROJECT_SOURCE_DIR}/.abidos_cpp/")
 
 add_subdirectory(${INCLUDES})
 add_subdirectory(${CMAKE_SOURCE_DIR})

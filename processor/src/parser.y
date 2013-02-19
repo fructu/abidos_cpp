@@ -57,7 +57,7 @@ static void yyerror(char *s);
 %token TEMPLATE_TYPE
 %token PREPROCESSOR_DEFINITION
 /*
-  abidos commands
+  abidos_cpp commands
   put all together
   {
 */

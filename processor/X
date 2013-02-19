@@ -26,7 +26,7 @@ display colon_colon_chain
 b src/parser_descent.cpp:470
 #
 #
-# gdb src/abidos -x X
+# gdb src/abidos_cpp -x X
 run --includes test_includes/ \
     --out_dir test_out/ \
     --test_all_tokens_consumed_flag \

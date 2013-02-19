@@ -41,7 +41,7 @@ c_options::c_options()
 
     //abidos_commands
     ban_symbols_on = 0;
-    sprintf(includes_sharp,"/opt/abidos/includes/");
+    sprintf(includes_sharp,"/opt/abidos_cpp/includes/");
     includes[0]='\0';
 
     sprintf(files_input,"files_input");
@@ -54,7 +54,7 @@ c_options::proccess(int argc, char *argv[])
 {
     int c;
 
-    sprintf(out_dir,"./abidos");
+    sprintf(out_dir,"./abidos_cpp");
 
     while (1) {
         static struct option long_options[] = {

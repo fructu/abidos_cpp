@@ -25,9 +25,9 @@ rm 	-r  includes/cmake_install.cmake
 rm  -rf out/*
 rm  -rf test_out/*
 
-rm  -rf src/.abidos/
+rm  -rf src/.abidos_cpp/
 rm  -f  install_manifest.txt
-rm  -rf .abidos/
+rm  -rf .abidos_cpp/
 
 rm CTestTestfile.cmake
 rm  -rf Testing/

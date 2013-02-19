@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
 
-    Proyecto            : abidos
+    Proyecto            : abidos_cpp
     Codigo              : parser_descent.h
     Descripcion         :
     Version             : 0.1
@@ -343,7 +343,7 @@ private:
     //## dummy to consume int a[][];
     int consume_array_brakets(c_trace_node trace_node);
 
-    //## abidos commands
+    //## abidos_cpp commands
     int check_abidos_command(int t);
     void ban_symbols_on(void);
     void ban_symbols_off(void);

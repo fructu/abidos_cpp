@@ -43,12 +43,12 @@ Intructions
     git clone git@github.com:fructu/abidos.git
 
   2) testing preprocessor:
-    cd abidos/preprocessor
+    cd abidos_cpp/preprocessor
     make all
     make execute
 
   3) testin processor:
-    cd abidos/processor/
+    cd abidos_cpp/processor/
     cmake .
     make VERBOSE=1 &> make_out.txt
     sudo make install
