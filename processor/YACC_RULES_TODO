@@ -877,11 +877,12 @@ mem_initializer_id:
 /*----------------------------------------------------------------------
  * Overloading.
  *----------------------------------------------------------------------*/
-
+//## did
 operator_function_id:
 	OPERATOR operator
 	;
 
+//## did
 operator:
 	NEW
 	| DELETE

@@ -59,7 +59,6 @@ int chain_is_tail(string class_name_declaration, char * text)
         if ( text[i] != class_name[i_class_name] ) {
             return 0;
         }
-
         if ( 0 == i ) {
             return 1;
         }
@@ -546,6 +545,7 @@ void c_parser_descent::token_next(string tab)
             continue;
         }
         token.save(t, yytext);
+
         result = drop_head_namespace(tab, token);
         if (0==result) { // is not a using namespace
             break;
@@ -671,7 +671,6 @@ int c_parser_descent::identifier_search(string tab, const char * p_str, c_token 
 */
 void c_parser_descent::check_identifier(string tab, c_token &token)
 {
-
     if ( 1 == identifier_search_with_type(tab, yytext, token) ) {
         return;
     }
@@ -695,17 +694,6 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         return;
     }
 
-    // declarations of members functions outside of his class
-    // but inside of the namespace
-    if ( 0 == context.class_name_declaration.size() ) {
-        if ( 0 != context.namespace_name_declaration.size() ) {
-            string s = context.namespace_name_declaration + "::" + yytext;
-            if ( 1 == identifier_search(tab, s.c_str(), token) ) {
-                return;
-            }
-        }
-    }
-
     // chek the using namespaces
     if ( semantic.vector_using_namespace.size() > 0 ) {
         int unsigned i = 0;
@@ -719,20 +707,19 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
         }
     }
 
-    if ( 0 != context.class_name_declaration.size() ) {
-        if ( 0 != context.namespace_name_declaration.size() ) {
-            string s = context.namespace_name_declaration + "::" + yytext;
-            if ( 1 == identifier_search(tab, s.c_str(), token) ) {
-                return;
-            }
+    // search in the actual namespace
+    if ( 0 != context.namespace_name_declaration.size() ) {
+        string s = context.namespace_name_declaration + "::" + yytext;
+        if ( 1 == identifier_search(tab, s.c_str(), token) ) {
+            return;
         }
     }
 
-    // maybe is a class defined inside the current class
+    // maybe is a class defined inside in one of the nested current classes
     if ( 0 != context.class_name_declaration.size() ) {
         char str[1000];
         char str_droped[1000];
-        c_symbol *p_symbol = 0;
+
         sprintf(str,"%s::%s",context.class_name_declaration.c_str(),yytext);
         sprintf(str_droped,"%s",context.class_name_declaration.c_str());
         while (1) {
