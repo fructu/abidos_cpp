@@ -5,6 +5,7 @@ Abidos will be a toolbox to improve navigation and refactoring cpp's code:
 * understanding of the system:
 abidos generates a set of diagrams (for now class diagrams with relations),
 you can see:
+
 ** hierarchy between the class of the soure code
 ** copositions/agregations
 ** friend relations
@@ -21,17 +22,21 @@ you can see:
 
 == Documentation
 
-  So far there are 2 manuals in draft version:
+So far there are 2 manuals in draft version:
+
 * user manual:
+
     http://abidos-cpp.googlecode.com/files/abidos_cpp_user_manual_cover_draft_1_1.pdf
 
-* programmer manual
+* programmer manual:
+
     http://abidos-cpp.googlecode.com/files/abidos_cpp_programmer_manual_cover_draft_1_1.pdf
 
-  The sources of this documentation are in:
+* The sources of this documentation are in:
+
     https://github.com/fructu/abidos_cpp_doc
 
-  But the best way is you download the pdfs from googlecode :-)
+But the best way is you download the pdfs from googlecode :-)
 
 == Parts
 
@@ -51,18 +56,20 @@ code most of this code were a set of experiments.
 == Installation
 
 === Get the project
+
 You can obtain the project from github by 2 ways.
 
 * clone the code with git:
+
 ------
 git clone git@github.com:fructu/abidos_cpp.git
 cd abidos_cpp/processor/
 ------
-indexterm:[github, git]
 
 or you can
 
 * download a zip package:
+
 ------
 wget "https://github.com/fructu/abidos_cpp/archive/master.zip"
 unzip master.zip
@@ -70,7 +77,9 @@ cd abidos_cpp-master/processor/
 ------
 
 === Make project and install
+
 we will make the processor part of Abidos is the real core of Abidos cpp:
+
 ------
 cmake .
 make VERBOSE=1 &> make_out.txt <1>
@@ -81,6 +90,7 @@ sudo make install
 have to parse (Abidos can parse Abidos because is a cpp Project).
 
 you can test it with the abidos itself:
+
 ------
 abidos_make_process.pl <1>
 ------
