@@ -1,5 +1,5 @@
 #
-# project abidos_cpp
+# project lsabidos_cpp
 # Manuel Hevia
 # make VERBOSE=1
 #
@@ -180,18 +180,19 @@ INSTALL(FILES ${TEST_INCLUDES}stdio.h           DESTINATION ${INSTALL_INCLUDES_D
 INSTALL(FILES ${TEST_INCLUDES}std.h             DESTINATION ${INSTALL_INCLUDES_DIR})
 INSTALL(FILES ${TEST_INCLUDES}inttypes.h        DESTINATION ${INSTALL_INCLUDES_DIR})
 
-INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}abidos_abidos <- ${INSTALL_BIN_LINKS_DIR}abidos_cpp\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"-- link ${INSTALL_DIR}abidos_abidos <- ${INSTALL_BIN_LINKS_DIR}abidos_cpp\")")
 INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}abidos_cpp; ${INSTALL_BIN_LINKS_DIR})")
 
-INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}abidos_make_process.pl <- ${INSTALL_BIN_LINKS_DIR}abidos_make_process.pl\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"-- link ${INSTALL_DIR}abidos_make_process.pl <- ${INSTALL_BIN_LINKS_DIR}abidos_make_process.pl\")")
 INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}abidos_make_process.pl; ${INSTALL_BIN_LINKS_DIR})")
 
-INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}xdot_run.py <- ${INSTALL_BIN_LINKS_DIR}xdot_run.py\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"-- link ${INSTALL_DIR}xdot_run.py <- ${INSTALL_BIN_LINKS_DIR}xdot_run.py\")")
 INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}xdot_run.py; ${INSTALL_BIN_LINKS_DIR};)")
 
-INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"   link ${INSTALL_DIR}xdot_run.py <- ${INSTALL_BIN_LINKS_DIR}xdot_run.py\")")
+INSTALL( CODE" EXECUTE_PROCESS(COMMAND echo \"-- link ${INSTALL_DIR}xdot_run.py <- ${INSTALL_BIN_LINKS_DIR}xdot_run.py\")")
 INSTALL( CODE" EXECUTE_PROCESS(COMMAND ln; -s;${INSTALL_DIR}xdot.py; ${INSTALL_LIB_PYTHON_LINKS_DIR})")
 
+INSTALL(FILES ${CMAKE_MAN}abidos_cpp.1 DESTINATION ${CMAKE_MAN_INSTALL})
 
 # uninstall
 add_custom_target(
@@ -214,5 +215,8 @@ add_custom_target(
 
 	COMMAND echo "  ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.pyc"
 	COMMAND rm -f   ${INSTALL_LIB_PYTHON_LINKS_DIR}xdot.pyc
+
+	COMMAND echo "  ${CMAKE_MAN_INSTALL}abidos_cpp.1"
+	COMMAND rm -f   ${CMAKE_MAN_INSTALL}abidos_cpp.1
 )
 

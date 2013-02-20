@@ -1,0 +1,112 @@
+== abidos_cpp
+
+Abidos will be a toolbox to improve navigation and refactoring cpp's code:
+
+* understanding of the system:
+abidos generates a set of diagrams (for now class diagrams with relations),
+you can see:
+** hierarchy between the class of the soure code
+** copositions/agregations
+** friend relations
+** members of the classes
+
+* the navigation across the source code of a cpp project.
+  in a class diagram you can click in a member function or in an atribute of a 
+  class and then go to the line of code automatically.
+
+* in a second phase refactoring code will be avalible, for now i have a very
+  hard work doing the parser of cpp.
+
+  For now abidos has been started and be in a very early status of development.
+
+== Documentation
+
+  So far there are 2 manuals in draft version:
+* user manual:
+    http://abidos-cpp.googlecode.com/files/abidos_cpp_user_manual_cover_draft_1_1.pdf
+
+* programmer manual
+    http://abidos-cpp.googlecode.com/files/abidos_cpp_programmer_manual_cover_draft_1_1.pdf
+
+  The sources of this documentation are in:
+    https://github.com/fructu/abidos_cpp_doc
+
+  But the best way is you download the pdfs from googlecode :-)
+
+== Parts
+
+abidos for the moment has 2 parts and need refactor a great part of their
+code most of this code were a set of experiments.
+
+*  preprocessor
+  this part of the project have his own Makefile and can generate a graph with
+  the relations between the sources of a projects with his #includes. Is less
+  advanced than processor part.
+
+*  processor
+  this part of abidos is the core of the cpp's parser, it is a descent parser
+  but i use parts of the code generating by flex and bison (mainly his .h) and
+  the full scanner.
+
+== Installation
+
+=== Get the project
+You can obtain the project from github by 2 ways.
+
+* clone the code with git:
+------
+git clone git@github.com:fructu/abidos_cpp.git
+cd abidos_cpp/processor/
+------
+indexterm:[github, git]
+
+or you can
+
+* download a zip package:
+------
+wget "https://github.com/fructu/abidos_cpp/archive/master.zip"
+unzip master.zip
+cd abidos_cpp-master/processor/
+------
+
+=== Make project and install
+we will make the processor part of Abidos is the real core of Abidos cpp:
+------
+cmake .
+make VERBOSE=1 &> make_out.txt <1>
+sudo make install
+------
+
+<1> Abidos will need this file *make_out.txt* to know what files
+have to parse (Abidos can parse Abidos because is a cpp Project).
+
+you can test it with the abidos itself:
+------
+abidos_make_process.pl <1>
+------
+
+<1> this script do all the toolchain that abidos need for you.
+
+This command encapsulates the toolchain of Abidos (it will be explained in next
+chapters).
+
+== thanks
+  
+I use great pieces of code doing for great people without they my work would be
+imposible to start
+
+* cpp grammar with yacc and lex files.
+    http://www.sigala.it/sandro/download.php
+
+* graphviz a great sw to visualize information in form of graphs and networks
+    http://www.graphviz.org/
+
+* XDot python code to see the graphs
+    http://code.google.com/p/jrfonseca/wiki/XDot
+    git clone https://code.google.com/p/jrfonseca.xdot/
+
+* ubuntu
+
+* git
+
+* ...
