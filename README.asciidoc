@@ -22,21 +22,7 @@ you can see:
 
 == Documentation
 
-So far there are 2 manuals in draft version:
-
-* user manual:
-
-    http://abidos-cpp.googlecode.com/files/abidos_cpp_user_manual_cover_draft_1_1.pdf
-
-* programmer manual:
-
-    http://abidos-cpp.googlecode.com/files/abidos_cpp_programmer_manual_cover_draft_1_1.pdf
-
-* The sources of this documentation are in:
-
-    https://github.com/fructu/abidos_cpp_doc
-
-But the best way is you download the pdfs from googlecode :-)
+You can see pdfs, html manuals here: https://github.com/fructu/abidos
 
 == Parts
 
@@ -119,4 +105,7 @@ imposible to start
 
 * git
 
+* asciidoc
+
 * ...
+
