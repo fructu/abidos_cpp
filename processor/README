@@ -650,3 +650,4 @@ abidos_cpp
 -[v] script to prune subtrees from trace tree,
     scripts/trace_prune.pl
 -[v] refactor  c_parser_descent::check_identifier.
+-[v] drop magic numbers in i_am_in_template_declaration

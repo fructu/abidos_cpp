@@ -991,7 +991,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
 //      context.class_name_declaration = class_name;
     }
 
-    if ( 2 == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
         if ( token_is(TEMPLATE_TYPE, trace_node) ) {
             result = 1;
         }
@@ -2154,7 +2154,7 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
         return 0;
     }
 
-    context.i_am_in_template_declaration = 1;
+    context.i_am_in_template_declaration = TEMPLATE_PARAMETER_LIST;
 
     token_next(trace_node.get_tab());
     if ( token_is_not('<', trace_node) ) {
@@ -2170,14 +2170,14 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
     token_next(trace_node.get_tab());
     if ( token_is_not('>', trace_node) ) {
         context = context_tokens.restore();
-        context.i_am_in_template_declaration = 0;
+        context.i_am_in_template_declaration = NO_TEMPLATE_STATUS;
         return 0;
     }
 
-    context.i_am_in_template_declaration = 2;
+    context.i_am_in_template_declaration = TEMPLATE_DECLARATION;
 
     if ( 1 == declaration(trace_node) ) {
-        context.i_am_in_template_declaration = 0;
+        context.i_am_in_template_declaration = NO_TEMPLATE_STATUS;
         return 1;
     }
 

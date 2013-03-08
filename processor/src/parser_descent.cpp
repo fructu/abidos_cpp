@@ -686,7 +686,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
     }
 
     //check if is template type ej template <class T> --> T
-    if ( 2 == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
         if ( context.map_template_parameter.count(token.text) > 0) {
             token.id = TEMPLATE_TYPE;
         }

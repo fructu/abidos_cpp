@@ -56,7 +56,7 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     // we only take the name of the class the fist time after CLASS
     // if( 1 == context.class_head)
 
-    if ( 2 == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
         symbol.is_template = 1;
         symbol.vector_template_parameter = context.vector_template_parameter;
         symbol.map_template_parameter = context.map_template_parameter;
@@ -102,7 +102,8 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
 
         printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
         printf("##:           token.text[%s]\n",token.text.c_str());
-        printf("##:           context.i_am_in_template_declaration[%d]\n",context.i_am_in_template_declaration);
+        printf("##:           context.i_am_in_template_declaration[%s]\n",
+          table_template_declaration_status[context.i_am_in_template_declaration]);
 
         printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
     }
@@ -275,7 +276,7 @@ c_semantic::free_declarator(c_context & context, c_token token)
       }
       we are in GetMax line ...
     */
-    if ( 2 == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
         context.declarator.is_template = 1;
     }
 }
@@ -429,7 +430,7 @@ void c_semantic::identifier(c_context & context, c_token token)
             }
         }
     */
-    if ( 1 == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_PARAMETER_LIST == context.i_am_in_template_declaration ) {
         if ( 1 == context.declaring_template_type ) {
             context.template_parameter.token = token;
 
@@ -703,7 +704,7 @@ void c_semantic::declarator_insert(string tab, c_context & context)
         // void f(int p1) -> his name will be "f(int)"
         if ( 1 == context.declarator.is_function ) {
             symbol.text = context.declarator.get_full_name();
-            if ( 2 == context.i_am_in_template_declaration ) {
+            if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
                 symbol.is_template = 1;
                 symbol.vector_template_parameter = context.vector_template_parameter;
                 symbol.map_template_parameter = context.map_template_parameter;
