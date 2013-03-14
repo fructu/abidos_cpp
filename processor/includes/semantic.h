@@ -195,6 +195,8 @@ public:
 
     void class_pre_declaration_to_declaration(c_context & context, c_token token);
     void class_is_abstract(c_context & context);
+
+    void template_instantiation_argument(c_context & context, c_decl_specifier & decl);
 };
 
 extern c_semantic semantic;

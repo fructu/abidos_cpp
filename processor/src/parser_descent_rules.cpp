@@ -991,7 +991,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
 //      context.class_name_declaration = class_name;
     }
 
-    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.template_status ) {
         if ( token_is(TEMPLATE_TYPE, trace_node) ) {
             result = 1;
         }
@@ -1029,38 +1029,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
         } else if (1 == context.is_template_instantiation) {
             //### todo this if is weird
             if ( token_is_not('>', trace_node) ) {
-                /*
-                    //### todo maybe mov this code to semantic ???
-                    c_template_argument argument;
-                    // yes we need the next parameter to fill vector_argument
-                    size_t i = context.vector_template_argument.size();
-
-                    if (context.vector_template_parameter.size() > 0 ) {
-                      if (i < context.vector_template_parameter.size() ) {
-                        argument.token = context.vector_template_parameter[i].token;
-                        argument.vector_decl_specifier.push_back(decl);
-                        context.vector_template_argument.push_back(argument);
-                     }
-                    }
-                    */
-                //### todo this if is weird
-                //### todo maybe mov this code to semantic ???
-                c_template_argument argument;
-
-                // yes we need the next parameter to fill vector_argument
-                size_t i = context.vector_template_argument.size();
-
-                if ( 0 < i ) {
-                    argument = context.vector_template_argument[i - 1];
-                    context.vector_template_argument.pop_back();
-
-//                if (context.vector_template_parameter.size() > 0 ) {
-//                  if (i < context.vector_template_parameter.size() ) {
-//                    argument.token = context.vector_template_parameter[i].token;
-                    argument.vector_decl_specifier.push_back(decl);
-                    context.vector_template_argument.push_back(argument);
-//                 }
-                }
+              semantic.template_instantiation_argument(context, decl);
             }
         } else {
             semantic.push_back_vector_decl_specifier(decl);
@@ -2154,7 +2123,7 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
         return 0;
     }
 
-    context.i_am_in_template_declaration = TEMPLATE_PARAMETER_LIST;
+    context.template_status = TEMPLATE_PARAMETER_LIST;
 
     token_next(trace_node.get_tab());
     if ( token_is_not('<', trace_node) ) {
@@ -2170,14 +2139,14 @@ int c_parser_descent::template_declaration(c_trace_node trace_node)
     token_next(trace_node.get_tab());
     if ( token_is_not('>', trace_node) ) {
         context = context_tokens.restore();
-        context.i_am_in_template_declaration = NO_TEMPLATE_STATUS;
+        context.template_status = NO_TEMPLATE_STATUS;
         return 0;
     }
 
-    context.i_am_in_template_declaration = TEMPLATE_DECLARATION;
+    context.template_status = TEMPLATE_DECLARATION;
 
     if ( 1 == declaration(trace_node) ) {
-        context.i_am_in_template_declaration = NO_TEMPLATE_STATUS;
+        context.template_status = NO_TEMPLATE_STATUS;
         return 1;
     }
 

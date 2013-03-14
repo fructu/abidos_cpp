@@ -56,7 +56,7 @@ c_semantic::class_specifier_identifier(c_context & context, c_token token)
     // we only take the name of the class the fist time after CLASS
     // if( 1 == context.class_head)
 
-    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.template_status ) {
         symbol.is_template = 1;
         symbol.vector_template_parameter = context.vector_template_parameter;
         symbol.map_template_parameter = context.map_template_parameter;
@@ -102,8 +102,8 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
 
         printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
         printf("##:           token.text[%s]\n",token.text.c_str());
-        printf("##:           context.i_am_in_template_declaration[%s]\n",
-          table_template_declaration_status[context.i_am_in_template_declaration]);
+        printf("##:           context.template_status[%s]\n",
+          table_template_declaration_status[context.template_status]);
 
         printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
     }
@@ -276,7 +276,7 @@ c_semantic::free_declarator(c_context & context, c_token token)
       }
       we are in GetMax line ...
     */
-    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.template_status ) {
         context.declarator.is_template = 1;
     }
 }
@@ -430,7 +430,7 @@ void c_semantic::identifier(c_context & context, c_token token)
             }
         }
     */
-    if ( TEMPLATE_PARAMETER_LIST == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_PARAMETER_LIST == context.template_status ) {
         if ( 1 == context.declaring_template_type ) {
             context.template_parameter.token = token;
 
@@ -704,7 +704,7 @@ void c_semantic::declarator_insert(string tab, c_context & context)
         // void f(int p1) -> his name will be "f(int)"
         if ( 1 == context.declarator.is_function ) {
             symbol.text = context.declarator.get_full_name();
-            if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
+            if ( TEMPLATE_DECLARATION == context.template_status ) {
                 symbol.is_template = 1;
                 symbol.vector_template_parameter = context.vector_template_parameter;
                 symbol.map_template_parameter = context.map_template_parameter;
@@ -803,6 +803,48 @@ c_semantic::class_is_abstract(c_context & context)
     if ( 0 != p_symbol) {
         p_symbol->is_abstract = 1;
     }
+}
+/*----------------------------------------------------------------------------*/
+void
+c_semantic::template_instantiation_argument(c_context & context, c_decl_specifier & decl)
+{
+    if (1 == options.verbose_flag) {
+        printf("## c_semantic::template_instantiation_argument(c_context & context, c_decl_specifier & decl) decl.token[%s]\n"
+               , decl.token.text.c_str()
+              );
+    }
+                /*
+                    //### todo maybe mov this code to semantic ???
+                    c_template_argument argument;
+                    // yes we need the next parameter to fill vector_argument
+                    size_t i = context.vector_template_argument.size();
+
+                    if (context.vector_template_parameter.size() > 0 ) {
+                      if (i < context.vector_template_parameter.size() ) {
+                        argument.token = context.vector_template_parameter[i].token;
+                        argument.vector_decl_specifier.push_back(decl);
+                        context.vector_template_argument.push_back(argument);
+                     }
+                    }
+                    */
+                //### todo this if is weird
+                //### todo maybe mov this code to semantic ???
+                c_template_argument argument;
+
+                // yes we need the next parameter to fill vector_argument
+                size_t i = context.vector_template_argument.size();
+
+                if ( 0 < i ) {
+                    argument = context.vector_template_argument[i - 1];
+                    context.vector_template_argument.pop_back();
+
+//                if (context.vector_template_parameter.size() > 0 ) {
+//                  if (i < context.vector_template_parameter.size() ) {
+//                    argument.token = context.vector_template_parameter[i].token;
+                    argument.vector_decl_specifier.push_back(decl);
+                    context.vector_template_argument.push_back(argument);
+//                 }
+                }
 }
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;

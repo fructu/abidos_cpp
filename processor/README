@@ -651,3 +651,6 @@ abidos_cpp
     scripts/trace_prune.pl
 -[v] refactor  c_parser_descent::check_identifier.
 -[v] drop magic numbers in i_am_in_template_declaration
+-[v] refactor c_parser_descent::simple_type_specifier() template instantation
+    -> void template_instantiation_argument();
+

@@ -133,7 +133,7 @@ void
 c_context_tokens::save_only_template(c_context context_param)
 {
     context.class_name_declaration = context_param.class_name_declaration;
-    context.i_am_in_template_declaration = context_param.i_am_in_template_declaration;
+    context.template_status = context_param.template_status;
     context.vector_template_parameter = context_param.vector_template_parameter;
     context.map_template_parameter = context_param.map_template_parameter;
     context.is_template_instantiation = context_param.is_template_instantiation;
@@ -152,7 +152,7 @@ c_context c_context_tokens::restore(void)
 void c_context_tokens::restore_only_template(c_context & context_param)
 {
     context_param.class_name_declaration = context.class_name_declaration;
-    context_param.i_am_in_template_declaration = context.i_am_in_template_declaration;
+    context_param.template_status = context.template_status;
     context_param.vector_template_parameter = context.vector_template_parameter;
     context_param.map_template_parameter = context.map_template_parameter;
     context_param.is_template_instantiation = context.is_template_instantiation;
@@ -686,7 +686,7 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
     }
 
     //check if is template type ej template <class T> --> T
-    if ( TEMPLATE_DECLARATION == context.i_am_in_template_declaration ) {
+    if ( TEMPLATE_DECLARATION == context.template_status ) {
         if ( context.map_template_parameter.count(token.text) > 0) {
             token.id = TEMPLATE_TYPE;
         }

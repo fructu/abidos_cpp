@@ -20,15 +20,22 @@ set print address off
 #
 #
 #b c_parser_descent::colon_colon_chain_process
-#b c_parser_descent::colon_colon_chain_process
 #display token.text
 #display colon_colon_chain
 #b src/parser_descent.cpp:470
 #b c_parser_descent::identifier(c_trace_node)
 #b c_semantic::class_specifier_identifier
 #b c_semantic::identifier
+
+#b c_parser_descent::member_declaration
 #b c_parser_descent::parameter_declaration
-b semantic.declarator_insert
+#b semantic.identifier
+#b semantic.declarator_insert
+#b semantic.member_insert
+#b c_parser_descent::simple_type_specifier
+# p context.class_member.token.text
+
+#b semantic.declarator_insert
 #
 #display token.text
 #display context.class_name_declaration
@@ -43,6 +50,12 @@ b semantic.declarator_insert
 #c_parser_descent::nested_name_specifier
 #b parser_descent_rules.cpp:244
 #
+
+#b c_parser_descent::type_parameter
+#b c_parser_descent::function_definition
+#b c_parser_descent::simple_type_specifier
+b parser_descent_rules.cpp:1031
+
 #
 # gdb src/abidos_cpp -x X
 run --includes test_includes/ \
@@ -50,5 +63,5 @@ run --includes test_includes/ \
     --test_all_tokens_consumed_flag \
     --test_original \
     --ts_show \
-    --verbose test/book_inner_class_01.cpp > test_out/out_book_inner_class_01.cpp.txt
+    --verbose test/book_template_class_02.cpp > test_out/out_book_template_class_02.cpp.txt
 

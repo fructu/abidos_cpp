@@ -115,18 +115,18 @@ struct c_context {
     int is_typedef;
 
     /*
-      template <class identifier>       //i_am_in_template_declaration = TEMPLATE_PARAMETER_LIST
-      function_declaration;             //i_am_in_template_declaration = TEMPLATE_DECLARATION
+      template <class identifier>       //template_status = TEMPLATE_PARAMETER_LIST
+      function_declaration;             //template_status = TEMPLATE_DECLARATION
 
       template <typename identifier>
       function_declaration;
     */
-    //useful in i_am_in_template_declaration = TEMPLATE_PARAMETER_LIST
-    t_template_declaration_status i_am_in_template_declaration; // we are in template declaration
+    //useful in template_status = TEMPLATE_PARAMETER_LIST
+    t_template_declaration_status template_status; // we are in template declaration
     int declaring_template_type; //we are in indetifier declaration
     c_template_parameter template_parameter; //we are in indetifier declaration
 
-    //useful in i_am_in_template_declaration = TEMPLATE_DECLARATION and in template_instantation
+    //useful in template_status = TEMPLATE_DECLARATION and in template_instantation
     t_vector_template_parameter vector_template_parameter;
     t_map_template_parameter map_template_parameter;
 
@@ -182,7 +182,7 @@ struct c_context {
 
         is_typedef = 0;
 
-        i_am_in_template_declaration = NO_TEMPLATE_STATUS;
+        template_status = NO_TEMPLATE_STATUS;
         declaring_template_type = 0;
         template_parameter.clear();
         vector_template_parameter.clear();
@@ -236,7 +236,7 @@ struct c_context {
 
         is_typedef = 0;
 
-        i_am_in_template_declaration = NO_TEMPLATE_STATUS;
+        template_status = NO_TEMPLATE_STATUS;
         declaring_template_type = 0;
         template_parameter.clear();
         vector_template_parameter.clear();
@@ -274,8 +274,8 @@ struct c_context {
         context_param.declaration = declaration;
         context_param.is_typedef = is_typedef;
 
-        context_param.i_am_in_template_declaration =
-            i_am_in_template_declaration;
+        context_param.template_status =
+            template_status;
         context_param.declaring_template_type =
             declaring_template_type;
         context_param.template_parameter.save(template_parameter);
