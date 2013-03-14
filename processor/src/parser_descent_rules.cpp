@@ -2268,28 +2268,7 @@ int c_parser_descent::template_id(c_trace_node trace_node)
     c_context_tokens context_tokens(context);
 
     context.is_template_instantiation = 1;
-
-    c_symbol *p_symbol = ts.search_symbol(c_token_get().text.c_str());
-    if (0 == p_symbol) {
-        if ( colon_colon_chain.size() > 0) {
-            p_symbol = ts.search_symbol(c_token_get().text.c_str());
-        }
-    }
-
-    if (p_symbol) {
-        if (p_symbol->type != 0) {
-            // return symbol.type;
-            if (1 == options.verbose_flag) {
-                printf("## next_token found symbol [%s]",
-                       yytext);
-            }
-            if ( 1 == p_symbol->is_template ) {
-                context.is_template_instantiation = 1;
-                context.map_template_parameter = p_symbol->map_template_parameter;
-                context.vector_template_parameter = p_symbol->vector_template_parameter;
-            }
-        }
-    }
+    semantic.template_name_search_and_set_context( context, c_token_get() );
 
     token_next(trace_node.get_tab());
     if ( token_is_not('<', trace_node) ) {
@@ -2307,11 +2286,12 @@ int c_parser_descent::template_id(c_trace_node trace_node)
         context = context_tokens.restore();
         return 0;
     }
-    /*#### maybe mv this to semantic
+
+/*### if drop this t036.cpp does not work
                           context.is_template_instantiation = 0;
                           context.map_template_parameter.clear();
                           context.vector_template_parameter.clear();
-    */
+*/
     return 1;
 }
 /*----------------------------------------------------------------------------*/

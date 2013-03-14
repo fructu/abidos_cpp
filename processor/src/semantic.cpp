@@ -806,6 +806,21 @@ c_semantic::class_is_abstract(c_context & context)
 }
 /*----------------------------------------------------------------------------*/
 void
+c_semantic::template_name_search_and_set_context(c_context & context, c_token token)
+{
+    c_symbol *p_symbol = ts.search_symbol(token.text.c_str());
+
+    if (p_symbol) {
+        if (p_symbol->type != 0) {
+            if ( 1 == p_symbol->is_template ) {
+                context.map_template_parameter = p_symbol->map_template_parameter;
+                context.vector_template_parameter = p_symbol->vector_template_parameter;
+            }
+        }
+    }
+}
+/*----------------------------------------------------------------------------*/
+void
 c_semantic::template_instantiation_argument(c_context & context, c_decl_specifier & decl)
 {
     if (1 == options.verbose_flag) {
@@ -813,22 +828,7 @@ c_semantic::template_instantiation_argument(c_context & context, c_decl_specifie
                , decl.token.text.c_str()
               );
     }
-    /*
-        //### todo maybe mov this code to semantic ???
-        c_template_argument argument;
-        // yes we need the next parameter to fill vector_argument
-        size_t i = context.vector_template_argument.size();
 
-        if (context.vector_template_parameter.size() > 0 ) {
-          if (i < context.vector_template_parameter.size() ) {
-            argument.token = context.vector_template_parameter[i].token;
-            argument.vector_decl_specifier.push_back(decl);
-            context.vector_template_argument.push_back(argument);
-         }
-        }
-        */
-    //### todo this if is weird
-    //### todo maybe mov this code to semantic ???
     c_template_argument argument;
 
     // yes we need the next parameter to fill vector_argument
@@ -838,12 +838,8 @@ c_semantic::template_instantiation_argument(c_context & context, c_decl_specifie
         argument = context.vector_template_argument[i - 1];
         context.vector_template_argument.pop_back();
 
-//                if (context.vector_template_parameter.size() > 0 ) {
-//                  if (i < context.vector_template_parameter.size() ) {
-//                    argument.token = context.vector_template_parameter[i].token;
         argument.vector_decl_specifier.push_back(decl);
         context.vector_template_argument.push_back(argument);
-//                 }
     }
 }
 /*----------------------------------------------------------------------------*/

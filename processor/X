@@ -54,7 +54,10 @@ set print address off
 #b c_parser_descent::type_parameter
 #b c_parser_descent::function_definition
 #b c_parser_descent::simple_type_specifier
-b parser_descent_rules.cpp:1031
+
+b c_parser_descent::template_id
+#b parser_descent_rules.cpp:995
+#b c_semantic.template_instantiation_argument
 
 #
 # gdb src/abidos_cpp -x X
