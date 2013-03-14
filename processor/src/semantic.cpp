@@ -103,7 +103,7 @@ c_semantic::class_member_declarator(c_context & context, c_token token)
         printf("##:           context.class_name_declaration[%s]\n",context.class_name_declaration.c_str());
         printf("##:           token.text[%s]\n",token.text.c_str());
         printf("##:           context.template_status[%s]\n",
-          table_template_declaration_status[context.template_status]);
+               table_template_declaration_status[context.template_status]);
 
         printf("### context.class_specifier_status[%d] -> [%s] \n",context.class_specifier_status, table_parser_status[context.class_specifier_status]);
     }
@@ -813,38 +813,38 @@ c_semantic::template_instantiation_argument(c_context & context, c_decl_specifie
                , decl.token.text.c_str()
               );
     }
-                /*
-                    //### todo maybe mov this code to semantic ???
-                    c_template_argument argument;
-                    // yes we need the next parameter to fill vector_argument
-                    size_t i = context.vector_template_argument.size();
+    /*
+        //### todo maybe mov this code to semantic ???
+        c_template_argument argument;
+        // yes we need the next parameter to fill vector_argument
+        size_t i = context.vector_template_argument.size();
 
-                    if (context.vector_template_parameter.size() > 0 ) {
-                      if (i < context.vector_template_parameter.size() ) {
-                        argument.token = context.vector_template_parameter[i].token;
-                        argument.vector_decl_specifier.push_back(decl);
-                        context.vector_template_argument.push_back(argument);
-                     }
-                    }
-                    */
-                //### todo this if is weird
-                //### todo maybe mov this code to semantic ???
-                c_template_argument argument;
+        if (context.vector_template_parameter.size() > 0 ) {
+          if (i < context.vector_template_parameter.size() ) {
+            argument.token = context.vector_template_parameter[i].token;
+            argument.vector_decl_specifier.push_back(decl);
+            context.vector_template_argument.push_back(argument);
+         }
+        }
+        */
+    //### todo this if is weird
+    //### todo maybe mov this code to semantic ???
+    c_template_argument argument;
 
-                // yes we need the next parameter to fill vector_argument
-                size_t i = context.vector_template_argument.size();
+    // yes we need the next parameter to fill vector_argument
+    size_t i = context.vector_template_argument.size();
 
-                if ( 0 < i ) {
-                    argument = context.vector_template_argument[i - 1];
-                    context.vector_template_argument.pop_back();
+    if ( 0 < i ) {
+        argument = context.vector_template_argument[i - 1];
+        context.vector_template_argument.pop_back();
 
 //                if (context.vector_template_parameter.size() > 0 ) {
 //                  if (i < context.vector_template_parameter.size() ) {
 //                    argument.token = context.vector_template_parameter[i].token;
-                    argument.vector_decl_specifier.push_back(decl);
-                    context.vector_template_argument.push_back(argument);
+        argument.vector_decl_specifier.push_back(decl);
+        context.vector_template_argument.push_back(argument);
 //                 }
-                }
+    }
 }
 /*----------------------------------------------------------------------------*/
 c_semantic semantic;

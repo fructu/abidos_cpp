@@ -1029,7 +1029,7 @@ int c_parser_descent::simple_type_specifier(c_trace_node trace_node)
         } else if (1 == context.is_template_instantiation) {
             //### todo this if is weird
             if ( token_is_not('>', trace_node) ) {
-              semantic.template_instantiation_argument(context, decl);
+                semantic.template_instantiation_argument(context, decl);
             }
         } else {
             semantic.push_back_vector_decl_specifier(decl);
