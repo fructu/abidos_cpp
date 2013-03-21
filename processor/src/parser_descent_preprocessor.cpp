@@ -249,7 +249,7 @@ int c_parser_descent::preprocessor_include(c_trace_node trace_node)
             return 0;
         }
 
-        char f[1024];
+        char f[FILE_NAME_LEN];
         get_string_between_sharps(f);
         push_sharp_file(f);
         return 1;

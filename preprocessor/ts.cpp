@@ -136,8 +136,8 @@ void c_cell::fill(const char *f1, char * c_type)
 */
 {
 
-	char s_name[1024]={0};
-	char s_path[1024]={0};
+	char s_name[LONG_STR]={0};
+	char s_path[LONG_STR]={0};
 
 	char f[LONG_STR]={0};
 

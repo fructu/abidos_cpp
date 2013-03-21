@@ -38,7 +38,7 @@ void c_trace_node::set(string s)
 
     ++level;
 
-    char str_level[100] = {};
+    char str_level[IDENTIFIER_LONG] = {};
     sprintf(str_level, "_%d_", order);
 
     function_name_previous = function_name;
@@ -82,8 +82,8 @@ void put_scaped(string & s)
     } else if ( "{" == s || "}" == s || "[" == s || "]" == s || "/" == s || "," == s|| ":" == s) {
         s = "\\" + s;
     } else {//s can be a string
-        char str_in[1024] = {'\0'};
-        char str_out[1024] = {'\0'};
+        char str_in[IDENTIFIER_LONG] = {'\0'};
+        char str_out[IDENTIFIER_LONG] = {'\0'};
         int i_in = 0;
         int i_out = 0;
         char c=0;

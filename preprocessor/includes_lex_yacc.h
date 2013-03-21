@@ -17,6 +17,8 @@
 
 #include "includes_yacc.h"
 
+#define FILE_NAME_LEN (1000)
+
 extern int yylineno;
 extern FILE *yyin;
 

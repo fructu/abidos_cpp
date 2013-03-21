@@ -17,6 +17,7 @@
 
 #define FILE_NAME_LEN (1000)
 #define LINE_LONG (5000)
+#define IDENTIFIER_LONG (1000)
 
 struct c_options {
     int verbose_flag;

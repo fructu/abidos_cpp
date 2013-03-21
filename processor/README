@@ -20,6 +20,7 @@ useful commands:
 
     valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos_cpp --verbose ../test/mass_clases.cpp| grep -E "==\d=="
     valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 ./abidos_cpp --verbose ../test/test_symbols_table.h| grep -E "==\d=="
+    valgrind --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=20 --track-fds=yes --max-stackframe=4020472 src/abidos_cpp --verbose test/t041.cpp | grep -E "==\d=="
 
     ./$(EXECUTABLE)  test/$(FILE_TEST)
 
@@ -653,4 +654,8 @@ abidos_cpp
 -[v] drop magic numbers in i_am_in_template_declaration
 -[v] refactor c_parser_descent::simple_type_specifier() template instantation
     -> void template_instantiation_argument();
-
+-[] fix magic numbers:
+    find src/ -name "*.cpp" -exec grep -EHni "char[^\[]+\[[0-9]*\]" {} \;
+    [\d] -> [FILE_NAME_LEN]
+            [MAXPATHLEN]
+            [IDENTIFIER_LONG]

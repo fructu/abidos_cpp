@@ -30,7 +30,7 @@
 */
 int chain_is_tail(string class_name_declaration, char * text)
 {
-    char class_name[100];
+    char class_name[IDENTIFIER_LONG];
     unsigned len_class_name = class_name_declaration.size();
     unsigned len_text  = strlen(text);
 
@@ -184,7 +184,7 @@ c_parser_descent::c_parser_descent()
 /*----------------------------------------------------------------------------*/
 string c_parser_descent::get_class_no_name(void)
 {
-    char str[100] = {'\0'};
+    char str[IDENTIFIER_LONG] = {'\0'};
 
     sprintf(str,"%s%d",NO_CLASS_NAME,class_no_name_number);
     class_no_name = str;
@@ -717,8 +717,8 @@ void c_parser_descent::check_identifier(string tab, c_token &token)
 
     // maybe is a class defined inside in one of the nested current classes
     if ( 0 != context.class_name_declaration.size() ) {
-        char str[1000];
-        char str_droped[1000];
+        char str[IDENTIFIER_LONG];
+        char str_droped[IDENTIFIER_LONG];
 
         sprintf(str,"%s::%s",context.class_name_declaration.c_str(),yytext);
         sprintf(str_droped,"%s",context.class_name_declaration.c_str());
@@ -827,7 +827,7 @@ void c_parser_descent::yyparse(char *file_name)
 void c_parser_descent::yyparse_loader(char *file_loader)
 {
     ts.set();
-    char file_name[1024] = {0};
+    char file_name[FILE_NAME_LEN] = {0};
 
     loader.process_file(file_loader);
     loader.begin();

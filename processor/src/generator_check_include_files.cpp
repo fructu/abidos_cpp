@@ -13,6 +13,7 @@
 
 ------------------------------------------------------------------------------*/
 #include "generator_check_include_files.h"
+#include "options.h"
 #include <string.h>
 
 c_generator_check_include_files generator_check_include_files;
@@ -42,7 +43,7 @@ void get_constant(const char * file, char * constant)
 /*----------------------------------------------------------------------------*/
 void c_generator_check_include_files::push(const char *file)
 {
-    char constant[4000] = {'\0'};
+    char constant[LINE_LONG] = {'\0'};
     get_constant(file,constant);
 
     map_check_include_files[file] = constant;
